@@ -1,0 +1,36 @@
+<model=0>
+
+</model>
+
+<model=3>
+
+<question=0074>
+
+case=test_1
+input=int left(4 x + sin^{2}{left(x right)} + 4right), dx 
+output=2 x^{2} + frac{9 x}{2} - frac{sin{left(x right)} cos{left(x right)}}{2} 
+
+case=test_2
+input=9 
+output=frac{4 x^{3}}{3} + frac{x^{2} sin^{2}{left(x right)}}{4} + frac{x^{2} cos^{2}{left(x right)}}{4} + 2 x^{2} - frac{x sin{left(x right)} cos{left(x right)}}{2} + frac{sin^{2}{left(x right)}}{4} 
+
+<question>
+
+<question=1236>
+
+case=test_1
+input=78 73 7 23 
+output=281985 
+
+case=test_2
+input=76 77 7 23 
+output=289658 
+
+case=test_3
+input=77 61 7 23 
+output=232342 
+
+<question>
+
+</model>
+
