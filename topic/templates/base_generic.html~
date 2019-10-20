@@ -1,0 +1,325 @@
+{# base_generic.html it's the skeleton model #}
+
+<!DOCTYPE html>
+<html lang="pt">
+{% load static tempo_atual %}
+
+<head>
+    {% load i18n %}
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Title -->
+    {% block title %}<title>webMCTest</title>{% endblock %}
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'webMCTest.png' %}" type="image/png">
+
+    <!-- Arquivos CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'website/css/bootstrap.min.css' %}">
+    <link href="{% static 'website/css/bootstrap.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'website/css/master.css' %}">
+
+    <!-- Add additional CSS in static file -->
+    {% load static %}
+
+    {% block styles %}{% endblock %}
+
+    <style>
+        .carousel-caption {
+            position: relative;
+            left: 0;
+            top: 0;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'main:index' %}">
+        <img src="{% static 'webMCTest.png' %}" height="45px">
+
+    </a>
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'course:institute-list' %}">{% trans "All institutes" %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'course:course-list' %}">{% trans "All courses" %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'course:discipline-list' %}">{% trans "All disciplines" %}</a>
+            </li>
+
+            {% if user.is_authenticated and user.groups.all.0.name == 'professor' %}
+            <li class="nav-item">
+                <a class="nav-link" href="/topic/topics">{% trans "All topics" %}</a>
+            </li>
+
+            {% if user.groups.all.0.name == 'professor' %}
+            <li class="nav-item">
+                <a class="nav-link" href="/topic/questions">{% trans "All questions" %}</a>
+            </li>
+            {% endif %}
+
+            {% if user.is_staff %}
+            <li class="nav-item">
+                <a class="nav-link" href="/exam/exams/">{% trans "All exams" %}</a>
+            </li>
+            <p>
+                {% endif %}
+                {% endif %}
+
+        </ul>
+        <ul class="navbar-nav float-right">
+            <!--
+            <li class="nav-item">
+                <a class="nav-link" href="#"><b>Hora: </b>{% tempo_atual %}</a>
+            </li>
+            -->
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="#">{{ user.username }}:</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/topic/myquestions/">{% trans "Questions" %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/course/classroomsmy/">{% trans "Classrooms" %}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/exam/myexams/">{% trans "Exams" %}</a>
+            </li>
+            <p>
+                {% if user.is_staff %}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">{% trans "Admin" %}</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}?next={{ request.path }}">{% trans "Logout" %}</a>
+            </li>
+
+            {% else %}
+            <li><a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">{% trans "Login" %}</a></li>
+            {% endif %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="/topic/signup">{% trans "Sign up" %}</a>
+            </li>
+
+        </ul>
+
+    </div>
+</nav>
+
+<!-- Contend of site -->
+{% block content %}{% endblock %}
+
+<!-- Scripts .js -->
+<script src="{% static 'website/js/jquery-3.2.1.slim.min.js' %} "></script>
+<script src="{% static 'website/js/bootstrap.min.js' %} "></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% block scripts %}{% endblock %}
+
+<script src="{% static 'website/js/scripts.js' %}"></script>
+
+<hr>
+<!-- For scrolls in tables -->
+<link href="{% static 'website/css/font-awesome.min.css' %}" rel="stylesheet">
+
+<link href="{% static 'website/css/jquery.bxslider.css' %}" rel="stylesheet">
+<link href="{% static 'website/css/isotope.css' %}" media="screen">
+<link href="{% static 'website/css/animate.css' %}">
+<link href="{% static 'website/js/fancybox/jquery.fancybox.css' %}" type="text/css" media="screen">
+<link href="{% static 'website/css/prettyPhoto.css' %}" rel="stylesheet">
+
+<!--
+<link href="{% static 'website/css/style.css' %}" rel="stylesheet">
+-->
+
+<script src="{% static 'DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js' %} "></script>
+<script src="{% static 'website/js/dataTables.buttons.min.js' %} "></script>
+<script src="{% static 'website/js/buttons.colVis.js' %} "></script>
+<script src="{% static 'website/js/buttons.html5.min.js' %} "></script>
+<script src="{% static 'website/js/buttons.print.min.js' %} "></script>
+<script src="{% static 'website/js/jszip.min.js' %} "></script>
+<script src="{% static 'website/js/pdfmake.min.js' %} "></script>
+<script src="{% static 'website/js/buttons.flash.min.js' %} "></script>
+
+<script src="{% static 'DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.min.js' %} "></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %} "/>
+
+
+
+
+<!-- table example -->
+<script>
+    $(document).ready(function () {
+        var table = $('#example').DataTable({
+            dom: "Bfrtip",
+            scrollY: "380px",
+            scrollX: true,
+            paging: false,
+            //bInfo: false,
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: '{% trans 'copy' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    text: '{% trans 'csv' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: '{% trans 'excel' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '{% trans 'pdf' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '{% trans 'print' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+
+                //{
+                //    extend: 'colvis',
+                //    text: '{% trans 'column visibility' %}',
+                //    exportOptions: {
+                //        columns: ':visible'
+                //    }
+                //},
+            ]
+        });
+
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+    });
+</script>
+
+<!-- table example0 -->
+<script>
+    $(document).ready(function () {
+        var table = $('#example0').DataTable({
+            dom: "Bfrtip",
+            scrollY: "380px",
+            scrollX: true,
+            paging: false,
+            //bInfo: false,
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: '{% trans 'copy' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    text: '{% trans 'csv' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: '{% trans 'excel' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '{% trans 'pdf' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '{% trans 'print' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                //{
+                //    extend: 'colvis',
+                //    text: '{% trans 'column visibility' %}',
+                //    exportOptions: {
+                //        columns: ':visible'
+                //    }
+                //},
+            ]
+        });
+
+        table.buttons().container()
+            .appendTo('#example0_wrapper .col-md-6:eq(0)');
+    });
+</script>
+
+
+<style>
+    table.dataTable {
+        border-collapse: collapse !important;
+    }
+</style>
+
+
+<ul>
+  <font size="2" color="black">
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html"><img src={% static "agplv3.png" %}></a>
+        <a href="{% url 'main:license' %}">Copyright © 2019</a> by
+        <a href="https://sites.google.com/site/fzampirolli/">Francisco de Assis Zampirolli</a>
+        from <a href="http://www.ufabc.edu.br">Federal University of ABC</a> and
+        <a href="{% url 'main:contributors' %}">individual contributors.</a>
+        {% trans "See also" %}<a href="{% url 'main:readme' %}"> {%  trans "README" %}.</a><br>
+    Grant:
+    <a href="https://bv.fapesp.br/pt/auxilios/28430/modelagem-de-objetos-usando-morfologia-matematica-e-grafos-de-vizinhanca/">
+      #2009/14430–1</a> and
+    <a href="#">
+      #2018/23561-1</a> {% trans "São Paulo Research Foundation (FAPESP)" %}
+    
+  </font>
+</ul>
+
+</body>
+
+</html>
