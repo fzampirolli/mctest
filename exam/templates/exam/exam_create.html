@@ -1,0 +1,56 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Create a new Exam" %}</h5>
+
+                        <hr>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            <!-- Create fields -->
+                            <form action="" method="post">
+                                {% csrf_token %}
+
+                                <!-- classrooms -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Classrooms" %}</span>
+                                    </div>
+                                    {% render_field form.classrooms class+="form-control" placeholder=form.classrooms.help_text %}
+                                </div>
+
+                                <!-- exam_name -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Name" %}</span>
+                                    </div>
+                                    {% render_field form.exam_name class+="form-control" placeholder=form.exam_name.help_text %}
+                                </div>
+
+                                <hr>
+                                <div class="text-right">
+                                    <a href="{% url 'exam:myexams' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                </div>
+                            </form>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Click Exam Updatein My Exams to create the details" %}<br>
+                        {% trans "Exams of the disciplines that I am enrolled" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

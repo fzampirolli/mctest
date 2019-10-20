@@ -1,0 +1,16 @@
+{% load static %}
+
+<h1>Escolher as questões para a prova:</h1>
+
+<link rel="stylesheet" type="text/css" href="{% static 'topic/style.css' %}"/>
+
+{% if latest_question_list %}
+    <ul>
+        {% for question in latest_question_list %}
+            <li><a href="{% url 'topic:detail' question.id %}">{{ question.question_short_description }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No questions are available.</p>
+{% endif %}
+

@@ -1,0 +1,132 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Discipline Update" %}</h5>
+
+                        <hr>
+
+                        {% if user.is_superuser or user in discipline.discipline_coords.all %}
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <!-- courses -->
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Courses" %}</span>
+                                    </div>
+                                    {% render_field form.courses class+="form-control" %}
+                                </div>
+
+                                <!-- discipline_name -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Name" %}</span>
+                                    </div>
+                                    {% render_field form.discipline_name class+="form-control" placeholder=form.course_name.help_text %}
+                                </div>
+
+                                <!-- discipline_code -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Code" %}</span>
+                                    </div>
+                                    {% render_field form.discipline_code class+="form-control" placeholder=form.course_code.help_text %}
+                                </div>
+
+                                <!-- discipline_objective -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Objective" %}</span>
+                                    </div>
+                                    {% render_field form.discipline_objective class+="form-control" placeholder=form.course_code.help_text %}
+                                </div>
+
+                                <!-- discipline_profs -->
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Profs" %}</span>
+                                    </div>
+                                    {% render_field form.discipline_profs class+="form-control" %}
+                                </div>
+
+                                <!-- discipline_coords -->
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Coords" %}</span>
+                                    </div>
+                                    {% render_field form.discipline_coords class+="form-control" %}
+                                </div>
+
+                                <hr>
+                                <div class="text-right">
+                                    <a href="{% url 'course:discipline-list' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                </div>
+                            </form>
+
+                            <hr>
+
+                            <!-- Upload-Profs -->
+                            <h5>{% trans "Include multiple Profs from a CSV file" %}</h5>
+                            <form class="input-group mb-3 text-right" action="import/" method="POST"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="myfileProfs"><br>
+                                <button class="btn btn-primary"
+                                        type="submit">{% trans "Upload-Profs" %}</button>
+                            </form>
+                            <h6>
+                                <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-web/examples/">{% trans "see examples" %}</a>
+                            </h6>
+                            <h6>{% trans "CSV file syntax" %} - {% trans "Only UTF-8 format" %}: </h6>
+                            {% trans "João, Silva,  joao@ufabc.edu.br" %}<br>
+                            {% trans "Maria, Campos, maria@ufabc.edu.br" %}<p>
+                            {% trans "If necessary, use this to convert the accents" %}:
+                            <a href="http://w2.syronex.com/jmr/latex-symbols-converter">{% trans "convert" %}</a></br>
+                            {% trans "After importing CSV file, check if profs are marked in gray" %}<p>
+
+                            <hr>
+                            <!-- Upload-Classrooms -->
+                            <h5>{% trans "Create multiple Classrooms from a CSV file" %}</h5>
+                            <form class="input-group mb-3 text-right" action="import2/" method="POST"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="myfileProfs"><br>
+                                <button class="btn btn-primary"
+                                        type="submit">{% trans "Upload-Classrooms" %}</button>
+                            </form>
+
+                            {% csrf_token %}
+
+                            <h6>{% trans "ATTENTION: this scheme will remove all students from existing classrooms!" %}</h6>
+                            <h6>
+                                <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-web/examples/">{% trans "see examples" %}</a>
+                            </h6>
+
+                            <h6>{% trans "CSV file syntax" %} - {% trans "Only UTF-8 format" %}: </h6>
+                            {% trans "1234, João Silva,   joao@ufabc.edu.br,  08h-SA-DA1, sala1, PClass, fzprof@ufabc.edu.br" %}
+                            <br>
+                            {% trans "4321, Maria Campos, maria@ufabc.edu.br, 10h-SB-DA2, sala2, TClass, fzprof@ufabc.edu.br" %}<p>
+
+                            {% trans "If necessary, use this to convert the accents" %}:
+                            <a href="http://w2.syronex.com/jmr/latex-symbols-converter">{% trans "convert" %}</a><br>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Only admin can update/create/delete institutes/courses/disciplines" %}<br>
+                        {% trans "Only the coordinator can update your discipline" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Message" %}</h5>
+
+                <hr>
+
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+
+                            {% if 'safe' in message.tags %}
+                                <p> {{ message|safe }} </p>
+                            {% elif 'upper' in message.tags %}
+                                <p></p>
+                                <p> {{ message|upper }} </p>
+                            {% else %}
+                                {{ message }} <br>
+                            {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

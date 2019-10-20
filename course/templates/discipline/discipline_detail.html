@@ -1,0 +1,197 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Discipline Detail" %}</h5>
+
+                        <hr>
+
+                        <!-- header -->
+                        <h6><strong>{% trans "Discipline" %}: </strong> {{ discipline.discipline_name }}</h6>
+                        <h6><strong>{% trans "Code" %}: </strong>{{ discipline.discipline_code }}</h6>
+                        <h6><strong>{% trans "Objective" %}: </strong></h6>
+                        {{ discipline.discipline_objective }}
+
+                        <hr>
+
+                        <!-- Profs -->
+                        <h6><strong>{% trans "Profs" %}:</strong>
+                            {% for p in discipline.discipline_profs.all %}
+                                {{ p.username }};
+                            {% endfor %}
+                        </h6>
+
+                        <!-- Coords -->
+                        <h6><strong>{% trans "Coordinator" %}:</strong>
+                            {% for c in discipline.discipline_coords.all %}
+                                {{ c.username }};
+                            {% endfor %}
+                        </h6>
+
+                        <!-- Topic List f3f3f3 -->
+                        {% if discipline.topics2.all %}
+                            <div class="card-body" style="background-color:#f3f3f3;">
+                                <h5 class="card-title">{% trans "Topic List" %}</h5>
+
+                                {% if discipline.topics2.all %}
+
+                                    <table id="example0" class="table table-striped table-bordered" style="width:100%">
+                                        <thead class="thead-light">
+                                        <!-- Topic header -->
+                                        <tr>
+                                            <th scope="col">{% trans "Topic" %}</th>
+                                            <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for topic in discipline.topics2.all %}
+                                            <tr>
+
+                                                <!-- topic_text -->
+                                                <td>
+                                                    <a href="{% url 'topic:topic-detail' pk=topic.pk %}"
+                                                       class="btn btn-outline-info text-dark btn-sm">
+                                                        {{ topic.topic_text }}
+                                                    </a>
+                                                </td>
+
+                                                <!-- Actions-->
+                                                <td class="text-right">
+
+                                                    {% if user.is_superuser or user in discipline.discipline_coords.all %}
+
+                                                        <!-- Update-->
+                                                        <a href="{% url 'topic:topic-update'  pk=topic.pk %}"
+                                                           class="btn btn-outline-primary btn-sm">
+                                                            {% trans "Update" %}
+                                                        </a>
+
+                                                        <!-- Delete-->
+                                                        <a href="{% url 'topic:topic-delete'  pk=topic.pk %}"
+                                                           class="btn btn-outline-danger btn-sm">
+                                                            {% trans "Delete" %}
+                                                        </a>
+                                                    {% endif %}
+
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+
+                                {% else %}
+                                    <div class="text-center mt-5 mb-5 jumbotron">
+                                        <h5>{% trans "There is not " %}
+                                            <code> {% trans "Topic" %} </code> {% trans "registered yet." %}
+                                        </h5>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Create a New Topic -->
+                                {% if user in discipline.discipline_coords.all %}
+                                    <div class="text-right">
+                                        <a href="{% url 'topic:topic-create' %}" class="btn btn-primary">
+                                            {% trans "Create a New Topic" %}
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                                {% trans "Only coordinator can create/update/delate topic" %}<br>
+                            </div>
+                        {% endif %}
+
+                        <p></p>
+                        <!-- Discipline List -->
+                        {% if discipline.classrooms2.all %}
+                            <div class="card-body" style="background-color:#f3f3f3;">
+                                <h5 class="card-title">{% trans "Classroom List" %}</h5>
+
+                                <!-- Shows classrooms -->
+                                {% if discipline.classrooms2.all %}
+
+                                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                        <thead class="thead-light">
+                                        <!-- Header classrooms -->
+                                        <tr>
+                                            <th scope="col">{% trans "Code" %}</th>
+                                            <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for classroom in discipline.classrooms2.all %}
+                                            <tr>
+                                                <!-- classroom_code -->
+                                                <td>
+                                                    <a href="{% url 'course:classroom-detail' pk=classroom.pk %}"
+                                                       class="btn btn-outline-info text-dark btn-sm">
+                                                        {{ classroom.classroom_code }}
+                                                    </a>
+                                                </td>
+
+                                                <!-- Actions -->
+                                                <td class="text-right">
+                                                    {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.discipline.discipline_profs.all %}
+
+                                                        <!-- Update -->
+                                                        <a href="{% url 'course:classroom-update'  pk=classroom.pk %}"
+                                                           class="btn btn-outline-primary btn-sm">
+                                                            {% trans "Update" %}
+                                                        </a>
+                                                        <!-- Update -->
+                                                        <a href="{% url 'course:classroom-delete'  pk=classroom.pk %}"
+                                                           class="btn btn-outline-danger btn-sm">
+                                                            {% trans "Update" %}
+                                                        </a>
+                                                    {% endif %}
+
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                {% else %}
+
+                                    <div class="text-center mt-5 mb-5 jumbotron">
+                                        <h5>{% trans "There is no" %}
+                                            <code> {% trans "Classroom" %} </code> {% trans "registered yet." %}
+                                        </h5>
+                                    </div>
+
+                                {% endif %}
+
+                                <!-- Create a New Classroom -->
+                                {% if user.groups.all.0.name == 'professor' %}
+                                    <hr/>
+                                    <div class="text-right">
+                                        <a href="{% url 'course:classroom-create' %}" class="btn btn-primary">
+                                            {% trans "Create a New Classroom" %}
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                                <!-- End Shows classrooms -->
+                                {% trans "Only professor can create/update/delate classroom" %}
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

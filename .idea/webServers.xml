@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="fb984d33-237b-44a4-8146-6fb5e5bb83b7" name="vision" url="http://vision.ufabc.edu.br">
+        <fileTransfer host="vision.ufabc.edu.br" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="3295823d-483b-42b1-9548-2225ec92120a" name="vcad.ufabc.edu.br" url="http://vcad.ufabc.edu.br">
+        <fileTransfer host="vcad.ufabc.edu.br" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="01d6ad1a-688d-46ca-8461-78a4af9b4374" name="nubisys.ufabc.edu.br" url="http://nubisys.ufabc.edu.br">
+        <fileTransfer host="nubisys.ufabc.edu.br" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="7a32b525-2daf-48ee-b2c8-8654fd0044a8" name="177.104.60.16" url="http://177.104.60.16">
+        <fileTransfer host="177.104.60.16" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

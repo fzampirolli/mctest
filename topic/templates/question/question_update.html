@@ -1,0 +1,164 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Question Update" %}</h5>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            <!-- See-PDF and Save-Json Buttons -->
+                            <table style="width:100%" frame="hsides" rules="cols">
+                                <tr>
+                                    <th><br>
+                                        <!-- See-PDF -->
+                                        <form class="input-group mb-3" action="../seePDF/" method="post">
+                                            {% csrf_token %}
+                                            <input class="btn btn-primary" type="submit" action=""
+                                                   value={% trans "See-PDF" %}>
+                                        </form>
+                                        <h6>{% trans "See this question in PDF format" %}</h6>
+                                    </th>
+                                    <th><br>
+                                        <!-- Save-Json -->
+                                        <form class="input-group mb-3 text-right" action="../saveJson/"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <input class="btn btn-primary" type="submit" action=""
+                                                   value={% trans "Save-Json" %}>
+                                        </form>
+                                        <h6> {% trans "It will save all your questions to a file in json format" %}   </h6>
+                                    </th>
+                                </tr>
+                            </table>
+
+                            <hr>
+
+                            <!-- Update fields -->
+                            <form action="" method="post">
+                                {% csrf_token %}
+
+                                <!-- topic -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Topic" %}</span>
+                                    </div>
+                                    {% render_field form.topic class+="form-control" %}
+                                </div>
+
+                                <!-- question_short_description -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Short Description" %}</span>
+                                    </div>
+                                    {% render_field form.question_short_description class+="form-control" placeholder=form.question_short_description.help_text %}
+                                </div>
+
+                                <!-- question_group -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Group" %}</span>
+                                    </div>
+                                    {% render_field form.question_group class+="form-control" placeholder=form.question_group.help_text %}
+                                </div>
+
+                                <!-- question_text -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Description" %}</span>
+                                    </div>
+                                    {% render_field form.question_text class+="form-control" placeholder=form.question_text.help_text %}
+                                </div>
+
+                                <!-- question_type -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Type" %}</span>
+                                    </div>
+                                    {% render_field form.question_type class+="form-control" placeholder=form.question_type.help_text %}
+                                </div>
+
+                                <!-- question_difficulty -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Difficult" %}</span>
+                                    </div>
+                                    {% render_field form.question_difficulty class+="form-control" placeholder=form.question_difficulty.help_text %}
+                                </div>
+
+                                <!-- question_bloom_taxonomy -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Bloom Taxonomy" %}</span>
+                                    </div>
+                                    {% render_field form.question_bloom_taxonomy class+="form-control" placeholder=form.question_bloom_taxonomy.help_text %}
+                                </div>
+
+                                <!-- question_parametric -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Parametric" %}</span>
+                                    </div>
+                                    {% render_field form.question_parametric class+="form-control" placeholder=form.question_parametric.help_text %}
+                                </div>
+
+                                <!-- question_who_created -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Who Created" %}</span>
+                                    </div>
+                                    {% render_field form.question_who_created class+="form-control" placeholder=form.question_who_created.help_text %}
+                                </div>
+
+                                <!-- question_last_update -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Last Update" %}</span>
+                                    </div>
+                                    {% render_field form.question_last_update class+="form-control" placeholder=form.question_last_update.help_text %}
+                                </div>
+
+                                <hr>
+
+                                <!-- Answers -->
+                                {{ formset.management_form }}
+                                {% for f_form in formset %}
+                                    {{ f_form.as_p }}
+                                {% endfor %}
+
+                                <hr>
+                                <!-- Actions buttons -->
+                                <div class="text-right">
+                                    <a href="{% url 'topic:myquestions-list' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <input class="btn btn-primary" type="submit" value={% trans "Submit" %}>
+                                    <hr>
+                                </div>
+                            </form>
+
+                            <!-- Delete button -->
+                            <form action="../delete/" method="">
+                                {% csrf_token %}
+                                <div class="text-right">
+                                    <input class="btn btn-danger" type="submit" action=""
+                                           value={% trans "Delete this Question" %}/>
+                                </div>
+
+                            </form>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Questions of the disciplines that I am enrolled" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

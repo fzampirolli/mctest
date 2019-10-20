@@ -1,0 +1,445 @@
+'''
+=====================================================================
+Copyright (C) 2019 Francisco de Assis Zampirolli
+from Federal University of ABC and individual contributors.
+All rights reserved.
+
+This file is part of webMCTest 1.1 (or MCTest 5.1).
+
+Languages: Python 3.7, Django 2.2.4 and many libraries described at
+github.com/fzampirolli/mctest
+
+You should cite some references included in vision.ufabc.edu.br:8000
+in any publication about it.
+
+webMCTest is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License
+(gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) 
+any later version.
+
+webMCTest is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+=====================================================================
+'''
+# coding=UTF-8
+
+import random
+import time
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+#import matplotlib.pyplot as plt
+#import numpy as np
+
+from sympy import *
+
+# do not delete - for parametric questions
+
+matplotlib.use('Agg')
+
+from django.http import HttpResponse
+
+from topic.Utils import *
+
+def createWrongAnswers(a):
+    global correctAnswer, a0, a1, a2
+
+    respostas = ""
+    # print "======len:", len(a)
+    if len(a) == 2:
+        a0 = int(a[0])
+        a1 = int(a[1])
+
+        rand = random.sample(range(correctAnswer - a1, correctAnswer + int(a1 / 2)), a0)
+        for i in rand:
+            respostas += "" + str(i) + "\n"
+
+        if correctAnswer in rand:
+            respostas = createWrongAnswers(a)
+
+    elif len(a) == 1:
+        a0 = int(a[0])
+        count = 0
+        for i in a2:
+            if i != correctAnswer and count < a0:
+                count += 1
+                respostas += str(i) + "\n"
+
+    return respostas
+
+class UtilsMC(object):
+
+    @staticmethod
+    def getQuestion(i, AllLines):
+        tam = len(AllLines)
+        while i < tam and AllLines[i][:3] not in ['QT:', 'QE:', 'QM:', 'QH:']:  # acha uma questão
+            i += 1
+        # if i == tam: return(i,' ') # não achou questão
+
+        tp = AllLines[i][:3]
+        q = [AllLines[i] + '\n']
+        i += 1
+        # return HttpResponse(q)
+        while i < tam and AllLines[i][:AllLines[i].find(':')] not in ['QT', 'QE', 'QM', 'QH', 'A']:  # ,'[[def']:
+            q.append(AllLines[i] + '\n')
+            i += 1
+        if i <= tam and tp == 'QT:':  # questao do tipo texto
+            return (i, ''.join([x for x in q]))
+        if i < tam and tp in ['QE:', 'QM:', 'QH:'] and AllLines[i][:2] in ['QT', 'QE:', 'QM:', 'QH:']:
+            print('ERRO: questão sem alternativas')
+
+        return (i, ''.join([x for x in q]))
+
+    @staticmethod
+    def getAnswer(i, AllLines):
+        tam = len(AllLines)
+        while i < tam and AllLines[i][:2] not in ['A:']:  # acha uma questão
+            i += 1
+        # if i == tam: return(i,' ') # não achou questão
+        q = [AllLines[i]]
+        i += 1
+        while i < tam and AllLines[i][:AllLines[i].find(':')] not in ['QT', 'QE', 'QM', 'QH', 'A']:  # ,'[[def']:
+            q.append(AllLines[i] + '\n')
+            i += 1
+        return (i, ''.join([x for x in q]))
+
+    @staticmethod
+    def get_Equations(s):
+        # s = "um exemplo $*$ x, y = symbols('x,y') :: sin(x+y).expand(trig=True) $*$, outro exemplo $*$ :: b = y - x $*$ fim!"
+        # cada equacao tem ter duas partes, uma para definir as variáveis, que vai ser mostrado no enunciado da questao
+        # a segunda parte é a equação propriamente dita
+        eq_str = '$*$'
+        s1 = s.partition(eq_str)
+        eq = []
+        while len(s1) == 3 and s1[2] != '':
+            s2 = s1[2].partition(eq_str)
+            if s2[1] != '':
+                eq.append(s2[0])
+                s1 = s2[2].partition(eq_str)
+        return eq
+
+    @staticmethod
+    def get_code(s, str):
+        # https://automatetheboringstuff.com/chapter7/
+        import re
+        code = []
+        start = '\[\[' + str + ':'
+        end = '\]\]'
+        reg = re.compile(start + '(\S+|\w+|.*)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
+        for groups in reg.findall(s):
+
+            for i in ['exec', 'cmd', 'open', 'import os', '.remove', 'mkdir',
+                      'cmd', 'sys', 'gnureadline', 'subprocess', 'getopt',
+                      'shlex', 'wget', 'commands', 'system', 'exec', 'eval']:
+                if i in groups:
+                    return None  # HttpResponse('ERROR: do not use that word in the code: '+i)
+
+            code.append(groups)
+
+        return code
+
+    @staticmethod
+    def questionParametric(question, answers):
+
+        ############ question + def #####
+
+        AllLines = question.splitlines()
+        for i in range(0, len(AllLines)):
+            if AllLines[i].replace(" ", "") == "":
+                AllLines[i] = AllLines[i][1:] + '\n'
+            else:
+                AllLines[i] = AllLines[i] + '\n'
+        mystr = ''.join(AllLines).replace("\r", "")
+
+        myDef = UtilsMC.get_code(mystr, 'def')
+
+        if myDef is not None:
+            exec('\n'.join(myDef))  # run the algorithm and variables
+        else:
+            return ["", AllLines]
+
+        arg = UtilsMC.get_code(question, 'code')  # get the args in text
+
+        i = 0
+        tam = len(AllLines)
+        while i < tam:
+            for j in arg:
+                AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
+            if i >= len(AllLines) or AllLines[i].find("[[def:") > -1:
+                tam = i
+                break
+            i = i + 1
+
+        q_param = ""
+        for j in range(0, tam):
+            q_param += AllLines[j].replace('\r', '')
+
+        ############ answers #####
+        AllLines = []
+        for a in answers:
+            AllLines.append(a.answer_text + '\n')
+        i = 0
+        tam = len(AllLines)
+
+        for a in UtilsMC.get_code(''.join(AllLines), 'code'):  # get the args in answers
+            arg.append(a)
+
+        while i < tam:
+            for j in arg:
+                if AllLines[i].find('[[code:createWrongAnswers(') > -1 and j.find('createWrongAnswers(') > -1:
+                    del (AllLines[i])
+                    tam -= 1
+                    m = 0
+                    for k in j.split('\n'):
+                        if len(str(k)) > 0:
+                            for z in str(eval(k)).split('\n'):
+                                if z:
+                                    AllLines.insert(i, z.replace('\n\n', '\n'))
+                                    i += 1
+                                    m += 1
+                    i -= 1
+                    tam = tam + m
+                # print("####",i,j,str(eval(j)), AllLines[i])
+                # print("###",AllLines[i].replace("[[code:"+j+"]]", str(eval(j))))
+                AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
+
+            if i >= len(AllLines) or AllLines[i].find("[[def:") > -1:
+                tam = i
+                break
+
+            i = i + 1
+
+        return [q_param, AllLines]
+
+    @staticmethod
+    def questionsReadFiles(file):
+        # estados possiveis: fora de alguma questao
+        #                    dentro de uma questao - 'QT','QE','QM','QH' - pergunta
+        #                    dentro de uma questao - A - respostas
+        # as questões são dos tipos QT (somente texto), QE (fácil), QM (média) ou QH (difícil)
+        # podendo ter subtipos, por exemplo, se tiver 5 questões, QE:a:, será escolhido de forma
+        # aleatória, somente uma questão do subtipo "a".
+        # As questões QT, contendo apenas textos, serão inseridas no final do tex.
+
+        # global correctAnswer
+
+        listao = []
+        respostas = []
+        d = dict()
+        arqnum = 0
+        questnum = 0
+        questtotal = 0
+        questions_file = 0
+
+        latexAccents = [
+            [u"à", "\\`a"],  # Grave accent
+            [u"è", "\\`e"],
+            [u"ì", "\\`\\i"],
+            [u"ò", "\\`o"],
+            [u"ù", "\\`u"],
+            [u"ỳ", "\\`y"],
+            [u"À", "\\`A"],
+            [u"È", "\\`E"],
+            [u"Ì", "\\`\\I"],
+            [u"Ò", "\\`O"],
+            [u"Ù", "\\`U"],
+            [u"Ỳ", "\\`Y"],
+            [u"á", "\\'a"],  # Acute accent
+            [u"é", "\\'e"],
+            [u"í", "\\'\\i"],
+            [u"ó", "\\'o"],
+            [u"ú", "\\'u"],
+            [u"ý", "\\'y"],
+            [u"Á", "\\'A"],
+            [u"É", "\\'E"],
+            [u"Í", "\\'\\I"],
+            [u"Ó", "\\'O"],
+            [u"Ú", "\\'U"],
+            [u"Ý", "\\'Y"],
+            [u"â", "\\^a"],  # Circumflex
+            [u"ê", "\\^e"],
+            [u"î", "\\^\\i"],
+            [u"ô", "\\^o"],
+            [u"û", "\\^u"],
+            [u"ŷ", "\\^y"],
+            [u"Â", "\\^A"],
+            [u"Ê", "\\^E"],
+            [u"Î", "\\^\\I"],
+            [u"Ô", "\\^O"],
+            [u"Û", "\\^U"],
+            [u"Ŷ", "\\^Y"],
+            [u"ä", "\\\"a"],  # Umlaut or dieresis
+            [u"ë", "\\\"e"],
+            [u"ï", "\\\"\\i"],
+            [u"ö", "\\\"o"],
+            [u"ü", "\\\"u"],
+            [u"ÿ", "\\\"y"],
+            [u"Ä", "\\\"A"],
+            [u"Ë", "\\\"E"],
+            [u"Ï", "\\\"\\I"],
+            [u"Ö", "\\\"O"],
+            [u"Ü", "\\\"U"],
+            [u"Ÿ", "\\\"Y"],
+            [u"ç", "\\c{c}"],  # Cedilla
+            [u"Ç", "\\c{C}"],
+            [u"œ", "{\\oe}"],  # Ligatures
+            [u"Œ", "{\\OE}"],
+            [u"æ", "{\\ae}"],
+            [u"Æ", "{\\AE}"],
+            [u"å", "{\\aa}"],
+            [u"Å", "{\\AA}"],
+            [u"–", "--"],  # Dashes
+            [u"—", "---"],
+            [u"ø", "{\\o}"],  # Misc latin-1 letters
+            [u"Ø", "{\\O}"],
+            [u"ß", "{\\ss}"],
+            [u"¡", "{!`}"],
+            [u"¿", "{?`}"],
+            [u"\\", "\\\\"],  # Characters that should be quoted
+            [u"~", "\\~"],
+            [u"&", "\\&"],
+            [u"$", "\\$"],
+            [u"{", "\\{"],
+            [u"}", "\\}"],
+            [u"%", "\\%"],
+            [u"#", "\\#"],
+            [u"_", "\\_"],
+            [u"≥", "$\\ge$"],  # Math operators
+            [u"≤", "$\\le$"],
+            [u"≠", "$\\neq$"],
+            [u"©", "\copyright"],  # Misc
+            [u"ı", "{\\i}"],
+            [u"µ", "$\\mu$"],
+            [u"°", "$\\deg$"],
+            [u"‘", "`"],  # Quotes
+            [u"’", "'"],
+            [u"“", "``"],
+            [u"”", "''"],
+            [u"‚", ","],
+            [u"„", ",,"],
+        ]
+
+        # raise Http404("oi1")
+
+        # for a in arquivos: # para cada arquivo de questões
+        fstr = file.read().decode('utf-8')
+        # for i in latexAccents:
+        #    fstr = fstr.replace(i[0],i[1])
+
+        # raise Http404("oi1")
+
+        # return HttpResponse(fstr)
+
+        AllLines = fstr.splitlines()
+        tam = len(AllLines)
+        # return HttpResponse(AllLines)
+
+        i = 0
+        while i < tam:
+            i, q = UtilsMC.getQuestion(i, AllLines)
+            print("#>#>#>#===", i, q)
+            d = dict()
+
+            # return HttpResponse(q)
+
+            d["t"] = ''
+            vet = q.split('::')
+            if len(vet) == 2:  # somente tipo
+                d["t"] = vet[0]  # tipo QT, QE, QM ou QH
+                # d["q"] = r'\hspace{-12mm}{\color{white}\#'+str(questnum).zfill(3)+r'} \ \ \hspace{2mm} \ ' + vet[1].strip()
+                d["q"] = vet[1].strip()
+                d["c"] = ''
+                d["st"] = ''
+            elif len(vet) == 3:  # com conteúdo abordado da questão
+                d["t"] = vet[0]
+                s = vet[1]  # normalize('NFKD', vet[1].decode('utf-8')).encode('ASCII', 'ignore') # retirar acentos
+                d["c"] = s
+                # d["q"] = r'\hspace{-12mm}{\color{white}\#'+str(questnum).zfill(3) + r'} \ \ \hspace{2mm} \ ' + vet[2].strip()
+                d["q"] = vet[2].strip()
+                d["st"] = ''
+            elif len(vet) == 4:  # subtipo da questão, um caracter qualquer
+                d["t"] = vet[0]  # tipo QT, QE, QM ou QH
+                s = vet[1]  # normalize('NFKD', vet[1].decode('utf-8')).encode('ASCII', 'ignore') # retirar acentos
+                d["c"] = s
+                d["st"] = vet[2]
+                # d["q"] =  r'\hspace{-12mm}{\color{white}\#'+str(questnum).zfill(3)+ r'} \ \ \hspace{2mm} \ ' + vet[3].strip()
+                d["q"] = vet[3].strip()
+
+            d["n"] = questnum
+            d["arq"] = arqnum
+
+            respostas = []
+            contRespostas = 0
+            if d["t"] != "QT":
+                while i < tam and AllLines[i][:AllLines[i].find(':')] in ['A']:
+                    i, r = UtilsMC.getAnswer(i, AllLines)
+                    # print (i,r)
+                    # if i == tam: break # não achou questão
+                    if (not contRespostas):
+                        # respostas.append(r[2:].strip())   # cyan alternativa correta
+                        # respostas.append("{\color{cyan} "+r[2:].strip()+"}")   # cyan alternativa correta
+                        # respostas.append(r"\hspace{-1.2mm}{\color{white}\#}"+str(r[2:].strip()))
+                        respostas.append(str(r[2:].strip()))
+
+                    else:
+                        # respostas.append(r[2:].strip())   # gray alternativa errada
+                        # respostas.append("{\color{gray} "+r[2:].strip()+"}")
+                        respostas.append(str(r[2:].strip()))
+                    contRespostas += 1
+
+                if contRespostas == 0:
+                    return HttpResponse('ERROR: question without answers')
+
+            d["a"] = respostas
+
+            listao.append(d)
+            questnum += 1
+
+        # arq.close()
+        arqnum += 1
+        print("read the %d question(s)" % (len(listao) - questions_file))
+        questions_file = len(listao)
+
+        print("\nTotal of questions without suptype:")
+        print("Easy questions QE: %d" % (len([y for y in listao if y['t'] == 'QE' and y['st'] == ''])))
+        print("Mean questions QM: %d" % (len([y for y in listao if y['t'] == 'QM' and y['st'] == ''])))
+        print("Hard questions QH: %d" % (len([y for y in listao if y['t'] == 'QH' and y['st'] == ''])))
+        print("Text questions QT: %d" % (len([y for y in listao if y['t'] == 'QT' and y['st'] == ''])))
+
+        print("\nTotal of questions with suptype:")
+        print("Easy questions QE: %d" % (len([y for y in listao if y['t'] == 'QE' and y['st'] != ''])))
+        print("Mean questions QM: %d" % (len([y for y in listao if y['t'] == 'QM' and y['st'] != ''])))
+        print("Hard questions QH: %d" % (len([y for y in listao if y['t'] == 'QH' and y['st'] != ''])))
+        print("Text questions QT: %d" % (len([y for y in listao if y['t'] == 'QT' and y['st'] != ''])))
+
+        return listao
+
+    @staticmethod
+    def createListTypes(listao, tipo, numQ):
+        global RA
+
+        random.seed(int(RA))  # semente pelo RA
+
+        questTipo = [y for y in listao if y['t'] == tipo and y['st'] == '']  # pega todas as questões SEM subtipo
+
+        st = [(y['st'], y['n']) for y in listao if y['t'] == tipo and y['st'] != '']  # pega COM subtipos
+        if st:
+            stSet = list(set([i[0] for i in st]))  # retira elementos repetidos
+            for i in stSet:  # para cada subtipo, pego apenas UMA questão aleatoriamente
+                li = [(y['st'], y['n']) for y in listao if y['t'] == tipo and y['st'] == i]
+                escolhoUM = random.sample(li, 1)
+                ques = [y for y in listao if y['n'] == escolhoUM[0][1]]
+                questTipo.append(ques[0])
+
+        if numQ > len(questTipo):
+            print("number of available questions %s: \t %-5d" % (tipo, len(questTipo)))
+            print("\nERRO: number of solicitous questions is incompatible with the number of available questions\n")
+            # sys.exit(-1)
+            return []
+
+        return questTipo

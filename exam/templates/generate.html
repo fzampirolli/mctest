@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <p>Please select a student to generate the special file!</p>
+            <select name="dropdown_students" id="">
+                {% for student in students %}
+                    <option value="{{ student.id }}" name="student">{{ student.name }} {{ student.surname }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Generate</button>
+        </form>
+    </div>
+{% endblock %}

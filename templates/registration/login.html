@@ -1,0 +1,63 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Login" %}</h5>
+
+                        <hr>
+
+                        {% if form.errors %}
+                            <p>{% trans "Your username and password didn't match. Please try again" %}</p>
+                        {% endif %}
+
+                        {% if next %}
+                            {% if user.is_authenticated %}
+                                <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access" %}</p>
+                            {% else %}
+                                <p>{% trans "Please login to see this page" %}</p>
+                            {% endif %}
+                        {% endif %}
+
+                        <form method="post" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            <div class="text-left">
+
+                                <table>
+                                    <tr>
+                                        <td class="input-group-prepend">{{ form.username.label_tag }}  </td>
+                                        <td>{{ form.username }}  </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="input-group-prepend">{{ form.password.label_tag }}  </td>
+                                        <td>{{ form.password }}  </td>
+                                    </tr>
+                                </table>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary"
+                                            value={{ next }}>{% trans "Login" %}</button>
+
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <div class="text-right">
+                            <br>
+                            <a href="{% url 'password_reset' %}" class='btn btn-warning'>
+                                {% trans "Lost password?" %}
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

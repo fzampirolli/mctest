@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Classrooms List" %}</h5>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            {% if classroom_list %}
+                                <ul>
+                                    {% for classroom in classroom_list %}
+                                        <li class="{% if classroom.is_overdue %}text-danger{% endif %}">
+                                            <a href="/classroom/classroom/{{ classroom.pk }}/update"> {{ classroom }}</a>
+                                        </li>
+                                    {% endfor %}
+
+                                </ul>
+                            {% endif %}
+
+                            <form action="../classroom/create/" method="">
+                                {% csrf_token %}
+                                <input type="submit" action="" value={% trans "Create a new Classroom" %}/>
+                            </form>
+
+                        {% endif %}
+
+                        {% if classroom_list %}
+                            <h1>{% trans "Classroom List" %}</h1>
+                            <ul>
+                                {% for classroom in classroom_list %}
+                                    <li class="{% if classroom.is_overdue %}text-danger{% endif %}">
+                                        <a href="/classroom/classroom/{{ classroom.pk }}"> {{ classroom }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Only teacher registered in a discipline" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+    {% if user.is_staff %}
+
+        {% if institute_list %}
+            <h1>{% trans "Institute Update" %}</h1>
+            <ul>
+
+                {% for institute in institute_list %}
+                    <li class="{% if institute.is_overdue %}text-danger{% endif %}">
+
+                        <a href="/course/institute/{{ institute.pk }}/update">{{ institute.institute_code }}
+                            - {{ institute.institute_name }}</a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        {% endif %}
+
+        <form action="../institute/create/" method="">
+            {% csrf_token %}
+            <input type="submit" action="" value={% trans "Create a new Institute" %}/>
+        </form>
+
+
+    {% else %}
+
+        {% if institute_list %}
+            <h1>{% trans "Institute List" %}</h1>
+
+            <ul>
+
+                {% for institute in institute_list %}
+                    <li class="{% if institutes.is_overdue %}text-danger{% endif %}">
+                        <a href="/course/institute/{{ institute.pk }}">{{ institute.institute_code }}
+                            - {{ institute.institute_name }}</a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

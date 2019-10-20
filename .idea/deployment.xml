@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="vcad.ufabc.edu.br" showDialogOnRemoteDnD="false">
+    <serverData>
+      <paths name="177.104.60.16">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/fz/django_webmctest/mctest/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="nubisys.ufabc.edu.br">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/fz/django_webmctest/mctest/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="vcad.ufabc.edu.br">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/fz/django_webmctest/mctest/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="vision">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/fz/django_webmctest/mctest/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

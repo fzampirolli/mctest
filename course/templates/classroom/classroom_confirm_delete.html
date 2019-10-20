@@ -1,0 +1,41 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Delete Classroom" %}</h5>
+
+                <hr>
+
+                {% if user.groups.all.0.name == 'professor' %}
+
+                    <p class="card-text">
+                        {% trans "Are you sure you want to delete the classroom" %}: <code>{{ classroom }}</code>?
+                    </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <hr/>
+                        <div class="text-left">
+                            <a href="{% url 'course:classroom-mylist' %}" class="btn btn-outline-danger">
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-danger">{% trans "Delete" %}</button>
+                        </div>
+                    </form>
+
+                {% endif %}
+
+                <hr>
+                {% trans "Only teacher registered in a discipline" %}<br>
+                {% trans "Contact your discipline coordinator" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
