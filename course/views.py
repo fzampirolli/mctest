@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
@@ -482,7 +482,13 @@ class ClassroomDelete(LoginRequiredMixin, generic.DeleteView):
     template_name = 'classroom/classroom_confirm_delete.html'
     success_url = '/course/classroomsmy'
 
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            raise Http404(value)
+            setattr(self, key, value)
+
     def form_valid(self, form):
+        raise Http404("oi")
         if not self.request.user in form.instance.discipline.discipline_profs.all():
             messages.error(self.request, _('ClassroomDelete: The teacher is not registered in a Discipline'))
             return render(self.request, 'exam/exam_errors.html', {})

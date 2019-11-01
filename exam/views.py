@@ -31,6 +31,7 @@ import datetime
 import glob
 import os
 import re
+import random
 
 import cv2  # pip install opencv-python
 import numpy as np
@@ -894,7 +895,7 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            return HttpResponse("Invalid Form!\nVerify if date follows the format, for example.")
+            return HttpResponse(_("Invalid Form! Verify if date follows the format, for example."))
 
 
     else:

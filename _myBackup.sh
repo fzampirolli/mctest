@@ -15,6 +15,7 @@ BACKUP_DIR=/backup/mysql
 BACKUP_NAME=mysql-$DATE.sql
 BACKUP_TAR=mysql-$DATE.tar
 PATH_MCTest=/home/fz/django_webmctest
+PYTHON=/home/fz/django_webmctest/AmbientePython3/bin/python3
 
 echo "  -- in $IP_HOST"
 echo "  -- Gerando Backup da base de dados $DB_NAME em $BACKUP_DIR/$BACKUP_NAME ..."
@@ -46,9 +47,8 @@ find $PATH_MCTest/mctest/ -iname "*.log" -size +1M -exec mv {} "correct-$DATA.lo
 cd $PATH_MCTest
 source AmbientePython3/bin/activate
 cd mctest
-python3 manage.py shell <_clearsessions.py
+$PYTHON manage.py shell < _clearsessions.py
 
-PYTHON=$PATH_MCTest/AmbientePython3/bin/python3
 BACKUP_DIR=/backup/json
 BACKUP_NAME=json-$DATE.json
 BACKUP_TAR=json-$DATE.tar

@@ -179,7 +179,6 @@ echo "mysql -u root -p '"$DB_NAME"' < 'mctest.sql'"
 
 # OUTROS
 
-
 cp crontabDjango.sh ../
 cp runDjango.sh ../
 
@@ -191,6 +190,8 @@ service cron restart
 
 
 : '
+brew services restart mysql
+
 mysql -u root
 grant all privileges on DB_MCTest.* to 'fz'@'localhost';
 grant usage on *.* to 'fz'@'localhost';
@@ -214,7 +215,6 @@ sudo apt-get autoclean
 
 ### editar locale/*
 django-admin.py makemessages -l pt
-emacs locale/pt/LC_MESSAGES/django.po &
 django-admin.py compilemessages
 
 

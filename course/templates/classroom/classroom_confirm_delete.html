@@ -16,6 +16,28 @@
                         {% trans "Are you sure you want to delete the classroom" %}: <code>{{ classroom }}</code>?
                     </p>
 
+                    <script> var count = 0; </script>
+                    {% for c in classroom.discipline.classrooms2.all %}
+                        {% for e in c.exams2.all %}
+                            {% if c.exams2.all.count == 1 and classroom == c %}
+                                <script>
+                                    count++;
+                                </script>
+                                <hr/>
+                                <p>
+                                    {% trans "An exam cannot exist without a marked classroom!!!" %}
+                                    {% trans "Before you delete, MAKE SURE you have another classroom marked in all exams." %}
+                                </p>
+                                <p>
+                                    {% trans "Classrooms from discipline" %}
+                                    <code>{{ classroom.discipline.discipline_name }}</code>
+                                </p>
+                                {% trans "Exam " %} <code>{{ e.exam_name }}</code>
+                                {% trans "has ONLY ONE classroom: " %} <code>{{ c }}</code><br>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+
                     <form method="post">
                         {% csrf_token %}
 
@@ -26,8 +48,15 @@
                             </a>
                         </div>
                         <div class="text-right">
-                            <button class="btn btn-danger">{% trans "Delete" %}</button>
+
+                            <script>
+                                if (count == 0) {
+                                    document.write("<button class=\"btn btn-danger\">");
+                                    document.write("{%  trans 'Delete' %}</button>")
+                                }
+                            </script>
                         </div>
+
                     </form>
 
                 {% endif %}
