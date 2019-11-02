@@ -50,6 +50,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from more_itertools import chunked  # pip install more-itertools
+import itertools as it
 from pyzbar.pyzbar import decode
 from skimage.measure import label
 from skimage.measure import regionprops  # pip install scikit-image
@@ -314,15 +315,14 @@ class cvMCTest(object):
         for region in regionprops(labels):
             if areaMax < region.area:
                 areaMax = region.area
-            #print("####region.area####===", region.area)
+            h, w = region.centroid
             if circle_min < region.area < circle_max:
-                h, w = region.centroid
+                #print("####region.area####===", region.area, int(h), int(w))
                 p.append([int(h), int(w)])
 
-        # print(p)
         findRec = []  # se tiver mais que 4 pontos, escolho os que formam um retangulo
-        for i in chunked(range(len(p)), 4):
-            # print(i)
+        for i in np.array(list(it.combinations(range(len(p)), 4))):
+            #print(i)
             if len(i) == 4 and cvMCTest.isBigRectangle(p[i[0]], p[i[1]], p[i[2]], p[i[3]]):
                 findRec = [p[i[0]], p[i[1]], p[i[2]], p[i[3]]]
 
@@ -332,7 +332,6 @@ class cvMCTest(object):
             print("INTERVALO CONSIDERADO  = ", circle_min, circle_max)
             return -1
         else:
-
             return cvMCTest.order_points(findRec)
 
     @staticmethod

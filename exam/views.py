@@ -377,6 +377,7 @@ def correctStudentsExam(request, pk):
                 imgQR = cvMCTest.segmentQRcode(img, countPage)
                 if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02qrcode.png", imgQR)
                 qr = cvMCTest.decodeQRcode(imgQR)
+
             except:
                 # messages.warning(request, "Error in find QRCode, pag:"+ str(countPage))
                 # return HttpResponse("Error in find QRCode, pag:"+ str(countPage))
