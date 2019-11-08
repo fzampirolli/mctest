@@ -1035,7 +1035,7 @@ class cvMCTest(object):
 
                     area = 110 - int(sum(sum(iii == 0)))
 
-                    if area > 45:
+                    if area > 58:
                         if DEBUG: cv2.imwrite(
                             "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
                                 countSquare + 1) +
@@ -1043,6 +1043,7 @@ class cvMCTest(object):
                         if DEBUG: rect.append([x, y, w, h])
 
                         n = notas[countQuestions]
+
                         answers_n.append(n)
                         answers_area.append(area)
 

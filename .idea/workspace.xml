@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ProvaEscaneadaArqCompP12019-3Mat.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ProvaEscaneadaArqCompP12019-3Matv1.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysql-2019-11-01.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysql-2019-11-01.tar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_Manha150dpi_RETURN__.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_Manha150dpiarrastado_RETURN__.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_ProvaEscaneadaArqCompP12019-3Mat_RETURN__.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_ProvaEscaneadaArqCompP12019-3Matv1_RETURN__.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_Scanned-image_RETURN__.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_Scanned-image_p45_46_RETURN__.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_p17_RETURN__.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmpGAB/190425-1572550844540;2;64;31201910003;0;3;217;53;56;.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmpGAB/190425-1572550844739;2;64;522764174;0;3;217;53;56;.txt" afterDir="false" />
@@ -1973,10 +1973,10 @@
       <change afterPath="$PROJECT_DIR$/tmpGAB/191101-1572641505205;240;104;11041312;2;0;18;0;0;0;0;0;5;.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmpGAB/191101-1572641505423;240;104;11047514;2;0;18;0;0;0;0;0;5;.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_setup-all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/_setup-all.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/correct.log" beforeDir="false" afterPath="$PROJECT_DIR$/correct.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exam/CVMCTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/CVMCTest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exam/newVersion.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -2373,13 +2373,10 @@
       <workItem from="1572568706221" duration="150000" />
       <workItem from="1572637074278" duration="8363000" />
       <workItem from="1572646905473" duration="6396000" />
-    </task>
-    <task id="LOCAL-00001" summary="change license">
-      <created>1565568106327</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1565568106327</updated>
+      <workItem from="1572702389640" duration="3596000" />
+      <workItem from="1573223500641" duration="478000" />
+      <workItem from="1573224079220" duration="64000" />
+      <workItem from="1573224154068" duration="280000" />
     </task>
     <task id="LOCAL-00002" summary="change license">
       <created>1565616015115</created>
@@ -2717,7 +2714,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572644500711</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="change new GUI">
+      <created>1572702617422</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1572702617423</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

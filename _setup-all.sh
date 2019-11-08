@@ -191,6 +191,7 @@ service cron restart
 
 : '
 brew services restart mysql
+mysql -h localhost -P 3306 -u root -p DB_MCTest
 
 mysql -u root
 grant all privileges on DB_MCTest.* to 'fz'@'localhost';
