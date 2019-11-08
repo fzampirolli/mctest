@@ -13,15 +13,8 @@
       <change afterPath="$PROJECT_DIR$/pdfStudentEmail/download/11201811442_001.pdf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pdfStudentEmail/download/11201811442_001.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e102_fzampirolli@ufabc.edu.br_teste.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_setup-all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/_setup-all.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/correct.log" beforeDir="false" afterPath="$PROJECT_DIR$/correct.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/CVMCTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/CVMCTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/templates/exam/exam_update2.html" beforeDir="false" afterPath="$PROJECT_DIR$/exam/templates/exam/exam_update2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mctest/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mctest/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_settings-vision.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configVision.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -422,14 +415,7 @@
       <workItem from="1573223500641" duration="478000" />
       <workItem from="1573224079220" duration="64000" />
       <workItem from="1573224154068" duration="674000" />
-      <workItem from="1573236187659" duration="13332000" />
-    </task>
-    <task id="LOCAL-00003" summary="change license">
-      <created>1565795270586</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1565795270586</updated>
+      <workItem from="1573236187659" duration="13671000" />
     </task>
     <task id="LOCAL-00004" summary="change license">
       <created>1565795732312</created>
@@ -767,7 +753,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573224473632</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="change new GUI">
+      <created>1573250135444</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1573250135444</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
