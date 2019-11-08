@@ -89,11 +89,6 @@ def feedbackStudentsExamText(request, pk):
 
         filestr = str(file)
 
-        if int(filestr[2:filestr.find("q")]) != exam.id:
-            messages.error(request,
-                           _("feedbackStudentsExamText: Differents Exams ") + exam.id + filestr[2:filestr.find("q")])
-            return render(request, 'exam/exam_errors.html', {})
-
         fs = FileSystemStorage()
         filename = fs.save(file.name, file)
         uploaded_file_url = fs.url(filename)
@@ -111,24 +106,41 @@ def feedbackStudentsExamText(request, pk):
         except Exception as e:
             pass
 
-        os.system("unzip " + path_to_file0 + " -d " + BASE_DIR + "/pdfStudentEmail/")
+        os.system("unzip " + path_to_file0 + " -d " + path2)
 
         myfiles = []
         idQuestion = ""
         for f in np.sort(glob.glob(path2 + '/*.pdf')):
+
+            # try reading the pdf file using another way
+            pages = convert_from_path(f, 200)  # dpi 100=min 500=max
+            pages[0].save(f[:-4] + '.png')
+            pages.clear()
+            img = cv2.imread(f[:-4] + '.png')
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+            page = f[-7:-4]
+            myFlagArea, qr = cvMCTest.getQRCode(img, int(page))
+            if int(qr['idExam']) != exam.id:
+                messages.error(request,
+                               _("feedbackStudentsExamText: Differents Exams ") + exam.id + qr['idExam'])
+                return render(request, 'exam/exam_errors.html', {})
+
             fp = f.split('/')
             ss = fp[len(fp) - 2]
-            idExam = ss[2:ss.find("q")]
-            idQuestion = ss[ss.find("q") + 1:]
+
+            idExam = qr['idExam']     #ss[2:ss.find("q")]
+            idQuestion = qr['question'] #ss[ss.find("q") + 1:]
+            idStudent = qr['idStudent']
 
             fp = f.split("/")
             ss = fp[len(fp) - 1]
             ss0 = ss.split(";")
-            nota = erros = idStudent = ""
+            nota = erros = ""
             if len(ss0) == 2:
                 nota = ss0[0]
                 ss1 = ss0[1].split("_")
-                idStudent = ss1[0]
+                #idStudent = qr['idStudent'] # ss1[0]
 
                 try:
                     page = ss1[1][:-4]
@@ -142,12 +154,12 @@ def feedbackStudentsExamText(request, pk):
                 nota = ss0[0]
                 erros = ss0[1]
                 ss1 = ss0[2].split("_")
-                idStudent = ss1[0]
-                page = ss1[1][:-4]
+                #idStudent = qr['idStudent'] # ss1[0]
+                #page = ss1[1][:-4]
             else:
                 ss1 = ss.split("_")
-                idStudent = ss1[0]
-                page = ss1[1][:-4]
+                #idStudent = qr['idStudent'] #ss1[0]
+                #page = ss1[1][:-4]
 
             myfiles.append([idExam, idQuestion, idStudent, nota, erros, page, f])
 
@@ -278,6 +290,7 @@ from django.core.files.storage import FileSystemStorage
 
 from pdf2image import convert_from_path
 
+import img2pdf
 
 @login_required
 def correctStudentsExam(request, pk):
@@ -351,7 +364,7 @@ def correctStudentsExam(request, pk):
             print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
             myfile0 = MYFILES + '_p' + str(countPage) + '.png'
             img = cv2.imread(myfile0)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             cvMCTest.centroidsMarked = []
             countCorrectExams += 1
@@ -361,27 +374,7 @@ def correctStudentsExam(request, pk):
             # img = 255 - imgs[countPage]
             if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)
 
-            myFlagArea = True
-            qr = []
-            try:  # try find Answer Area
-                cvMCTest.imgAnswers = img = cvMCTest.getAnswerArea(img, countPage)
-                if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02answerArea.png", img)
-            except:
-                # messages.warning(request, "Error in find Answer Area, pag:"+ str(countPage))
-                # return HttpResponse("Error in find Answer Area, pag:"+ str(countPage))
-                myFlagArea = False
-                pass
-
-            try:  # try find QRcode
-                # if True:
-                imgQR = cvMCTest.segmentQRcode(img, countPage)
-                if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02qrcode.png", imgQR)
-                qr = cvMCTest.decodeQRcode(imgQR)
-
-            except:
-                # messages.warning(request, "Error in find QRCode, pag:"+ str(countPage))
-                # return HttpResponse("Error in find QRCode, pag:"+ str(countPage))
-                pass
+            myFlagArea, qr = cvMCTest.getQRCode(img, countPage)
 
             if not qr:
                 qr = dict()
@@ -425,15 +418,25 @@ def correctStudentsExam(request, pk):
 
                 os.system("mkdir " + mypath)
 
-                output = PdfFileWriter()
+                #output = PdfFileWriter()
                 # output.addPage(input_pdf.getPage(countPage))
-                output.addPage(pages[countPage])
+                #output.addPage(img0)
 
                 if countPage < numPAGES - 1:  # salva tb verso
                     countPage += 1
-                    # output.addPage(input_pdf.getPage(countPage))
-                    output.addPage(pages[countPage])
+                    myfile2 = MYFILES + '_p' + str(countPage) + '.png'
+                    #img2 = cv2.imread(myfile2)
 
+                    # output.addPage(input_pdf.getPage(countPage))
+                    #output.addPage(img2)
+
+                    with open(myfile, "wb") as outputStream:
+                        outputStream.write(img2pdf.convert(myfile0, myfile2))
+                else:
+                    with open(myfile, "wb") as outputStream:
+                        outputStream.write(img2pdf.convert(myfile0))
+
+                ''' se tiver mais que uma pagina por aluno
                 flagOK = True
                 while flagOK and countPage < numPAGES - 1:
                     countPage += 1
@@ -455,9 +458,11 @@ def correctStudentsExam(request, pk):
                         countPage -= 1
                     # except:
                     #    output.addPage(input_pdf.getPage(countPage))
+                '''
 
-                with open(myfile, "wb") as outputStream:
-                    output.write(outputStream)
+
+                #with open(myfile, "wb") as outputStream:
+                #    output.write(outputStream)
 
             elif qr:
 
@@ -551,11 +556,10 @@ def correctStudentsExam(request, pk):
             pass
 
         if qr['onlyT']:  # questoes dissertativas e uma questao por pagina: salva a página em tmp
-            os.system(
-                "mv " + BASE_DIR + "/tmp/_e" + str(exam.id) + str(request.user) + "_q0/* " + BASE_DIR + "/tmp/_e" + str(
-                    exam.id) + str(request.user) + "_q" + qr['question'] + "/")
-            os.system("zip -j " + fzip + " " + BASE_DIR + "/tmp/_e" + str(exam.id) + str(request.user) + "_q" + qr[
-                'question'] + "/*")
+            os.system("mv " + BASE_DIR + "/tmp/_e" + str(exam.id) + str(request.user) + "*_q0/* " + mypath)
+            os.system("zip -j " + fzip + " " + mypath + "/*")
+            os.system("rm -rf " + mypath)
+            os.system("rm " + mypath[:-5] + "*.png")
 
         else:
             path_to_file = BASE_DIR + "/" + file[:-4] + ".csv"
@@ -588,15 +592,15 @@ def correctStudentsExam(request, pk):
             else:
                 fzip = MYFILES + "_RETURN__.csv"
 
-            try:
-                # os.remove("{}.pdf".format(BASE_DIR + "/" + file[:-4]))
-                os.remove("{}.csv".format(BASE_DIR + "/" + file[:-4]))
-                os.system("rm " + MYFILES + "*.png")
-                if fzip[-3:] == 'zip':
-                    os.system("rm " + MYFILES + "_RETURN__.csv")
-                pass
-            except Exception as e:
-                pass
+        try:
+            # os.remove("{}.pdf".format(BASE_DIR + "/" + file[:-4]))
+            os.remove("{}.csv".format(BASE_DIR + "/" + file[:-4]))
+            os.system("rm " + MYFILES + "/*.png")
+            if fzip[-3:] == 'zip':
+                os.system("rm " + MYFILES + "_RETURN__.csv")
+            pass
+        except Exception as e:
+            pass
 
     return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
 

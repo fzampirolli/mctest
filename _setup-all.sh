@@ -241,7 +241,6 @@ sudo service cron restart
 
 ### editar locale/*
 django-admin.py makemessages -l pt
-emacs locale/pt/LC_MESSAGES/django.po &
 django-admin.py compilemessages
 
 pip install django-extensions
@@ -260,7 +259,7 @@ flush privileges;
 
 
 pip3 install django-widget-tweaks
-pip install django-extensions
-pip install python-decouple
+pip3 install django-extensions
+pip3 install python-decouple
 
 '

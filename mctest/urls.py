@@ -45,8 +45,11 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 
-from django.conf import settings
+
 from django.conf.urls.static import static
+
+from mctest.settings import STATIC_ROOT
+from mctest.settings import STATIC_URL
 
 urlpatterns = [
     path('', include('main.urls', namespace='main')),
@@ -56,4 +59,4 @@ urlpatterns = [
     path('course/', include('course.urls'), name='course'),
     path('account/', include('django.contrib.auth.urls')),
     path('student/', include('student.urls'), name='student'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(STATIC_URL, document_root=STATIC_ROOT)

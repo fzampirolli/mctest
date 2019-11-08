@@ -46,7 +46,9 @@ import PyPDF2  # pip install PyPDF2
 import bcrypt
 import cv2  # pip install opencv-python
 import numpy as np
-from django.conf import settings
+from mctest.settings import webMCTest_FROM
+from mctest.settings import webMCTest_PASS
+from mctest.settings import webMCTest_SERVER
 from django.http import HttpResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from more_itertools import chunked  # pip install more-itertools
@@ -74,6 +76,34 @@ class cvMCTest(object):
     imgAnswers = None
     imgAnswersSegment = None
     centroidsMarked = []
+
+    ################ para manipular PDF #################
+    @staticmethod
+    def getQRCode(img, countPage):
+        DEBUG = False
+
+        myFlagArea = True
+        qr = []
+        try:  # try find Answer Area
+            cvMCTest.imgAnswers = img = cvMCTest.getAnswerArea(img, countPage)
+            if DEBUG: cv2.imwrite("_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_01answerArea.png", img)
+        except:
+            # messages.warning(request, "Error in find Answer Area, pag:"+ str(countPage))
+            # return HttpResponse("Error in find Answer Area, pag:"+ str(countPage))
+            myFlagArea = False
+            pass
+
+        try:  # try find QRcode
+            # if True:
+            imgQR = cvMCTest.segmentQRcode(img, countPage)
+            if DEBUG: cv2.imwrite("_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_02qrcode.png", imgQR)
+            qr = cvMCTest.decodeQRcode(imgQR)
+
+        except:
+            # messages.warning(request, "Error in find QRCode, pag:"+ str(countPage))
+            # return HttpResponse("Error in find QRCode, pag:"+ str(countPage))
+            pass
+        return myFlagArea, qr
 
     ################ para manipular PDF #################
     @staticmethod
@@ -1633,7 +1663,8 @@ class cvMCTest(object):
         # mensagem += "Attached is the feedback from your test. Seek your teacher for questions."+"\n\n"
 
         # porta smtp do gmail e ufabc
-        porta = 587
+        myporta = 587
+        myserver = webMCTest_SERVER
 
         # Assunto do email
         assunto = "Mensagem enviada automaticamente por webMCTest"
@@ -1645,10 +1676,10 @@ class cvMCTest(object):
         # mensagem += "\n\n" + "* Atenção: Essa é uma mensagem automática, as respostas não são monitoradas.\n"
 
         # chamada a funcao de envio do email
-        cvMCTest.envia_email(settings.webMCTest_SERVER,
-                             porta,
-                             settings.webMCTest_FROM,
-                             settings.webMCTest_PASS,
+        cvMCTest.envia_email(webMCTest_SERVER,
+                             myporta,
+                             webMCTest_FROM,
+                             webMCTest_PASS,
                              destinatario,
                              assunto,
                              mensagem,
