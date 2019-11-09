@@ -120,6 +120,14 @@ def feedbackStudentsExamText(request, pk):
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             page = f[-7:-4]
+            try:
+                a = int(page)
+            except:
+                messages.error(request,
+                               _(
+                                   "feedbackStudentsExamText: name of the pdf file does not follow a pattern ID_xxx.pdf"))
+                return render(request, 'exam/exam_errors.html', {})
+
             myFlagArea, qr = cvMCTest.getQRCode(img, int(page))
             if int(qr['idExam']) != exam.id:
                 messages.error(request,
@@ -129,7 +137,7 @@ def feedbackStudentsExamText(request, pk):
             fp = f.split('/')
             ss = fp[len(fp) - 2]
 
-            idExam = qr['idExam']     #ss[2:ss.find("q")]
+            idExam = qr['idExam']       #ss[2:ss.find("q")]
             idQuestion = qr['question'] #ss[ss.find("q") + 1:]
             idStudent = qr['idStudent']
 
@@ -140,25 +148,17 @@ def feedbackStudentsExamText(request, pk):
             if len(ss0) == 2:
                 nota = ss0[0]
                 ss1 = ss0[1].split("_")
-                #idStudent = qr['idStudent'] # ss1[0]
-
-                try:
-                    page = ss1[1][:-4]
-                except:
-                    messages.error(request,
-                                   _(
-                                       "feedbackStudentsExamText: name of the pdf file does not follow a pattern ID_xxx.pdf"))
-                    return render(request, 'exam/exam_errors.html', {})
+                #idStudent = ss1[0]
 
             elif len(ss0) == 3:
                 nota = ss0[0]
                 erros = ss0[1]
                 ss1 = ss0[2].split("_")
-                #idStudent = qr['idStudent'] # ss1[0]
+                #idStudent =  ss1[0]
                 #page = ss1[1][:-4]
             else:
                 ss1 = ss.split("_")
-                #idStudent = qr['idStudent'] #ss1[0]
+                #idStudent = ss1[0]
                 #page = ss1[1][:-4]
 
             myfiles.append([idExam, idQuestion, idStudent, nota, erros, page, f])
@@ -186,7 +186,7 @@ def feedbackStudentsExamText(request, pk):
                 for f in myfiles:
                     if f[0] == str(exam.id) and f[2] == s.student_ID:
                         email = "fzampirolli@gmail.com"
-                        email = s.student_email
+                        #email = s.student_email
                         data_hora = datetime.datetime.now()
                         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
                         file_name = f[6]
@@ -408,8 +408,6 @@ def correctStudentsExam(request, pk):
             if not countPage:  # para correcoes sem questoes, com apenas quadro de reposta,
                 qr0 = qr  # guarda a primeira pagina como gabarito
 
-            # if countPage==6: raise Http404('lin317',qr)
-
             if qr['onlyT']:  # questoes dissertativas e uma questao por pagina - frente-verso: salva a página em tmp/
                 print(">>>>text>>>>", qr)
                 mypath = MYFILES + "_q" + qr['question']
@@ -430,8 +428,23 @@ def correctStudentsExam(request, pk):
                     # output.addPage(input_pdf.getPage(countPage))
                     #output.addPage(img2)
 
+                    fileImages = [myfile0, myfile2]
+
+                    flagOK = False
+                    while not flagOK and countPage < numPAGES - 1:
+                        myfile3 = MYFILES + '_p' + str(countPage+1) + '.png'
+                        img2 = cv2.imread(myfile3)
+                        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+                        flagOK, qr3 = cvMCTest.getQRCode(img2, countPage)
+
+                        if not qr3:
+                            fileImages.append(myfile3)
+                            countPage+=1
+                        else:
+                            flagOK = True
+
                     with open(myfile, "wb") as outputStream:
-                        outputStream.write(img2pdf.convert(myfile0, myfile2))
+                        outputStream.write(img2pdf.convert(fileImages))
                 else:
                     with open(myfile, "wb") as outputStream:
                         outputStream.write(img2pdf.convert(myfile0))

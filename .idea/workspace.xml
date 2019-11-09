@@ -1,20 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="">
+    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="change new GUI">
       <change afterPath="$PROJECT_DIR$/mysql-2019-11-08.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/mysql-2019-11-08.tar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfStudentEmail/_e102_1240/11119614_003.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfStudentEmail/_e102_1240/11119614_003.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfStudentEmail/_e102_1240/11201811442_001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfStudentEmail/_e102_1240/11201811442_001.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pdfStudentEmail/download/11119614_003.pdf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pdfStudentEmail/download/11119614_003.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pdfStudentEmail/download/11201811442_001.pdf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pdfStudentEmail/download/11201811442_001.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/_e102_fzampirolli@ufabc.edu.br_teste.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_settings-vision.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configVision.txt" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/report102q1240.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_0LZgt7q.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_8Sm5gEi.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_AtmlIkp.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_Q6115vf.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_SUctRDo.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_T5xvaHk.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_e9n300w.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_eqlxJeO.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_f4KQ3v7.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_hqASeq4.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_nzuJG1V.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_sPE5Aj1.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teste004ads_z1mW9PI.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e102_fzampirolli@ufabc.edu.br_teste004ads.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e102_fzampirolli@ufabc.edu.br_teste004ads/11119614_004.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/_e102_fzampirolli@ufabc.edu.br_teste004ads/11201811442_001.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Provateste.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bash.bashrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bashrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/correct.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docDjango.new.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/duvida.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/exam/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -415,14 +436,8 @@
       <workItem from="1573223500641" duration="478000" />
       <workItem from="1573224079220" duration="64000" />
       <workItem from="1573224154068" duration="674000" />
-      <workItem from="1573236187659" duration="13671000" />
-    </task>
-    <task id="LOCAL-00004" summary="change license">
-      <created>1565795732312</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1565795732312</updated>
+      <workItem from="1573236187659" duration="16079000" />
+      <workItem from="1573259656246" duration="2805000" />
     </task>
     <task id="LOCAL-00005" summary="change license">
       <created>1565804224734</created>
@@ -760,7 +775,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573250135444</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="change new GUI">
+      <created>1573250476336</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1573250476336</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
