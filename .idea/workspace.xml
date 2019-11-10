@@ -172,7 +172,6 @@
       <change beforePath="$PROJECT_DIR$/docDjango.new.sh" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/duvida.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/exam/templates/exam/exam_update2.html" beforeDir="false" afterPath="$PROJECT_DIR$/exam/templates/exam/exam_update2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
     </list>
@@ -579,14 +578,7 @@
       <workItem from="1573320587011" duration="2024000" />
       <workItem from="1573326437094" duration="1139000" />
       <workItem from="1573327677322" duration="134000" />
-      <workItem from="1573329741939" duration="14149000" />
-    </task>
-    <task id="LOCAL-00006" summary="change license">
-      <created>1565805906918</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1565805906918</updated>
+      <workItem from="1573329741939" duration="14402000" />
     </task>
     <task id="LOCAL-00007" summary="change license">
       <created>1565855957930</created>
@@ -924,7 +916,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573262536911</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="change new GUI">
+      <created>1573383701291</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1573383701292</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
