@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-08 19:12-0300\n"
+"POT-Creation-Date: 2019-11-10 07:59-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1006,7 +1006,7 @@ msgstr "StudentCreate: Já existe ID"
 msgid "StudentCreate: Created Student "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:435 exam/views.py:1045
+#: course/views.py:435 exam/views.py:1019
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1583,16 +1583,17 @@ msgid ""
 "follow a few steps: (1) in the previous column step, when uploading all "
 "exams in PDF, a zip file with a folder for each question was generated (for "
 "example, Download.zip). Within this folder a pdf was generated for each "
-"student in the format 123_001.pdf, where 123 is the student ID and 001 is "
-"the pdf page. The teacher can correct by making annotations in the PDF "
-"itself OR also can scan with annotations made in the pen. (2) manually "
-"change the file names of each question in the format _c;e1,e2,...;123_001."
-"pdf, where c is a concept or a note and ei are error code numbers "
-"(optional); in the question folder, it should have a _msg.txt file, with a "
-"message to be sent to each student. (3) compress the folder of each question "
-"for all students (for example _e31_769.zip) and press the button above. Each "
-"student will receive the PDF with the corrections and will also return a CSV "
-"file with the concepts of each student."
+"student in the format _e1_c2_q3_p001_5.pdf, where 1 is the exam ID, 2 is the "
+"classroom ID, 3 is the question ID, 001 is the pdf page, and 5 is the "
+"student ID. The teacher can correct by making annotations in the PDF itself "
+"OR also can scan with annotations made in the pen. (2) manually change the "
+"file names of each question in the format _A;e1,e2,...;_e1_c2_q3_p001_5.pdf, "
+"where A is a concept or a note and ei are error code numbers (optional); in "
+"the question folder, it should have a _e1_c2_q3.txt file, with a message to "
+"be sent to each student. (3) compress the folder of each question for all "
+"students (for example _e1_q2.zip) and press the button above. Each student "
+"will receive the PDF with the corrections and will also return a CSV file "
+"with the concepts of each student."
 msgstr ""
 "Atenção: Se foi utilizado exames com questões dissertativas e no formato NÃO "
 "ecológico, então foi gerado uma questão por folha, certo? Se quiser enviar "
@@ -1600,16 +1601,17 @@ msgstr ""
 "necessário seguir alguns passos: (1) no passo da coluna anterior, ao fazer "
 "upload de todas os exames digitalizados, foi gerado um arquivo zip com uma "
 "pasta para cada questão (ex. Download.zip). Dentro desta pasta foi gerado um "
-"pdf para cada estudante no formato 123_001.pdf, onde 123 é o ID do estudante "
-"e 001 é a página do pdf. O professor pode corrigir fazendo anostações no "
-"próprio PDF OU pode também digitalizar com anotações feitas à caneta. (2) "
-"alterar manualmente os nomes dos arquivos de cada questão da forma _c;e1,"
-"e2,...;123_001.pdf, onde c é um conceito ou nota e ei são números de códigos "
-"de erros (opcional); na pasta da questão, tem que ter um arquivo _msg.txt, "
-"com uma mensagem a ser enviada para cada estudante. (3) compactar a pasta de "
-"cada questão (ex. _e31_769.zip) e fazer upload no botão acima. Será enviado "
-"para cada estudante o PDF com as correções e também irá retornar um arquivo "
-"CSV com os conceitos de cada estudante."
+"pdf para cada estudante no formato _e1_c2_q3_p001_5.pdf, onde 1 é o ID do "
+"exame, 2 é o ID da turma, 3 é o ID da questão, 001 é a página e 5 é o ID do "
+"estudante. O professor pode corrigir fazendo anostações no próprio PDF OU "
+"pode também digitalizar com anotações feitas à caneta. (2) alterar "
+"manualmente os nomes dos arquivos de cada questão da forma _A;e1,e2,...;"
+"_e1_c2_q3_p001_5.pdf, onde A é um conceito ou nota e ei são números de "
+"códigos de erros (opcional); na pasta da questão, tem que ter um arquivo "
+"_e1_c2_q3.txt, com uma mensagem a ser enviada para cada estudante. (3) "
+"compactar a pasta de cada questão (ex. _e1_q2.zip) e fazer upload no botão "
+"acima. Será enviado para cada estudante o PDF com as correções e também irá "
+"retornar um arquivo CSV com os conceitos de cada estudante."
 
 #: exam/templates/exam/exam_update2.html:71
 msgid "Send-Feedback-Students"
@@ -1680,7 +1682,7 @@ msgstr "Estilo do Exame"
 msgid "Delete this Exam"
 msgstr "Apagar este Exame"
 
-#: exam/views.py:75
+#: exam/views.py:78
 msgid ""
 "feedbackStudentsExamText: feedback to student is NO, Change to YES and click "
 "in Upload-PDF again!"
@@ -1688,7 +1690,7 @@ msgstr ""
 "feedbackStudentsExamText: retorno do estudante é NÃO, escolher SIM e clique "
 "em Upload-PDF novamente"
 
-#: exam/views.py:87
+#: exam/views.py:90
 msgid ""
 "feedbackStudentsExamText: choose a ZIP file with scanned exams, for example "
 "_e31_769.zip!"
@@ -1696,18 +1698,14 @@ msgstr ""
 "feedbackStudentsExamText: escolher um arquivo ZIP com os exames "
 "digitalizados, por exemplo: _e31_769.zip!"
 
-#: exam/views.py:126
-msgid "feedbackStudentsExamText: Differents Exams "
-msgstr "feedbackStudentsExamText: exames diferentes"
-
-#: exam/views.py:150
+#: exam/views.py:138
 msgid ""
 "feedbackStudentsExamText: name of the pdf file does not follow a pattern "
 "ID_xxx.pdf"
 msgstr ""
 "feedbackStudentsExamText: nome do arquivo PDF não segue um padrão: ID_xxx.pdf"
 
-#: exam/views.py:204
+#: exam/views.py:198
 msgid ""
 "feedbackStudentsExamText: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -1715,7 +1713,7 @@ msgstr ""
 "feedbackStudentsExamText: nenhum email foi enviado, você está em Exame e "
 "Turma corretos?"
 
-#: exam/views.py:227
+#: exam/views.py:221
 msgid ""
 "feedbackStudentsExam: feedback to student is NO, Change to YES and click in "
 "Upload-PDF again!"
@@ -1723,7 +1721,7 @@ msgstr ""
 "feedbackStudentsExam: retorno ao estudante é NÃO, escolher SIM e clique em "
 "Upload-PDF novamente!"
 
-#: exam/views.py:280
+#: exam/views.py:274
 msgid ""
 "feedbackStudentsExam: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -1731,67 +1729,67 @@ msgstr ""
 "feedbackStudentsExam: nenhum email foi enviado, você está em Exame e Turma "
 "corretos?"
 
-#: exam/views.py:310
+#: exam/views.py:300
 msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
-#: exam/views.py:655
+#: exam/views.py:629
 msgid "Dear"
 msgstr ""
 
-#: exam/views.py:656
+#: exam/views.py:630
 msgid ""
 "This message contains the test cases to be inserted into moodle for "
 "automatic correction of student submitted codes."
 msgstr ""
 
-#: exam/views.py:657
+#: exam/views.py:631
 msgid "Follow these steps:"
 msgstr ""
 
-#: exam/views.py:658
+#: exam/views.py:632
 msgid ""
 "1. Use the pdf with the exams generated with this date and time "
 "(EXACTLY !!!): "
 msgstr ""
 
-#: exam/views.py:659
+#: exam/views.py:633
 msgid "2. Save the following content to a *.cases file"
 msgstr ""
 
-#: exam/views.py:660
+#: exam/views.py:634
 msgid "3. "
 msgstr ""
 
-#: exam/views.py:661
+#: exam/views.py:635
 msgid "4. "
 msgstr ""
 
-#: exam/views.py:720
+#: exam/views.py:694
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr ""
 
-#: exam/views.py:729
+#: exam/views.py:703
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:789
+#: exam/views.py:763
 msgid "Error: there is no student in classroom(s)."
 msgstr "Error: não existe estudante na(s) turma(s)"
 
-#: exam/views.py:903
+#: exam/views.py:877
 msgid "Invalid Form! Verify if date follows the format, for example."
 msgstr ""
 
-#: exam/views.py:959
+#: exam/views.py:933
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:974
+#: exam/views.py:948
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:993
+#: exam/views.py:967
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -3047,6 +3045,9 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 #: topic/views.py:594
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid "feedbackStudentsExamText: Differents Exams "
+#~ msgstr "feedbackStudentsExamText: exames diferentes"
 
 #~ msgid "Choose"
 #~ msgstr "Escolher"

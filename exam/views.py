@@ -48,6 +48,9 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
 from tablib import Dataset
+from django.core.files.storage import FileSystemStorage
+from pdf2image import convert_from_path
+import img2pdf
 
 from exam.CVMCTest import cvMCTest
 from exam.UtilsLatex import Utils
@@ -96,81 +99,72 @@ def feedbackStudentsExamText(request, pk):
         path_to_file0 = BASE_DIR + "/" + uploaded_file_url
         path2 = BASE_DIR + "/pdfStudentEmail/" + filestr[:-4]
 
-        try:  # se existir pasta, remover
-            for f in os.listdir(path2):
-                fp = os.path.join(path2, f)
-                if os.path.isfile(fp):
-                    os.remove(fp)
-            os.rmdir(path2)
-            pass
-        except Exception as e:
-            pass
+        os.system('rm -rf ' + path2)
 
         os.system("unzip " + path_to_file0 + " -d " + path2)
 
+        files5 = []
+        # r=root, d=directories, f = files  ===>> pega todos os pdfs
+        for r, d, f in os.walk(path2):
+            for file in f:
+                if '.pdf' in file and file[0] != '.':
+                    files5.append(os.path.join(r, file))
+
         myfiles = []
         idQuestion = ""
-        for f in np.sort(glob.glob(path2 + '/*.pdf')):
+        for f in np.sort(files5):
 
-            # try reading the pdf file using another way
-            pages = convert_from_path(f, 200)  # dpi 100=min 500=max
-            pages[0].save(f[:-4] + '.png')
-            pages.clear()
-            img = cv2.imread(f[:-4] + '.png')
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            #/Users/fz/PycharmProjects/mctest/pdfStudentEmail/download/e102_c224_q1240_p001_11201811442.pdf
+            #['', 'Users', 'fz', 'PycharmProjects', 'mctest', 'pdfStudentEmail', 'download', '_e102_c224_q1240_p001_11201811442.pdf']
+            fp = f.split('/')
 
-            page = f[-7:-4]
+            #_e102_c224_q1240_p001_11201811442.pdf
+            ss = fp[-1]
+
             try:
+                idExam = ss[ss.find('_e') + 2:ss.find('_c')]
+                idClass = ss[ss.find('_c') + 2:ss.find('_q')]
+                idQuestion = ss[ss.find('_q') + 2:ss.find('_p')]
+                page = ss[ss.find('_p') + 2:ss.find('_p') + 5]
+                idStudent = ss[ss.rfind('_') + 1:-4]
+                a = int(idExam)
+                a = int(idClass)
+                a = int(idQuestion)
                 a = int(page)
+                a = int(idStudent)
             except:
                 messages.error(request,
                                _(
                                    "feedbackStudentsExamText: name of the pdf file does not follow a pattern ID_xxx.pdf"))
                 return render(request, 'exam/exam_errors.html', {})
 
-            myFlagArea, qr = cvMCTest.getQRCode(img, int(page))
-            if int(qr['idExam']) != exam.id:
-                messages.error(request,
-                               _("feedbackStudentsExamText: Differents Exams ") + exam.id + qr['idExam'])
-                return render(request, 'exam/exam_errors.html', {})
-
-            fp = f.split('/')
-            ss = fp[len(fp) - 2]
-
-            idExam = qr['idExam']       #ss[2:ss.find("q")]
-            idQuestion = qr['question'] #ss[ss.find("q") + 1:]
-            idStudent = qr['idStudent']
-
-            fp = f.split("/")
-            ss = fp[len(fp) - 1]
             ss0 = ss.split(";")
             nota = erros = ""
             if len(ss0) == 2:
                 nota = ss0[0]
                 ss1 = ss0[1].split("_")
-                #idStudent = ss1[0]
 
             elif len(ss0) == 3:
                 nota = ss0[0]
                 erros = ss0[1]
                 ss1 = ss0[2].split("_")
-                #idStudent =  ss1[0]
-                #page = ss1[1][:-4]
+
             else:
                 ss1 = ss.split("_")
-                #idStudent = ss1[0]
-                #page = ss1[1][:-4]
 
+            print('processing ', page, idQuestion, idStudent)
             myfiles.append([idExam, idQuestion, idStudent, nota, erros, page, f])
 
         try:
-            with open(os.path.join(path2, "_msg.txt"), 'r') as f:
+            #_e102_c224_q1240
+            fileMSG = '_e' + idExam + '_c' + idClass + '_q' + idQuestion + '.txt'
+            with open(os.path.join(path2, fileMSG), 'r', encoding="ISO-8859-1") as f:
                 msg_str = f.read()
         except:
             msg_str = ""
 
         path_to_file = BASE_DIR + "/report" + str(pk) + "q" + idQuestion + ".csv"
-        # raise Http404(path_to_file)
+        #raise Http404(path_to_file)
 
         try:
             os.remove(path_to_file)
@@ -180,8 +174,8 @@ def feedbackStudentsExamText(request, pk):
 
         for room in exam.classrooms.all():  # para cada turma
             for s in room.students.all():  # para cada estudante da turma
-                path = os.getcwd() + "/pdfStudentEmail/"
-                file_name = "studentEmail_e" + str(exam.id) + "_r" + str(room.id) + "_s" + s.student_ID
+                #path = os.getcwd() + "/pdfStudentEmail/"
+                #file_name = "studentEmail_e" + str(exam.id) + "_r" + str(room.id) + "_s" + s.student_ID
 
                 for f in myfiles:
                     if f[0] == str(exam.id) and f[2] == s.student_ID:
@@ -190,7 +184,7 @@ def feedbackStudentsExamText(request, pk):
                         data_hora = datetime.datetime.now()
                         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
                         file_name = f[6]
-
+                        print('send mail to: ', s.student_email)
                         cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name))
                         with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
                             writer = csv.writer(data)
@@ -257,8 +251,8 @@ def feedbackStudentsExam(request, pk):
                 path = os.getcwd() + "/pdfStudentEmail/"
                 for f in myfiles:
                     if f[0] == str(exam.id) and f[1] == str(room.id) and f[2] == s.student_ID:
-                        # email="fzampirolli@gmail.com"
-                        email = s.student_email
+                        email = "fzampirolli@gmail.com"
+                        #email = s.student_email
                         data_hora = datetime.datetime.now()
                         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
@@ -286,11 +280,7 @@ def feedbackStudentsExam(request, pk):
     return HttpResponseRedirect("/")
 
 
-from django.core.files.storage import FileSystemStorage
 
-from pdf2image import convert_from_path
-
-import img2pdf
 
 @login_required
 def correctStudentsExam(request, pk):
@@ -412,25 +402,24 @@ def correctStudentsExam(request, pk):
                 print(">>>>text>>>>", qr)
                 mypath = MYFILES + "_q" + qr['question']
 
-                myfile = mypath + "/" + qr['idStudent'] + "_" + str(countPage + 1).zfill(3) + ".pdf"
+                myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
+
+                myfileMSG = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + '.txt'
 
                 os.system("mkdir " + mypath)
 
-                #output = PdfFileWriter()
-                # output.addPage(input_pdf.getPage(countPage))
-                #output.addPage(img0)
+                if not os.path.exists(myfileMSG):
+                    with open(myfileMSG, 'w') as fileMSG:
+                        fileMSG.write('Write here a message to sent to student, for each question/classroom')
+                        fileMSG.close()
 
                 if countPage < numPAGES - 1:  # salva tb verso
                     countPage += 1
                     myfile2 = MYFILES + '_p' + str(countPage) + '.png'
-                    #img2 = cv2.imread(myfile2)
-
-                    # output.addPage(input_pdf.getPage(countPage))
-                    #output.addPage(img2)
 
                     fileImages = [myfile0, myfile2]
 
-                    flagOK = False
+                    flagOK = False # continua salvando ate achar qrcode ou acabar
                     while not flagOK and countPage < numPAGES - 1:
                         myfile3 = MYFILES + '_p' + str(countPage+1) + '.png'
                         img2 = cv2.imread(myfile3)
@@ -439,7 +428,7 @@ def correctStudentsExam(request, pk):
 
                         if not qr3:
                             fileImages.append(myfile3)
-                            countPage+=1
+                            countPage += 1
                         else:
                             flagOK = True
 
@@ -448,34 +437,6 @@ def correctStudentsExam(request, pk):
                 else:
                     with open(myfile, "wb") as outputStream:
                         outputStream.write(img2pdf.convert(myfile0))
-
-                ''' se tiver mais que uma pagina por aluno
-                flagOK = True
-                while flagOK and countPage < numPAGES - 1:
-                    countPage += 1
-
-                    myfile0 = MYFILES + '_p' + str(countPage) + '.png'
-                    img = cv2.imread(myfile0)
-                    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-                    # img = 255 - imgs[countPage]
-                    if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
-                    # try:
-                    if True:
-                        img = cvMCTest.getAnswerArea(img, countPage)
-                        if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01a.png", img)
-                        imgQR = cvMCTest.segmentQRcode(img, countPage)
-                        if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01b.png", img)
-                        qr2 = cvMCTest.decodeQRcode(imgQR)
-                        flagOK = False
-                        countPage -= 1
-                    # except:
-                    #    output.addPage(input_pdf.getPage(countPage))
-                '''
-
-
-                #with open(myfile, "wb") as outputStream:
-                #    output.write(outputStream)
 
             elif qr:
 
