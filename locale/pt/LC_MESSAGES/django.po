@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-10 08:14-0300\n"
+"POT-Creation-Date: 2019-11-12 20:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -435,7 +435,7 @@ msgstr "Turma"
 msgid "Students List"
 msgstr "Listar Estudantes"
 
-#: course/templates/classroom/classroom_detail.html:37 exam/CVMCTest.py:1555
+#: course/templates/classroom/classroom_detail.html:37 exam/CVMCTest.py:1571
 #: student/templates/student/student_create.old.html:23
 #: student/templates/student/student_detail.html:15
 #: topic/templates/question/question_list.html:27
@@ -445,13 +445,13 @@ msgid "ID"
 msgstr "ID"
 
 #: course/templates/classroom/classroom_detail.html:38
-#: course/templates/classroom/classroom_detail.html:106 exam/CVMCTest.py:1554
+#: course/templates/classroom/classroom_detail.html:106 exam/CVMCTest.py:1570
 #: exam/UtilsLatex.py:417 exam/UtilsLatex.py:469 exam/models.py:201
 #: exam/models.py:237
 msgid "Student"
 msgstr "Estudante"
 
-#: course/templates/classroom/classroom_detail.html:39 exam/CVMCTest.py:1556
+#: course/templates/classroom/classroom_detail.html:39 exam/CVMCTest.py:1572
 #: student/templates/student/student_create.old.html:39
 #: student/templates/student/student_detail.html:17
 #: student/templates/student/student_update.html:38
@@ -1006,7 +1006,7 @@ msgstr "StudentCreate: Já existe ID"
 msgid "StudentCreate: Created Student "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:435 exam/views.py:1019
+#: course/views.py:435 exam/views.py:1020
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1024,31 +1024,31 @@ msgid ""
 msgstr ""
 "LoanedClassroomByUserListView: o professor não está registrado na disciplina"
 
-#: exam/CVMCTest.py:1561
+#: exam/CVMCTest.py:1577
 msgid "Grade"
 msgstr "Nota"
 
-#: exam/CVMCTest.py:1563 exam/UtilsLatex.py:944
+#: exam/CVMCTest.py:1579 exam/UtilsLatex.py:944
 msgid "Multiple Choice Questions"
 msgstr "Questões de Múltipla Escolha"
 
-#: exam/CVMCTest.py:1573
+#: exam/CVMCTest.py:1589
 msgid "Correct answer"
 msgstr "Alternativa correta"
 
-#: exam/CVMCTest.py:1579
+#: exam/CVMCTest.py:1595
 msgid "Your answer"
 msgstr "Sua alternativa"
 
-#: exam/CVMCTest.py:1581
+#: exam/CVMCTest.py:1597
 msgid "INCORRECT"
 msgstr "INCORRETO"
 
-#: exam/CVMCTest.py:1586 topic/templates/question/question_detail.html:78
+#: exam/CVMCTest.py:1602 topic/templates/question/question_detail.html:78
 msgid "Feedback"
 msgstr "Retorno"
 
-#: exam/CVMCTest.py:1588
+#: exam/CVMCTest.py:1604
 msgid "Invalid answer!"
 msgstr "Alternativa inválida!"
 
@@ -1735,63 +1735,63 @@ msgstr ""
 msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
-#: exam/views.py:629
+#: exam/views.py:630
 msgid "Dear"
 msgstr ""
 
-#: exam/views.py:630
+#: exam/views.py:631
 msgid ""
 "This message contains the test cases to be inserted into moodle for "
 "automatic correction of student submitted codes."
 msgstr ""
 
-#: exam/views.py:631
+#: exam/views.py:632
 msgid "Follow these steps:"
 msgstr ""
 
-#: exam/views.py:632
+#: exam/views.py:633
 msgid ""
 "1. Use the pdf with the exams generated with this date and time "
 "(EXACTLY !!!): "
 msgstr ""
 
-#: exam/views.py:633
+#: exam/views.py:634
 msgid "2. Save the following content to a *.cases file"
 msgstr ""
 
-#: exam/views.py:634
+#: exam/views.py:635
 msgid "3. "
 msgstr ""
 
-#: exam/views.py:635
+#: exam/views.py:636
 msgid "4. "
 msgstr ""
 
-#: exam/views.py:694
+#: exam/views.py:695
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr ""
 
-#: exam/views.py:703
+#: exam/views.py:704
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:763
+#: exam/views.py:764
 msgid "Error: there is no student in classroom(s)."
 msgstr "Error: não existe estudante na(s) turma(s)"
 
-#: exam/views.py:877
+#: exam/views.py:878
 msgid "Invalid Form! Verify if date follows the format, for example."
 msgstr ""
 
-#: exam/views.py:933
+#: exam/views.py:934
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:948
+#: exam/views.py:949
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:967
+#: exam/views.py:968
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -1871,21 +1871,45 @@ msgstr "imprimir"
 msgid "column visibility"
 msgstr "colunas visíveis"
 
-#: main/templates/base_generic.html:357
-msgid "See also"
-msgstr "Veja também"
+#: main/templates/base_generic.html:353
+msgid "by"
+msgstr "por"
 
-#: main/templates/base_generic.html:357 main/templates/readme.html:10
+#: main/templates/base_generic.html:355
+msgid "from"
+msgstr "da"
+
+#: main/templates/base_generic.html:355 main/templates/users.html:16
+msgid "Federal University of ABC"
+msgstr "Universidade Federal do ABC"
+
+#: main/templates/base_generic.html:355 main/templates/base_generic.html:362
+msgid "and"
+msgstr "e"
+
+#: main/templates/base_generic.html:356
+msgid "individual contributors"
+msgstr "Colaboradores"
+
+#: main/templates/base_generic.html:357 main/templates/users.html:10
+msgid "Who use"
+msgstr "Quem utiliza"
+
+#: main/templates/base_generic.html:358
+msgid "Download"
+msgstr ""
+
+#: main/templates/base_generic.html:359 main/templates/readme.html:10
 msgid "README"
 msgstr "LEIA-ME"
 
-#: main/templates/base_generic.html:362
-#, fuzzy
-#| msgid "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)"
+#: main/templates/base_generic.html:360
+msgid "Grant"
+msgstr "Apoio"
+
+#: main/templates/base_generic.html:364
 msgid "São Paulo Research Foundation (FAPESP)"
-msgstr ""
-"processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
-"Paulo (FAPESP)"
+msgstr "Fundação de Amparo à Pesquisa do Estado de São Paulo (FAPESP)"
 
 #: main/templates/contributors.html:10
 msgid "Contributors"
@@ -1917,21 +1941,21 @@ msgstr ""
 "precisar de funções personalizadas em Python para facilitar a escrita. A "
 "esse respeito, também agradeço"
 
-#: main/templates/contributors.html:37
+#: main/templates/contributors.html:37 main/templates/users.html:24
 msgid "I hope this list grows more and more"
 msgstr "Espero que esta lista cresça mais e mais"
 
-#: main/templates/contributors.html:39
+#: main/templates/contributors.html:39 main/templates/users.html:26
 msgid "Please email"
 msgstr "Enviar email para"
 
-#: main/templates/contributors.html:40
+#: main/templates/contributors.html:40 main/templates/users.html:27
 msgid "if I forgot anyone"
 msgstr "se eu esqueci de alguém"
 
 #: main/templates/index.html:16 main/templates/index.html:381
 msgid "webMCTest"
-msgstr "webMCTest"
+msgstr ""
 
 #: main/templates/index.html:54 main/templates/index.html:70
 #: main/templates/index.html:84 main/templates/index.html:98
@@ -3047,6 +3071,9 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 #: topic/views.py:594
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid "See also"
+#~ msgstr "Veja também"
 
 #~ msgid "feedbackStudentsExamText: Differents Exams "
 #~ msgstr "feedbackStudentsExamText: exames diferentes"

@@ -24,6 +24,9 @@ from django.utils import timezone
 def contributors(request):
     return render(request, 'contributors.html', {})
 
+def users(request):
+    return render(request, 'users.html', {})
+
 
 def readme(request):
     return render(request, 'readme.html', {})

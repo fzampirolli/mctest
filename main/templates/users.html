@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{%  trans "Who use" %}</h5>
+
+                <hr>
+
+                <ol>
+                    <li>
+                        <a href="http://mctest.ufabc.edu.br">{%  trans "Federal University of ABC" %}</a>
+                    </li>
+
+
+                </ol>
+
+                <hr>
+
+                <p>{% trans "I hope this list grows more and more" %} ...</p>
+
+                {% trans "Please email" %} <a
+                    href="mailto:fzampirolli@ufabc.edu.edu">fzampirolli@ufabc.edu.edu</a> {% trans "if I forgot anyone" %}.
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

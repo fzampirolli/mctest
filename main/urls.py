@@ -53,5 +53,6 @@ urlpatterns = [
     path('readme', views.readme, name='readme'),
     path('license', views.license, name='license'),
     path('contributors', views.contributors, name='contributors'),
+    path('users', views.users, name='users'),
     path('signup/', views.SignUp.as_view(), name='signup'),
 ]

@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="change new GUI">
-      <change afterPath="$PROJECT_DIR$/ESTG025-17_PI_RESP2.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ESTG025-17_PI_RESP2_If8wV76.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_getQRCode_p001_01answerArea.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_getQRCode_p001_02qrcode.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/templates/users.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/mysql-2019-11-12.tar" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_ESTG025-17_PI_RESP2_RETURN__.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_ESTG025-17_PI_RESP2_p0.png" afterDir="false" />
@@ -918,8 +915,11 @@
       <change beforePath="$PROJECT_DIR$/correct.log" beforeDir="false" afterPath="$PROJECT_DIR$/correct.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docDjango.new.sh" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/duvida.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/CVMCTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/CVMCTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/templates/base_generic.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/base_generic.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -1009,7 +1009,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/topic/templates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/main/templates" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
@@ -1023,19 +1023,19 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/topic/templates" />
-      <recent name="$PROJECT_DIR$/main/static" />
-      <recent name="$PROJECT_DIR$/main" />
-      <recent name="$PROJECT_DIR$/topic/static" />
-      <recent name="$PROJECT_DIR$/static" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/main/templates" />
       <recent name="$PROJECT_DIR$/topic" />
       <recent name="$PROJECT_DIR$/topic/templates/static" />
       <recent name="$PROJECT_DIR$/topic/templates" />
       <recent name="$PROJECT_DIR$/static" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/main/templates" />
+      <recent name="$PROJECT_DIR$/topic/templates" />
+      <recent name="$PROJECT_DIR$/main/static" />
+      <recent name="$PROJECT_DIR$/main" />
+      <recent name="$PROJECT_DIR$/topic/static" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -1326,14 +1326,8 @@
       <workItem from="1573327677322" duration="134000" />
       <workItem from="1573329741939" duration="15145000" />
       <workItem from="1573384609968" duration="413000" />
-      <workItem from="1573578521236" duration="4338000" />
-    </task>
-    <task id="LOCAL-00009" summary="change license">
-      <created>1565896927467</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1565896927467</updated>
+      <workItem from="1573578521236" duration="4408000" />
+      <workItem from="1573600123755" duration="2139000" />
     </task>
     <task id="LOCAL-00010" summary="change license">
       <created>1565918292101</created>
@@ -1671,7 +1665,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573384633110</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="change new GUI">
+      <created>1573583033886</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1573583033886</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
