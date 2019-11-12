@@ -365,6 +365,7 @@ def correctStudentsExam(request, pk):
             if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)
 
             myFlagArea, qr = cvMCTest.getQRCode(img, countPage)
+            img = cvMCTest.imgAnswers
 
             if not qr:
                 qr = dict()

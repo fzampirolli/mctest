@@ -697,7 +697,7 @@ class cvMCTest(object):
                 3) + "_00.png", img)
         # raise Http404("oi3")
 
-        img = cv2.GaussianBlur(img, (5, 5), 0)
+        img = cv2.GaussianBlur(img, (7, 7), 0)
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_01.png", img)
@@ -706,13 +706,13 @@ class cvMCTest(object):
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
-                3) + "_01op1.png", img)
+                3) + "_01OPEN1.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (1, 2))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
-                3) + "_01op2.png", img)
+                3) + "_01OPEN2.png", img)
 
         # se = cv2.getStructuringElement(cv2.MORPH_CROSS,(3,1))
         # img=cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
@@ -735,29 +735,45 @@ class cvMCTest(object):
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
-                3) + "_03.png", img)
+                3) + "_03ero1.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (1, 7))  # horizontal
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
-                3) + "_04.png", img)
+                3) + "_03ero2.png", img)
+
+        se = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))  # vertical
+        img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
+        if DEBUG: cv2.imwrite(
+            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+                3) + "_04ope1.png", img)
+
+        se = cv2.getStructuringElement(cv2.MORPH_CROSS, (1, 15))  # horizontal
+        img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
+        if DEBUG: cv2.imwrite(
+            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+                3) + "_04open2.png", img)
 
         img = cv2.distanceTransform(img, cv2.DIST_L2, cv2.DIST_MASK_PRECISE)
         img = cvMCTest.imfillhole(img)
         labels = label(img)
 
+        if DEBUG: cv2.imwrite(
+            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+                3) + "_05fill.png", img)
+
         img = np.zeros(img.shape, dtype='uint8')
         for region in regionprops(labels):
             x0, y0 = region.centroid
-            if 200 < region.area < 600 and x0 > 270:
+            if 200 < region.area < 700 and x0 > 280:
                 img[labels == region.label] = 255
             else:
                 continue
 
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
-                3) + "_05.png", img)
+                3) + "_05region.png", img)
 
         img = cvMCTest.imclearborder(img, 1)
         if DEBUG: cv2.imwrite(
