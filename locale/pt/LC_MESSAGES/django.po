@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 20:47-0300\n"
+"POT-Creation-Date: 2019-11-12 21:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2421,14 +2421,18 @@ msgstr "Acesse "
 msgid "for some "
 msgstr "e mais"
 
-#: main/templates/readme.html:28
+#: main/templates/readme.html:26
+msgid "Final URL :8000 is for development"
+msgstr "URL final :8000 é para desenvolvimento"
+
+#: main/templates/readme.html:30
 msgid ""
 "Help us spread webMCtest. If more people use it, the faster the improvements"
 msgstr ""
 "Ajude-nos a divulgar o webMCtest. Se mais pessoas utilizarem, mais rápidas "
 "serão as melhorias"
 
-#: main/templates/readme.html:29
+#: main/templates/readme.html:31
 msgid ""
 "WebMCtest must be installed on an Ubuntu 18.04 server through ports 3306 and "
 "8000"
@@ -2436,62 +2440,62 @@ msgstr ""
 "O webMCtest deve ser instalado em um servidor Ubuntu 18.04 através das "
 "portas 3306 e 8000"
 
-#: main/templates/readme.html:30
+#: main/templates/readme.html:32
 msgid "Define specific data in the file "
 msgstr "Definir dados específicos no arquivo "
 
-#: main/templates/readme.html:35
+#: main/templates/readme.html:37
 msgid "After downloading in "
 msgstr "Após baixar em"
 
-#: main/templates/readme.html:37
+#: main/templates/readme.html:39
 msgid "install webMCTest with"
 msgstr "instalar webMCTest com"
 
-#: main/templates/readme.html:45
+#: main/templates/readme.html:47
 msgid "Future Improvements"
 msgstr "Melhorias Futuras"
 
-#: main/templates/readme.html:48
+#: main/templates/readme.html:50
 msgid "Error messages and Graphical interfaces"
 msgstr "Mensagens de erro e interface gráfica"
 
-#: main/templates/readme.html:51
+#: main/templates/readme.html:53
 msgid "Install"
 msgstr "Instalador"
 
-#: main/templates/readme.html:52
+#: main/templates/readme.html:54
 msgid "including other operating systems"
 msgstr "incluindo outros sistemas operacionais"
 
-#: main/templates/readme.html:55
+#: main/templates/readme.html:57
 msgid "The time to generate PDF from an exam with many variations"
 msgstr ""
 
-#: main/templates/readme.html:58
+#: main/templates/readme.html:60
 msgid "Site and DB in different languages. For example, edit the "
 msgstr "Portal e BD em diferentes idiomas. Por exemplo, edit "
 
-#: main/templates/readme.html:59
+#: main/templates/readme.html:61
 msgid "for Portuguese and use the commands"
 msgstr "para Português e use os comandos"
 
-#: main/templates/readme.html:66
+#: main/templates/readme.html:68
 msgid "Afterwards make the following changes in "
 msgstr "Em seguida, faça as seguintes alterações em "
 
-#: main/templates/readme.html:71
+#: main/templates/readme.html:73
 msgid "Please see 'locale' folder for other languages"
 msgstr "Veja pasta 'locale' para outros idiomas"
 
-#: main/templates/readme.html:75
+#: main/templates/readme.html:77
 msgid ""
 "AI Exams Module: individual exams based on the students and the class history"
 msgstr ""
 "Módulo de Exame utilizando IA: exames individuais com base no histórico do "
 "aluno e da turma"
 
-#: main/templates/readme.html:78
+#: main/templates/readme.html:80
 msgid ""
 "AI Students Module: evaluation of how the weigh questions in order to show "
 "the skills and abilities of each student"
@@ -2499,53 +2503,53 @@ msgstr ""
 "Módulo de Estudante utilizando IA: como as questões com diferentes pesos são "
 "escolhidas para mostrar as competências e habilidades de cada estudante"
 
-#: main/templates/readme.html:81
+#: main/templates/readme.html:83
 msgid "Use of blockchain to validate exams, history and other features"
 msgstr "Utilizar blockchain para validar exames, histórico e outros recursos"
 
-#: main/templates/readme.html:84
+#: main/templates/readme.html:86
 msgid "Inclusion of facial recognition in the QR Code of the exams"
 msgstr "Incluir reconhecimento facial no exame QR Code"
 
-#: main/templates/readme.html:90
+#: main/templates/readme.html:92
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:97
+#: main/templates/readme.html:99
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:98
+#: main/templates/readme.html:100
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:105
+#: main/templates/readme.html:107
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:106
+#: main/templates/readme.html:108
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:107
+#: main/templates/readme.html:109
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:114
+#: main/templates/readme.html:116
 msgid "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)"
 msgstr ""
 "processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo (FAPESP)"
 
-#: main/templates/readme.html:115
+#: main/templates/readme.html:117
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
 msgstr ""
-"Título: Um Sistema Universal para Gerac ̧ ̃ao e Correc ̧ ̃ao Autom ́atica de Quest"
-" ̃oes Parametrizadas"
+"Título: Um Sistema Universal para Geração e Correção Automática de Questões "
+"Parametrizadas"
 
 #: mctest/settings.py:194
 msgid "English"

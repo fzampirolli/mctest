@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="change new GUI">
-      <change afterPath="$PROJECT_DIR$/main/templates/users.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/mysql-2019-11-12.tar" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_ESTG025-17_PI_RESP2_RETURN__.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tmp/_e104_fzampirolli@ufabc.edu.br_ESTG025-17_PI_RESP2_p0.png" afterDir="false" />
@@ -917,9 +916,7 @@
       <change beforePath="$PROJECT_DIR$/duvida.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/templates/base_generic.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/base_generic.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/templates/readme.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/readme.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -1327,21 +1324,7 @@
       <workItem from="1573329741939" duration="15145000" />
       <workItem from="1573384609968" duration="413000" />
       <workItem from="1573578521236" duration="4408000" />
-      <workItem from="1573600123755" duration="2353000" />
-    </task>
-    <task id="LOCAL-00010" summary="change license">
-      <created>1565918292101</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1565918292101</updated>
-    </task>
-    <task id="LOCAL-00011" summary="change license">
-      <created>1565919035162</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1565919035162</updated>
+      <workItem from="1573600123755" duration="3233000" />
     </task>
     <task id="LOCAL-00012" summary="change license">
       <created>1565919210704</created>
@@ -1672,7 +1655,21 @@
       <option name="project" value="LOCAL" />
       <updated>1573583033886</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="change new GUI">
+      <created>1573602533913</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1573602533913</updated>
+    </task>
+    <task id="LOCAL-00060" summary="change new GUI">
+      <created>1573602743060</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1573602743060</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
