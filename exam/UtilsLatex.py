@@ -421,14 +421,14 @@ _inst1_
             if i[0] == exam.exam_term:
                 quad = i[1]
 
-        size_qr = 4.5  # 3.9  # 3.3
+        size_qr = 5.3  # 4.5 # 3.9  # 3.3
         if exam.exam_print in ['both'] and Utils.validateNumQuestions(request, exam) > 10:
             size_qr += Utils.validateNumQuestions(request, exam) / 15
 
         # header da página 1/2
         str1 = "\\vspace{-1mm}\\hspace{5mm}"
         str1 += "\\begin{table}[h]\n"
-        str1 += "\\begin{tabular}{|l|p{%scm}|l}\n \\cline{1-2}" % (str(15 - size_qr))
+        str1 += "\\begin{tabular}{|l|p{%scm}|l}\n \\cline{1-2}" % (str(16.5 - size_qr))
         # str1+="\\cline{1-1} \\cline{3-3}\n"
         str1 += "\\multirow{7}{*}{\\vspace{8mm}\\includegraphics[width=2cm]{./figs/%s}} \n" % logo
         str1 += "&\\textbf{%s} \n              " % (institute)
@@ -795,7 +795,7 @@ _inst1_
                     if ans.index(a) == 0:
                         str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}\#%s}}%s" % (str(ans.index(a)), a)
                     else:
-                        str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}*%s}}%s" % (str(ans.index(a)), a)
+                        str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (str(ans.index(a)), a)
 
                 str1 += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
 
@@ -848,7 +848,8 @@ _inst1_
                     messages.error(request, _('drawQuestionsTDifficulty: Error in compression textual questions'))
                     return -1
 
-                qr = pyqrcode.create(sbeforeQR)  # myqr[1])
+                # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
+                qr = pyqrcode.create(sbeforeQR, error='M')  # myqr[1])
                 # gerar qr após sorteio das questoes/respostas
                 qr.eps(myqr[0])
 
@@ -1057,7 +1058,8 @@ _inst1_
         if s != decompressed:
             return HttpResponse("ERROR: in compression")
 
-        qr = pyqrcode.create(sbeforeQR0)  # myqr[1]
+        # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
+        qr = pyqrcode.create(sbeforeQR0, error='M')  # myqr[1]
         qr.eps(myqr[0])  # gerar qr após sorteio das questoes/respostas
 
         if (exam.exam_print_eco == 'yes'):
