@@ -1,0 +1,36 @@
+<model=0>
+
+</model>
+
+<model=2>
+
+<question=1236>
+
+case=test_1
+input=71 75 13 23 
+output=263550 
+
+case=test_2
+input=60 64 13 23 
+output=189960 
+
+case=test_3
+input=78 64 13 23 
+output=247112 
+
+<question>
+
+<question=0070>
+
+case=test_1
+input=Bi (ou Multi) lac-I 
+output=Matriz lac-O 
+
+case=test_2
+input=entrada2 
+output=saida2 
+
+<question>
+
+</model>
+

@@ -1,0 +1,36 @@
+<model=0>
+
+</model>
+
+<model=2>
+
+<question=1236>
+
+case=test_1
+input=78 62 13 23 
+output=239368 
+
+case=test_2
+input=71 75 13 23 
+output=263550 
+
+case=test_3
+input=73 62 13 23 
+output=223993 
+
+<question>
+
+<question=0070>
+
+case=test_1
+input=Uni lac-I 
+output=Vetor lac-O 
+
+case=test_2
+input=entrada2 
+output=saida2 
+
+<question>
+
+</model>
+

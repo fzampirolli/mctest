@@ -1,0 +1,532 @@
+\documentclass[10pt,brazil,a4paper]{exam}
+\usepackage[utf8]{inputenc}
+%\usepackage[portuguese]{babel}
+\usepackage[brazilian]{babel}
+\usepackage[table,xcdraw]{xcolor}
+
+%sudo apt install linuxbrew-wrapper
+%sudo apt install texlive-extra-utils
+%sudo apt install texlive-font-utils
+
+\usepackage[pdftex]{graphicx}
+\usepackage[dvips]{graphicx}
+\usepackage{epstopdf}
+\graphicspath{{./tmp/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.eps}
+\usepackage[outdir=./]{epstopdf}
+
+\usepackage{hyperref} % include fig um http
+
+\usepackage{listings} % para códigos
+
+%\usepackage[top=.4in, bottom=.1in, left=1in, right=.4in]{geometry}
+\textheight=6in
+\usepackage{tikz}
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{changepage,ifthen}
+\usepackage{verbatim}
+\usepackage{tabularx}
+\usepackage{amsfonts}
+\usepackage{multicol}
+
+%\usepackage[T1]{fontenc}
+%\usepackage{times}         
+%\usepackage{multido}  % border
+%\usepackage{pst-barcode}
+
+\setlength{\textwidth}{185mm}
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{0in}
+\setlength{\columnsep}{8mm}
+\setlength{\topmargin}{-28mm}
+\setlength{\textheight}{282mm}
+\setlength{\itemsep}{0in}
+
+\newcommand*\varhrulefill[1][0.4pt]{\leavevmode\leaders\hrule height#1\hfill\kern0pt}
+\def\drawLines#1{{\color{lightgray}\foreach \x in {1,...,#1}{\par\vspace{2mm}\noindent\hrulefill}}}       
+% cyan
+\newcommand{\qid}[1]{\textcolor{white}{{\tiny #1}\hspace{0mm}}} %question identification (invisible text #1)
+\usepackage[table,xcdraw]{xcolor}
+
+#\renewcommand{\thefootnote}{\color{white}{\faGears}}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\definecolor{bubbles}{rgb}{0.71, 1.0, 1.0}
+
+\begin{document}
+\pagestyle{empty}
+
+\pagenumbering{gobble}
+%\newgeometry{bottom=0.1cm}
+\makeatletter\renewcommand*\cleardoublepage{\ifodd\c@page \else\hbox{}\newpage\fi}
+\makeatother
+\cleardoublepage
+\newpage
+
+% drawCircles
+\vspace{-5mm}
+\leavevmode\put(-11,0){\color{black}\circle*{15}}\hspace{-0mm}
+\leavevmode\put(509,0){\color{black}\circle*{15}}
+        \vspace{-1mm}\hspace{5mm}\begin{table}[h]
+\begin{tabular}{|l|p{10.8cm}|l}
+ \cline{1-2}\multirow{7}{*}{\vspace{8mm}\includegraphics[width=2cm]{./figs/webMCTest1}} 
+&\textbf{Instituto Exemplo} 
+              &\multirow{7}{*}{\hspace{-2mm}\includegraphics[scale=1.9000000000000001]{./tmp/QRCode_221_90_11201811685.eps}} \\ 
+&\textbf{Curso Exemplo}                        & \\ 
+&\textbf{Disciplina:} Disciplina Exemplo \hfill                        & \\ 
+&\textbf{Prof.:} Francisco Zampirolli   & \\ 
+&\textbf{Turma:} CE-teste
+ \hfill \textbf{Sala:} 123
+  & \\ 
+&\textbf{Exame:} CE-exame teste \hfill \textbf{Data:} 20-10-2019           & \\ 
+ \cline{1-2}\multicolumn{2}{|l|}{}      & \\ 
+\multicolumn{2}{|l|}{\textbf{Ass.: }\rule{5cm}{0.1pt}} & \\ 
+ \multicolumn{2}{|l|}{\textbf{\small{Estudante:}} ACOLON CAPONI DE CAIRES SILVA \hfill \textbf{\small{ID/RA:}} 11201811685}           & \\ 
+ \cline{1-2}\end{tabular}
+\end{table}
+\vspace{-4.4mm}\hspace{-5mm}\footnote[2]{\color{lightgray}\textbf{webMCTest:} gerador e corretor de exames disponível para professores de instituições cadastradas em \textbf{\url{vision.ufabc.edu.br:8000}}}
+
+\vspace{1.5mm}
+
+
+
+ \hfill \tiny{{\color{red}2019-11-14 - 18:08:03\hspace{8mm}}}
+
+\vspace{-6mm}\begin{center}\textbf{}\end{center}
+\begin{center} 
+
+ \vspace{-2mm} \ 
+\begin{tikzpicture}[font=\tiny,fill=black]
+  \foreach \numLab in {1,...,3} {
+    \node[inner sep=3pt] at ({(\numLab-1+1) * 0.5},-0.1) {\numLab};
+  }
+  \foreach \letter/\line in {A/1,B/2,C/3,D/4,E/5} {
+     \begin{scope}[xshift=0cm,yshift=-(\line)*5mm]
+       \node at (0.1,0) {\letter};
+       \foreach \letter/\position in {1,...,3} {
+           \draw[fill=gray] ({\position * 0.5 - 0.2},-0.2) rectangle ({\position * 0.5+0.2},0.2); 
+           \node[fill=white,draw,circle,inner sep=2.3pt] at ({\position * 0.5},0) {};
+       }
+     \end{scope}
+  }
+\end{tikzpicture}\hspace{1 mm}
+
+ \ \ 
+\end{center}
+
+% drawCircles
+\vspace{-5mm}
+\leavevmode\put(-11,0){\color{black}\circle*{15}}\hspace{-0mm}
+\leavevmode\put(509,0){\color{black}\circle*{15}}
+        
+%drawInstructions
+\vspace{3mm}\noindent{\small\textbf{Instruções:}\vspace{-1mm}
+\begin{enumerate}[label=(\alph*)]
+\itemsep0pt\parskip0pt\parsep0pt
+\item desligar o celular
+\end{enumerate}}\normalsize
+
+            \\\vspace{2mm}\hspace{-5mm}\noindent\textbf{Questões de Múltipla Escolha:}\vspace{2mm}
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@1235}} \hspace{0mm} 1. A car moves on a road with an hourly function
+$s=-4 + 6t$, where $s$ is
+given in miles and $t$ in hours. The car passes
+the mile 4 exactly at:
+
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}2.33
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}1.33
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}-6.67
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}-0.67
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}0.33
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@1236}} \hspace{0mm} 2. % Part I: description of a question 
+Build a matrix of generic dimensions, for example, $62 \times 72$ whose elements $(i,j)$ are $((((i+1) * 19) + ((j+1) * 11)) \mod{100})$. Compute the sum of the entries of this matrix. Indexes $i$ of rows and $j$ of columns begin with $0$.
+
+% Part II: we need to write cases here as a comment
+\begin{comment}
+{"input": [[75, 79, 19, 11], [74, 68, 19, 11], [62, 72, 19, 11]], "output": [[293250], [248944], [220900]]}
+\end{comment}
+
+% Part III: python code
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}293250
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}293248
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}293249
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}293240
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}293253
+\end{oneparchoices}\vspace{1mm}
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@0070}} \hspace{0mm} 3. % texto da questão
+O(a) \_\_\_\_\_\_ em Estrutura de Dados é também conhecido (a) como array Uni-dimensional. Assinale a alternativa que complete a lacuna.
+
+\begin{verbatim}
+ {"input": [["Uni", "lac-I"], ["entrada2"]], "output": [["Vetor", "lac-O"], ["saida2"]]}
+\end{verbatim}
+
+\begin{comment}
+ {"input": [["Uni", "lac-I"], ["entrada2"]], "output": [["Vetor", "lac-O"], ["saida2"]]}
+\end{comment}
+
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}Vetor
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}Matriz
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}Pilha usando Ponteiro
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}Árvore
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}Grafo
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+ \ \ \ 
+ \newpage
+\makeatletter\renewcommand*\cleardoublepage{\ifodd\c@page \else\hbox{}\newpage\fi}
+\makeatother
+\cleardoublepage
+\newpage
+
+% drawCircles
+\vspace{-5mm}
+\leavevmode\put(-11,0){\color{black}\circle*{15}}\hspace{-0mm}
+\leavevmode\put(509,0){\color{black}\circle*{15}}
+        \vspace{-1mm}\hspace{5mm}\begin{table}[h]
+\begin{tabular}{|l|p{10.8cm}|l}
+ \cline{1-2}\multirow{7}{*}{\vspace{8mm}\includegraphics[width=2cm]{./figs/webMCTest1}} 
+&\textbf{Instituto Exemplo} 
+              &\multirow{7}{*}{\hspace{-2mm}\includegraphics[scale=1.9000000000000001]{./tmp/QRCode_221_90_11201721630.eps}} \\ 
+&\textbf{Curso Exemplo}                        & \\ 
+&\textbf{Disciplina:} Disciplina Exemplo \hfill                        & \\ 
+&\textbf{Prof.:} Francisco Zampirolli   & \\ 
+&\textbf{Turma:} CE-teste
+ \hfill \textbf{Sala:} 123
+  & \\ 
+&\textbf{Exame:} CE-exame teste \hfill \textbf{Data:} 20-10-2019           & \\ 
+ \cline{1-2}\multicolumn{2}{|l|}{}      & \\ 
+\multicolumn{2}{|l|}{\textbf{Ass.: }\rule{5cm}{0.1pt}} & \\ 
+ \multicolumn{2}{|l|}{\textbf{\small{Estudante:}} Acsa Santos Sousa \hfill \textbf{\small{ID/RA:}} 11201721630}           & \\ 
+ \cline{1-2}\end{tabular}
+\end{table}
+\vspace{-4.4mm}\hspace{-5mm}\footnote[2]{\color{lightgray}\textbf{webMCTest:} gerador e corretor de exames disponível para professores de instituições cadastradas em \textbf{\url{vision.ufabc.edu.br:8000}}}
+
+\vspace{1.5mm}
+
+
+
+ \hfill \tiny{{\color{red}2019-11-14 - 18:08:03\hspace{8mm}}}
+
+\vspace{-6mm}\begin{center}\textbf{}\end{center}
+\begin{center} 
+
+ \vspace{-2mm} \ 
+\begin{tikzpicture}[font=\tiny,fill=black]
+  \foreach \numLab in {1,...,3} {
+    \node[inner sep=3pt] at ({(\numLab-1+1) * 0.5},-0.1) {\numLab};
+  }
+  \foreach \letter/\line in {A/1,B/2,C/3,D/4,E/5} {
+     \begin{scope}[xshift=0cm,yshift=-(\line)*5mm]
+       \node at (0.1,0) {\letter};
+       \foreach \letter/\position in {1,...,3} {
+           \draw[fill=gray] ({\position * 0.5 - 0.2},-0.2) rectangle ({\position * 0.5+0.2},0.2); 
+           \node[fill=white,draw,circle,inner sep=2.3pt] at ({\position * 0.5},0) {};
+       }
+     \end{scope}
+  }
+\end{tikzpicture}\hspace{1 mm}
+
+ \ \ 
+\end{center}
+
+% drawCircles
+\vspace{-5mm}
+\leavevmode\put(-11,0){\color{black}\circle*{15}}\hspace{-0mm}
+\leavevmode\put(509,0){\color{black}\circle*{15}}
+        
+%drawInstructions
+\vspace{3mm}\noindent{\small\textbf{Instruções:}\vspace{-1mm}
+\begin{enumerate}[label=(\alph*)]
+\itemsep0pt\parskip0pt\parsep0pt
+\item desligar o celular
+\end{enumerate}}\normalsize
+
+            \\\vspace{2mm}\hspace{-5mm}\noindent\textbf{Questões de Múltipla Escolha:}\vspace{2mm}
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@1235}} \hspace{0mm} 1. A car moves on a road with an hourly function
+$s=-4 + 6t$, where $s$ is
+given in miles and $t$ in hours. The car passes
+the mile 4 exactly at:
+
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}2.33
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}1.33
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}-6.67
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}-0.67
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}0.33
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@1236}} \hspace{0mm} 2. % Part I: description of a question 
+Build a matrix of generic dimensions, for example, $62 \times 72$ whose elements $(i,j)$ are $((((i+1) * 19) + ((j+1) * 11)) \mod{100})$. Compute the sum of the entries of this matrix. Indexes $i$ of rows and $j$ of columns begin with $0$.
+
+% Part II: we need to write cases here as a comment
+\begin{comment}
+{"input": [[75, 79, 19, 11], [74, 68, 19, 11], [62, 72, 19, 11]], "output": [[293250], [248944], [220900]]}
+\end{comment}
+
+% Part III: python code
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}293250
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}293248
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}293249
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}293240
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}293253
+\end{oneparchoices}\vspace{1mm}
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@0070}} \hspace{0mm} 3. % texto da questão
+O(a) \_\_\_\_\_\_ em Estrutura de Dados é também conhecido (a) como array Uni-dimensional. Assinale a alternativa que complete a lacuna.
+
+\begin{verbatim}
+ {"input": [["Uni", "lac-I"], ["entrada2"]], "output": [["Vetor", "lac-O"], ["saida2"]]}
+\end{verbatim}
+
+\begin{comment}
+ {"input": [["Uni", "lac-I"], ["entrada2"]], "output": [["Vetor", "lac-O"], ["saida2"]]}
+\end{comment}
+
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}Vetor
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}Matriz
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}Pilha usando Ponteiro
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}Árvore
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}Grafo
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+ \ \ \ 
+ \newpage
+\makeatletter\renewcommand*\cleardoublepage{\ifodd\c@page \else\hbox{}\newpage\fi}
+\makeatother
+\cleardoublepage
+\newpage
+
+% drawCircles
+\vspace{-5mm}
+\leavevmode\put(-11,0){\color{black}\circle*{15}}\hspace{-0mm}
+\leavevmode\put(509,0){\color{black}\circle*{15}}
+        \vspace{-1mm}\hspace{5mm}\begin{table}[h]
+\begin{tabular}{|l|p{10.8cm}|l}
+ \cline{1-2}\multirow{7}{*}{\vspace{8mm}\includegraphics[width=2cm]{./figs/webMCTest1}} 
+&\textbf{Instituto Exemplo} 
+              &\multirow{7}{*}{\hspace{-2mm}\includegraphics[scale=1.9000000000000001]{./tmp/QRCode_221_90_11001816.eps}} \\ 
+&\textbf{Curso Exemplo}                        & \\ 
+&\textbf{Disciplina:} Disciplina Exemplo \hfill                        & \\ 
+&\textbf{Prof.:} Francisco Zampirolli   & \\ 
+&\textbf{Turma:} CE-teste
+ \hfill \textbf{Sala:} 123
+  & \\ 
+&\textbf{Exame:} CE-exame teste \hfill \textbf{Data:} 20-10-2019           & \\ 
+ \cline{1-2}\multicolumn{2}{|l|}{}      & \\ 
+\multicolumn{2}{|l|}{\textbf{Ass.: }\rule{5cm}{0.1pt}} & \\ 
+ \multicolumn{2}{|l|}{\textbf{\small{Estudante:}} Adan Alves Siqueira \hfill \textbf{\small{ID/RA:}} 11001816}           & \\ 
+ \cline{1-2}\end{tabular}
+\end{table}
+\vspace{-4.4mm}\hspace{-5mm}\footnote[2]{\color{lightgray}\textbf{webMCTest:} gerador e corretor de exames disponível para professores de instituições cadastradas em \textbf{\url{vision.ufabc.edu.br:8000}}}
+
+\vspace{1.5mm}
+
+
+
+ \hfill \tiny{{\color{red}2019-11-14 - 18:08:03\hspace{8mm}}}
+
+\vspace{-6mm}\begin{center}\textbf{}\end{center}
+\begin{center} 
+
+ \vspace{-2mm} \ 
+\begin{tikzpicture}[font=\tiny,fill=black]
+  \foreach \numLab in {1,...,3} {
+    \node[inner sep=3pt] at ({(\numLab-1+1) * 0.5},-0.1) {\numLab};
+  }
+  \foreach \letter/\line in {A/1,B/2,C/3,D/4,E/5} {
+     \begin{scope}[xshift=0cm,yshift=-(\line)*5mm]
+       \node at (0.1,0) {\letter};
+       \foreach \letter/\position in {1,...,3} {
+           \draw[fill=gray] ({\position * 0.5 - 0.2},-0.2) rectangle ({\position * 0.5+0.2},0.2); 
+           \node[fill=white,draw,circle,inner sep=2.3pt] at ({\position * 0.5},0) {};
+       }
+     \end{scope}
+  }
+\end{tikzpicture}\hspace{1 mm}
+
+ \ \ 
+\end{center}
+
+% drawCircles
+\vspace{-5mm}
+\leavevmode\put(-11,0){\color{black}\circle*{15}}\hspace{-0mm}
+\leavevmode\put(509,0){\color{black}\circle*{15}}
+        
+%drawInstructions
+\vspace{3mm}\noindent{\small\textbf{Instruções:}\vspace{-1mm}
+\begin{enumerate}[label=(\alph*)]
+\itemsep0pt\parskip0pt\parsep0pt
+\item desligar o celular
+\end{enumerate}}\normalsize
+
+            \\\vspace{2mm}\hspace{-5mm}\noindent\textbf{Questões de Múltipla Escolha:}\vspace{2mm}
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@0070}} \hspace{0mm} 1. % texto da questão
+O(a) \_\_\_\_\_\_ em Estrutura de Dados é também conhecido (a) como array Uni-dimensional. Assinale a alternativa que complete a lacuna.
+
+\begin{verbatim}
+ {"input": [["Uni", "lac-I"], ["entrada2"]], "output": [["Vetor", "lac-O"], ["saida2"]]}
+\end{verbatim}
+
+\begin{comment}
+ {"input": [["Uni", "lac-I"], ["entrada2"]], "output": [["Vetor", "lac-O"], ["saida2"]]}
+\end{comment}
+
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}Pilha usando Ponteiro
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}Grafo
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}Matriz
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}Árvore
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}Vetor
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@1236}} \hspace{0mm} 2. % Part I: description of a question 
+Build a matrix of generic dimensions, for example, $71 \times 70$ whose elements $(i,j)$ are $((((i+1) * 7) + ((j+1) * 23)) \mod{100})$. Compute the sum of the entries of this matrix. Indexes $i$ of rows and $j$ of columns begin with $0$.
+
+% Part II: we need to write cases here as a comment
+\begin{comment}
+{"input": [[69, 60, 7, 23], [76, 62, 7, 23], [71, 70, 7, 23]], "output": [[205010], [233028], [245845]]}
+\end{comment}
+
+% Part III: python code
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}205004
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}205011
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}205014
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}205000
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}205010
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+\hspace{-15mm}{\tiny {\color{white}\@1235}} \hspace{0mm} 3. A car moves on a road with an hourly function
+$s=-3 + 7t$, where $s$ is
+given in miles and $t$ in hours. The car passes
+the mile 3 exactly at:
+
+\vspace{0mm}
+
+\begin{oneparchoices}
+\choice \hspace{-2.0mm}{\tiny{\color{white}#4}}\hspace{2.0mm}-7.14
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#1}}\hspace{2.0mm}1.86
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}\#0}}0.86
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#2}}\hspace{2.0mm}-1.14
+
+\choice \hspace{-2.0mm}{\tiny{\color{white}#3}}\hspace{2.0mm}-0.14
+
+\end{oneparchoices}\vspace{1mm}
+
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+
+% QUESTOES DE MULTIPLA ESCOLHA
+
+
+ \ \ \ 
+ \newpage
+\end{document}
