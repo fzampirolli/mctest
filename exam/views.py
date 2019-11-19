@@ -502,8 +502,8 @@ def correctStudentsExam(request, pk):
                     qr = cvMCTest.studentGrade(qr, qr0)  # calcula nota final do aluno
 
                 cvMCTest.saveCSVone(qr)  # salva arquivo CSV
-
-                cvMCTest.writeCSV(qr)  # imprime conteÃºdo do CSV
+                #cvMCTest.writeCSV(qr)  # imprime conteÃºdo do CSV
+                #raise Http404(qr)
 
                 if (exam.exam_student_feedback == 'yes'):
                     # raise Http404(qr)
@@ -699,7 +699,7 @@ def generate_page(request, pk):
                                                         listao[hash_num % int(exam.exam_variations)],
                                                         # uma variacao de prova por aluno
                                                         exam, room, s.student_ID, s.student_name, request.user,
-                                                        countVariations % int(exam.exam_variations))
+                                                        countVariations % int(exam.exam_variations), data_hora)
                 else:
                     messages.error(request, _('ERROR in validateNumQuestions!!!!'))
 
@@ -710,9 +710,8 @@ def generate_page(request, pk):
                 if exam.exam_print in ['answ', 'both']:
                     if int(Utils.getNumMCQuestions(exam)):
                         strSTUDENT += Utils.drawJumpPage()
-                        strSTUDENT += '\n\n \\hfill \\tiny{{\\color{red}'+ data_hora +  '\\hspace{8mm}}}\n\n'
                         strSTUDENT += strCircles
-                        strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr)
+                        strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr, data_hora)
                         strSTUDENT += strAnswerSheet
                         strSTUDENT += strCircles
                         '''
@@ -724,13 +723,13 @@ def generate_page(request, pk):
                         strSTUDENT += strInstructions
                         if exam.exam_print_eco == 'no' and exam.exam_print == 'both':
                             strSTUDENT += "\n\n\\newpage\n\n"
-                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr)
+                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr, data_hora)
                         if exam.exam_print == 'both':
                             strSTUDENT += strQuestions
                 if exam.exam_print in ['ques']:
                     if int(exam.exam_number_of_questions_text):
                         if exam.exam_print_eco == 'yes':
-                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr)
+                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr, data_hora)
                             strSTUDENT += strInstructions
                         strSTUDENT += strQuestions
 

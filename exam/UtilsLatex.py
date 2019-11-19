@@ -386,7 +386,7 @@ _inst1_
         return str1
 
     @staticmethod
-    def getHeader(request, exam, room, idStudent, nameStudent, myqr):  # define o cabeçalho de cada página
+    def getHeader(request, exam, room, idStudent, nameStudent, myqr, data_hora):  # define o cabeçalho de cada página
         inst = []
         logo = ''
         for course in room.discipline.courses.all():
@@ -421,18 +421,18 @@ _inst1_
             if i[0] == exam.exam_term:
                 quad = i[1]
 
-        size_qr = 5.3  # 4.5 # 3.9  # 3.3
+        size_qr = 5.65  # 4.5 # 3.9  # 3.3
         if exam.exam_print in ['both'] and Utils.validateNumQuestions(request, exam) > 10:
             size_qr += Utils.validateNumQuestions(request, exam) / 15
 
         # header da página 1/2
         str1 = "\\vspace{-1mm}\\hspace{5mm}"
         str1 += "\\begin{table}[h]\n"
-        str1 += "\\begin{tabular}{|l|p{%scm}|l}\n \\cline{1-2}" % (str(16.5 - size_qr))
+        str1 += "\\begin{tabular}{|l|p{%scm}|c}\n \\cline{1-2}" % (str(16.5 - size_qr))
         # str1+="\\cline{1-1} \\cline{3-3}\n"
         str1 += "\\multirow{7}{*}{\\vspace{8mm}\\includegraphics[width=2cm]{./figs/%s}} \n" % logo
         str1 += "&\\textbf{%s} \n              " % (institute)
-        str1 += "&\\multirow{7}{*}{\\hspace{-2mm}\\includegraphics[scale=%s]{%s}} \\\\ \n" % (size_qr / 3, myqr[0])
+        str1 += "&\\multirow{7}{*}[2.5mm]{\\hspace{-2mm}\\includegraphics[scale=%s]{%s}}\\\\ \n" % (size_qr / 3, myqr[0])
 
         str1 += "&%s                        & \\\\ \n" % (course)
         str1 += "&%s                        & \\\\ \n" % (disc)
@@ -456,10 +456,13 @@ _inst1_
 
         str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{webMCTest:} gerador e corretor de exames disponível para professores de instituições cadastradas em \\textbf{\\url{vision.ufabc.edu.br:8000}}}\n\n"
 
+        str1 += '\n\n \\hfill \\tiny{{\\color{red}\#' + str(exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
+
         if exam.exam_print == 'both':
             str1 += "\\vspace{%smm}\n\n" % (int(Utils.getNumMCQuestions(exam)) / 2)
         else:
             str1 += "\\vspace{4mm}\n\n"
+
 
         return str1.replace("_nameStudent_", nameStudent).replace("_idStudent_", idStudent)
 
@@ -554,7 +557,6 @@ _inst1_
 
     @staticmethod
     def drawAnswerSheet(exam):
-        # raise Http404("oi0")
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
         numQT = int(exam.exam_number_of_questions_text)
         numQuestoes = 0
@@ -565,7 +567,6 @@ _inst1_
         maxQuestQuadro = int(exam.exam_max_questions_square)
         maxQuadrosHoz = int(exam.exam_max_squares_horizontal)
         str1 = ''
-        # raise Http404("oi0")
 
         if numQuestoes > 0:
             let = letras_1[0:numRespostas]
@@ -804,7 +805,7 @@ _inst1_
         return ([str1, qr_bytes, count])
 
     @staticmethod
-    def drawQuestionsTDifficulty(request, QT, exam, room, student_ID, student_name, count):
+    def drawQuestionsTDifficulty(request, QT, exam, room, student_ID, student_name, count, data_hora):
         qr_bytes = ''
         str1 = ''
         titl = _("Text Questions")
@@ -854,7 +855,7 @@ _inst1_
                 qr.eps(myqr[0])
 
                 str1 += Utils.drawCircles()
-                str1 += Utils.getHeader(request, exam, room, student_ID, student_name, myqr)
+                str1 += Utils.getHeader(request, exam, room, student_ID, student_name, myqr, data_hora)
                 str1 += Utils.drawCircles()
                 str1 += "\\vspace{-1mm}\n"
                 str1 += Utils.drawInstructions(exam)
@@ -970,7 +971,7 @@ _inst1_
         return [qr_answers, str1, QT]
 
     @staticmethod
-    def drawQuestions(request, exam_i, exam, room, student_ID, student_name, user, countVariations):
+    def drawQuestions(request, exam_i, exam, room, student_ID, student_name, user, countVariations, data_hora):
         # random.seed(int(student_ID))
         str1 = ''
         count = 0
@@ -992,7 +993,7 @@ _inst1_
             else:
                 str1 += "\n\n\\newpage\n\n"
 
-            s = Utils.drawQuestionsTDifficulty(request, exam_i[2], exam, room, student_ID, student_name, count)
+            s = Utils.drawQuestionsTDifficulty(request, exam_i[2], exam, room, student_ID, student_name, count, data_hora)
 
             str1 += s[0]
             myqr[1] += s[1]
@@ -1030,33 +1031,35 @@ _inst1_
         sbeforeQR0 = binascii.hexlify(id_hashed + compressed0)
 
         # gabarito de cada exame vai para um arquivo no servidor
-        fileGAB = 'tmpGAB/' + myqr[1] + '.txt'
-        with open(fileGAB, 'w') as myfile:
-            myfile = open(fileGAB, 'w')
-            myfile.write(sbeforeQR.decode('utf-8'))
-            myfile.close()
+        if exam.exam_print == 'both':
 
-        # para testar
-        with open(fileGAB, 'r') as myfile:
-            mysbeforeQR = myfile.read()
-            myfile.close()
+            fileGAB = 'tmpGAB/' + myqr[1] + '.txt'
+            with open(fileGAB, 'w') as myfile:
+                myfile = open(fileGAB, 'w')
+                myfile.write(sbeforeQR.decode('utf-8'))
+                myfile.close()
 
-        # para testar
-        safterScanmy = binascii.unhexlify(mysbeforeQR)
-        safterScan = binascii.unhexlify(sbeforeQR)
-        if safterScanmy != safterScan:
-            return HttpResponse("ERRO!!!!")
-        un_hashed = safterScan[:53]
-        safterScan = safterScan[53:]
-        decompressed = zlib.decompress(safterScan)
+            # para testar
+            with open(fileGAB, 'r') as myfile:
+                mysbeforeQR = myfile.read()
+                myfile.close()
 
-        pre = '$2b$06$' + un_hashed.decode('utf-8')
+            # para testar
+            safterScanmy = binascii.unhexlify(mysbeforeQR)
+            safterScan = binascii.unhexlify(sbeforeQR)
+            if safterScanmy != safterScan:
+                return HttpResponse("ERRO!!!!")
+            un_hashed = safterScan[:53]
+            safterScan = safterScan[53:]
+            decompressed = zlib.decompress(safterScan)
 
-        if hashed == bcrypt.hashpw(stud, pre.encode('utf-8')):
-            print("passou19 = ok", pre)
+            pre = '$2b$06$' + un_hashed.decode('utf-8')
 
-        if s != decompressed:
-            return HttpResponse("ERROR: in compression")
+            if hashed == bcrypt.hashpw(stud, pre.encode('utf-8')):
+                print("passou19 = ok", pre)
+
+            if s != decompressed:
+                return HttpResponse("ERROR: in compression")
 
         # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
         qr = pyqrcode.create(sbeforeQR0, error='M')  # myqr[1]

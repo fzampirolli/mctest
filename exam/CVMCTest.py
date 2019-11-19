@@ -184,6 +184,7 @@ class cvMCTest(object):
             #print("############ QRcode1="+str(dec0))
             #print("############ QRcode2="+str(len(safterScan)))
 
+            #raise Http404(len(safterScan))
             if len(safterScan) < 51:  ##### este caso é para questões dissertativas com uma questão por folha
                 dec = zlib.decompress(safterScan)
                 dec = dec.decode('utf-8')
@@ -420,7 +421,6 @@ class cvMCTest(object):
         # find the contours in the thresholded image
         (_, cnts, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        # raise Http404(cnts)
 
         # if no contours were found, return None
         if len(cnts) == 0:
@@ -430,7 +430,6 @@ class cvMCTest(object):
 
         for c in cnts:
             x, y, w, h = cv2.boundingRect(c)
-            # raise Http404(cv2.contourArea(c))
             if abs(w - h) < 30 and x + w > 800 and y < 200:  # quadrado e no topo direito
 
                 if 10000 < cv2.contourArea(c):
@@ -558,15 +557,11 @@ class cvMCTest(object):
 
             size_rectangle = cv2.contourArea(approximation)
 
-            # if size_rectangle<1500:
-            #    raise Http404(size_rectangle)
 
             if size_rectangle > 2000:
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
                 squares.append(cvMCTest.SortPointsExtreme(approximation))
 
-        # if squares:
-        #    raise Http404(squares)
 
         pt = []
         ptSort = []
@@ -636,7 +631,6 @@ class cvMCTest(object):
         (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
 
-        # raise Http404(qr)
 
         # size_rectangle_max = 0
         squares = []
@@ -657,7 +651,6 @@ class cvMCTest(object):
                 # area of the polygon
             size_rectangle = cv2.contourArea(approximation)
 
-            # raise Http404(size_rectangle)
 
             if size_rectangle > 800:
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
@@ -695,7 +688,6 @@ class cvMCTest(object):
         if DEBUG: cv2.imwrite(
             "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_00.png", img)
-        # raise Http404("oi3")
 
         img = cv2.GaussianBlur(img, (7, 7), 0)
         if DEBUG: cv2.imwrite(
@@ -1100,7 +1092,6 @@ class cvMCTest(object):
             if int(qr['page']) == 2:
                 # for cnt in contoursOrder:
 
-                # raise Http404(qr)
                 pass
 
             if DEBUG: lixo.append([countPage, q, NUM_RESPOSTAS, H, W, jini, jfim, count, rect, answers_area, answers_n])
@@ -1203,6 +1194,11 @@ class cvMCTest(object):
             # print q,j
             ## verifica qual foi a resposta
             im = img2[jini:jfim, :]
+
+            if DEBUG: cv2.imwrite(
+                "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_04_"+str(jfim)+".png",
+                im)
+
             (_, contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             answers_area = []  # em questões duplicadas, pegar a com maior area
             answers_n = []
@@ -1276,7 +1272,6 @@ class cvMCTest(object):
             q = q + 1
             jfim = jfim + 1
 
-        # raise Http404(mr)
         return ([countPage, idTest, countSquare, NUM_RESPOSTAS, NUM_QUESTOES, invalida, 0, mr])
 
     @staticmethod
@@ -1314,13 +1309,11 @@ class cvMCTest(object):
         qr['invalid'] = invalida
         qr['grade'] = nota
 
-        # raise Http404(qr)
         return qr
 
     @staticmethod
     def studentGrade(qr, qr0):
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
-        # raise Http404(qr)
 
         if qr['idStudent'] == 'ERROR' or (qr == qr0 and int(qr['page'])):
             if not 'correct' in qr:
@@ -1336,7 +1329,6 @@ class cvMCTest(object):
         resp = str(qr['answers']).split(',')
         nota = count = 0
         coresp = []
-        # raise Http404(resp)
 
         try:
             student = Student.objects.filter(student_ID=int(qr['idStudent']))
@@ -1389,7 +1381,6 @@ class cvMCTest(object):
         if not count:
             if not qr['correct'] and int(qr['page']):  # comparar com o gabarito da primeira pagina
 
-                # raise Http404(qr0,qr)
 
                 str2 = ''
                 ss0 = qr0['answers'].split(',')
@@ -1422,7 +1413,6 @@ class cvMCTest(object):
 
         qr['respgrade'] = coresp
 
-        # raise Http404(qr, qr0)
 
         # for s in StudentExam.objects.all(): print(s.grade)
         # for q in StudentExamQuestion.objects.all(): print(q.studentAnswer,q.answersOrder)
@@ -1514,8 +1504,6 @@ class cvMCTest(object):
                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                 print(f + ' criado no HD')
                 L1 = ['Pag', 'ID', 'Resp', 'Quest', 'Inv', 'Nota']
-
-                # raise Http404(qr)
 
                 try:
                     i = int(qr['correct'][0])  # se for inteiro entao tem questoes no BD
