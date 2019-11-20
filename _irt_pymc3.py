@@ -29,7 +29,8 @@ print("Starting IRT...")
 print(str(sys.argv[1]))
 
 file_name = str(sys.argv[1])
-s = file_name.split('_')
+s = file_name.split('/')
+s = s[len(s)-1].split('_')
 destinatario = s[2]
 
 msg = "\n"
@@ -42,7 +43,7 @@ msg += "Att, \nwebMCTest\n\n"
 
 msg += "==================================================\n\n"
 
-msg += "File: %s\n\n" % s[3]
+msg += "File: %s\n\n" % "_".join([i for i in s[3:-1]])
 
 X = np.genfromtxt(file_name, delimiter=',', dtype=int)
 N = len(X)
@@ -124,6 +125,7 @@ def envia_email(servidor, porta, FROM, PASS, TO, subject, texto, anexo=[]):
         gm.login(FROM, PASS)
         gm.sendmail(FROM, TO, msg.as_string())
         gm.close()
+        print("Sending email ...")
     except Exception:
         raise Http404(
             "Nao Foi Possivel Enviar o Email.\n Error:" + str([servidor, porta, FROM, TO, subject, texto, anexo]))

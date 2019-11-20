@@ -555,7 +555,7 @@ def correctStudentsExam(request, pk):
             ### IRT begin
             X = np.genfromtxt(path_to_file, delimiter=',', dtype=str)
             N = len(X[:, 0]) - 1          # Number of students
-            M = int((len(X[0]) - 6) / 2)  # Number of questions
+            M = int(Utils.getNumMCQuestions(exam))  # Number of questions
             dados = np.zeros((N, M), dtype=int)
             for n, L in enumerate(X):  # for each student
                 if n:
