@@ -17,11 +17,11 @@
                                 <tr>
                                     <th>
                                         <form class="input-group mb-3"
-                                              action="{% url 'topic:question-see-question-PDF' pk=question.id %}"
+                                              action="{% url 'topic:question-create-question-PDF' pk=question.id %}"
                                               method="post">
                                             {% csrf_token %}
                                             <input class="btn btn-primary" type="submit" action=""
-                                                   value={% trans "See-PDF" %}>
+                                                   value={% trans "Create-PDF" %}>
                                         </form>
                                     </th>
                                     <th>

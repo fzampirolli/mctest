@@ -267,6 +267,7 @@ sudo find . -name "*#"  -exec rm {} \;
 sudo find . -name ".DS_Store"  -exec rm {} \;
 sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 sudo find . -path "*/migrations/*.pyc"  -delete
+sudo find . -path "*/__pycache__/*.pyc"  -delete
 sudo find . -path "*/tmp/*"  -exec rm {} \;
 sudo find . -path "*/pdf*/*"  -exec rm {} \;
 sudo find . -path "*/tmp/*"  -exec rm {} \;

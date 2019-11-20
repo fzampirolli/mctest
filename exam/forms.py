@@ -114,7 +114,7 @@ class UpdateExamForm(forms.Form):
     exam_student_feedback = forms.ChoiceField(
         choices=Exam.exam_student_feedback_choice,
         help_text=_("Send feedback to the student - Very attention! If you choose YES, an exam will be emailed to "
-                    "each student after clicking seePDF."),
+                    "each student after clicking createPDF."),
         label=_("Student Feedback"))
     #    exam_room = forms.CharField(
     #        max_length=20,

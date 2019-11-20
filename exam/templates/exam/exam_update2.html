@@ -16,7 +16,7 @@
                         <h4>
                             <code>
                                 {% trans "Attention" %}:
-                                {% trans "Each time you click See-PDF, a different exam will be generated!" %}
+                                {% trans "Each time you click Create-PDF, a different exam will be generated!" %}
                                 {% trans "After printing the PDF with the exam, SAVE IT TO YOUR COMPUTER and " %}
                                 {% trans "DO NOT CHANGE the attributes of this page; " %}
                                 {% trans "Otherwise automatic correction will not be possible on scanned exams in Upload-PDF." %}
@@ -24,15 +24,15 @@
                         </h4>
                         {% if user.groups.all.0.name == 'professor' %}
 
-                            <!-- See-PDF; Upload-PDF; Send-Feedback-Students Text; Send-Feedback-Students Buttons -->
+                            <!-- Create-PDF; Upload-PDF; Send-Feedback-Students Text; Send-Feedback-Students Buttons -->
                             <table frame="hsides" rules="cols" style="width:100%">
                                 <tr>
                                     <td>
-                                        <!-- See-PDF -->
+                                        <!-- Create-PDF -->
                                         <form action="../generate/" class="input-group mb-3" method="post">
                                             {% csrf_token %}
                                             <input action="" class="btn btn-primary" type="submit"
-                                                   value={% trans "See-PDF" %}>
+                                                   value={% trans "Create-PDF" %}>
                                         </form>
                                         <h6>{% trans "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, if the circles are defective, the broker may not work correctly - we recommend that you change the printer and print again. (3) Before applying the exam, it is strongly recommended to print a sheet, fill in, scan and follow the step on the right side. Upload-PDF >>>" %}</h6>
                                     </td>

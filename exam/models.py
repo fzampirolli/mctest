@@ -120,9 +120,9 @@ class Exam(models.Model):
         help_text=_("Ecological (reduce number of sheets)"),
         verbose_name=_("Ecological"))
     exam_student_feedback_choice = (
-        ('yes', _('Yes - feedback: Header and All Questions; *seePDF* >> SEND EMAIL TO STUDENT WITH YOUR EXAM')),
+        ('yes', _('Yes - feedback: Header and All Questions; *createPDF* >> SEND EMAIL TO STUDENT WITH YOUR EXAM')),
         # ('yes2', _('Yes - Only Header - area between the 4 black disks')),
-        # ('yes3', _('Yes - ATTENTION - SEND AN EMAIL to each studente with your EXAM, WHEN PRESS SEE-PDF!')),
+        # ('yes3', _('Yes - ATTENTION - SEND AN EMAIL to each studente with your EXAM, WHEN PRESS Create-PDF!')),
         ('no', _('No')),
     )
     exam_student_feedback = models.CharField(

@@ -851,7 +851,7 @@ msgstr ""
 #: exam/forms.py:117
 msgid ""
 "Send feedback to the student - Very attention! If you choose YES, an exam "
-"will be emailed to each student after clicking seePDF."
+"will be emailed to each student after clicking createPDF."
 msgstr ""
 
 #: exam/forms.py:119 exam/models.py:134
@@ -905,7 +905,7 @@ msgstr ""
 
 #: exam/models.py:124
 msgid ""
-"Yes - feedback: Header and All Questions; *seePDF* >> SEND EMAIL TO STUDENT "
+"Yes - feedback: Header and All Questions; *createPDF* >> SEND EMAIL TO STUDENT "
 "WITH YOUR EXAM"
 msgstr ""
 
@@ -1005,7 +1005,7 @@ msgstr ""
 
 #: exam/templates/exam/exam_update2.html:15
 #: topic/templates/question/question_update.html:21
-msgid "See-PDF"
+msgid "Create-PDF"
 msgstr ""
 
 #: exam/templates/exam/exam_update2.html:17

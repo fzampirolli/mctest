@@ -12,15 +12,15 @@
 
                         {% if user.groups.all.0.name == 'professor' %}
 
-                            <!-- See-PDF and Save-Json Buttons -->
+                            <!-- Create-PDF and Save-Json Buttons -->
                             <table style="width:100%" frame="hsides" rules="cols">
                                 <tr>
                                     <th><br>
-                                        <!-- See-PDF -->
-                                        <form class="input-group mb-3" action="../seePDF/" method="post">
+                                        <!-- Create-PDF -->
+                                        <form class="input-group mb-3" action="../createPDF/" method="post">
                                             {% csrf_token %}
                                             <input class="btn btn-primary" type="submit" action=""
-                                                   value={% trans "See-PDF" %}>
+                                                   value={% trans "Create-PDF" %}>
                                         </form>
                                         <h6>{% trans "See this question in PDF format" %}</h6>
                                     </th>
