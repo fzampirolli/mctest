@@ -31,26 +31,25 @@ import datetime
 import glob
 import os
 import re
-import random
 
 import cv2  # pip install opencv-python
+import img2pdf
 import numpy as np
-from PyPDF2 import PdfFileWriter  # apt-get install python-pypdf2
 from django.contrib import messages
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages import get_messages
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
-from tablib import Dataset
-from django.core.files.storage import FileSystemStorage
 from pdf2image import convert_from_path
-import img2pdf
+from tablib import Dataset
+import subprocess
 
 from exam.CVMCTest import cvMCTest
 from exam.UtilsLatex import Utils
@@ -114,11 +113,11 @@ def feedbackStudentsExamText(request, pk):
         idQuestion = ""
         for f in np.sort(files5):
 
-            #/Users/fz/PycharmProjects/mctest/pdfStudentEmail/download/e102_c224_q1240_p001_11201811442.pdf
-            #['', 'Users', 'fz', 'PycharmProjects', 'mctest', 'pdfStudentEmail', 'download', '_e102_c224_q1240_p001_11201811442.pdf']
+            # /Users/fz/PycharmProjects/mctest/pdfStudentEmail/download/e102_c224_q1240_p001_11201811442.pdf
+            # ['', 'Users', 'fz', 'PycharmProjects', 'mctest', 'pdfStudentEmail', 'download', '_e102_c224_q1240_p001_11201811442.pdf']
             fp = f.split('/')
 
-            #_e102_c224_q1240_p001_11201811442.pdf
+            # _e102_c224_q1240_p001_11201811442.pdf
             ss = fp[-1]
 
             try:
@@ -156,7 +155,7 @@ def feedbackStudentsExamText(request, pk):
             myfiles.append([idExam, idQuestion, idStudent, nota, erros, page, f])
 
         try:
-            #_e102_c224_q1240
+            # _e102_c224_q1240
             fileMSG = '_e' + idExam + '_c' + idClass + '_q' + idQuestion + '.txt'
             with open(os.path.join(path2, fileMSG), 'r', encoding="ISO-8859-1") as f:
                 msg_str = f.read()
@@ -164,7 +163,7 @@ def feedbackStudentsExamText(request, pk):
             msg_str = ""
 
         path_to_file = BASE_DIR + "/report" + str(pk) + "q" + idQuestion + ".csv"
-        #raise Http404(path_to_file)
+        # raise Http404(path_to_file)
 
         try:
             os.remove(path_to_file)
@@ -174,13 +173,13 @@ def feedbackStudentsExamText(request, pk):
 
         for room in exam.classrooms.all():  # para cada turma
             for s in room.students.all():  # para cada estudante da turma
-                #path = os.getcwd() + "/pdfStudentEmail/"
-                #file_name = "studentEmail_e" + str(exam.id) + "_r" + str(room.id) + "_s" + s.student_ID
+                # path = os.getcwd() + "/pdfStudentEmail/"
+                # file_name = "studentEmail_e" + str(exam.id) + "_r" + str(room.id) + "_s" + s.student_ID
 
                 for f in myfiles:
                     if f[0] == str(exam.id) and f[2] == s.student_ID:
                         email = "fzampirolli@gmail.com"
-                        #email = s.student_email
+                        # email = s.student_email
                         data_hora = datetime.datetime.now()
                         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
                         file_name = f[6]
@@ -252,7 +251,7 @@ def feedbackStudentsExam(request, pk):
                 for f in myfiles:
                     if f[0] == str(exam.id) and f[1] == str(room.id) and f[2] == s.student_ID:
                         email = "fzampirolli@gmail.com"
-                        #email = s.student_email
+                        # email = s.student_email
                         data_hora = datetime.datetime.now()
                         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
@@ -278,8 +277,6 @@ def feedbackStudentsExam(request, pk):
                      os.path.dirname(path_to_file))
 
     return HttpResponseRedirect("/")
-
-
 
 
 @login_required
@@ -403,7 +400,8 @@ def correctStudentsExam(request, pk):
                 print(">>>>text>>>>", qr)
                 mypath = MYFILES + "_q" + qr['question']
 
-                myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
+                myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(
+                    countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
 
                 myfileMSG = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + '.txt'
 
@@ -420,9 +418,9 @@ def correctStudentsExam(request, pk):
 
                     fileImages = [myfile0, myfile2]
 
-                    flagOK = False # continua salvando ate achar qrcode ou acabar
+                    flagOK = False  # continua salvando ate achar qrcode ou acabar
                     while not flagOK and countPage < numPAGES - 1:
-                        myfile3 = MYFILES + '_p' + str(countPage+1) + '.png'
+                        myfile3 = MYFILES + '_p' + str(countPage + 1) + '.png'
                         img2 = cv2.imread(myfile3)
                         img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
                         flagOK, qr3 = cvMCTest.getQRCode(img2, countPage)
@@ -490,20 +488,20 @@ def correctStudentsExam(request, pk):
                             qr['correct'] = 'ERROR:' + ' page ' + str(countPage + 1) + ' square ' + str(
                                 countSquare + 1) + ': ' + str(NUM_RESPOSTAS) + '-' + str(qr['answer'])
 
+                        imgQiNC = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
                         if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':  # quadro horizontal
-                            imgQiNC = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
                             testAnswers.append(
                                 cvMCTest.segmentAnswersHor([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
                         else:
-                            testAnswers.append(cvMCTest.segmentAnswers(imgQi, countPage, countSquare, NUM_QUESTOES, qr))
+                            testAnswers.append(cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
 
                     qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)  # deixa as respostas de cada quadro em uma linha
 
                     qr = cvMCTest.studentGrade(qr, qr0)  # calcula nota final do aluno
 
                 cvMCTest.saveCSVone(qr)  # salva arquivo CSV
-                #cvMCTest.writeCSV(qr)  # imprime conteÃºdo do CSV
-                #raise Http404(qr)
+                # cvMCTest.writeCSV(qr)  # imprime conteÃºdo do CSV
+                # raise Http404(qr)
 
                 if (exam.exam_student_feedback == 'yes'):
                     # raise Http404(qr)
@@ -553,6 +551,29 @@ def correctStudentsExam(request, pk):
                 spamWriter.writerow(["\n" + str(request.user), ",", str(datetime.datetime.now())])
             os.system("cat >> correct.log " + path_to_file)
             ### log end
+
+            ### IRT begin
+            X = np.genfromtxt(path_to_file, delimiter=',', dtype=str)
+            N = len(X[:, 0]) - 1          # Number of students
+            M = int((len(X[0]) - 6) / 2)  # Number of questions
+            dados = np.zeros((N, M), dtype=int)
+            for n, L in enumerate(X):  # for each student
+                if n:
+                    for m, C in enumerate(L):
+                        if 5 < m <= 5 + M:
+                            try:
+                                if len(str(C).split()[0]) == 1:
+                                    dados[n - 1][m - 6] = 1
+                            except:
+                                pass
+
+            with open(MYFILES + '_irt.csv', 'w') as csvfile:
+                spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                for n in range(N):
+                    spamWriter.writerow(dados[n])
+
+            os.system("python3 _irt_pymc3.py " + MYFILES + "_irt.csv &")
+            ### IRT end
 
             myfiles = []
             for f in np.sort(glob.glob(MYFILES + "_RETURN_*.png")):
@@ -627,10 +648,12 @@ def generate_page(request, pk):
 
         # send by email all case tests of moodle
         cases = Utils.get_cases(listao)
-        message_cases = _('Dear')+'\n\n'
-        message_cases += _('This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
-        message_cases += _('Follow these steps:')+'\n\n'
-        message_cases += _('1. Use the pdf with the exams generated with this date and time (EXACTLY !!!): ') + data_hora + '\n'
+        message_cases = _('Dear') + '\n\n'
+        message_cases += _(
+            'This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
+        message_cases += _('Follow these steps:') + '\n\n'
+        message_cases += _(
+            '1. Use the pdf with the exams generated with this date and time (EXACTLY !!!): ') + data_hora + '\n'
         message_cases += _('2. Save the following content to a *.cases file') + '\n'
         message_cases += _('3. ') + '\n'
         message_cases += _('4. ') + '\n\n'
@@ -691,11 +714,11 @@ def generate_page(request, pk):
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     hash_num = Utils.distro_table(s.student_name)
-                    if hash_num==-1:
+                    if hash_num == -1:
                         messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
                         return render(request, 'exam/exam_errors.html', {})
 
-                    strQuestions += Utils.drawQuestions(request,#countStudents
+                    strQuestions += Utils.drawQuestions(request,  # countStudents
                                                         listao[hash_num % int(exam.exam_variations)],
                                                         # uma variacao de prova por aluno
                                                         exam, room, s.student_ID, s.student_name, request.user,
@@ -711,7 +734,8 @@ def generate_page(request, pk):
                     if int(Utils.getNumMCQuestions(exam)):
                         strSTUDENT += Utils.drawJumpPage()
                         strSTUDENT += strCircles
-                        strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr, data_hora)
+                        strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
+                                                      data_hora)
                         strSTUDENT += strAnswerSheet
                         strSTUDENT += strCircles
                         '''
@@ -723,13 +747,15 @@ def generate_page(request, pk):
                         strSTUDENT += strInstructions
                         if exam.exam_print_eco == 'no' and exam.exam_print == 'both':
                             strSTUDENT += "\n\n\\newpage\n\n"
-                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr, data_hora)
+                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
+                                                          data_hora)
                         if exam.exam_print == 'both':
                             strSTUDENT += strQuestions
                 if exam.exam_print in ['ques']:
                     if int(exam.exam_number_of_questions_text):
                         if exam.exam_print_eco == 'yes':
-                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr, data_hora)
+                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
+                                                          data_hora)
                             strSTUDENT += strInstructions
                         strSTUDENT += strQuestions
 
@@ -832,8 +858,8 @@ def UpdateExam(request, pk):
     st = Utils.validateProf(exam_inst, request.user)
     if st is not None:
         return HttpResponse(st)
-        #messages.error(request, _('Error: there is no selected classroom(s).'))
-        #return render(request, 'exam/exam_errors.html', {})
+        # messages.error(request, _('Error: there is no selected classroom(s).'))
+        # return render(request, 'exam/exam_errors.html', {})
 
     if request.method == 'POST':
         form = UpdateExamForm(request.POST)

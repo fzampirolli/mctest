@@ -62,7 +62,6 @@ from exam.models import Exam, StudentExam, StudentExamQuestion
 from student.models import Student
 from topic.models import Question, Answer
 
-
 circle_min = 650
 circle_max = 940  # 895
 
@@ -144,7 +143,6 @@ class cvMCTest(object):
         data = obj._data
         return 255 - cv2.imdecode(np.frombuffer(data, np.uint8), cvMCTest.CV_CUR_LOAD_IM_GRAY)
 
-
     @staticmethod
     def get_img_from_page(pdf_obj, page):
         page_obj = pdf_obj.getPage(page)
@@ -172,19 +170,19 @@ class cvMCTest(object):
 
         qr = dict()
         if True:
-            #print("################ decodeQRcode")
+            # print("################ decodeQRcode")
             dec0 = decode(img)
-            #print("################ QRcode0="+str(dec0))
+            # print("################ QRcode0="+str(dec0))
             if not dec0:
                 return []
 
             dec0 = dec0[0][0]
             safterScan = binascii.unhexlify(dec0)
 
-            #print("############ QRcode1="+str(dec0))
-            #print("############ QRcode2="+str(len(safterScan)))
+            # print("############ QRcode1="+str(dec0))
+            # print("############ QRcode2="+str(len(safterScan)))
 
-            #raise Http404(len(safterScan))
+            # raise Http404(len(safterScan))
             if len(safterScan) < 51:  ##### este caso é para questões dissertativas com uma questão por folha
                 dec = zlib.decompress(safterScan)
                 dec = dec.decode('utf-8')
@@ -230,8 +228,8 @@ class cvMCTest(object):
                 qr['numquest'] = numMCQ
                 qr['correct'] = ''  ### Quando o gabarito esta na primeira pagina do pdf
 
-                #print("############ QRcode3=" + str(qr))
-                #print("############ QRcode4=" + str(dec))
+                # print("############ QRcode3=" + str(qr))
+                # print("############ QRcode4=" + str(dec))
 
                 # ler gabarito do servidor
                 fileGAB = 'tmpGAB/' + dec + '.txt'
@@ -348,12 +346,12 @@ class cvMCTest(object):
                 areaMax = region.area
             h, w = region.centroid
             if circle_min < region.area < circle_max:
-                #print("####region.area####===", region.area, int(h), int(w))
+                # print("####region.area####===", region.area, int(h), int(w))
                 p.append([int(h), int(w)])
 
         findRec = []  # se tiver mais que 4 pontos, escolho os que formam um retangulo
         for i in np.array(list(it.combinations(range(len(p)), 4))):
-            #print(i)
+            # print(i)
             if len(i) == 4 and cvMCTest.isBigRectangle(p[i[0]], p[i[1]], p[i[2]], p[i[3]]):
                 findRec = [p[i[0]], p[i[1]], p[i[2]], p[i[3]]]
 
@@ -420,7 +418,6 @@ class cvMCTest(object):
 
         # find the contours in the thresholded image
         (_, cnts, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
 
         # if no contours were found, return None
         if len(cnts) == 0:
@@ -557,11 +554,9 @@ class cvMCTest(object):
 
             size_rectangle = cv2.contourArea(approximation)
 
-
             if size_rectangle > 2000:
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
                 squares.append(cvMCTest.SortPointsExtreme(approximation))
-
 
         pt = []
         ptSort = []
@@ -631,7 +626,6 @@ class cvMCTest(object):
         (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
 
-
         # size_rectangle_max = 0
         squares = []
         for cnt in contours:  # loop over the contours
@@ -651,7 +645,6 @@ class cvMCTest(object):
                 # area of the polygon
             size_rectangle = cv2.contourArea(approximation)
 
-
             if size_rectangle > 800:
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
                 squares.append(cvMCTest.SortPointsExtreme(approximation))
@@ -670,7 +663,7 @@ class cvMCTest(object):
             ptSort.append([p1, p2])
 
             # pc =int(p1[0]/30)+H*np.int(p1[1]/30)
-            pc = int((p2[0]+p1[0]) / 30) + W * np.int((p2[1]+p1[1]) / 30)  # raster order
+            pc = int((p2[0] + p1[0]) / 30) + W * np.int((p2[1] + p1[1]) / 30)  # raster order
             pt.append(pc)
 
         pto = np.argsort(pt)
@@ -977,13 +970,8 @@ class cvMCTest(object):
     def segmentAnswersHor(img, countPage, countSquare, NUM_QUESTOES, qr):
         DEBUG = False
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
-        filePath = "/home/fz/django_webmctest/mctest/tmp/"
-        # impath = os.path.abspath("./_test") + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1)
-        impath0 = os.path.abspath(filePath) + "/_e" + str(qr['idExam']) + str(qr['file']) + "_p" + str(
-            countPage + 1).zfill(3)
         imgNC = img[1]
         img = img[0]
-        # img0 = img
         H, W = img.shape
 
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
@@ -1008,7 +996,6 @@ class cvMCTest(object):
             countSquare + 1) + "_q_02Blur.png", img)
 
         img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 175, 1)
-        # ret, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
         if DEBUG: cv2.imwrite(
             "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png",
             img)
@@ -1044,8 +1031,10 @@ class cvMCTest(object):
             ## verifica qual foi a resposta em cada coluna/questao
             im = img[:, jini:jfim]
 
-            if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-                countSquare + 1) + "_q_04_" + str(q) + ".png", im)
+            if DEBUG: cv2.imwrite(
+                "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+                    countSquare + 1) + "_q_04_" + str(jfim) + ".png",
+                im)
 
             (_, contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -1064,20 +1053,19 @@ class cvMCTest(object):
                 if cv2.contourArea(cnt) > 200:
                     x, y, w, h = cv2.boundingRect(cnt)
                     iii = im[y:y + h, x:x + w]
-                    if DEBUG: cv2.imwrite(
-                        "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) +
-                        "_q_04_" + str(q) + "_" + str(count) + "a.png", iii)
 
                     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
                     iii = cv2.morphologyEx(iii, cv2.MORPH_CLOSE, kernel)
 
                     area = 110 - int(sum(sum(iii == 0)))
 
-                    if area > 58:
-                        if DEBUG: cv2.imwrite(
+                    if DEBUG:
+                        cv2.imwrite(
                             "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
                                 countSquare + 1) +
-                            "_q_04_" + str(q) + "_" + str(count) + "_area_" + str(area) + "_b.png", iii)
+                            "_q_04_" + str(q) + "_" + str(count) + "_area_" + str(area) + ".png", iii)
+
+                    if area > 58:
                         if DEBUG: rect.append([x, y, w, h])
 
                         n = notas[countQuestions]
@@ -1088,11 +1076,6 @@ class cvMCTest(object):
                         count += 1
 
                     countQuestions += 1
-
-            if int(qr['page']) == 2:
-                # for cnt in contoursOrder:
-
-                pass
 
             if DEBUG: lixo.append([countPage, q, NUM_RESPOSTAS, H, W, jini, jfim, count, rect, answers_area, answers_n])
 
@@ -1111,8 +1094,9 @@ class cvMCTest(object):
                 aaux = {x: list(aux).count(x) for x in set(list(aux))}  # conta False e True
 
                 if count > 1 and False in aaux:  # salva somente as questoes com respostas duplicadas = areas > percOK
-                    impath = impath0 + "_s" + str(countSquare + 1) + "_q" + str(q).zfill(3)
-                    if aaux[False] > 1:  # se tem mais que uma marcação forte > percOK => questão inválida
+                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[:-4]
+                    impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(q).zfill(3)
+                    if aaux[False] > 1:  # se tem mais que uma marcacao forte > percOK => questão inválida
                         impath += ".png"
                         if DEBUG:
                             print(">>>INVALIDA: ", impath)
@@ -1140,13 +1124,13 @@ class cvMCTest(object):
                         mr.append(respostaConsiderada)
             q += 1
             jfim += 1
-
         return ([countPage, idTest, countSquare, NUM_RESPOSTAS, NUM_QUESTOES, invalida, 0, mr])
 
     @staticmethod
     def segmentAnswers(img, countPage, countSquare, NUM_QUESTOES, qr):
         DEBUG = False
-        img0 = img
+        imgNC = img[1]
+        img0 = img = img[0]
         H, W = img.shape
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
         if qr['idStudent'] == 'ERROR':
@@ -1154,7 +1138,6 @@ class cvMCTest(object):
         idTest = qr['idStudent']
         NUM_RESPOSTAS = int(qr['answer'])
         [NUM, imgLins] = cvMCTest.setLines(img, countPage, countSquare)
-        # impath = os.path.abspath("./_test") + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1)
 
         if DEBUG: cv2.imwrite(
             "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png",
@@ -1196,7 +1179,8 @@ class cvMCTest(object):
             im = img2[jini:jfim, :]
 
             if DEBUG: cv2.imwrite(
-                "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_04_"+str(jfim)+".png",
+                "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+                    countSquare + 1) + "_q_04_" + str(jfim) + ".png",
                 im)
 
             (_, contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -1233,11 +1217,8 @@ class cvMCTest(object):
 
                 if count > 1 and False in aaux:  # salva somente as questoes com respostas duplicadas = areas > percOK
 
-                    # return HttpResponse(str(answers_area),str(aux),str(aaux),str(aaux[False]), str(False in aaux))
-                    #filePath = "/home/fz/django_webmctest/mctest/tmp/"
-
                     impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[:-4]
-                    impath+= "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(q).zfill(3)
+                    impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(q).zfill(3)
                     if aaux[False] > 1:  # se tem mais que uma marcação forte > percOK => questão inválida
                         impath += ".png"
                         if DEBUG:
@@ -1308,7 +1289,6 @@ class cvMCTest(object):
         qr['numquest'] = numquest
         qr['invalid'] = invalida
         qr['grade'] = nota
-
         return qr
 
     @staticmethod
@@ -1381,7 +1361,6 @@ class cvMCTest(object):
         if not count:
             if not qr['correct'] and int(qr['page']):  # comparar com o gabarito da primeira pagina
 
-
                 str2 = ''
                 ss0 = qr0['answers'].split(',')
                 ss1 = qr['answers'].split(',')
@@ -1412,7 +1391,6 @@ class cvMCTest(object):
             pass
 
         qr['respgrade'] = coresp
-
 
         # for s in StudentExam.objects.all(): print(s.grade)
         # for q in StudentExamQuestion.objects.all(): print(q.studentAnswer,q.answersOrder)
@@ -1542,6 +1520,7 @@ class cvMCTest(object):
                 except:
                     t.append(''.join(x for x in qr['correct']))
 
+
                 spamWriter.writerow(t)
 
     ####################################
@@ -1572,8 +1551,8 @@ class cvMCTest(object):
                 count += 1
                 str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (str(count), qe.question.question_text)
                 # index = qe.answersOrder.find('0')
-                #aa = [a for a in Answer.objects.all() if a.question == qe.question]                         ###### VALIDAR ISSO !!!!!!
-                aa = [a for a in qe.question.answers2.all()]                                                 ###### VALIDAR ISSO !!!!!!
+                # aa = [a for a in Answer.objects.all() if a.question == qe.question]                         ###### VALIDAR ISSO !!!!!!
+                aa = [a for a in qe.question.answers2.all()]  ###### VALIDAR ISSO !!!!!!
                 str1 += "\\textbf{%s:} \t%s\n\n" % (_("Correct answer"), aa[0].answer_text)
                 # str1+="\\textbf{%s:} \t%s\n\n" % (_("Your answer"), qe.studentAnswer )
 
