@@ -37,11 +37,9 @@ print("Destination: " + destinatario)
 
 msg = "\n"
 msg += "Prezado(a), \n\n"
-
-msg += "Seguem algumas estatísticas retiradas deste link: \n"
-msg += "http://y-okamoto-psy1949.la.coocan.jp/Python/en1/IRTLClassPyMC3/ \n\n"
-
-msg += "Att, \nwebMCTest\n\n"
+msg += "Seguem algumas estatísticas das correções. \n\n"
+msg += "Att, \nFrancisco de Assis Zampirolli\n\n"
+msg += "REF.: http://y-okamoto-psy1949.la.coocan.jp/Python/en1/IRTLClassPyMC3/ \n\n"
 
 msg += "==================================================\n\n"
 
