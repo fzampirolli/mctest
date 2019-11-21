@@ -24,11 +24,11 @@ source _setup_all.sh
 ```
 
 ### Future Improvements
-1) Error messages and Graphical interfaces;
+1) Error messages and graphical interfaces;
  
 2) Install [_setup-all.sh](_setup-all.sh) (including other operating systems);
 
-3) The time to generate PDF from an exam with many variations.
+3) The time to generate PDF from an exam with many students.
 
 4) Site and DB in different languages. For example, 
    edit the [locale/pt/LC_MESSAGES/django.po](locale/pt/LC_MESSAGES/django.po) 
@@ -53,8 +53,11 @@ source _setup_all.sh
 
 7) Use of blockchain to validate exams, history and other features;
 
-8) Inclusion of facial recognition in the QR Code of the exams.
+8) Inclusion of facial recognition in the QR Code of the exams;
 
+9) Improve of Item Response Theory;  
+
+10) Use Markdown to describe questions and send exams or activities to students.
 ---
 ### Versions 
 
