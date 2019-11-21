@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-20 18:47-0300\n"
+"POT-Creation-Date: 2019-11-21 06:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2469,8 +2469,8 @@ msgid "including other operating systems"
 msgstr "incluindo outros sistemas operacionais"
 
 #: main/templates/readme.html:57
-msgid "The time to generate PDF from an exam with many variations"
-msgstr ""
+msgid "The time to generate PDF from an exam with many students"
+msgstr "Tempo para criar pdf de um exame com muitos estudantes"
 
 #: main/templates/readme.html:60
 msgid "Site and DB in different languages. For example, edit the "
@@ -2511,39 +2511,50 @@ msgstr "Utilizar blockchain para validar exames, histórico e outros recursos"
 msgid "Inclusion of facial recognition in the QR Code of the exams"
 msgstr "Incluir reconhecimento facial no exame QR Code"
 
+#: main/templates/readme.html:89
+msgid "Improve of Item Response Theory;  "
+msgstr "Melhorias em Teoria de Resposta ao Item"
+
 #: main/templates/readme.html:92
+msgid ""
+"Use Markdown to describe questions and send exams or activities to students"
+msgstr ""
+"Usar Markdown para descrever perguntas e enviar exames ou atividades aos "
+"alunos"
+
+#: main/templates/readme.html:100
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:99
+#: main/templates/readme.html:107
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:100
+#: main/templates/readme.html:108
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:107
+#: main/templates/readme.html:115
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:108
+#: main/templates/readme.html:116
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:109
+#: main/templates/readme.html:117
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:116
+#: main/templates/readme.html:124
 msgid "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)"
 msgstr ""
 "processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo (FAPESP)"
 
-#: main/templates/readme.html:117
+#: main/templates/readme.html:125
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
