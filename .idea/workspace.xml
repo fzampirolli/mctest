@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="" />
+    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="change new GUI">
+      <change afterPath="$PROJECT_DIR$/account/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/course/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pdfExam/_e90_CE-teste_PClass_CE-exameteste.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pdfQuestion/fzampirolli.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/student/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11001816-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11001816.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201721630-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201721630.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201811685-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201811685.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-CE-exameteste-2019-11-21-11-34-23.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1574346864075;221;90;11201811685;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1574346864233;221;90;11201721630;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1574346864385;221;90;11001816;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/topic/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -413,27 +432,7 @@
       <workItem from="1573774142540" duration="29000" />
       <workItem from="1574124841079" duration="605000" />
       <workItem from="1574243289685" duration="18112000" />
-    </task>
-    <task id="LOCAL-00015" summary="change license">
-      <created>1566123154247</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1566123154247</updated>
-    </task>
-    <task id="LOCAL-00016" summary="change license">
-      <created>1566123704383</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1566123704383</updated>
-    </task>
-    <task id="LOCAL-00017" summary="change settings.env">
-      <created>1566140877999</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1566140877999</updated>
+      <workItem from="1574350410726" duration="1208000" />
     </task>
     <task id="LOCAL-00018" summary="change settings.env">
       <created>1566173816459</created>
@@ -757,7 +756,28 @@
       <option name="project" value="LOCAL" />
       <updated>1574346717072</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="change new GUI">
+      <created>1574346726584</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1574346726584</updated>
+    </task>
+    <task id="LOCAL-00065" summary="change new GUI">
+      <created>1574346780874</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1574346780874</updated>
+    </task>
+    <task id="LOCAL-00066" summary="change new GUI">
+      <created>1574350739398</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1574350739398</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
