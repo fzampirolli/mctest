@@ -26,12 +26,14 @@ from mctest.settings import webMCTest_SERVER
 
 print("Starting IRT...")
 
-print(str(sys.argv[1]))
+print("File: "+str(sys.argv[1]))
 
 file_name = str(sys.argv[1])
 s = file_name.split('/')
 s = s[len(s)-1].split('_')
 destinatario = s[2]
+
+print("Destination: " + destinatario)
 
 msg = "\n"
 msg += "Prezado(a), \n\n"
@@ -84,7 +86,7 @@ for i in range(NStg):
     msg += "{0:>10}".format('Stage-{}'.format(i))
 msg += '\n'
 for j in range(M):
-    msg += 'Item-{0: <7d}'.format(j)
+    msg += 'Item-{0: <7d}'.format(j+1)
     for s in range(NStg):
         msg += '{0: >10.5f}'.format(ary_prob_response[:, s, j].mean())
     msg += '\n'
@@ -94,7 +96,7 @@ ary_p_stages = ary_p_stages.T
 msg += "\nMean stages and their SD's\n"
 msg += '{0: >11s}{1:>10s}{2:>10s}\n'.format(' ', '    Mean', 'SD')
 for i in range(len(ary_p_stages)):
-    msg += 'person-{0: <4d}{1:>10.3f}{2:>10.3f}\n'.format(i, ary_p_stages[i].mean(),
+    msg += 'person-{0: <4d}{1:>10.3f}{2:>10.3f}\n'.format(i+1, ary_p_stages[i].mean(),
                                                        ary_p_stages[i].std())
 v_waic = az.waic(trace)
 
