@@ -1,0 +1,247 @@
+{
+  "variations": [
+    {
+      "variant": "1",
+      "questions": [
+        {
+          "key": "1236",
+          "number": "1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                77,
+                65,
+                13,
+                17
+              ],
+              "output": [
+                247640
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                68,
+                74,
+                13,
+                17
+              ],
+              "output": [
+                249052
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                77,
+                63,
+                13,
+                17
+              ],
+              "output": [
+                240001
+              ]
+            }
+          ]
+        },
+        {
+          "key": "0070",
+          "number": "2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "Uni",
+                "lac-I"
+              ],
+              "output": [
+                "Vetor",
+                "lac-O"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "entrada2"
+              ],
+              "output": [
+                "saida2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "2",
+      "questions": [
+        {
+          "key": "1236",
+          "number": "1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                72,
+                66,
+                19,
+                17
+              ],
+              "output": [
+                235176
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                71,
+                76,
+                19,
+                17
+              ],
+              "output": [
+                267046
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                77,
+                69,
+                19,
+                17
+              ],
+              "output": [
+                263168
+              ]
+            }
+          ]
+        },
+        {
+          "key": "0070",
+          "number": "2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "Uni",
+                "lac-I"
+              ],
+              "output": [
+                "Vetor",
+                "lac-O"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "entrada2"
+              ],
+              "output": [
+                "saida2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "3",
+      "questions": [
+        {
+          "key": "0070",
+          "number": "1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "Uni",
+                "lac-I"
+              ],
+              "output": [
+                "Vetor",
+                "lac-O"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "entrada2"
+              ],
+              "output": [
+                "saida2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1236",
+          "number": "2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                74,
+                67,
+                19,
+                23
+              ],
+              "output": [
+                245431
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                62,
+                64,
+                19,
+                23
+              ],
+              "output": [
+                196428
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                65,
+                72,
+                19,
+                23
+              ],
+              "output": [
+                231620
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
