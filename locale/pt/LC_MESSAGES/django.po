@@ -2519,7 +2519,7 @@ msgstr "Melhorias em Teoria de Resposta ao Item"
 msgid ""
 "Use Markdown to describe questions and send exams or activities to students"
 msgstr ""
-"Usar Markdown para descrever perguntas e enviar exames ou atividades aos "
+"Usar Markdown para descrever questões e enviar exames ou atividades aos "
 "alunos"
 
 #: main/templates/readme.html:100

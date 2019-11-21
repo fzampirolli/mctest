@@ -5,7 +5,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/course/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/exam/UtilsLatex.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/UtilsLatex.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exam/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/exam/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/student/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/topic/migrations/0001_initial.py" beforeDir="false" />
     </list>
@@ -865,9 +869,9 @@
     </ignored-roots>
     <MESSAGE value="change license" />
     <MESSAGE value="change settings.env" />
-    <MESSAGE value="change new GUI" />
     <MESSAGE value="including irt" />
-    <option name="LAST_COMMIT_MESSAGE" value="including irt" />
+    <MESSAGE value="change new GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="change new GUI" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">

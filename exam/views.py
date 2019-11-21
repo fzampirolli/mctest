@@ -653,10 +653,11 @@ def generate_page(request, pk):
             'This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
         message_cases += _('Follow these steps:') + '\n\n'
         message_cases += _(
-            '1. Use the pdf with the exams generated with this date and time (EXACTLY !!!): ') + data_hora + '\n'
-        message_cases += _('2. Save the following content to a *.cases file') + '\n'
-        message_cases += _('3. ') + '\n'
-        message_cases += _('4. ') + '\n\n'
+            '1. Use the pdf with the exams generated with this date and time (EXACTLY): ') + data_hora + '\n'
+        message_cases += _('2. Save the following content to the linker.json file (RENAME)') + '\n'
+        message_cases += _('3. After you create a Moodle VPL activity, in the runtime files, add linker.json') + '\n'
+        message_cases += _('4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification2') + '\n'
+        message_cases += '\n\n'
 
         if len(cases['id'] and cases['id'][0]):
             anexos = Utils.format_cases(cases, str(request.user) + '-' + str(exam.exam_name) + '-' + data_hora)

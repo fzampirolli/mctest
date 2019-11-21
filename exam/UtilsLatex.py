@@ -40,6 +40,7 @@ import bcrypt
 import numpy as np
 import pyqrcode
 from django.contrib import messages
+from django.core.serializers import serialize
 from django.http import HttpResponse
 # coding=UTF-8
 from django.utils.translation import gettext_lazy as _
@@ -50,7 +51,7 @@ from topic.UtilsMCTest4 import UtilsMC
 
 class Utils(object):
 
-    # return case test between begin{comment} and end{comment}
+    # return test case between begin{comment} and end{comment}
     @staticmethod
     def get_cases(listao):
         start_q = '\\color{white}\\\@'
@@ -94,9 +95,47 @@ class Utils(object):
     # cases['id']    = np.array([     [     [id1]     ,    [id2]     ],      [  [id2]    ,   [id1]     ] ] )
     # cases['input'] = np.array([     [ [ [1], [2,3] ],  [[2, 2]]    ],      [ [[5, 5]   , [[6, 6]]    ] ] )
     # cases['output']= np.array([     [ [ [1,2], [3] ],  [[3, 4, 5]] ],      [ [[4, 5, 6], [[7, 8, 9]] ] ] )
-
     @staticmethod
     def format_cases(cases, file): # _version1
+        file = file.replace(' ', '').replace('/', '-').replace(':', '-')
+        files = ['./tmp/' + file + ".json"]
+        formatCases = {}
+        formatCases['variations'] = []  # variant/models
+
+        for v in range(len(cases['input'])):  # for each variant/model
+            st_f = './tmp/' + file + '-m' + str(v+1) + ".cases"
+            variant = {}
+            variant['variant'] = str(v + 1)
+            variant['questions'] = []
+            count_q = 0
+            for q in range(len(cases['input'][v])):  # for each question
+                count_q += 1
+                question = {}
+                question['key'] = str(cases['id'][v][q])
+                question['number'] = str(count_q)
+                #question['file'] = ''
+                question['weight'] = '1'
+                question['language'] = ['all']
+                question['cases'] = []
+                if isinstance(cases['input'][v][q], list):
+                    for c in range(len(cases['input'][v][q])):  # for each case
+                        cases_q = {}
+                        cases_q['case'] = "test_"+str(c+1)
+                        cases_q['input'] = cases['input'][v][q][c]
+                        cases_q['output'] = cases['output'][v][q][c]
+                        question['cases'].append(cases_q)
+
+                variant['questions'].append(question)
+
+            formatCases['variations'].append(variant)
+
+        with open(files[0], "w") as out:
+            json.dump(formatCases, out, indent=2)
+
+        return files
+
+    @staticmethod
+    def format_cases_version3(cases, file): ###### LIXO
         file = file.replace(' ', '').replace('/', '-').replace(':', '-')
         files = ['./tmp/' + file + ".xml"]
 
@@ -170,7 +209,7 @@ class Utils(object):
         return files
 
     @staticmethod
-    def format_cases_version2(cases, file):
+    def format_cases_version2(cases, file):  ##### LIXO
         file = file.replace(' ', '').replace('/', '-').replace(':', '-')
         st = '<model=0>\n\n</model>\n\n'
         str_q = []
