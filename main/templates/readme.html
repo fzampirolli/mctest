@@ -54,7 +54,7 @@
                             ({% trans "including other operating systems" %});</p>
                     </li>
                     <li>
-                        <p>{% trans "The time to generate PDF from an exam with many variations" %};</p>
+                        <p>{% trans "The time to generate PDF from an exam with many students" %};</p>
                     </li>
                     <li>
                         <p>{% trans "Site and DB in different languages. For example, edit the " %}
@@ -63,8 +63,7 @@
                 django-admin.py makemessages -l pt
                 django-admin.py compilemessages</pre>
                         </p>
-                    </li>
-                    <li>
+
                         <p>{% trans "Afterwards make the following changes in " %}
                             <a href="http://vision.ufabc.edu.br/static/_settings.env">_settings.env</a>:
                         <pre>
@@ -83,8 +82,16 @@
                         <p>{% trans "Use of blockchain to validate exams, history and other features" %};</p>
                     </li>
                     <li>
-                        <p>{% trans "Inclusion of facial recognition in the QR Code of the exams" %}.</p>
+                        <p>{% trans "Inclusion of facial recognition in the QR Code of the exams" %};</p>
                     </li>
+                    <li>
+                        <p>{% trans "Improve of Item Response Theory;  " %};</p>
+                    </li>
+                                        <li>
+                        <p>{% trans "Use Markdown to describe questions and send exams or activities to students" %}.</p>
+                    </li>
+
+
                 </ol>
 
                 <hr>
