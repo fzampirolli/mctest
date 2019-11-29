@@ -38,6 +38,8 @@
                         <li data-target="#carouselExampleIndicators" data-slide-to="15"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="16"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="17"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="18"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="19"></li>
                     </ol>
                     <div class="carousel-inner" style="background-color:#447e9b;">
                         <!-- slide 1 -->
@@ -166,7 +168,7 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Part II" %}</h5>
-                                <p>{% trans "Attributes and answers to a question. When creating a question, the first alternative is always the correct one." %}</p>
+                                <p>{% trans "Attributes and answers to a question. When creating a question, the first alternative is always the correct one" %}</p>
                             </div>
                         </div>
                         <!-- slide 9 parametric - part III -->
@@ -180,7 +182,7 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Part III" %}</h5>
-                                <p>{% trans "Question to be displayed. Note the order in which answers were drawn after '#'" %}.
+                                <p>{% trans "Question to be displayed. Note the order in which answers were drawn after '#'" %}
                                 {% trans "You can assign different weights for each anwers, on the exam grade" %}</p>
                             </div>
                         </div>
@@ -237,7 +239,7 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "CSV File with Exam Correction" %}</h5>
-                                <p>{% trans "In yellow, answer marked '/' correct answer." %}
+                                <p>{% trans "In yellow, answer marked '/' correct answer" %}.
                                     {% trans "In green, Question ID in the DB and answers order (0=A, 1=B, ...)" %}.
                                  {% trans "ID here means exam variations" %}</p>
                             </div>
@@ -282,7 +284,7 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
-                                <p>{% trans "The answer in light colors, not to appear printed. You can program the answer to have a similar number of lines (same difficulty)." %}</p>
+                                <p>{% trans "The answer in light colors, not to appear printed. You can program the answer to have a similar number of lines (same difficulty)" %}</p>
                             </div>
                         </div>
                         <!-- slide 17 - Email corrections to each student -->
@@ -296,7 +298,7 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email corrections to each student" %}</h5>
-                                <p>{% trans "It is also possible to include in the email a PDF file with the text of the questions, the alternative the student has marked, the feedback and the correct alternative (if incorrect)." %}</p>
+                                <p>{% trans "It is also possible to include in the email a PDF file with the text of the questions, the alternative the student has marked, the feedback and the correct alternative (if incorrect)" %}</p>
                             </div>
                         </div>
                         <!-- slide 18 - Email correction with statistics -->
@@ -310,10 +312,23 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email with some correction statistics" %}</h5>
-                                <p>{% trans "The teacher receives this email after sending a PDF of the scanned exams." %}</p>
+                                <p>{% trans "The teacher receives this email after sending a PDF of the scanned exams" %}</p>
                             </div>
                         </div>
-
+                        <!-- slide 19 - Email with case tests of Moodle + VPL -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/19.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with test cases of moodle + VPL" %}</h5>
+                                <p>{% trans "The teacher receives this email after creating a PDF when there is an exam that contains program exercises" %}</p>
+                            </div>
+                        </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
