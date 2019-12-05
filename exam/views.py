@@ -32,9 +32,11 @@ import glob
 import os
 import re
 
+import PyPDF2
 import cv2  # pip install opencv-python
 import img2pdf
 import numpy as np
+import pandas
 from django.contrib import messages
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -317,7 +319,6 @@ def correctStudentsExam(request, pk):
 
         MYFILES = BASE_DIR + "/tmp/_e" + str(exam.id) + '_' + str(request.user) + '_' + file0[:-4]
 
-        '''
         try:
             input_pdf = PyPDF2.PdfFileReader(open(str(file), "rb"))
         except PyPDF2.utils.PdfReadError:
@@ -332,7 +333,6 @@ def correctStudentsExam(request, pk):
             pass
             #messages.error(request, _("correctStudentsExam: Error in read PDF: ") + str(file))
             #return render(request, 'exam/exam_errors.html', {})
-        '''
 
         # try reading the pdf file using another way
         pages = convert_from_path(file, 200)  # dpi 100=min 500=max
@@ -553,26 +553,24 @@ def correctStudentsExam(request, pk):
             ### log end
 
             ### IRT begin
-            X = np.genfromtxt(path_to_file, delimiter=',', dtype=str)
-            N = len(X[:, 0]) - 1          # Number of students
-            M = int(Utils.getNumMCQuestions(exam))  # Number of questions
-            dados = np.zeros((N, M), dtype=int)
-            for n, L in enumerate(X):  # for each student
-                if n:
-                    for m, C in enumerate(L):
-                        if 5 < m <= 5 + M:
-                            try:
-                                if len(str(C).split()[0]) == 1:
-                                    dados[n - 1][m - 6] = 1
-                            except:
-                                pass
+            try:
+                M = int(Utils.getNumMCQuestions(exam))  # Number of questions
+                X = pandas.read_csv(path_to_file, delimiter=',', usecols = [str(i) for i in range(1,M+1)])
+                N = len(X['1'])          # Number of students
+                dados = np.zeros((N, M), dtype=int)
+                for q in X: # for each question
+                    for n, s in enumerate(X[q]):  # for each student
+                        if len(str(s).split()[0]) == 1:
+                            dados[n][int(q)-1] = 1
 
-            with open(MYFILES + '_irt.csv', 'w') as csvfile:
-                spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-                for n in range(N):
-                    spamWriter.writerow(dados[n])
+                with open(MYFILES + '_irt.csv', 'w') as csvfile:
+                    spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                    for n in range(N):
+                        spamWriter.writerow(dados[n])
 
-            os.system("python3 _irt_pymc3.py " + MYFILES + "_irt.csv &")
+                os.system("python3 _irt_pymc3.py " + MYFILES + "_irt.csv &")
+            except:
+                pass
             ### IRT end
 
             myfiles = []
