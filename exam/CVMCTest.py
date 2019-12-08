@@ -1018,10 +1018,6 @@ class cvMCTest(object):
 
         while 1:  # para cada COLUNA/QUESTAO da imagem
 
-            if q==3:
-                print (mr)
-                pass
-
             count = 0
             while jfim < W and imgCols[10, jfim] == 0:
                 jfim += 1
