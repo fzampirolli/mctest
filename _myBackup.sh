@@ -1,10 +1,13 @@
 #!/bin/bash
+cd /home/fz/django_webmctest/
+#cp __settings.env ../
+source _settings.env
+source AmbientePython3/bin/activate
+cd mctest
 
 #################### SCRIPT PARA BACKUP MYSQL ####################
 # mysqldump --no-defaults -u root -p DB_MCTest > mctest.sql
 
-#cp __settings.env ../
-source ../_settings.env
 
 DB_PARAM='--no-defaults  -h $IP_HOST'
 

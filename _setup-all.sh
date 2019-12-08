@@ -275,4 +275,8 @@ sudo rm *.tex
 sudo rm *.pdf
 sudo rm *.csv
 
+
+mysql -u root -p DB_MCTest < "mysql-2019-12-07.sql"
+
+
 '

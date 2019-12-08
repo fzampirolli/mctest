@@ -975,9 +975,9 @@ class cvMCTest(object):
         H, W = img.shape
 
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-            countSquare + 1) + "_q_01bin.png", img)
+            countSquare + 1) + "_p_01bin.png", img)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01nc.png",
+            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_01nc.png",
             imgNC)
         if qr['idStudent'] == 'ERROR':
             pass
@@ -987,13 +987,13 @@ class cvMCTest(object):
         [NUM, imgCols] = cvMCTest.setColumnsHor(img, countPage, countSquare)
 
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-            countSquare + 1) + "_q_02imgCols.png", imgCols)
+            countSquare + 1) + "_p_02imgCols.png", imgCols)
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-            countSquare + 1) + "_q_02imgLines.png", imgLines)
+            countSquare + 1) + "_p_02imgLines.png", imgLines)
 
         img = cv2.GaussianBlur(imgNC, (7, 7), 0)
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-            countSquare + 1) + "_q_02Blur.png", img)
+            countSquare + 1) + "_p_02Blur.png", img)
 
         img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 175, 1)
         if DEBUG: cv2.imwrite(
@@ -1003,11 +1003,11 @@ class cvMCTest(object):
 
         img3 = cv2.bitwise_and(imgCols, imgLines)
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-            countSquare + 1) + "_q_03and1.png", img3)
+            countSquare + 1) + "_p_03and1.png", img3)
 
         img = cv2.bitwise_and(img, img3)
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-            countSquare + 1) + "_q_03and2.png", img)
+            countSquare + 1) + "_p_03and2.png", img)
 
         if DEBUG: lixo = []
         q = 1
@@ -1017,6 +1017,10 @@ class cvMCTest(object):
         invalida = 0
 
         while 1:  # para cada COLUNA/QUESTAO da imagem
+
+            if q==3:
+                print (mr)
+                pass
 
             count = 0
             while jfim < W and imgCols[10, jfim] == 0:
@@ -1033,7 +1037,7 @@ class cvMCTest(object):
 
             if DEBUG: cv2.imwrite(
                 "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
-                    countSquare + 1) + "_q_04_" + str(jfim) + ".png",
+                    countSquare + 1) + "_p_04_" + str(jfim) + ".png",
                 im)
 
             (_, contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -1046,11 +1050,12 @@ class cvMCTest(object):
             answers_area = []  # em questões duplicadas, pegar a com maior area
             if DEBUG: rect = []
             answers_n = []
-
             countQuestions = 0
+            count_aux = 0
             for cnt in contoursOrder:  # loop over the contours
-
-                if cv2.contourArea(cnt) > 200:
+                area = cv2.contourArea(cnt)
+                if area > 100:   ################################# SENSIVEL!!!!!
+                    count_aux+=1
                     x, y, w, h = cv2.boundingRect(cnt)
                     iii = im[y:y + h, x:x + w]
 
@@ -1063,9 +1068,9 @@ class cvMCTest(object):
                         cv2.imwrite(
                             "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
                                 countSquare + 1) +
-                            "_q_04_" + str(q) + "_" + str(count) + "_area_" + str(area) + ".png", iii)
+                            "_p_04_q" + str(q) + "_" + str(count_aux) + "_area_" + str(area) + ".png", iii)
 
-                    if area > 58:
+                    if area > 58: ################################# SENSIVEL!!!!!
                         if DEBUG: rect.append([x, y, w, h])
 
                         n = notas[countQuestions]
@@ -1080,7 +1085,10 @@ class cvMCTest(object):
             if DEBUG: lixo.append([countPage, q, NUM_RESPOSTAS, H, W, jini, jfim, count, rect, answers_area, answers_n])
 
             if count == 1:  # somente uma marcação ==> OK
-                mr.append(n)
+                if count_aux == NUM_RESPOSTAS:
+                    mr.append(n)
+                else: ################## ERRO na segmentacao das respostas
+                    mr.append('#')
 
             elif count == 0:  # sem marcação ==> questão inválida!
                 mr.append(str(count))  # questao invÃ¡lida
