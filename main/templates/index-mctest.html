@@ -13,9 +13,9 @@
                 <div class="container">
                     <div class="text-center">
                         <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
-                            <h1>{% trans "webMCTest" %} - desenvolvimento</h1>
-                            Melhorias serão incluídas a todo momento.
-                            USAR SOMENTE o serviço em produção: <a href="http://mctest.ufabc.edu.br">mctest</a> (BD atualizado em 03/01/2020 13:10h).
+                            <h1>{% trans "webMCTest" %} - produção</h1>
+                            Melhorias serão instaladas somente durante o recesso.
+                            NÃO USAR MAIS a <a href="http://vision.ufabc.edu.br">vision</a> (BD atualizado em 03/01/2020 13:10h).
                         </div>
                     </div>
                 </div>
@@ -349,13 +349,6 @@
                         <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.3s">
                             <h5>{% trans "Welcome to <em>webMCTest</em>, a website designed to assist with exams preparation and correction." %}</h5>
                         </div>
-                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.3s">
-                            <p><a href="http://nubisys.ufabc.edu.br:8000">English version with
-                                different DB</a></p>
-                        </div>
-                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
-                            <p>{% trans "Attendance offered to the community to facilitate the process of automatic elaboration and correction of the exams, with generation and correction of approximately 10,000 annual exams." %}</p>
-                        </div>
                     </div>
                 </div>
 
@@ -363,9 +356,7 @@
 
                 <h3>{% trans "Dynamic content" %}</h3>
 
-                <p>{% trans "The webMCTest has the following record counts" %} ({% trans "see also:" %}
-                    <a href="http://vision.ufabc.edu.br/static/models.png">ER1</a>;
-                    <a href="http://vision.ufabc.edu.br/static/models_col.png">ER2</a>):</p>
+                <p>{% trans "The webMCTest has the following record counts" %}:</p>
                 <ul>
                     <li><strong>{% trans "Institutes" %}:</strong> {{ num_institutes }}
                         [{% trans "Institute has Courses" %}]
@@ -380,8 +371,7 @@
                         [{% trans "Classroom has Exams, Profs and Student" %}]
                     </li>
                     <li><strong>{% trans "Exams" %}:</strong> {{ num_exams }}
-                        [{% trans "Exam has Classrooms and Questions" %}] - {% trans "motivations" %} [<a
-                                href="https://doi.org/10.1002/cae.22029">ref18a</a>]
+                        [{% trans "Exam has Classrooms and Questions" %}] - {% trans "motivations" %}
                     </li>
                     <li><strong>{% trans "Topics" %}:</strong> {{ num_topics }}
                         [{% trans "Topic has Questions" %}]
@@ -390,216 +380,14 @@
                     <hr>
 
                     <li><strong>{% trans "Questions" %}:</strong> {{ num_questions }}
-                        - {% trans "motivations for the use of bloom taxonomy" %} [<a
-                                href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao">ref17cap2</a>;
-                        <a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517">ref18b</a>]
                     </li>
                     <ul>
                         <li><strong>{% trans "Multiple Choice" %}:</strong> {{ num_QM }}</li>
                         <li><strong>{% trans "Text" %}:</strong> {{ num_QT }}</li>
-                        <li><strong>{% trans "Parametric" %}:</strong> {{ num_Parametric }} [<a
-                                href="http://www.itng.info">ref19a</a>; <a href="http://csedu.org">ref19b</a>]
+                        <li><strong>{% trans "Parametric" %}:</strong> {{ num_Parametric }}
                         </li>
                     </ul>
                     <li><strong>{% trans "Users" %}:</strong> {{ num_users }}</li>
-                </ul>
-
-                <hr>
-
-                <h3>{% trans "Explanatory videos" %} </h3>
-                <ol>
-                    <h6>{% trans "webMCTest" %} - {% trans "version" %} 1.0:</h6>
-                    <li><a href="https://youtu.be/SxQlw9ADxe8">{% trans "global vision (in English)" %}</a></li>
-                    <br><strong>{% trans "in Portuguese" %}:</strong></br>
-                    <li><a href="https://youtu.be/tAMt7K74ELs">{% trans "global vision" %}</a></li>
-                    <li><a href="https://youtu.be/dnev3NUV7Gg">{% trans "create Classrooms and Exams" %}</a></li>
-                    <li><a href="https://youtu.be/2CqQeb3OXwY">{% trans "to correct Exams" %}</a></li>
-                    <li><a href="https://youtu.be/oOR4d54hWk4">{% trans "to create problems using the TXT file" %}</a>
-                    </li>
-                    <li>{% trans "create parametric questions" %}:</li>
-                    <ul>
-                        <li><a href="https://youtu.be/ycQRJ57Owsg">{% trans "part I" %}</a></li>
-                        <li><a href="https://youtu.be/t3_cMmuKAAw">{% trans "part II" %}</a></li>
-                        <li><a href="https://youtu.be/DfCNTuhoAX0">{% trans "part III" %}</a>
-                            - {% trans "use of the sympy library (URM and integral examples)" %}</li>
-                        <li><a href="https://youtu.be/hA_oHivIz6U">{% trans "part IV" %}</a>
-                            - {% trans "use of the sympy library (integral with figures)" %}</li>
-                    </ul>
-                    <li>
-                        <a href="https://youtu.be/NycuEqba14w">{% trans "to create exams with multiple choice questions and dissertations - conclusions" %}</a>
-                    </li>
-
-                </ol>
-
-                <hr>
-
-
-                <h3>{% trans "Historic" %} - {% trans "Software registration" %}</h3>
-
-                <ul>
-                    <table style="width: 97%;" border="1" cellspacing="0">
-                        <colgroup width="15%"></colgroup>
-                        <colgroup width="5%"></colgroup>
-                        <colgroup width="70%"></colgroup>
-                        <tbody>
-                        <tr style="height: 13px;">
-                            <td style="width: 90px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
-                                    style="font-family: 'Liberation Serif';">{% trans "Order" %} -
-                        <a href="https://gru.inpi.gov.br/pePI/jsp/programas/ProgramaSearchBasico.jsp">INPI</a></span></strong>
-                            </td>
-
-                            <td style="width: 49px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
-                                    style="font-family: 'Liberation Serif';">{% trans "Title" %}</span></strong></td>
-                            <td style="width: 49px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
-                                    style="font-family: 'Liberation Serif';">{% trans "Description" %}</span></strong>
-                            </td>
-                        </tr>
-                        <tr style="height: 13px;">
-                            <td style="width: 90px; height: 13px;" align="center"></td>
-                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 5 (webMCTest)</strong>
-                            </td>
-                            <td style="width: 49px; height: 13px;"
-                                align="left">{% trans "Developed in Python (Django 2.0) for automatic correction - available in" %}
-                                <a
-                                        href="http://vision.ufabc.edu.br:8000">vision.ufabc.edu.br:8000</a>
-                                - {% trans "exams generated in LaTeX using a MySQL DB" %}
-                                [<a href="http://www.itng.info">ref19a</a>;
-                                <a href="http://csedu.org">ref19b</a>;
-                                <a href="http://csedu.org">ref19c</a>;
-                                <a href="https://doi.org/10.1002/cae.22029">ref18a</a>]
-                            </td>
-                        </tr>
-
-                        <tr style="height: 13px;">
-                            <td style="width: 90px; height: 13px;" align="center"><span
-                                    style="font-family: 'Liberation Serif';">BR 51 2018 001202 7</span>
-                            </td>
-                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 4.G</strong></td>
-                            <td style="width: 49px; height: 13px;"
-                                align="left">{% trans "Developed in Python for LaTeX generated exams" %} (<a
-                                    href="https://ieeexplore.ieee.org/document/7757467">ref16a;
-                                <a href="https://github.com/fzampirolli/mctest4">GitHub</a>)
-                            </td>
-                        </tr>
-                        <tr style="height: 13px;">
-                            <td align="center" style="width: 90px; height: 13px;"><span
-                                    style="font-family: 'Liberation Serif';">BR 51 2016 001344 3</span>
-                            </td>
-                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 4</strong></td>
-                            <td style="width: 49px; height: 13px;"
-                                align="left">{% trans "Developed in Python for automatic correction - available in" %}
-                                <a href="http://vision.ufabc.edu.br">vision.ufabc.edu.br</a> - {% trans "by ftp" %}
-                                [<a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a>]
-                            </td>
-                        </tr>
-                        <tr style="height: 13px;">
-                            <td style="width: 90px; height: 13px;" align="center"><span
-                                    style="font-family: 'Liberation Serif';">BR 51 2015 001445 5</span>
-                            </td>
-                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 3</strong></td>
-                            <td style="width: 49px; height: 13px;"
-                                align="left">{% trans "Developed in Python for automatic correction - exams generated in Word / BROffic" %}</td>
-                        </tr>
-                        <tr style="height: 24px;">
-                            <td style="width: 90px; height: 13px;" align="center"><span
-                                    style="font-family: 'Liberation Serif';">BR 51 2015 001444 7</span>
-                            </td>
-                            <td style="width: 49px; height: 13px;" align="left"><strong><a
-                                    href="http://vision.ufabc.edu.br/MCTest/MCTest2-android/">MCTest 2</a></strong></td>
-                            <td style="fdwidth: 49px; height: 13px;" align="left">{% trans "Developed in Android" %} <a
-                                    href="http://vision.ufabc.edu.br/MCTest/MCTest2-android/">apk</a> {% trans "for automatic correction - exams generated in Word / BROffice" %}
-                                [<a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a>, <a
-                                        href="https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394">ref16b</a>]
-                            </td>
-                        </tr>
-                        <tr style="height: 13px;">
-                            <td style="width: 90px; height: 13px;" align="center"><span
-                                    style="font-family: 'Liberation Serif';">BR 51 2013 001231 7</span>
-                            </td>
-                            <td style="width: 49px; height: 13px;" align="left"><strong><a
-                                    href="http://vision.ufabc.edu.br/MCTest/MCTest1-matlab/">MCTest</a></strong></td>
-                            <td style="width: 49px; height: 13px;"
-                                align="left">{% trans "Developed in Matlab for automatic correction - exams generated in Word / BROffice" %}
-                                [<a href="http://iris.sel.eesc.usp.br/wvc/Anais_WVC2013/Poster/1/9.pdf">ref13</a>]
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                </ul>
-
-                <hr>
-
-                <h3>{% trans "Publications" %}</h3>
-                <ul>
-                    <li><a href="http://www.itng.info">ref19a</a> - Zampirolli, F. A., Teubl, F. and Batista, V. R., "A
-                        Generator
-                        and Corrector of Parametric Questions in Hard Copy". International Conference on Information
-                        Technology: New
-                        Generations. Las Vegas, USA, 2019.
-                    </li>
-                    <li><a href="http://csedu.org">ref19b</a> - Zampirolli, F. A., Teubl, F. and Batista, V. R., "Online
-                        Generator
-                        and Corrector of Parametric Questions in Hard Copy Useful for the Elaboration of Thousands of
-                        Individualized
-                        Exams". International Conference on Computer Supported Education. Crete, Grécia, 2019.
-                        (<a href="http://vision.ufabc.edu.br/static/__CSEDU19_webMCTest.pdf">SLIDES</a>)
-                    </li>
-                    <li><a href="http://csedu.org">ref19c</a> - Rezende, F., Zampirolli, F. A. and Kobayashi, G.,
-                        "Convolutional
-                        Neural Network applied to Code Assignment Grading". International Conference on Computer
-                        Supported
-                        Education. Crete, Grécia, 2019.
-                    </li>
-                    <li><a href="https://doi.org/10.1002/cae.22029">ref18a</a> - Zampirolli, F. A., Goya, D., Pimentel,
-                        E. P., and
-                        Kobayashi, G. "Evaluation process for an introductory programming course using blended learning
-                        in
-                        engineering education". Computer Applications in Engineering Education. 2018.
-                    </li>
-                    <li><a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517">ref18b</a> -
-                        Calsavara, A.,
-                        Serra, A. P. G. Zampirolli, F. A., Carvalho, L. S. G., Jonathan, M. and Correia, R. C. M.
-                        "Método baseado
-                        nos Referenciais de Formação da SBC para reestruturação de descritivos de disciplinas de Ciência
-                        da
-                        Computação em conformidade com as DCN de 2016". Workshop sobre Educação em Computação
-                        (WEI_CSBC), [S.l.], v.
-                        26, n. 1/2018.
-                    </li>
-                    <li>
-                        <a href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao">ref17cap2</a>
-                        - Zorzo, A. F., Nunes, D., Matos, E., Steinmacher, I., Leite, J., Araujo, R. M., and Martins, S.
-                        "Referenciais de Formação para os Cursos de Graduação em Computação". Sociedade Brasileira de
-                        Computação
-                        (SBC). 153p, 2017.
-                    </li>
-                    <li><a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a> - Zampirolli, F. A., Batista,
-                        V. R., and
-                        Quilici-Gonzalez, J. A. "An automatic generator and corrector of multiple choice tests with
-                        random answer
-                        keys." Frontiers in Education Conference (FIE), 2016 IEEE.
-                        (<a href="http://vision.ufabc.edu.br/static/__FIE16_MCTest.pdf">SLIDES</a>)
-                    </li>
-                    <li><a href="https://periodicos.itp.ifsp.edu.br/index.php/IC/article/viewFile/221/394">ref16b</a> -
-                        China, R.
-                        T., Zampirolli, F. A., Neves, R. P. O. and Quilici-Gonzalez, J. A. (2016). An application for
-                        automatic
-                        multiple-choice test grading on android. Revista Brasileira de Iniciação Científica, 3(2).
-                    </li>
-                    <li><a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a> - Zampirolli, F. A.,
-                        China, R. T.,
-                        Neves, R. P. O. and QUILICI-GONZALEZ, J. A. "Automatic Correction of Multiple-Choice Tests on
-                        Android
-                        Devices". In: Workshop de Visão Computacional, 2015.
-                    </li>
-                    <li><a href="http://iris.sel.eesc.usp.br/wvc/Anais_WVC2013/Poster/1/9.pdf">ref13</a> - Zampirolli,
-                        F. A,
-                        Quilici-Gonzalez, J. A. and Neves, R. P. O. "Automatic Correction of Multiple-Choice Tests using
-                        Digital
-                        Cameras and Image Processing". In: Workshop de Visão Computacional, 2013.
-                    </li>
-
                 </ul>
 
                 <hr>
@@ -645,9 +433,6 @@
                 </ul>
 
                 <hr>
-
-                <p>{% trans "You have visited this page" %} {{ num_visits }}
-                    {% if num_visits == 1 %} {% trans "time" %} {% else %} {% trans "times" %}{% endif %}.</p>
 
                 <p>{% trans "Send improvement suggestions to" %}: <a href="mailto:fzampirolli@ufabc.edu.br"
                                                                      target="_top">fzampirolli@ufabc.edu.br</a>
