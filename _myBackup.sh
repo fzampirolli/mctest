@@ -40,6 +40,9 @@ rm -rf $BACKUP_DIR/$BACKUP_NAME
 find /backup/*/* -type f -ctime +180 -exec rm -rf {} \;
 find $PATH_MCTest/mctest/tmp*/* -type f -ctime +180 -exec rm -rf {} \;
 find $PATH_MCTest/mctest/pdf*/* -type f -ctime +180 -exec rm -rf {} \;
+find $PATH_MCTest/mctest/*.pdf -type f -ctime +180 -exec rm -rf {} \;
+find $PATH_MCTest/mctest/*.tex -type f -ctime +180 -exec rm -rf {} \;
+find $PATH_MCTest/mctest/*.csv -type f -ctime +180 -exec rm -rf {} \;
 
 # renomeando log grande
 find $PATH_MCTest/mctest/ -iname "*.log" -size +1M -exec mv {} "correct-$DATA.log.backup" \;
