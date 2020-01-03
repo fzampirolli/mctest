@@ -129,6 +129,7 @@ mkdir pdfStudentEmail
 mkdir /backup
 mkdir /backup/json
 mkdir /backup/mysql
+mkdir /backup/tmpGAB
 
 mysql -u root -p -e -h $DB_HOST 'create database '"$DB_NAME"'; create user '"$DB_USER"'@'"$DB_HOST"' identified by '"$DB_PASS"'; GRANT ALL ON *.* TO '"$DB_USER"'@'"$DB_HOST"' IDENTIFIED BY '"$DB_PASS"'; grant all privileges on '"$DB_NAME"'.* to '"$DB_USER"'@'"$DB_HOST"'; FLUSH PRIVILEGES;'
 

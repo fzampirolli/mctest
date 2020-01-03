@@ -50,6 +50,8 @@ find $PATH_MCTest/mctest/ -iname "*.log" -size +1M -exec mv {} "correct-$DATA.lo
 #################### SCRIPT PARA BACKUP JSON ####################
 # python3 manage.py dumpdata --indent 2 > db.json
 
+echo "  -- backup json ..."
+
 cd $PATH_MCTest
 source AmbientePython3/bin/activate
 cd mctest
@@ -64,3 +66,12 @@ DB_PARAM='manage.py dumpdata --indent 2'
 $PYTHON $DB_PARAM >$BACKUP_DIR/$BACKUP_NAME
 tar -cjf $BACKUP_DIR/$BACKUP_TAR -C $BACKUP_DIR $BACKUP_NAME --remove-files
 rm -rf $BACKUP_DIR/$BACKUP_NAME
+
+echo "  -- backup tmpGAB ..."
+
+BACKUP_DIR=/backup/tmpGAB
+BACKUP_NAME=tmpGAB
+BACKUP_TAR=tmpGAB-$DATE.tar
+
+tar -cjf $BACKUP_DIR/$BACKUP_TAR $BACKUP_NAME
+#rm -rf $BACKUP_DIR/$BACKUP_NAME
