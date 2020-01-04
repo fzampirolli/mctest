@@ -5,23 +5,18 @@
       <change afterPath="$PROJECT_DIR$/account/migrations/0001_initial.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/course/migrations/0001_initial.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/exam/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfExam/_e90_CE-teste_PClass_CE-exameteste.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfQuestion/fzampirolli.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysql-2020-01-04.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/student/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11001816-eps-converted-to.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11001816.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201721630-eps-converted-to.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201721630.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201811685-eps-converted-to.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/QRCode_221_90_11201811685.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-CE-exameteste-2019-11-21-11-34-23.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1574346864075;221;90;11201811685;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1574346864233;221;90;11201721630;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1574346864385;221;90;11001816;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/topic/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_setup-all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/_setup-all.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/templates/index-vision.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/index-vision.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/index.html" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,10 +92,17 @@
     <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="true" />
@@ -112,7 +114,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/main/templates" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -123,13 +125,6 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/main/templates" />
-      <recent name="$PROJECT_DIR$/topic" />
-      <recent name="$PROJECT_DIR$/topic/templates/static" />
-      <recent name="$PROJECT_DIR$/topic/templates" />
-      <recent name="$PROJECT_DIR$/static" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/main/templates" />
       <recent name="$PROJECT_DIR$/topic/templates" />
@@ -137,18 +132,13 @@
       <recent name="$PROJECT_DIR$/main" />
       <recent name="$PROJECT_DIR$/topic/static" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/main/templates" />
+      <recent name="$PROJECT_DIR$/topic" />
+      <recent name="$PROJECT_DIR$/topic/templates/static" />
+      <recent name="$PROJECT_DIR$/topic/templates" />
+      <recent name="$PROJECT_DIR$/static" />
+    </key>
   </component>
   <component name="RunManager" selected="Django server.mctest">
     <configuration name="Test: " type="DjangoTestsConfigurationType" temporary="true">
@@ -272,18 +262,15 @@
     </recent_temporary>
   </component>
   <component name="ServiceViewManager">
-    <option name="allServicesViewState">
-      <serviceView>
-        <treeState>
-          <expand>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@83c8b0ac" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-            </path>
-          </expand>
-          <select />
-        </treeState>
-      </serviceView>
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
     </option>
   </component>
   <component name="SvnConfiguration">
@@ -432,84 +419,35 @@
       <workItem from="1573774142540" duration="29000" />
       <workItem from="1574124841079" duration="605000" />
       <workItem from="1574243289685" duration="18112000" />
-      <workItem from="1574350410726" duration="1208000" />
-    </task>
-    <task id="LOCAL-00018" summary="change settings.env">
-      <created>1566173816459</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1566173816459</updated>
-    </task>
-    <task id="LOCAL-00019" summary="change settings.env">
-      <created>1566174726162</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1566174726162</updated>
-    </task>
-    <task id="LOCAL-00020" summary="change settings.env">
-      <created>1566175794314</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1566175794314</updated>
-    </task>
-    <task id="LOCAL-00021" summary="change settings.env">
-      <created>1566176162792</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1566176162792</updated>
-    </task>
-    <task id="LOCAL-00022" summary="change settings.env">
-      <created>1566216157251</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1566216157251</updated>
-    </task>
-    <task id="LOCAL-00023" summary="change settings.env">
-      <created>1566316347072</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1566316347072</updated>
-    </task>
-    <task id="LOCAL-00024" summary="change settings.env">
-      <created>1566402322984</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1566402322984</updated>
-    </task>
-    <task id="LOCAL-00025" summary="change new GUI">
-      <created>1566433428483</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1566433428483</updated>
-    </task>
-    <task id="LOCAL-00026" summary="change new GUI">
-      <created>1566641836637</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1566641836637</updated>
-    </task>
-    <task id="LOCAL-00027" summary="change new GUI">
-      <created>1566867174951</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1566867174951</updated>
-    </task>
-    <task id="LOCAL-00028" summary="change new GUI">
-      <created>1566955380406</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1566955380406</updated>
+      <workItem from="1574350410726" duration="1821000" />
+      <workItem from="1574352346960" duration="39000" />
+      <workItem from="1574519702316" duration="1505000" />
+      <workItem from="1574637237340" duration="1874000" />
+      <workItem from="1574775427125" duration="1049000" />
+      <workItem from="1575029574659" duration="3103000" />
+      <workItem from="1575058780230" duration="157000" />
+      <workItem from="1575540273260" duration="141000" />
+      <workItem from="1575540464930" duration="5390000" />
+      <workItem from="1575573398895" duration="3000" />
+      <workItem from="1575575969116" duration="796000" />
+      <workItem from="1575576795322" duration="3970000" />
+      <workItem from="1575633440262" duration="109000" />
+      <workItem from="1575749371869" duration="3259000" />
+      <workItem from="1575807347896" duration="2827000" />
+      <workItem from="1575980438157" duration="1052000" />
+      <workItem from="1576003166720" duration="430000" />
+      <workItem from="1576013631984" duration="6495000" />
+      <workItem from="1576326169105" duration="2478000" />
+      <workItem from="1576335070557" duration="1679000" />
+      <workItem from="1576748242360" duration="351000" />
+      <workItem from="1578056070021" duration="1616000" />
+      <workItem from="1578146877657" duration="35000" />
+      <workItem from="1578146946376" duration="851000" />
+      <workItem from="1578147873136" duration="257000" />
+      <workItem from="1578148144849" duration="546000" />
+      <workItem from="1578148849900" duration="3690000" />
+      <workItem from="1578156756352" duration="353000" />
+      <workItem from="1578162302266" duration="6940000" />
     </task>
     <task id="LOCAL-00029" summary="change new GUI">
       <created>1567150376773</created>
@@ -777,7 +715,84 @@
       <option name="project" value="LOCAL" />
       <updated>1574350739398</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="change new GUI">
+      <created>1574351854627</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1574351854627</updated>
+    </task>
+    <task id="LOCAL-00068" summary="change new GUI">
+      <created>1574776443547</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1574776443547</updated>
+    </task>
+    <task id="LOCAL-00069" summary="change new GUI">
+      <created>1574776463678</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1574776463679</updated>
+    </task>
+    <task id="LOCAL-00070" summary="change new GUI">
+      <created>1575032342022</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1575032342022</updated>
+    </task>
+    <task id="LOCAL-00071" summary="change new GUI">
+      <created>1575581735964</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1575581735964</updated>
+    </task>
+    <task id="LOCAL-00072" summary="change new GUI">
+      <created>1575810237834</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1575810237835</updated>
+    </task>
+    <task id="LOCAL-00073" summary="change new GUI">
+      <created>1575810457520</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1575810457520</updated>
+    </task>
+    <task id="LOCAL-00074" summary="change new GUI">
+      <created>1576326951622</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1576326951622</updated>
+    </task>
+    <task id="LOCAL-00075" summary="change new GUI">
+      <created>1578162520312</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1578162520313</updated>
+    </task>
+    <task id="LOCAL-00076" summary="change new GUI">
+      <created>1578167551604</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1578167551604</updated>
+    </task>
+    <task id="LOCAL-00077" summary="change new GUI">
+      <created>1578167771278</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1578167771278</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -883,6 +898,94 @@
     <option name="LAST_COMMIT_MESSAGE" value="change new GUI" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
+  <component name="WindowStateProjectService">
+    <state x="302" y="85" key="#Deployment" timestamp="1578148877990">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="302" y="85" key="#Deployment/0.23.1440.877@0.23.1440.877" timestamp="1578148877990" />
+    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578056929937">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1578056929937" />
+    <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578167819776">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1578167819776" />
+    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1578167771170">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1575581735825" />
+    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1578167771170" />
+    <state x="100" y="120" width="1240" height="683" key="DiffContextDialog" timestamp="1575810044182">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="100" y="100" width="1240" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1575541371402" />
+    <state x="100" y="120" width="1240" height="683" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1575810044182" />
+    <state width="1082" height="286" key="GridCell.Tab.0.bottom" timestamp="1578173463765">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1398" height="153" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1575581715448" />
+    <state width="1082" height="286" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1578173463765" />
+    <state width="1082" height="286" key="GridCell.Tab.0.center" timestamp="1578173463764">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1398" height="153" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1575581715447" />
+    <state width="1082" height="286" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1578173463764" />
+    <state width="1082" height="286" key="GridCell.Tab.0.left" timestamp="1578173463763">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1398" height="153" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1575581715446" />
+    <state width="1082" height="286" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1578173463763" />
+    <state width="1082" height="286" key="GridCell.Tab.0.right" timestamp="1578173463764">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1398" height="153" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1575581715448" />
+    <state width="1082" height="286" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1578173463764" />
+    <state width="1172" height="167" key="GridCell.Tab.1.bottom" timestamp="1575753631234">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1172" height="167" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
+    <state width="1172" height="167" key="GridCell.Tab.1.center" timestamp="1575753631234">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1172" height="167" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
+    <state width="1172" height="167" key="GridCell.Tab.1.left" timestamp="1575753631234">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1172" height="167" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
+    <state width="1172" height="167" key="GridCell.Tab.1.right" timestamp="1575753631234">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1172" height="167" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
+    <state x="570" y="97" key="MultipleFileMergeDialog" timestamp="1578167575470">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="570" y="97" key="MultipleFileMergeDialog/0.23.1440.877@0.23.1440.877" timestamp="1578167575470" />
+    <state x="333" y="88" width="1072" height="722" key="SettingsEditor" timestamp="1578057219320">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="333" y="88" width="1072" height="722" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1578057219320" />
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1578167777995">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1578167777995" />
+    <state x="466" y="211" width="683" height="486" key="find.popup" timestamp="1578173436763">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="466" y="211" width="683" height="486" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1578173436763" />
+    <state x="738" y="186" key="ftp.server.browser" timestamp="1575980636422">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="738" y="186" key="ftp.server.browser/0.23.1440.877@0.23.1440.877" timestamp="1575980636422" />
+    <state x="497" y="247" key="git4idea.merge.GitPullDialog" timestamp="1578147202048">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="497" y="247" key="git4idea.merge.GitPullDialog/0.23.1440.877@0.23.1440.877" timestamp="1578147202048" />
+    <state x="662" y="349" key="publish.login" timestamp="1578171871317">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="662" y="349" key="publish.login/0.23.1440.877@0.23.1440.877" timestamp="1578171871317" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -897,12 +1000,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/exam/CVMCTest.py</url>
-          <line>1649</line>
+          <line>1653</line>
           <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/exam/views.py</url>
-          <line>170</line>
+          <line>172</line>
           <option name="timeStamp" value="86" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="django-line">
@@ -926,7 +1029,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/mctest$Test__.coverage" NAME="Test:  Coverage Results" MODIFIED="1567198461579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/mctest$.coverage" NAME=" Coverage Results" MODIFIED="1569586836741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/mctest$Test__.coverage" NAME="Test:  Coverage Results" MODIFIED="1567198461579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
