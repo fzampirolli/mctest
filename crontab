@@ -17,4 +17,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */10 *  * * *   root   /home/fz/django_webmctest/crontabDjango.sh
 #
 
-# 5 3 * * *   cd /home/fz/django_webmctest &&  ./_backup-mctest.sh >> log.log 2>&1
+# 5  3   * * *   fz  /home/ufabc/django_webmctest/_backup-mctest.sh
