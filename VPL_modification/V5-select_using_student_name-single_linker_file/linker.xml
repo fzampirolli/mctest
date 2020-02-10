@@ -1,0 +1,27 @@
+<quest=ABC>
+	<number=1/>
+	<file=first/>
+	<weight=4/>
+	<language>
+		python
+		ada
+	</language>
+</quest>
+
+<quest=IJK>
+	<weight=5/>
+	<file=third/>
+	<number=3/>
+	<language>
+		java
+	</language>
+</quest>
+
+<quest=XYZ>
+	<number=2/>
+	<file=second/>
+	<weight=2/>
+	<language>
+		cpp
+	</language>
+</quest>

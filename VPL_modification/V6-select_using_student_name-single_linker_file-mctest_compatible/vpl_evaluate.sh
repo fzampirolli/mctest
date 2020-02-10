@@ -46,7 +46,7 @@ for THIS_QUESTION_KEY in $QUESTION_LIST ; do
 
         if [ ! -z $THIS_QUESTION_CHOSEN_FILE ] && [ -f $THIS_QUESTION_CHOSEN_FILE ] ; then
             # echo "found: '$THIS_QUESTION_CHOSEN_FILE'"
-            ./vpl_run.sh $THIS_QUESTION_CHOSEN_FILE >> vpl_compilation_error.txt 2>&1
+            ./vpl_run.sh $THIS_QUESTION_CHOSEN_FILE >> vpl_compilation_error.txt 2>&2 1>&2
             if [ -f vpl_execution ] ; then
                 # echo "Creating:"$( test_file_func $THIS_QUESTION_KEY )
                 mv vpl_execution $( test_file_func $THIS_QUESTION_KEY )
