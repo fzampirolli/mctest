@@ -1,0 +1,235 @@
+{
+	"variations" : [
+		{
+			"variant" : "1",
+			"questions" : [
+				{
+					"key" : "ABC",
+					"number" : "1",
+					"file" : "Q1",
+					"weight" : "3",
+					"language" : ["python","ada"],
+					"cases" : [
+	                        {
+	                            "case" : "test_1",
+	                            "input" : "1 2",
+	                            "output" : "3"
+	                        },
+	                        {
+	                            "case" : "test_2",
+	                            "input" : "3 4",
+	                            "output" : "7"
+	                        },
+	                        {
+	                            "case" : "test_3",
+	                            "input" : "5 6",
+	                            "output" : "11"
+	                        }
+	                    ]
+				},
+				{
+					"key" : "IJK",
+					"number" : "3",
+					"file" : "Q3",
+					"weight" : "5",
+					"language" : ["java","python"],
+					"cases" : [
+	                        {
+	                            "case" : "test_1",
+	                            "input" : "1 2",
+	                            "output" : "2"
+	                        },
+	                        {
+	                            "case" : "test_2",
+	                            "input" : "3 4",
+	                            "output" : "12"
+	                        },
+	                        {
+	                            "case" : "test_3",
+	                            "input" : "5 6",
+	                            "output" : "30"
+	                        }
+	                    ]
+				},
+				{
+					"key" : "XYZ",
+					"number" : "2",
+					"file" : "Q2",
+					"weight" : "2",
+					"language" : ["python","cpp"],
+					"cases" : [
+	                        {
+	                            "case" : "test_1",
+	                            "input" : "1 2",
+	                            "output" : "1"
+	                        },
+	                        {
+	                            "case" : "test_2",
+	                            "input" : "3 4",
+	                            "output" : "81"
+	                        },
+	                        {
+	                            "case" : "test_3",
+	                            "input" : "5 6",
+	                            "output" : "15625"
+	                        }
+	                    ]
+				}
+			]
+		},
+		{
+			"variant" : "1",
+			"questions" : [
+				{
+					"key" : "ABC",
+					"number" : "1",
+					"file" : "Q1",
+					"weight" : "3",
+					"language" : ["python","ada"],
+					"cases" : [
+	                        {
+	                            "case" : "test_1",
+	                            "input" : "1 2",
+	                            "output" : "3"
+	                        },
+	                        {
+	                            "case" : "test_2",
+	                            "input" : "3 4",
+	                            "output" : "7"
+	                        },
+	                        {
+	                            "case" : "test_3",
+	                            "input" : "5 6",
+	                            "output" : "11"
+	                        }
+	                    ]
+				},
+				{
+					"key" : "IJK",
+					"number" : "3",
+					"file" : "Q3",
+					"weight" : "5",
+					"language" : ["java","python"],
+					"cases" : [
+	                        {
+	                            "case" : "test_1",
+	                            "input" : "1 2",
+	                            "output" : "2"
+	                        },
+	                        {
+	                            "case" : "test_2",
+	                            "input" : "3 4",
+	                            "output" : "12"
+	                        },
+	                        {
+	                            "case" : "test_3",
+	                            "input" : "5 6",
+	                            "output" : "30"
+	                        }
+	                    ]
+				},
+				{
+					"key" : "XYZ",
+					"number" : "2",
+					"file" : "Q2",
+					"weight" : "2",
+					"language" : ["python","cpp"],
+					"cases" : [
+	                        {
+	                            "case" : "test_1",
+	                            "input" : "1 2",
+	                            "output" : "1"
+	                        },
+	                        {
+	                            "case" : "test_2",
+	                            "input" : "3 4",
+	                            "output" : "81"
+	                        },
+	                        {
+	                            "case" : "test_3",
+	                            "input" : "5 6",
+	                            "output" : "15625"
+	                        }
+	                    ]
+				}
+			]
+		},
+		{
+			"variant" : "2",
+			"questions" : [
+				{
+					"key" : "ABC",
+					"number" : "1",
+					"file" : "Q1",
+					"weight" : "3",
+					"language" : ["python","ada"],
+					"cases" : [
+						{
+							"case" : "test_1",
+							"input" : "1 2",
+							"output" : "3"
+						},
+						{
+							"case" : "test_2",
+							"input" : "3 4",
+							"output" : "7"
+						},
+						{
+							"case" : "test_3",
+							"input" : "5 6",
+							"output" : "11"
+						}
+					]
+				},
+				{
+					"key" : "IJK",
+					"number" : "3",
+					"file" : "Q3",
+					"weight" : "5",
+					"language" : ["java","python"],
+					"cases" : [
+						{
+							"case" : "test_1",
+							"input" : "1 2",
+							"output" : "2"
+						},
+						{
+							"case" : "test_2",
+							"input" : "3 4",
+							"output" : "12"
+						},
+						{
+							"case" : "test_3",
+							"input" : "5 6",
+							"output" : "30"
+						}
+					]
+				},
+				{
+					"key" : "XYZ",
+					"number" : "2",
+					"file" : "Q2",
+					"weight" : "2",
+					"language" : ["python","cpp"],
+					"cases" : [
+						{
+							"case" : "test_1",
+							"input" : "1 2",
+							"output" : "1"
+						},
+						{
+							"case" : "test_2",
+							"input" : "3 4",
+							"output" : "81"
+						},
+						{
+							"case" : "test_3",
+							"input" : "5 6",
+							"output" : "15625"
+						}
+					]
+				}
+			]
+		}
+	]
+}
