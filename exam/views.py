@@ -614,7 +614,7 @@ def correctStudentsExam(request, pk):
 
 @login_required
 def generate_page(request, pk):
-    print("generate_page")
+    print("generate_page-00-" + str(datetime.datetime.now()))
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
         if not 'exam.change_exam' in perm:
@@ -624,6 +624,8 @@ def generate_page(request, pk):
 
     exam = get_object_or_404(Exam, pk=pk)
     context = {"students": exam}
+
+    print("generate_page-01-" + str(datetime.datetime.now()))
 
     path_to_file_REPORT = BASE_DIR + "/report_Exam_" + str(pk) + ".csv"
     # raise Http404("oi00")
@@ -636,16 +638,17 @@ def generate_page(request, pk):
         st = Utils.validateProf(exam, request.user)
         if st != None:
             return HttpResponse(st)
-
+        print("generate_page-02-"+str(datetime.datetime.now()))
         listao = []  ############ gera X variacoes de exames
         for i in range(int(exam.exam_variations)):
             listao.append(Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam)))
-
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
+        print("generate_page-03-"+str(datetime.datetime.now()))
         # send by email all case tests of moodle
         cases = Utils.get_cases(listao)
+        print("generate_page-04-"+str(datetime.datetime.now()))
         message_cases = _('Dear') + '\n\n'
         message_cases += _(
             'This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
