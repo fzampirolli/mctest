@@ -66,26 +66,33 @@ class Utils(object):
         if str(listao).find(start) == -1:  # se nao tem vpl, aborta listao
             return cases
         print("get_cases-01-" + str(datetime.datetime.now()))
-        aux_ids = []
-        aux_in = []
-        aux_ou = []
         for model in listao:
             for questions in model:
+                if not str(questions):
+                    continue
+                aux_ids = []
+                aux_in = []
+                aux_ou = []
                 for qq in questions:
                     st = str(qq)
-                    numQuestion = st.split(',')[1]
+                    numQuestion = st.split(',')[1].replace(' ','')
                     for case in re.findall(start + '(.+?)' + end, st):
                         case = str(case)
                         case = case[case.find("{"):len(case)-4]
                         case = case.replace('\\\\', '\\')
                         case1 = json.loads(case)
                         aux_ids.append(numQuestion)
-                        aux_in.append(case1['input'])
-                        aux_ou.append(case1['output'])
-
-                    cases['id'].append(aux_ids)
-                    cases['input'].append(aux_in)
-                    cases['output'].append(aux_ou)
+                        inp0 = []
+                        for i in case1['input']:
+                            inp0.append([i])
+                        out0 = []
+                        for i in case1['output']:
+                            out0.append([i])
+                        aux_in.append(inp0)
+                        aux_ou.append(out0)
+                cases['id'].append(aux_ids)
+                cases['input'].append(aux_in)
+                cases['output'].append(aux_ou)
 
         return cases
 
