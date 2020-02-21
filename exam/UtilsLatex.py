@@ -44,10 +44,12 @@ from django.contrib import messages
 from django.core.serializers import serialize
 from django.http import HttpResponse
 # coding=UTF-8
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.http import Http404
 
 from topic.UtilsMCTest4 import UtilsMC
+from topic.models import Question
 
 
 class Utils(object):
@@ -120,7 +122,11 @@ class Utils(object):
                 question['key'] = str(cases['id'][v][q])
                 question['number'] = str(count_q)
                 question['file'] = 'Q'+str(count_q)
-                question['weight'] = '1'
+                try:
+                    questionObject = get_object_or_404(Question, pk=question['number'])
+                    question['weight'] = questionObject.question_difficulty
+                except:
+                    question['weight'] = '1'
                 question['language'] = ['all']
                 question['cases'] = []
                 if isinstance(cases['input'][v][q], list):
