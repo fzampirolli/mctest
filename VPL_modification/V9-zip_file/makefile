@@ -13,7 +13,7 @@ TAG_UNZIP_TAR = -xf
 TAG_UNZIP_GZ = -d
 TAG_UNZIP_B64 = -d
 
-OUT_FILE = ../zip
+OUT_FILE = ./zip
 
 OUT_FILE_TAR = $(OUT_FILE).tar
 OUT_FILE_GZ = $(OUT_FILE_TAR).gz
