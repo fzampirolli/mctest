@@ -6,11 +6,15 @@
 Yasuharu Okamoto, 2019.02
 """
 # mac
-# !conda install pymc3
-# !conda install -c conda-forge arviz
+# conda install pymc3
+# conda install -c conda-forge arviz
+#
 # linux
 # pip3 install pymc3
 # pip3 install arviz
+# pip3 install matplotlib==3.1.1
+# syntax:
+# python3 _irt_pymc3_shell.py epufabc2020_irt100.csv >> epufabc2020_irt100.txt &
 
 import sys
 
