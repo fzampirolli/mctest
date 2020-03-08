@@ -444,6 +444,8 @@ _inst1_
             for i in course.institutes.all():
                 inst.append(i.institute_name)
                 logo = i.institute_logo
+                instURL = i.institute_url
+
         institute = ','.join(inst)
         discipline = room.discipline.discipline_name
         course = "\\textbf{%s}" % ','.join([c.course_name for c in room.discipline.courses.all()])
@@ -506,7 +508,7 @@ _inst1_
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
 
-        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{webMCTest:} gerador e corretor de exames disponível para professores de instituições cadastradas em \\textbf{\\url{vision.ufabc.edu.br:8000}}}\n\n"
+        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{webMCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (instURL)
 
         str1 += '\n\n \\hfill \\tiny{{\\color{red}\#' + str(exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
 
