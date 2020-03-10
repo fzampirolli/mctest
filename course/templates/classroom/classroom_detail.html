@@ -15,6 +15,11 @@
 
                         <h5><strong>{% trans "Classroom" %}:</strong> {{ classroom.classroom_code }}</h5>
                         <h6><strong>{% trans "Type" %}:</strong>{{ classroom.classroom_type }}</h6>
+                        <h6><strong>{% trans "Profs" %}:</strong>
+                            {% for prof in classroom.classroom_profs.all %}
+                                {{ prof }};
+                            {% endfor %}
+                            </h6>
 
                         {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.discipline.discipline_profs.all %}
 
