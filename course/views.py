@@ -51,6 +51,8 @@ def ImportClassroomsDiscipline(request, pk):
             return HttpResponseRedirect("/")
     else:
         return HttpResponseRedirect("/")
+
+
     discipline = get_object_or_404(Discipline, pk=pk)
 
     if request.method == 'POST':
@@ -63,6 +65,7 @@ def ImportClassroomsDiscipline(request, pk):
             return render(request, 'exam/exam_errors.html', {})
 
         f = new_persons.read().decode('utf-8')
+
         for c in discipline.classrooms2.all():  # para cada classe da disciplina
             for s in c.students.all():  # remover os alunos existentes da classe
                 c.students.remove(s)
@@ -106,9 +109,11 @@ def ImportClassroomsDiscipline(request, pk):
                 sala = r[4].lstrip().rstrip()
                 modo = r[5].lstrip().rstrip()
 
-                try:
+                try:  # ATENCAO: NAO FAZ NADA SE ESTUDANTE JÁ EXISTIR, PARA NAO APAGAR DADOS ANTIGOS NO BD
                     s = Student.objects.get(student_ID=ID)
+                    #s.delete()
                 except:
+                    #pass
                     s = Student.objects.create(
                         student_ID=ID,
                         student_name=nome,
