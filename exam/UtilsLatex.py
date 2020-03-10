@@ -35,6 +35,7 @@ import subprocess
 import time
 import unicodedata
 import zlib
+import datetime
 
 import bcrypt
 import numpy as np
@@ -43,10 +44,12 @@ from django.contrib import messages
 from django.core.serializers import serialize
 from django.http import HttpResponse
 # coding=UTF-8
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.http import Http404
 
 from topic.UtilsMCTest4 import UtilsMC
+from topic.models import Question
 
 
 class Utils(object):
@@ -54,6 +57,7 @@ class Utils(object):
     # return test case between begin{comment} and end{comment}
     @staticmethod
     def get_cases(listao):
+        print("get_cases-00-" + str(datetime.datetime.now()))
         start_q = '\\color{white}\\\@'
         start = 'begin{comment}'
         end = 'end{comment}'
@@ -61,32 +65,36 @@ class Utils(object):
         cases['id'] = []
         cases['input'] = []
         cases['output'] = []
-        if str(listao).find(start)==-1: #se nao tem vpl, aborta listao
+        if str(listao).find(start) == -1:  # se nao tem vpl, aborta listao
             return cases
+        print("get_cases-01-" + str(datetime.datetime.now()))
         for model in listao:
-            aux_ids = []
-            aux_in = []
-            aux_ou = []
-            st = str(model)
-            i = 0
-            st_test = ''
-            while (st != st_test):
-                i_in = st.find(start_q)
-                i_end = st.find(start_q, st.find(start_q) + 1)
-                if i_end > 0:
-                    st_test = st[i_in:i_end]
-                    st = st[i_end:]
-                else:
-                    st_test = st[i_in:]
-                for case in re.findall(start + '(.+?)' + end, st_test):
-                    case = case.replace('\\n', '').replace('\\', '')
-                    case1 = json.loads(case)
-                    aux_ids.append(st_test[16:20])
-                    aux_in.append(case1['input'])
-                    aux_ou.append(case1['output'])
-            cases['id'].append(aux_ids)
-            cases['input'].append(aux_in)
-            cases['output'].append(aux_ou)
+            for questions in model:
+                if not str(questions):
+                    continue
+                aux_ids = []
+                aux_in = []
+                aux_ou = []
+                for qq in questions:
+                    st = str(qq)
+                    numQuestion = st.split(',')[1].replace(' ','')
+                    for case in re.findall(start + '(.+?)' + end, st):
+                        case = str(case)
+                        case = case[case.find("{"):len(case)-4]
+                        case = case.replace('\\\\', '\\')
+                        case1 = json.loads(case)
+                        aux_ids.append(numQuestion)
+                        inp0 = []
+                        for i in case1['input']:
+                            inp0.append([i])
+                        out0 = []
+                        for i in case1['output']:
+                            out0.append([i])
+                        aux_in.append(inp0)
+                        aux_ou.append(out0)
+                cases['id'].append(aux_ids)
+                cases['input'].append(aux_in)
+                cases['output'].append(aux_ou)
 
         return cases
 
@@ -96,14 +104,14 @@ class Utils(object):
     # cases['input'] = np.array([     [ [ [1], [2,3] ],  [[2, 2]]    ],      [ [[5, 5]   , [[6, 6]]    ] ] )
     # cases['output']= np.array([     [ [ [1,2], [3] ],  [[3, 4, 5]] ],      [ [[4, 5, 6], [[7, 8, 9]] ] ] )
     @staticmethod
-    def format_cases(cases, file): # _version1
+    def format_cases(cases, file):  # _version1
         file = file.replace(' ', '').replace('/', '-').replace(':', '-')
         files = ['./tmp/' + file + ".json"]
         formatCases = {}
         formatCases['variations'] = []  # variant/models
 
         for v in range(len(cases['input'])):  # for each variant/model
-            st_f = './tmp/' + file + '-m' + str(v+1) + ".cases"
+            st_f = './tmp/' + file + '-m' + str(v + 1) + ".cases"
             variant = {}
             variant['variant'] = str(v + 1)
             variant['questions'] = []
@@ -113,15 +121,19 @@ class Utils(object):
                 question = {}
                 question['key'] = str(cases['id'][v][q])
                 question['number'] = str(count_q)
-                #question['file'] = ''
-                question['weight'] = '1'
+                question['file'] = 'Q'+str(count_q)
+                try:
+                    questionObject = get_object_or_404(Question, pk=question['number'])
+                    question['weight'] = questionObject.question_difficulty
+                except:
+                    question['weight'] = '1'
                 question['language'] = ['all']
                 question['cases'] = []
                 if isinstance(cases['input'][v][q], list):
                     for c in range(len(cases['input'][v][q])):  # for each case
                         cases_q = {}
-                        cases_q['case'] = "test_"+str(c+1)
-                        cases_q['input'] = cases['input'][v][q][c]
+                        cases_q['case'] = "test_" + str(c + 1)
+                        cases_q['input'] = cases['input'][v][q][c]  ##################### AQUI
                         cases_q['output'] = cases['output'][v][q][c]
                         question['cases'].append(cases_q)
 
@@ -135,12 +147,12 @@ class Utils(object):
         return files
 
     @staticmethod
-    def format_cases_version3(cases, file): ###### LIXO
+    def format_cases_version3(cases, file):  ###### LIXO
         file = file.replace(' ', '').replace('/', '-').replace(':', '-')
         files = ['./tmp/' + file + ".xml"]
 
         for m in range(len(cases['input'])):  # for each model
-            st_f = './tmp/' + file + '-m' + str(m+1) + ".cases"
+            st_f = './tmp/' + file + '-m' + str(m + 1) + ".cases"
             st = '<model=0>\n\n</model>\n\n'
             st += '<model=' + str(m + 1) + '>'
 
@@ -194,8 +206,8 @@ class Utils(object):
         st_geral += '</questions>\n\n'
 
         st_geral += '<models>\n'
-        for en,st in enumerate(files[1:]):
-            st_geral += '<model=' + str(en+1) + '>\n'
+        for en, st in enumerate(files[1:]):
+            st_geral += '<model=' + str(en + 1) + '>\n'
             st_geral += '<file=' + st + '/>\n'
             for q in cases['id'][en]:
                 st_geral += '<question=' + q + '/>\n'
@@ -214,7 +226,7 @@ class Utils(object):
         st = '<model=0>\n\n</model>\n\n'
         str_q = []
 
-        for q in range(len(cases['id'][0])): # for each question
+        for q in range(len(cases['id'][0])):  # for each question
             str_q.append(st)
 
         for q in range(len(cases['id'][0])):  # for each question
@@ -256,7 +268,7 @@ class Utils(object):
         st_geral = ''
         for q in range(len(cases['id'][0])):
             st = './tmp/' + file + '-' + str(cases['id'][0][q]) + ".cases"
-            st_geral += '<quest=' + str(q+1) + '>\n'
+            st_geral += '<quest=' + str(q + 1) + '>\n'
             st_geral += '<file=' + st + '/>\n'
             st_geral += '<number=' + str(cases['id'][0][q]) + '/>\n'
             st_geral += '<weight=1/>\n'
@@ -432,6 +444,8 @@ _inst1_
             for i in course.institutes.all():
                 inst.append(i.institute_name)
                 logo = i.institute_logo
+                instURL = i.institute_url
+
         institute = ','.join(inst)
         discipline = room.discipline.discipline_name
         course = "\\textbf{%s}" % ','.join([c.course_name for c in room.discipline.courses.all()])
@@ -471,7 +485,8 @@ _inst1_
         # str1+="\\cline{1-1} \\cline{3-3}\n"
         str1 += "\\multirow{7}{*}{\\vspace{8mm}\\includegraphics[width=2cm]{./figs/%s}} \n" % logo
         str1 += "&\\textbf{%s} \n              " % (institute)
-        str1 += "&\\multirow{7}{*}[2.5mm]{\\hspace{-2mm}\\includegraphics[scale=%s]{%s}}\\\\ \n" % (size_qr / 3, myqr[0])
+        str1 += "&\\multirow{7}{*}[2.5mm]{\\hspace{-2mm}\\includegraphics[scale=%s]{%s}}\\\\ \n" % (
+        size_qr / 3, myqr[0])
 
         str1 += "&%s                        & \\\\ \n" % (course)
         str1 += "&%s                        & \\\\ \n" % (disc)
@@ -493,7 +508,7 @@ _inst1_
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
 
-        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{webMCTest:} gerador e corretor de exames disponível para professores de instituições cadastradas em \\textbf{\\url{vision.ufabc.edu.br:8000}}}\n\n"
+        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{webMCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (instURL)
 
         str1 += '\n\n \\hfill \\tiny{{\\color{red}\#' + str(exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
 
@@ -501,7 +516,6 @@ _inst1_
             str1 += "\\vspace{%smm}\n\n" % (int(Utils.getNumMCQuestions(exam)) / 2)
         else:
             str1 += "\\vspace{4mm}\n\n"
-
 
         return str1.replace("_nameStudent_", nameStudent).replace("_idStudent_", idStudent)
 
@@ -555,7 +569,7 @@ _inst1_
                                _('validateNumQuestions: You chose Anwsers. Is it right? Number of QM questions >=3'))
                 return False
         if exam.exam_print == 'ques':
-            if int(exam.exam_number_of_questions_text) < 2:
+            if int(exam.exam_number_of_questions_text) < 1:
                 messages.error(request,
                                _('validateNumQuestions: You chose Questions. Is it right? Number of QM questions >=2'))
                 return False
@@ -835,7 +849,8 @@ _inst1_
                     if ans.index(a) == 0:
                         str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}\#%s}}%s" % (str(ans.index(a)), a)
                     else:
-                        str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (str(ans.index(a)), a)
+                        str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (
+                        str(ans.index(a)), a)
 
                 str1 += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
 
@@ -1032,7 +1047,8 @@ _inst1_
             else:
                 str1 += "\n\n\\newpage\n\n"
 
-            s = Utils.drawQuestionsTDifficulty(request, exam_i[2], exam, room, student_ID, student_name, count, data_hora)
+            s = Utils.drawQuestionsTDifficulty(request, exam_i[2], exam, room, student_ID, student_name, count,
+                                               data_hora)
 
             str1 += s[0]
             myqr[1] += s[1]

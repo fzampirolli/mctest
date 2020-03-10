@@ -614,7 +614,7 @@ def correctStudentsExam(request, pk):
 
 @login_required
 def generate_page(request, pk):
-    print("generate_page")
+    print("generate_page-00-" + str(datetime.datetime.now()))
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
         if not 'exam.change_exam' in perm:
@@ -625,7 +625,10 @@ def generate_page(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     context = {"students": exam}
 
+    print("generate_page-01-" + str(datetime.datetime.now()))
+
     path_to_file_REPORT = BASE_DIR + "/report_Exam_" + str(pk) + ".csv"
+    path_to_file_VARIATIONS = BASE_DIR + "/report_Exam_" + str(pk) + "_variations.csv"
     # raise Http404("oi00")
     if request.POST:
         countStudentsAll = 0
@@ -636,16 +639,17 @@ def generate_page(request, pk):
         st = Utils.validateProf(exam, request.user)
         if st != None:
             return HttpResponse(st)
-
+        print("generate_page-02-"+str(datetime.datetime.now()))
         listao = []  ############ gera X variacoes de exames
         for i in range(int(exam.exam_variations)):
             listao.append(Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam)))
-
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
+        print("generate_page-03-"+str(datetime.datetime.now()))
         # send by email all case tests of moodle
         cases = Utils.get_cases(listao)
+        print("generate_page-04-"+str(datetime.datetime.now()))
         message_cases = _('Dear') + '\n\n'
         message_cases += _(
             'This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
@@ -691,7 +695,7 @@ def generate_page(request, pk):
         # messages.error(request, 'Document deleted.')
         # return render(request, 'exam/exam_errors.html', {})
         # raise Http404(exam.classrooms.all())
-
+        listVariations = [['Room', 'ID', 'Name', 'Variation']]
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             countStudents = 0
             file_name = "_e" + str(
@@ -713,6 +717,7 @@ def generate_page(request, pk):
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     hash_num = Utils.distro_table(s.student_name)
+                    listVariations.append([room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
                     if hash_num == -1:
                         messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
                         return render(request, 'exam/exam_errors.html', {})
@@ -807,6 +812,15 @@ def generate_page(request, pk):
                 i.institute_exams_generated += countStudentsAll
                 i.save()
                 break
+
+        if int(exam.exam_variations) > 0:
+            # send file by email with variation of each student
+            #path_to_file_VARIATIONS
+            with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
+                writer = csv.writer(file_var)
+                writer.writerows(listVariations)
+            auxSTR = 'In the attached file are the exam variations per student \n-----'
+            cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
 
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"

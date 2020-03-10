@@ -1,0 +1,7 @@
+case=teste_1
+input=2 5
+output=32
+
+case=teste_2
+input=3 3
+output=27
