@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="" />
+    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -471,21 +473,7 @@
       <workItem from="1585950185277" duration="1499000" />
       <workItem from="1586194567361" duration="1589000" />
       <workItem from="1586201395454" duration="1812000" />
-      <workItem from="1586336546362" duration="2394000" />
-    </task>
-    <task id="LOCAL-00043" summary="change new GUI">
-      <created>1568917591601</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1568917591601</updated>
-    </task>
-    <task id="LOCAL-00044" summary="change new GUI">
-      <created>1569593478957</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1569593478957</updated>
+      <workItem from="1586336546362" duration="2914000" />
     </task>
     <task id="LOCAL-00045" summary="change new GUI">
       <created>1570872693589</created>
@@ -816,7 +804,21 @@
       <option name="project" value="LOCAL" />
       <updated>1586338976249</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="change new GUI">
+      <created>1586339250769</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1586339250769</updated>
+    </task>
+    <task id="LOCAL-00093" summary="change new GUI">
+      <created>1586339443047</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1586339443047</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -939,10 +941,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="540" y="202" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1440.877@0.23.1440.877" timestamp="1582113389605" />
-    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1586338976139">
+    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1586339442945">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1586338976139" />
+    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1586339442945" />
     <state x="100" y="120" width="1240" height="683" key="DiffContextDialog" timestamp="1583928517704">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -975,10 +977,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="333" y="88" width="1072" height="722" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1579094167156" />
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1586339003741">
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1586339526931">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1586339003741" />
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1586339526931" />
     <state x="430" y="52" width="904" height="848" key="find.popup" timestamp="1586338682705">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
