@@ -70,9 +70,12 @@ def ImportClassroomsDiscipline(request, pk):
             for s in c.students.all():  # remover os alunos existentes da classe
                 c.students.remove(s)
 
+
+
         mystr4 = '/course/discipline/' + str(pk) + '/update'
         messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
         messages.info(request, _('Discipline name') + ' >> ' + discipline.discipline_name, extra_tags='upper')
+
 
         contS = 0
         for row in f.split('\n'):

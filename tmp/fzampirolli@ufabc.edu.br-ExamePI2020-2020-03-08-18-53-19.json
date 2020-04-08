@@ -1,0 +1,242 @@
+{
+  "variations": [
+    {
+      "variant": "1",
+      "questions": [
+        {
+          "key": "1379",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "3\n3\n3"
+              ],
+              "output": [
+                "0"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "1\n6\n7"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "4\n4\n3"
+              ],
+              "output": [
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1380",
+          "number": "2",
+          "file": "Q2",
+          "weight": "3",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "7\n1\n2\n5"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "6\n4\n3\n5"
+              ],
+              "output": [
+                "0"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "8\n7\n8\n7"
+              ],
+              "output": [
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1381",
+          "number": "3",
+          "file": "Q3",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "5\n1\n4\n4\n1"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "4\n5\n1\n8\n4"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "5\n1\n4\n6\n1"
+              ],
+              "output": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "2",
+      "questions": [
+        {
+          "key": "1379",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "7\n3\n3"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "4\n4\n1"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "4\n7\n4"
+              ],
+              "output": [
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1380",
+          "number": "2",
+          "file": "Q2",
+          "weight": "3",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "3\n3\n5\n7"
+              ],
+              "output": [
+                "1"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "8\n6\n3\n7"
+              ],
+              "output": [
+                "0"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "7\n5\n8\n8"
+              ],
+              "output": [
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1381",
+          "number": "3",
+          "file": "Q3",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "3\n7\n4\n4\n8"
+              ],
+              "output": [
+                "2"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "6\n3\n3\n6\n6"
+              ],
+              "output": [
+                "0"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "3\n5\n3\n1\n2"
+              ],
+              "output": [
+                "2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -5,17 +5,61 @@
       <change afterPath="$PROJECT_DIR$/account/migrations/0001_initial.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/course/migrations/0001_initial.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/exam/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysql-2020-01-04.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fzampirolli.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fzampirolli.tex" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pdfExam/_e128_PI-teste_PClass_ExamePI2020.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pdfExam/_e20_test-teo_PClass_Prova12020.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pdfQuestion/fzampirolli.pdf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/student/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001_q1379-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001_q1379.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001_q1380-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001_q1380.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001_q1381-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_31201910001_q1381.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001_q1379-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001_q1379.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001_q1380-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001_q1380.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001_q1381-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_38660461700001_q1381.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617_q1379-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617_q1379.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617_q1380-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617_q1380.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617_q1381-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_386604617_q1381.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002_q1379-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002_q1379.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002_q1380-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002_q1380.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002_q1381-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_39193094100002_q1381.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941_q1379-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941_q1379.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941_q1380-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941_q1380.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941_q1381-eps-converted-to.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/QRCode_337_128_391930941_q1381.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fz_pi_fig01.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-ExamePI2020-2020-03-08-18-53-19.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-ExamePI2020-2020-03-08-18-58-12.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-ExamePI2020-2020-03-09-16-17-45.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-ExamePI2020-2020-03-09-16-18-25.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmp/fzampirolli@ufabc.edu.br-ExamePI2020-2020-03-09-16-21-21.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1581724616114;221;90;11201811685;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1581724616300;221;90;11201721630;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tmpGAB/191020-1581724616461;221;90;11001816;0;0;3;0;0;0;0;0;5;.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/topic/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_setup-all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/_setup-all.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/templates/index-vision.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/index-vision.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course/templates/discipline/discipline_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/course/templates/discipline/discipline_update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/course/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -447,70 +491,46 @@
       <workItem from="1578148144849" duration="546000" />
       <workItem from="1578148849900" duration="3690000" />
       <workItem from="1578156756352" duration="353000" />
-      <workItem from="1578162302266" duration="6940000" />
-    </task>
-    <task id="LOCAL-00029" summary="change new GUI">
-      <created>1567150376773</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1567150376773</updated>
-    </task>
-    <task id="LOCAL-00030" summary="change new GUI">
-      <created>1567150423916</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1567150423916</updated>
-    </task>
-    <task id="LOCAL-00031" summary="change new GUI">
-      <created>1567178978291</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1567178978291</updated>
-    </task>
-    <task id="LOCAL-00032" summary="change new GUI">
-      <created>1567188569226</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1567188569226</updated>
-    </task>
-    <task id="LOCAL-00033" summary="change new GUI">
-      <created>1567197447914</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1567197447914</updated>
-    </task>
-    <task id="LOCAL-00034" summary="change new GUI">
-      <created>1567202136790</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1567202136790</updated>
-    </task>
-    <task id="LOCAL-00035" summary="change new GUI">
-      <created>1567204072155</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1567204072155</updated>
-    </task>
-    <task id="LOCAL-00036" summary="change new GUI">
-      <created>1567242553128</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1567242553128</updated>
-    </task>
-    <task id="LOCAL-00037" summary="change new GUI">
-      <created>1567258128229</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1567258128229</updated>
+      <workItem from="1578162302266" duration="7121000" />
+      <workItem from="1578173916256" duration="6758000" />
+      <workItem from="1578316039658" duration="4570000" />
+      <workItem from="1579093807766" duration="1494000" />
+      <workItem from="1581340742176" duration="845000" />
+      <workItem from="1581695420036" duration="1654000" />
+      <workItem from="1581722657267" duration="1319000" />
+      <workItem from="1581727491278" duration="871000" />
+      <workItem from="1581766871544" duration="9307000" />
+      <workItem from="1581798181971" duration="83000" />
+      <workItem from="1581798336101" duration="227000" />
+      <workItem from="1581847562854" duration="243000" />
+      <workItem from="1581851802009" duration="134000" />
+      <workItem from="1581856335969" duration="3478000" />
+      <workItem from="1581942436678" duration="672000" />
+      <workItem from="1581943693396" duration="382000" />
+      <workItem from="1581959291838" duration="109000" />
+      <workItem from="1582113378702" duration="15000" />
+      <workItem from="1582113401278" duration="737000" />
+      <workItem from="1582146103444" duration="5241000" />
+      <workItem from="1582285849617" duration="1810000" />
+      <workItem from="1582591237963" duration="533000" />
+      <workItem from="1583492846631" duration="289000" />
+      <workItem from="1583573320835" duration="119000" />
+      <workItem from="1583574430572" duration="266000" />
+      <workItem from="1583575184630" duration="2264000" />
+      <workItem from="1583700883512" duration="4577000" />
+      <workItem from="1583705699663" duration="93000" />
+      <workItem from="1583705810262" duration="304000" />
+      <workItem from="1583781366946" duration="849000" />
+      <workItem from="1583782372678" duration="982000" />
+      <workItem from="1583928377494" duration="929000" />
+      <workItem from="1583937498423" duration="570000" />
+      <workItem from="1583955114589" duration="123000" />
+      <workItem from="1583957820024" duration="537000" />
+      <workItem from="1584785244153" duration="136000" />
+      <workItem from="1585950185277" duration="1499000" />
+      <workItem from="1586194567361" duration="1589000" />
+      <workItem from="1586201395454" duration="1812000" />
+      <workItem from="1586336546362" duration="188000" />
     </task>
     <task id="LOCAL-00038" summary="change new GUI">
       <created>1567373368614</created>
@@ -792,7 +812,70 @@
       <option name="project" value="LOCAL" />
       <updated>1578167771278</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="change new GUI">
+      <created>1578173755483</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1578173755483</updated>
+    </task>
+    <task id="LOCAL-00079" summary="change new GUI">
+      <created>1578319497161</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1578319497162</updated>
+    </task>
+    <task id="LOCAL-00080" summary="change new GUI">
+      <created>1581798202079</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1581798202080</updated>
+    </task>
+    <task id="LOCAL-00081" summary="change new GUI">
+      <created>1581859587671</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1581859587671</updated>
+    </task>
+    <task id="LOCAL-00082" summary="change new GUI">
+      <created>1582287091988</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1582287091988</updated>
+    </task>
+    <task id="LOCAL-00083" summary="change new GUI">
+      <created>1583574698743</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1583574698743</updated>
+    </task>
+    <task id="LOCAL-00084" summary="change new GUI">
+      <created>1583702162170</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1583702162171</updated>
+    </task>
+    <task id="LOCAL-00085" summary="change new GUI">
+      <created>1583704800606</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1583704800606</updated>
+    </task>
+    <task id="LOCAL-00086" summary="change new GUI">
+      <created>1583781795333</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1583781795333</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -899,92 +982,78 @@
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="302" y="85" key="#Deployment" timestamp="1578148877990">
+    <state x="302" y="85" key="#Deployment" timestamp="1586336735915">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="302" y="85" key="#Deployment/0.23.1440.877@0.23.1440.877" timestamp="1578148877990" />
-    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578056929937">
+    <state x="302" y="85" key="#Deployment/0.23.1440.877@0.23.1440.877" timestamp="1586336735915" />
+    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579138421559">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1578056929937" />
-    <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578167819776">
+    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1579138421559" />
+    <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1585950376379">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1578167819776" />
-    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1578167771170">
+    <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1585950376379" />
+    <state x="540" y="202" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1582113389605">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1575581735825" />
-    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1578167771170" />
-    <state x="100" y="120" width="1240" height="683" key="DiffContextDialog" timestamp="1575810044182">
+    <state x="540" y="202" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1440.877@0.23.1440.877" timestamp="1582113389605" />
+    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1586336917850">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="100" y="100" width="1240" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1575541371402" />
-    <state x="100" y="120" width="1240" height="683" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1575810044182" />
-    <state width="1082" height="286" key="GridCell.Tab.0.bottom" timestamp="1578173463765">
+    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1586336917850" />
+    <state x="100" y="120" width="1240" height="683" key="DiffContextDialog" timestamp="1583928517704">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="153" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1575581715448" />
-    <state width="1082" height="286" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1578173463765" />
-    <state width="1082" height="286" key="GridCell.Tab.0.center" timestamp="1578173463764">
+    <state x="100" y="120" width="1240" height="683" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1583928517704" />
+    <state width="1091" height="226" key="GridCell.Tab.0.bottom" timestamp="1584870395586">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="153" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1575581715447" />
-    <state width="1082" height="286" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1578173463764" />
-    <state width="1082" height="286" key="GridCell.Tab.0.left" timestamp="1578173463763">
+    <state width="1398" height="262" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1583702534408" />
+    <state width="1091" height="226" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1584870395586" />
+    <state width="1091" height="226" key="GridCell.Tab.0.center" timestamp="1584870395585">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="153" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1575581715446" />
-    <state width="1082" height="286" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1578173463763" />
-    <state width="1082" height="286" key="GridCell.Tab.0.right" timestamp="1578173463764">
+    <state width="1398" height="262" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1583702534408" />
+    <state width="1091" height="226" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1584870395585" />
+    <state width="1091" height="226" key="GridCell.Tab.0.left" timestamp="1584870395584">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="153" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1575581715448" />
-    <state width="1082" height="286" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1578173463764" />
-    <state width="1172" height="167" key="GridCell.Tab.1.bottom" timestamp="1575753631234">
+    <state width="1398" height="262" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1583702534407" />
+    <state width="1091" height="226" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1584870395584" />
+    <state width="1091" height="226" key="GridCell.Tab.0.right" timestamp="1584870395585">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1172" height="167" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
-    <state width="1172" height="167" key="GridCell.Tab.1.center" timestamp="1575753631234">
-      <screen x="0" y="23" width="1440" height="877" />
-    </state>
-    <state width="1172" height="167" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
-    <state width="1172" height="167" key="GridCell.Tab.1.left" timestamp="1575753631234">
-      <screen x="0" y="23" width="1440" height="877" />
-    </state>
-    <state width="1172" height="167" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
-    <state width="1172" height="167" key="GridCell.Tab.1.right" timestamp="1575753631234">
-      <screen x="0" y="23" width="1440" height="877" />
-    </state>
-    <state width="1172" height="167" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1575753631234" />
+    <state width="1398" height="262" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1583702534408" />
+    <state width="1091" height="226" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1584870395585" />
     <state x="570" y="97" key="MultipleFileMergeDialog" timestamp="1578167575470">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="570" y="97" key="MultipleFileMergeDialog/0.23.1440.877@0.23.1440.877" timestamp="1578167575470" />
-    <state x="333" y="88" width="1072" height="722" key="SettingsEditor" timestamp="1578057219320">
+    <state x="333" y="88" width="1072" height="722" key="SettingsEditor" timestamp="1579094167156">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="333" y="88" width="1072" height="722" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1578057219320" />
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1578167777995">
+    <state x="333" y="88" width="1072" height="722" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1579094167156" />
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1583781801939">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1578167777995" />
-    <state x="466" y="211" width="683" height="486" key="find.popup" timestamp="1578173436763">
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1583781801939" />
+    <state x="466" y="211" width="683" height="486" key="find.popup" timestamp="1583781574817">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="466" y="211" width="683" height="486" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1578173436763" />
-    <state x="738" y="186" key="ftp.server.browser" timestamp="1575980636422">
+    <state x="466" y="211" width="683" height="486" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1583781574817" />
+    <state x="497" y="247" key="git4idea.merge.GitPullDialog" timestamp="1586336930470">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="738" y="186" key="ftp.server.browser/0.23.1440.877@0.23.1440.877" timestamp="1575980636422" />
-    <state x="497" y="247" key="git4idea.merge.GitPullDialog" timestamp="1578147202048">
+    <state x="497" y="247" key="git4idea.merge.GitPullDialog/0.23.1440.877@0.23.1440.877" timestamp="1586336930470" />
+    <state x="662" y="349" key="publish.login" timestamp="1586201443022">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="497" y="247" key="git4idea.merge.GitPullDialog/0.23.1440.877@0.23.1440.877" timestamp="1578147202048" />
-    <state x="662" y="349" key="publish.login" timestamp="1578171871317">
+    <state x="662" y="349" key="publish.login/0.23.1440.877@0.23.1440.877" timestamp="1586201443022" />
+    <state x="478" y="212" width="670" height="676" key="search.everywhere.popup" timestamp="1586202306856">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="662" y="349" key="publish.login/0.23.1440.877@0.23.1440.877" timestamp="1578171871317" />
+    <state x="478" y="212" width="670" height="676" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1586202306856" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1007,6 +1076,11 @@
           <url>file://$PROJECT_DIR$/exam/views.py</url>
           <line>172</line>
           <option name="timeStamp" value="86" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VPL_modification/V8-select_using_student_name-single_linker_file-mctest_compatible-secure_lang-lock/espalhador.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="87" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="django-line">
           <url>file://$PROJECT_DIR$/course/templates/discipline/discipline_update.html</url>
