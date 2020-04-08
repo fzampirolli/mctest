@@ -57,7 +57,11 @@ source _setup_all.sh
 
 9) Improve of Item Response Theory;  
 
-10) Use Markdown to describe questions and send exams or activities to students.
+10) Use Markdown to describe questions and send exams or activities to students;
+
+11) Adapt the Android application to this version of webMCTest [[ref15](http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf), [ref16b](https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394)];
+
+12) Study the integration of webMCTest with other systems, for example, SIGAA and Moodle, sharing different databases.
 ---
 ### Versions 
 
