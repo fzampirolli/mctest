@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/templates/readme.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/readme.html" afterDir="false" />
-    </list>
+    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -477,28 +471,7 @@
       <workItem from="1585950185277" duration="1499000" />
       <workItem from="1586194567361" duration="1589000" />
       <workItem from="1586201395454" duration="1812000" />
-      <workItem from="1586336546362" duration="2123000" />
-    </task>
-    <task id="LOCAL-00040" summary="change new GUI">
-      <created>1567471591647</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1567471591647</updated>
-    </task>
-    <task id="LOCAL-00041" summary="change new GUI">
-      <created>1568853422566</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1568853422566</updated>
-    </task>
-    <task id="LOCAL-00042" summary="change new GUI">
-      <created>1568857303803</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1568857303803</updated>
+      <workItem from="1586336546362" duration="2394000" />
     </task>
     <task id="LOCAL-00043" summary="change new GUI">
       <created>1568917591601</created>
@@ -822,7 +795,28 @@
       <option name="project" value="LOCAL" />
       <updated>1586337516861</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="change new GUI">
+      <created>1586338856799</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1586338856799</updated>
+    </task>
+    <task id="LOCAL-00090" summary="change new GUI">
+      <created>1586338968018</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1586338968019</updated>
+    </task>
+    <task id="LOCAL-00091" summary="change new GUI">
+      <created>1586338976248</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1586338976249</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -945,10 +939,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="540" y="202" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1440.877@0.23.1440.877" timestamp="1582113389605" />
-    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1586338967919">
+    <state x="303" y="74" key="CommitChangelistDialog2" timestamp="1586338976139">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1586338967919" />
+    <state x="303" y="74" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1586338976139" />
     <state x="100" y="120" width="1240" height="683" key="DiffContextDialog" timestamp="1583928517704">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -981,10 +975,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="333" y="88" width="1072" height="722" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1579094167156" />
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1586338893347">
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1586339003741">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1586338893347" />
+    <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1586339003741" />
     <state x="430" y="52" width="904" height="848" key="find.popup" timestamp="1586338682705">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -993,10 +987,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="497" y="247" key="git4idea.merge.GitPullDialog/0.23.1440.877@0.23.1440.877" timestamp="1586336930470" />
-    <state x="662" y="349" key="publish.login" timestamp="1586337441232">
+    <state x="662" y="349" key="publish.login" timestamp="1586339099929">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="662" y="349" key="publish.login/0.23.1440.877@0.23.1440.877" timestamp="1586337441232" />
+    <state x="662" y="349" key="publish.login/0.23.1440.877@0.23.1440.877" timestamp="1586339099929" />
     <state x="478" y="212" width="670" height="676" key="search.everywhere.popup" timestamp="1586202306856">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
