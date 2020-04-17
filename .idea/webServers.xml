@@ -3,59 +3,52 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="fb984d33-237b-44a4-8146-6fb5e5bb83b7" name="vision" url="http://vision.ufabc.edu.br">
-        <fileTransfer host="vision.ufabc.edu.br" port="22" rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="vision.ufabc.edu.br" port="22" sshConfigId="ee8286e0-7089-48b1-84c4-e51a43a489a8" sshConfig="vision">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="3295823d-483b-42b1-9548-2225ec92120a" name="vcad.ufabc.edu.br" url="http://vcad.ufabc.edu.br">
-        <fileTransfer host="vcad.ufabc.edu.br" port="22" rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="vcad.ufabc.edu.br" port="22" sshConfigId="5802ba1d-f559-41f2-b033-bd33a66257d4" sshConfig="vcad.ufabc.edu.br">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="01d6ad1a-688d-46ca-8461-78a4af9b4374" name="nubisys.ufabc.edu.br" url="http://nubisys.ufabc.edu.br">
-        <fileTransfer host="nubisys.ufabc.edu.br" port="22" rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="nubisys.ufabc.edu.br" port="22" sshConfigId="2e78123c-52bf-490e-920f-5f20f9eb2150" sshConfig="nubisys.ufabc.edu.br">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="7a32b525-2daf-48ee-b2c8-8654fd0044a8" name="177.104.60.16" url="http://177.104.60.16">
-        <fileTransfer host="177.104.60.16" port="22" rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="177.104.60.16" port="22" sshConfigId="2319c545-f4c1-4a52-85b0-3c0a6a0e12d0" sshConfig="177.104.60.16">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="6f749fe5-54dc-43a1-9d9f-f95d7505aae1" name="prof" url="http://professor.ufabc.edu.br">
-        <fileTransfer host="professor.ufabc.edu.br" port="22" rootFolder="/home/fzampirolli" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fzampirolli" accessType="SFTP" host="professor.ufabc.edu.br" port="22" sshConfigId="7463c393-e224-40ab-8bdc-18fce610408e" sshConfig="prof">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="662711f7-929c-4b9d-8981-9d7c1b327834" name="mctest" url="http://mctest.ufabc.edu.br">
-        <fileTransfer host="mctest.ufabc.edu.br" port="22" rootFolder="/home/ufabc/django_webmctest/mctest" accessType="SFTP">
+        <fileTransfer rootFolder="/home/ufabc/django_webmctest/mctest" accessType="SFTP" host="177.104.60.16" port="22" sshConfigId="2319c545-f4c1-4a52-85b0-3c0a6a0e12d0" sshConfig="177.104.60.16">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="605bb26f-ef4f-49d4-90e0-67ce36258925" name="acessivel" url="http://acessivel.ufabc.edu.br">
-        <fileTransfer host="acessivel.ufabc.edu.br" port="22" rootFolder="/home/fz" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fz" accessType="SFTP" host="acessivel.ufabc.edu.br" port="22" sshConfigId="95492805-8aac-480f-842c-22962a297536" sshConfig="acessivel">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>

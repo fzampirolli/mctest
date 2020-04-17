@@ -258,7 +258,7 @@ alterar senha mysql
 sudo systemctl stop mysql
 sudo mysqld_safe --skip-grant-tables &
 use mysql;
-update user set authentication_string=PASSWORD("Zaq1234567***") where User='root';
+update user set authentication_string=PASSWORD("PASW_SQL***") where User='root';
 flush privileges;
 
 

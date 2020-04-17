@@ -31,7 +31,7 @@ load_dotenv(os.path.join(BASE_DIR, '../_settings.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #os.getenv('DEBUG')
+DEBUG = False #os.getenv('DEBUG')
 
 # For Mysql
 DB_PASS = os.getenv('DB_PASS')

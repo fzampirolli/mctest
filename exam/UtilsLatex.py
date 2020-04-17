@@ -77,7 +77,10 @@ class Utils(object):
                 aux_ou = []
                 for qq in questions:
                     st = str(qq)
-                    numQuestion = st.split(',')[1].replace(' ','')
+                    try:
+                        numQuestion = st.split(',')[1].replace(' ','')
+                    except:
+                        numQuestion = 'ERRO:'+st
                     for case in re.findall(start + '(.+?)' + end, st):
                         case = str(case)
                         case = case[case.find("{"):len(case)-4]
