@@ -61,7 +61,11 @@ source _setup_all.sh
 
 11) Adapt the Android application to this version of MCTest [[ref15](http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf), [ref16b](https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394)];
 
-12) Study the integration of MCTest with other systems, for example, SIGAA and Moodle, sharing different databases.
+12) Study the integration of MCTest with other systems, for example, SIGAA and Moodle, sharing different databases;
+
+13) Run the parametric question codes on other servers, similar to those used in the Moodle VPL plug-in;
+
+14) Write a complete tutorial to install and use MCTest.
 ---
 ### Versions 
 
