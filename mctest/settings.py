@@ -51,7 +51,7 @@ EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-# To webmctest send emails to students and professors
+# To MCTest send emails to students and professors
 webMCTest_SERVER = os.getenv('webMCTest_SERVER')
 webMCTest_FROM = os.getenv('webMCTest_FROM')
 webMCTest_PASS = os.getenv('webMCTest_PASS')

@@ -191,6 +191,9 @@ service cron restart
 
 
 : '
+
+killall - kill python3
+
 brew services restart mysql
 mysql -h localhost -P 3306 -u root -p DB_MCTest
 

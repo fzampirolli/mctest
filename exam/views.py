@@ -12,13 +12,13 @@ github.com/fzampirolli/mctest
 You should cite some references included in vision.ufabc.edu.br:8000
 in any publication about it.
 
-webMCTest is free software: you can redistribute it and/or modify
+MCTest is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License
 (gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) 
 any later version.
 
-webMCTest is distributed in the hope that it will be useful,
+MCTest is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
@@ -545,7 +545,7 @@ def correctStudentsExam(request, pk):
             if not os.path.exists(f_log):
                 with open(f_log, 'w') as csvfile:
                     spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-                    spamWriter.writerow("CORRECTIONS of webMCTest")
+                    spamWriter.writerow("CORRECTIONS of MCTest")
             with open(f_log, 'a') as csvfile:
                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                 spamWriter.writerow(["\n" + str(request.user), ",", str(datetime.datetime.now())])
@@ -777,7 +777,7 @@ def generate_page(request, pk):
                     Utils.genTex(fileExamNameSTUDENT, myPATH)
                     myFILE = BASE_DIR + "/" + myPATH + "/" + fileExamNameSTUDENT[:-4] + '.pdf'
                     email = s.student_email
-                    cvMCTest.sendMail(myFILE, "Exam by webMCTest", email, str(s.student_name))
+                    cvMCTest.sendMail(myFILE, "Exam by MCTest", email, str(s.student_name))
                     with open(path_to_file_REPORT, 'a') as data:  # acrescenta no final do csv a cada envio
                         writer = csv.writer(data)
                         writer.writerow(

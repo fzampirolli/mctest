@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-08 06:39-0300\n"
+"POT-Creation-Date: 2020-04-17 09:54-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -972,9 +972,8 @@ msgid "Return to: "
 msgstr "Retorno para: "
 
 #: course/views.py:93
-msgid "ImportClassroomsDiscipline: The teacher is not registered in webMCTest"
-msgstr ""
-"ImportClassroomsDiscipline: o professor não está registrado em  webMCTest"
+msgid "ImportClassroomsDiscipline: The teacher is not registered in MCTest"
+msgstr "ImportClassroomsDiscipline: o professor não está registrado em MCTest"
 
 #: course/views.py:104
 msgid "ImportClassroomsDiscipline: ID must be digits only: "
@@ -1742,8 +1741,6 @@ msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
 #: exam/views.py:325
-#, fuzzy
-#| msgid "correctStudentsExam: Error in read PDF: "
 msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
@@ -1899,7 +1896,7 @@ msgstr "da"
 msgid "Federal University of ABC"
 msgstr "Universidade Federal do ABC"
 
-#: main/templates/base_generic.html:355 main/templates/base_generic.html:362
+#: main/templates/base_generic.html:355 main/templates/base_generic.html:363
 msgid "and"
 msgstr "e"
 
@@ -1915,15 +1912,19 @@ msgstr "Quem utiliza"
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:359 main/templates/readme.html:10
+#: main/templates/base_generic.html:359
+msgid "FAQ"
+msgstr ""
+
+#: main/templates/base_generic.html:360 main/templates/readme.html:10
 msgid "README"
 msgstr "LEIA-ME"
 
-#: main/templates/base_generic.html:360
+#: main/templates/base_generic.html:361
 msgid "Grant"
 msgstr "Apoio"
 
-#: main/templates/base_generic.html:364
+#: main/templates/base_generic.html:365
 msgid "São Paulo Research Foundation (FAPESP)"
 msgstr "Fundação de Amparo à Pesquisa do Estado de São Paulo (FAPESP)"
 
@@ -1941,19 +1942,19 @@ msgstr ""
 
 #: main/templates/contributors.html:21
 msgid ""
-"We also thank the contributors who helped codify webMCTest, unknown in web "
+"We also thank the contributors who helped codify MCTest, unknown in web "
 "discussion forums"
 msgstr ""
-"Agradeço também aos colaboradores que ajudaram a codificar o webMCTest, "
+"Agradeço também aos colaboradores que ajudaram a codificar o MCTest, "
 "desconhecidos nos fóruns de discussão na web"
 
 #: main/templates/contributors.html:25
 msgid ""
-"I think the big difference with webMCTest is the parameterized issue, which "
-"may need custom Python functions to make writing easier. In this regard, I "
-"also thank"
+"I think the big difference with MCTest is the parameterized issue, which may "
+"need custom Python functions to make writing easier. In this regard, I also "
+"thank"
 msgstr ""
-"Acho que a grande diferença do webMCTest é a questão parametrizada, que pode "
+"Acho que a grande diferença do MCTest é a questão parametrizada, que pode "
 "precisar de funções personalizadas em Python para facilitar a escrita. A "
 "esse respeito, também agradeço"
 
@@ -1969,9 +1970,7 @@ msgstr "Enviar email para"
 msgid "if I forgot anyone"
 msgstr "se eu esqueci de alguém"
 
-#: main/templates/index-mctest.html:16 main/templates/index-vision.html:16
-#: main/templates/index-vision.html:410 main/templates/index.html:16
-#: main/templates/index.html:412
+#: main/templates/index-mctest.html:16
 msgid "webMCTest"
 msgstr ""
 
@@ -2213,11 +2212,10 @@ msgstr ""
 #: main/templates/index-mctest.html:350 main/templates/index-vision.html:349
 #: main/templates/index.html:351
 msgid ""
-"Welcome to <em>webMCTest</em>, a website designed to assist with exams "
+"Welcome to <em>MCTest</em>, a website designed to assist with exams "
 "preparation and correction."
 msgstr ""
-"Bem vindo ao <em>webMCTest</em>, um portal para a geração e correção de "
-"exames."
+"Bem vindo ao <em>MCTest</em>, um portal para a geração e correção de exames."
 
 #: main/templates/index-mctest.html:357 main/templates/index-vision.html:363
 #: main/templates/index.html:365
@@ -2226,8 +2224,8 @@ msgstr "Conteúdo dinâmico"
 
 #: main/templates/index-mctest.html:359 main/templates/index-vision.html:365
 #: main/templates/index.html:367
-msgid "The webMCTest has the following record counts"
-msgstr "O webMCTest tem os seguintes contadores"
+msgid "The MCTest has the following record counts"
+msgstr "O MCTest tem os seguintes contadores"
 
 #: main/templates/index-mctest.html:361 main/templates/index-vision.html:369
 #: main/templates/index.html:371
@@ -2321,6 +2319,11 @@ msgstr "Último Acesso"
 #: main/templates/index.html:658
 msgid "Send improvement suggestions to"
 msgstr "Enviar sugestões de melhoria para"
+
+#: main/templates/index-vision.html:16 main/templates/index-vision.html:410
+#: main/templates/index.html:16 main/templates/index.html:412
+msgid "MCTest"
+msgstr ""
 
 #: main/templates/index-vision.html:16 main/templates/index.html:16
 msgid "development"
@@ -2511,15 +2514,14 @@ msgstr "ou"
 
 #: main/templates/readme.html:14
 msgid ""
-"Welcome to webMCTest, a website devoted to assist in preparing and "
-"correcting exams"
+"Welcome to MCTest, a website devoted to assist in preparing and correcting "
+"exams"
 msgstr ""
-"Bem vindo ao <em>webMCTest</em>, um portal para a geração e correção de "
-"exames"
+"Bem vindo ao <em>MCTest</em>, um portal para a geração e correção de exames"
 
 #: main/templates/readme.html:16
-msgid "WebMCtest is a free open-source software (see"
-msgstr "webMCTest é um sofware livre e de código aberto (veja"
+msgid "MCTest is a free open-source software (see"
+msgstr "MCTest é um sofware livre e de código aberto (veja"
 
 #: main/templates/readme.html:18
 msgid ""
@@ -2543,18 +2545,18 @@ msgstr "URL final :8000 é para desenvolvimento"
 
 #: main/templates/readme.html:30
 msgid ""
-"Help us spread webMCtest. If more people use it, the faster the improvements"
+"Help us spread MCTest. If more people use it, the faster the improvements"
 msgstr ""
-"Ajude-nos a divulgar o webMCtest. Se mais pessoas utilizarem, mais rápidas "
+"Ajude-nos a divulgar o MCtest. Se mais pessoas utilizarem, mais rápidas "
 "serão as melhorias"
 
 #: main/templates/readme.html:31
 msgid ""
-"WebMCtest must be installed on an Ubuntu 18.04 server through ports 3306 and "
+"MCTest must be installed on an Ubuntu 18.04 server through ports 3306 and "
 "8000"
 msgstr ""
-"O webMCtest deve ser instalado em um servidor Ubuntu 18.04 através das "
-"portas 3306 e 8000"
+"O MCtest deve ser instalado em um servidor Ubuntu 18.04 através das portas "
+"3306 e 8000"
 
 #: main/templates/readme.html:32
 msgid "Define specific data in the file "
@@ -2565,8 +2567,8 @@ msgid "After downloading in "
 msgstr "Após baixar em"
 
 #: main/templates/readme.html:39
-msgid "install webMCTest with"
-msgstr "instalar webMCTest com"
+msgid "install MCTest with"
+msgstr "instalar MCTest com"
 
 #: main/templates/readme.html:47
 msgid "Future Improvements"
@@ -2639,50 +2641,62 @@ msgstr ""
 "alunos"
 
 #: main/templates/readme.html:95
-msgid "Adapt the Android application to this version of webMCTest"
-msgstr "Adaptar o aplicativo Android a esta versão do webMCTest"
+msgid "Adapt the Android application to this version of MCTest"
+msgstr "Adaptar o aplicativo Android a esta versão do MCTest"
 
 #: main/templates/readme.html:101
 msgid ""
-"Study the integration of webMCTest with other systems, for example, SIGAA "
-"and Moodle, sharing different databases"
+"Study the integration of MCTest with other systems, for example, SIGAA and "
+"Moodle, sharing different databases"
 msgstr ""
-"Estudar a integração do webMCTest com outros sistemas, por exemplo, SIGAA e "
+"Estudar a integração do MCTest com outros sistemas, por exemplo, SIGAA e "
 "Moodle, compartilhando bancos de dados diferentes"
 
+#: main/templates/readme.html:104
+msgid ""
+"Run the parametric question codes on other servers, similar to those used in "
+"the Moodle VPL plug-in"
+msgstr ""
+"Executar os códigos de questões paramétricos em outros servidores, "
+"semelhante ao usado ​​no plug-in VPL do Moodle"
+
 #: main/templates/readme.html:107
+msgid "Write a complete tutorial to install and use MCTest"
+msgstr "Escrever um tutorial completo para instalar e usar o MCTest"
+
+#: main/templates/readme.html:113
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:114
+#: main/templates/readme.html:120
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:115
+#: main/templates/readme.html:121
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:122
+#: main/templates/readme.html:128
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:123
+#: main/templates/readme.html:129
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:124
+#: main/templates/readme.html:130
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:131
+#: main/templates/readme.html:137
 msgid "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)"
 msgstr ""
 "processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo (FAPESP)"
 
-#: main/templates/readme.html:132
+#: main/templates/readme.html:138
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
@@ -3214,18 +3228,3 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 #: topic/views.py:594
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
-
-#~ msgid "In yellow, answer marked '/' correct answer."
-#~ msgstr "Em amarelo, alternativa marcada '/' alternativa correta"
-
-#~ msgid "See also"
-#~ msgstr "Veja também"
-
-#~ msgid "feedbackStudentsExamText: Differents Exams "
-#~ msgstr "feedbackStudentsExamText: exames diferentes"
-
-#~ msgid "Choose"
-#~ msgstr "Escolher"
-
-#~ msgid "Start a new version with support from FAPESP, n. 2018/23561-1"
-#~ msgstr "Início de uma nova versão com apoio da FAPESP, n. 2018/23561-1"

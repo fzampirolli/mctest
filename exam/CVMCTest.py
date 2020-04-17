@@ -4,7 +4,7 @@ Copyright (C) 2019 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 1.1 (or MCTest 5.1).
 
 Languages: Python 3.7, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
@@ -12,13 +12,13 @@ github.com/fzampirolli/mctest
 You should cite some references included in vision.ufabc.edu.br:8000
 in any publication about it.
 
-webMCTest is free software: you can redistribute it and/or modify
+MCTest is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License
 (gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) 
 any later version.
 
-webMCTest is distributed in the hope that it will be useful,
+MCTest is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
@@ -1654,10 +1654,10 @@ class cvMCTest(object):
         myserver = webMCTest_SERVER
 
         # Assunto do email
-        assunto = "Mensagem enviada automaticamente por webMCTest"
+        assunto = "Mensagem enviada automaticamente por MCTest"
 
         mensagem += "\n" + "Message sent automatically"
-        mensagem += "\n" + "WebMCTest project coordinator:" + " Prof. Francisco - email fzampirolli@ufabc.edu.br.\n"
+        mensagem += "\n" + "MCTest project coordinator:" + " Prof. Francisco - email fzampirolli@ufabc.edu.br.\n"
         mensagem += "\n\n" + "Notice: This is an automated message, the responses are not monitored.\n"
 
         # mensagem += "\n\n" + "* Atenção: Essa é uma mensagem automática, as respostas não são monitoradas.\n"

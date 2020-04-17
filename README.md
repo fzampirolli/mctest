@@ -1,8 +1,8 @@
-# mctest v. 5.1 (or webMCTest 1.1)
+# MCTest v. 5.1 (or webMCTest 1.1)
 
-Welcome to webMCTest, a website devoted to assist in preparing and correcting exams.
+Welcome to MCTest, a website devoted to assist in preparing and correcting exams.
 
-WebMCtest is a free open-source software (see [License](License.txt)), and its best 
+MCTest is a free open-source software (see [License](License.txt)), and its best 
 advantage is the handling to parametric questions through 
 ![equation](http://latex.codecogs.com/gif.latex?\LaTeX) and Python, 
 **allowing for infinite variations of each same question**.
@@ -10,14 +10,14 @@ advantage is the handling to parametric questions through
 Please access [vision.ufabc.edu.br:8000](http://vision.ufabc.edu.br:8000)
 for some [examples](http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/).
 
-#### Help us spread webMCtest. If more people use it, the faster the improvements.
+#### Help us spread MCTest. If more people use it, the faster the improvements.
 
-WebMCtest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000.
+MCTest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000.
 
 Define specific data in the file [_settings.env](_settings.env).
 
 ### After downloading in [github.com/fzampirolli/mctest](https://github.com/fzampirolli/mctest), 
-install webMCTest with:
+install MCTest with:
 ```
 sudo su
 source _setup_all.sh 
@@ -59,9 +59,9 @@ source _setup_all.sh
 
 10) Use Markdown to describe questions and send exams or activities to students;
 
-11) Adapt the Android application to this version of webMCTest [[ref15](http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf), [ref16b](https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394)];
+11) Adapt the Android application to this version of MCTest [[ref15](http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf), [ref16b](https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394)];
 
-12) Study the integration of webMCTest with other systems, for example, SIGAA and Moodle, sharing different databases.
+12) Study the integration of MCTest with other systems, for example, SIGAA and Moodle, sharing different databases.
 ---
 ### Versions 
 

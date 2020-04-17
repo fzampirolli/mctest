@@ -12,13 +12,13 @@ github.com/fzampirolli/mctest
 You should cite some references included in vision.ufabc.edu.br:8000
 in any publication about it.
 
-webMCTest is free software: you can redistribute it and/or modify
+MCTest is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License
 (gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) 
 any later version.
 
-webMCTest is distributed in the hope that it will be useful,
+MCTest is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
@@ -508,7 +508,7 @@ _inst1_
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
 
-        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{webMCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (instURL)
+        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (instURL)
 
         str1 += '\n\n \\hfill \\tiny{{\\color{red}\#' + str(exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
 

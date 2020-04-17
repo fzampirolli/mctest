@@ -563,7 +563,7 @@ msgid "ImportClassroomsDiscipline: choose a CSV following the model"
 msgstr ""
 
 #: course/views.py:83
-msgid "ImportClassroomsDiscipline: The teacher is not registered in webMCTest"
+msgid "ImportClassroomsDiscipline: The teacher is not registered in MCTest"
 msgstr ""
 
 #: course/views.py:92
@@ -1269,7 +1269,7 @@ msgid "Answer Feedback"
 msgstr ""
 
 #: topic/templates/base_generic.html:19 topic/templates/index.html:6
-msgid "webMCTest"
+msgid "MCTest"
 msgstr ""
 
 #: topic/templates/base_generic.html:20
@@ -1331,7 +1331,7 @@ msgstr ""
 
 #: topic/templates/index.html:12
 msgid ""
-"Welcome to <em>webMCTest</em>, a website designed to assist with exams "
+"Welcome to <em>MCTest</em>, a website designed to assist with exams "
 "preparation and correction."
 msgstr ""
 
@@ -1340,7 +1340,7 @@ msgid "Dynamic content"
 msgstr ""
 
 #: topic/templates/index.html:16
-msgid "The webMCTest has the following record counts"
+msgid "The MCTest has the following record counts"
 msgstr ""
 
 #: topic/templates/index.html:16

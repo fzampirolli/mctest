@@ -11,9 +11,9 @@
 
                 <hr>
 
-                <p>{% trans "Welcome to webMCTest, a website devoted to assist in preparing and correcting exams" %}.</p>
+                <p>{% trans "Welcome to MCTest, a website devoted to assist in preparing and correcting exams" %}.</p>
                 <p>
-                    {% trans "WebMCtest is a free open-source software (see" %}
+                    {% trans "MCTest is a free open-source software (see" %}
                     <a href="{% url 'main:license' %}">{% trans "License" %}</a>)
                     {% trans "and its best advantage is the handling to parametric questions through LaTeX and Python, allowing for infinite variations of each same question" %}.
                 </p>
@@ -27,8 +27,8 @@
 
                 </p>
                 <p>
-                <h6>{% trans "Help us spread webMCtest. If more people use it, the faster the improvements" %}.</h6></p>
-                <p>{% trans "WebMCtest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000" %}.</p>
+                <h6>{% trans "Help us spread MCTest. If more people use it, the faster the improvements" %}.</h6></p>
+                <p>{% trans "MCTest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000" %}.</p>
                 <p>{% trans "Define specific data in the file " %}
                     <a href="http://vision.ufabc.edu.br/static/_settings.env">_settings.env</a>.
                 </p>
@@ -36,7 +36,7 @@
                 <h6>
                     {% trans "After downloading in " %}
                     <a href="http://github.com/fzampirolli/mctest">github.com/fzampirolli/mctest</a>
-                    {% trans "install webMCTest with" %}:
+                    {% trans "install MCTest with" %}:
                 </h6>
                 <ol>
                 <pre>
@@ -89,16 +89,22 @@
                         <p>{% trans "Improve of Item Response Theory;  " %};</p>
                     </li>
                     <li>
-                        <p>{% trans "Use Markdown to describe questions and send exams or activities to students" %}.</p>
+                        <p>{% trans "Use Markdown to describe questions and send exams or activities to students" %};</p>
                     </li>
                     <li>
-                        <p>{% trans "Adapt the Android application to this version of webMCTest" %} [<a
+                        <p>{% trans "Adapt the Android application to this version of MCTest" %} [<a
                                 href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a>, <a
-                                href="https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394">ref16b</a>].
+                                href="https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394">ref16b</a>];
                         </p>
                     </li>
                     <li>
-                        <p>{% trans "Study the integration of webMCTest with other systems, for example, SIGAA and Moodle, sharing different databases" %}.</p>
+                        <p>{% trans "Study the integration of MCTest with other systems, for example, SIGAA and Moodle, sharing different databases" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Run the parametric question codes on other servers, similar to those used in the Moodle VPL plug-in" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Write a complete tutorial to install and use MCTest" %}.</p>
                     </li>
                 </ol>
 
@@ -117,7 +123,7 @@
                     </li>
                     <p></p>
                     <li>
-                        <p><strong>webMCTest 1.1</strong></p>
+                        <p><strong>webMCTest 1.1 (MCTest 5.1)</strong></p>
                         <ul>
                             <li>{% trans "August 2019" %}</li>
                             <li>{% trans "New graphical interfaces" %}</li>
@@ -126,7 +132,7 @@
                     </li>
                     <p></p>
                     <li>
-                        <p><strong>webMCTest 1.2</strong></p>
+                        <p><strong>webMCTest 1.2 (MCTest 5.2)</strong></p>
                         <ul>
                             <li>{% trans "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)" %}</li>
                             <li>{% trans "Title: A universal system for generation and correction automatic of parametrized questions" %}</li>

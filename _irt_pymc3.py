@@ -135,7 +135,7 @@ print (msg)
 
 myporta = 587
 myserver = webMCTest_SERVER
-assunto = "Mensagem enviada automaticamente por webMCTest com estatíticas das correções"
+assunto = "Mensagem enviada automaticamente por MCTest com estatíticas das correções"
 envia_email(webMCTest_SERVER,
             myporta,
             webMCTest_FROM,

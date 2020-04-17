@@ -12,13 +12,13 @@ github.com/fzampirolli/mctest
 You should cite some references included in vision.ufabc.edu.br:8000
 in any publication about it.
 
-webMCTest is free software: you can redistribute it and/or modify
+MCTest is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License
 (gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) 
 any later version.
 
-webMCTest is distributed in the hope that it will be useful,
+MCTest is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
@@ -90,7 +90,7 @@ def ImportClassroomsDiscipline(request, pk):
                     if [i for u in discipline.courses.all() for i in u.institutes.all() if
                         i.institute_url[4:] == emailProf[emailProf.find('@') + 1:]]:
                         messages.error(request,
-                                       _('ImportClassroomsDiscipline: The teacher is not registered in webMCTest'))
+                                       _('ImportClassroomsDiscipline: The teacher is not registered in MCTest'))
                         return render(request, 'exam/exam_errors.html', {})
 
                 for p in User.objects.filter(email=emailProf):  # registrar prof na disciplina, se não estiver
