@@ -68,7 +68,7 @@ source _setup_all.sh
 
 ---
 ### I would like to collaborate with experts to write articles 
-A maximum of 5 per article; Authors' order proportional to the number of pages written; I already have data/implementations for some topics:
+A maximum of 5 authors per article; Authors' order proportional to the number of pages written; I already have data/implementations for some topics:
 
 1) Security in exams using QRcode;
 

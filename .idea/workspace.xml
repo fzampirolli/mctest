@@ -19,19 +19,22 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/fzampirolli.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fzampirolli.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pdfQuestion/fzampirolli.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report_Exam_129_variations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmpGAB/200311-1587130663687;294;129;386604617;0;0;2;1;0;0;0;0;5;.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmpGAB/200311-1587130795739;294;129;386604617;0;0;2;1;0;0;0;0;5;.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sshConfigs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sshConfigs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+    <list default="true" id="ebf356a0-b4d3-4845-9d55-bcc21a40d3ee" name="Default Changelist" comment="change new GUI">
+      <change afterPath="$PROJECT_DIR$/mysql-2020-04-17.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysql-2020-04-17.tar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mctest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mctest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_setup-all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/_setup-all.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exam/UtilsLatex.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/UtilsLatex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mctest/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mctest/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/course/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exam/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/exam/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.mo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/locale/pt/LC_MESSAGES/django.po" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/templates/readme.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/readme.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/student/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/student/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/topic/migrations/0001_initial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,9 +88,6 @@
     <option name="WARN_ABOUT_CRLF" value="false" />
     <option name="WARN_ABOUT_DETACHED_HEAD" value="false" />
   </component>
-  <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="5cfdd7a0-9080-4f93-b8c2-6e9ee03a2ac0" />
-  </component>
   <component name="GithubProjectSettings">
     <option name="CREATE_PULL_REQUEST_DEFAULT_BRANCH" value="master" />
     <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_USER" value="fzampirolli" />
@@ -117,7 +117,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/main/templates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -131,19 +131,19 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/main/templates" />
-      <recent name="$PROJECT_DIR$/topic/templates" />
-      <recent name="$PROJECT_DIR$/main/static" />
-      <recent name="$PROJECT_DIR$/main" />
-      <recent name="$PROJECT_DIR$/topic/static" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/main/templates" />
       <recent name="$PROJECT_DIR$/topic" />
       <recent name="$PROJECT_DIR$/topic/templates/static" />
       <recent name="$PROJECT_DIR$/topic/templates" />
       <recent name="$PROJECT_DIR$/static" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/main/templates" />
+      <recent name="$PROJECT_DIR$/topic/templates" />
+      <recent name="$PROJECT_DIR$/main/static" />
+      <recent name="$PROJECT_DIR$/main" />
     </key>
   </component>
   <component name="RunManager" selected="Django Server.mctest">
@@ -229,8 +229,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="mctest.settings" />
+        <env name="PATH" value="/usr/local/opt/mysql-client/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin" />
       </envs>
-      <option name="SDK_HOME" value="$USER_HOME$/mctest/bin/python" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../venv/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -489,13 +490,15 @@
       <workItem from="1587125339044" duration="3530000" />
       <workItem from="1587128908288" duration="565000" />
       <workItem from="1587129549107" duration="2117000" />
-    </task>
-    <task id="LOCAL-00050" summary="change new GUI">
-      <created>1572702617422</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1572702617423</updated>
+      <workItem from="1587157169897" duration="535000" />
+      <workItem from="1587157864999" duration="525000" />
+      <workItem from="1587159516400" duration="878000" />
+      <workItem from="1587161234948" duration="480000" />
+      <workItem from="1587162247478" duration="685000" />
+      <workItem from="1587163156000" duration="685000" />
+      <workItem from="1587163980405" duration="3205000" />
+      <workItem from="1587167252352" duration="2994000" />
+      <workItem from="1587202327951" duration="6613000" />
     </task>
     <task id="LOCAL-00051" summary="change new GUI">
       <created>1573224473632</created>
@@ -833,7 +836,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587128317712</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="change new GUI">
+      <created>1587210092761</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1587210092762</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -915,13 +925,6 @@
         </entry>
       </map>
     </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="1" value="TOOL_WINDOW" />
-        <entry key="2" value="TOOL_WINDOW" />
-        <entry key="3" value="TOOL_WINDOW" />
-      </map>
-    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
@@ -939,74 +942,105 @@
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="302" y="85" key="#Deployment" timestamp="1587129602954">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="268" y="57" key="#Deployment" timestamp="1587210618938">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state x="268" y="57" key="#Deployment/0.0.1280.800@0.0.1280.800" timestamp="1587210618938" />
     <state x="302" y="85" key="#Deployment/0.23.1440.877@0.23.1440.877" timestamp="1587129602954" />
-    <state x="286" y="72" key="#SSH_Configurations" timestamp="1587129600682">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="254" y="45" key="#SSH_Configurations" timestamp="1587210614661">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state x="254" y="45" key="#SSH_Configurations/0.0.1280.800@0.0.1280.800" timestamp="1587210614661" />
     <state x="286" y="72" key="#SSH_Configurations/0.23.1440.877@0.23.1440.877" timestamp="1587129600682" />
-    <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579138421559">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="176" y="175" key="#TODO" timestamp="1587211200449">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state x="176" y="175" key="#TODO/0.0.1280.800@0.0.1280.800" timestamp="1587211200449" />
+    <state x="209" y="101" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587169748944">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="209" y="101" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.777@0.23.1280.777" timestamp="1587169748944" />
     <state x="296" y="111" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1579138421559" />
     <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1585950376379">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="582" y="232" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1585950376379" />
-    <state x="540" y="202" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1587125171748">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="480" y="182" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1587157408447">
+      <screen x="0" y="23" width="1280" height="777" />
     </state>
+    <state x="480" y="182" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1280.777@0.23.1280.777" timestamp="1587157408447" />
     <state x="540" y="202" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1440.877@0.23.1440.877" timestamp="1587125171748" />
-    <state x="303" y="51" key="CommitChangelistDialog2" timestamp="1587128317489">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="341" y="23" key="#mctest" timestamp="1587164150050">
+      <screen x="0" y="23" width="1280" height="777" />
     </state>
+    <state x="341" y="23" key="#mctest/0.23.1280.777@0.23.1280.777" timestamp="1587164150050" />
+    <state x="0" y="0" width="1280" height="777" key="CommitChangelistDialog2" timestamp="1587211240158">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="0" y="0" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1587211240158" />
+    <state x="0" y="23" width="1280" height="777" key="CommitChangelistDialog2/0.23.1280.777@0.23.1280.777" timestamp="1587159583948" />
     <state x="303" y="51" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1587128317489" />
     <state x="100" y="120" width="1240" height="683" key="DiffContextDialog" timestamp="1583928517704">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="100" y="120" width="1240" height="683" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1583928517704" />
-    <state width="1198" height="2" key="GridCell.Tab.0.bottom" timestamp="1587130922365">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="503" y="149" width="630" height="628" key="EnvironmentVariablesDialog" timestamp="1587159755645">
+      <screen x="0" y="23" width="1280" height="777" />
     </state>
+    <state x="503" y="149" width="630" height="628" key="EnvironmentVariablesDialog/0.23.1280.777@0.23.1280.777" timestamp="1587159755645" />
+    <state width="1238" height="195" key="GridCell.Tab.0.bottom" timestamp="1587210625488">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="195" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1587210625488" />
     <state width="1398" height="203" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1587125976909" />
+    <state width="1046" height="253" key="GridCell.Tab.0.bottom/0.23.1280.777@0.23.1280.777" timestamp="1587171307022" />
     <state width="1198" height="2" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1587130922365" />
-    <state width="1198" height="2" key="GridCell.Tab.0.center" timestamp="1587130922364">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state width="1238" height="195" key="GridCell.Tab.0.center" timestamp="1587210625486">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state width="1238" height="195" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1587210625486" />
     <state width="1398" height="203" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1587125976908" />
+    <state width="1046" height="253" key="GridCell.Tab.0.center/0.23.1280.777@0.23.1280.777" timestamp="1587171306996" />
     <state width="1198" height="2" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1587130922364" />
-    <state width="1198" height="2" key="GridCell.Tab.0.left" timestamp="1587130922363">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state width="1238" height="195" key="GridCell.Tab.0.left" timestamp="1587210625485">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state width="1238" height="195" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1587210625485" />
     <state width="1398" height="203" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1587125976907" />
+    <state width="1046" height="253" key="GridCell.Tab.0.left/0.23.1280.777@0.23.1280.777" timestamp="1587171306995" />
     <state width="1198" height="2" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1587130922363" />
-    <state width="1198" height="2" key="GridCell.Tab.0.right" timestamp="1587130922365">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state width="1238" height="195" key="GridCell.Tab.0.right" timestamp="1587210625487">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state width="1238" height="195" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1587210625487" />
     <state width="1398" height="203" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1587125976908" />
+    <state width="1046" height="253" key="GridCell.Tab.0.right/0.23.1280.777@0.23.1280.777" timestamp="1587171307013" />
     <state width="1198" height="2" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1587130922365" />
-    <state x="333" y="88" width="1072" height="722" key="SettingsEditor" timestamp="1579094167156">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="296" y="78" width="953" height="722" key="SettingsEditor" timestamp="1587169635862">
+      <screen x="0" y="23" width="1280" height="777" />
     </state>
+    <state x="296" y="78" width="953" height="722" key="SettingsEditor/0.23.1280.777@0.23.1280.777" timestamp="1587169635862" />
     <state x="333" y="88" width="1072" height="722" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1579094167156" />
-    <state x="465" y="189" key="Vcs.Push.Dialog.v2" timestamp="1587128333563">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="413" y="151" key="Vcs.Push.Dialog.v2" timestamp="1587210107490">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state x="413" y="151" key="Vcs.Push.Dialog.v2/0.0.1280.800@0.0.1280.800" timestamp="1587210107490" />
     <state x="465" y="189" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1587128333563" />
     <state x="430" y="52" width="904" height="848" key="find.popup" timestamp="1587131903666">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="430" y="29" width="904" height="871" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1587125833801" />
     <state x="430" y="52" width="904" height="848" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1587131903666" />
-    <state x="497" y="247" key="git4idea.merge.GitPullDialog" timestamp="1586336930470">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="442" y="221" key="git4idea.merge.GitPullDialog" timestamp="1587163177057">
+      <screen x="0" y="23" width="1280" height="777" />
     </state>
+    <state x="442" y="221" key="git4idea.merge.GitPullDialog/0.23.1280.777@0.23.1280.777" timestamp="1587163177057" />
     <state x="497" y="247" key="git4idea.merge.GitPullDialog/0.23.1440.877@0.23.1440.877" timestamp="1586336930470" />
-    <state x="662" y="349" key="publish.login" timestamp="1587131794442">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="588" y="298" key="publish.login" timestamp="1587210534449">
+      <screen x="0" y="0" width="1280" height="800" />
     </state>
+    <state x="588" y="298" key="publish.login/0.0.1280.800@0.0.1280.800" timestamp="1587210534449" />
+    <state x="588" y="312" key="publish.login/0.23.1280.777@0.23.1280.777" timestamp="1587166602534" />
     <state x="662" y="349" key="publish.login/0.23.1440.877@0.23.1440.877" timestamp="1587131794442" />
     <state x="478" y="212" width="670" height="676" key="search.everywhere.popup" timestamp="1586202306856">
       <screen x="0" y="23" width="1440" height="877" />
@@ -1061,7 +1095,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/mctest$.coverage" NAME=" Coverage Results" MODIFIED="1569586836741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/mctest$Test__.coverage" NAME="Test:  Coverage Results" MODIFIED="1567198461579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/mctest$.coverage" NAME=" Coverage Results" MODIFIED="1569586836741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

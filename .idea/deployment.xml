@@ -9,20 +9,6 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="acessivel">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="mctest">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="nubisys.ufabc.edu.br">
         <serverdata>
           <mappings>

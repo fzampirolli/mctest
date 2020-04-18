@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-18 08:39-0300\n"
+"POT-Creation-Date: 2020-04-18 08:48-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2666,8 +2666,8 @@ msgid "Collaboration proposal with experts to write articles"
 msgstr "Propostas de colaborações com especialistas para escrever artigos"
 
 #: main/templates/readme.html:115
-msgid "A maximum of 5 per article"
-msgstr "Máximo de 5 por artigo"
+msgid "A maximum of 5 authors per article"
+msgstr "Máximo de 5 autores por artigo"
 
 #: main/templates/readme.html:116
 msgid "Authors' order proportional to the number of pages written"
