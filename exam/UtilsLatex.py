@@ -36,6 +36,7 @@ import time
 import unicodedata
 import zlib
 import datetime
+import csv
 
 import bcrypt
 import numpy as np
@@ -51,8 +52,36 @@ from django.http import Http404
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
 
-
 class Utils(object):
+
+    # create template of all variations in varia_gab_all
+    @staticmethod
+    def sendMailTemplates(exam, listao, path_to_file_TEMPLATES):
+        contVaria = 0
+        letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+        varia_gab_header = ['variation']
+        for i in range(int(Utils.getNumMCQuestions(exam)) + int(exam.exam_number_of_questions_text)):
+            varia_gab_header.append('Q' + str(i + 1))
+        varia_gab_all = [varia_gab_header]
+        for varia in listao:
+            qts = varia[0]
+            contVaria += 1
+            varia_gab = [str(contVaria)]
+            for q in qts.split(';'):
+                if len(q):
+                    q_str = q[-int(exam.exam_number_of_anwsers_question):]
+                    q_ind = q_str.find('0')
+                    varia_gab.append(letras_1[q_ind])
+            for qt in range(int(exam.exam_number_of_questions_text)):
+                varia_gab.append('Q' + str(qt + 1 + int(Utils.getNumMCQuestions(exam))))
+            if varia_gab:
+                varia_gab_all.append(varia_gab)
+
+        if varia_gab_all:
+            with open(path_to_file_TEMPLATES, 'w') as data:
+                writer = csv.writer(data)
+                for varia in varia_gab_all:
+                    writer.writerow(varia)
 
     # return test case between begin{comment} and end{comment}
     @staticmethod
@@ -849,11 +878,14 @@ _inst1_
                 for a in random.sample(ans, len(ans)):
 
                     stra += str(ans.index(a))
-                    if ans.index(a) == 0:
-                        str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}\#%s}}%s" % (str(ans.index(a)), a)
+                    if exam.exam_student_feedback: # se enviar pdf ao aluno, retira gabarito
+                        str1 += "\n\n\\choice %s" % a
                     else:
-                        str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (
-                        str(ans.index(a)), a)
+                        if ans.index(a) == 0:
+                            str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}\#%s}}%s" % (str(ans.index(a)), a)
+                        else:
+                            str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (
+                            str(ans.index(a)), a)
 
                 str1 += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
 

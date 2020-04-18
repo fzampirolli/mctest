@@ -629,6 +629,7 @@ def generate_page(request, pk):
 
     path_to_file_REPORT = BASE_DIR + "/report_Exam_" + str(pk) + ".csv"
     path_to_file_VARIATIONS = BASE_DIR + "/report_Exam_" + str(pk) + "_variations.csv"
+    path_to_file_TEMPLATES = BASE_DIR + "/report_Exam_" + str(pk) + "_templates.csv"
     # raise Http404("oi00")
     if request.POST:
         countStudentsAll = 0
@@ -643,8 +644,22 @@ def generate_page(request, pk):
         listao = []  ############ gera X variacoes de exames
         for i in range(int(exam.exam_variations)):
             listao.append(Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam)))
+
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+
+        try:
+            Utils.sendMailTemplates(exam,listao,path_to_file_TEMPLATES)
+            message_cases = 'Following templates for all variations\n\n'
+            cvMCTest.envia_email(webMCTest_SERVER,
+                                 587,
+                                 webMCTest_FROM,
+                                 webMCTest_PASS,
+                                 str(request.user),
+                                 'MCTest: Templates of all variations: ' + str(exam.exam_name) + ' - ' + data_hora,
+                                 message_cases, [path_to_file_TEMPLATES])
+        except:
+            pass
 
         print("generate_page-03-"+str(datetime.datetime.now()))
         # send by email all case tests of moodle
@@ -668,7 +683,7 @@ def generate_page(request, pk):
                                  webMCTest_FROM,
                                  webMCTest_PASS,
                                  str(request.user),
-                                 'case test of moodle - Exam: ' + str(exam.exam_name) + ' - ' + data_hora,
+                                 'MCTest: case test of moodle - Exam: ' + str(exam.exam_name) + ' - ' + data_hora,
                                  message_cases, anexos)
 
         storage = get_messages(request)
@@ -717,7 +732,7 @@ def generate_page(request, pk):
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     hash_num = Utils.distro_table(s.student_name)
-                    listVariations.append([room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
+                    listVariations.append([room.classroom_code, s.student_ID, s.student_name, (hash_num % int(exam.exam_variations)) + 1])
                     if hash_num == -1:
                         messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
                         return render(request, 'exam/exam_errors.html', {})
