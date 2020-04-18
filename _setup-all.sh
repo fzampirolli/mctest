@@ -282,5 +282,10 @@ sudo rm *.csv
 
 mysql -u root -p DB_MCTest < "mysql-2019-12-07.sql"
 
-
+# write code documentation
+pip3 install Sphinx
+sphinx-quickstart
+make html
+make man
+make spelling
 '
