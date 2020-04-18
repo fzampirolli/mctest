@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 09:54-0300\n"
+"POT-Creation-Date: 2020-04-18 08:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -360,7 +360,7 @@ msgid "Code"
 msgstr "Código"
 
 #: course/templates/classroom/classroom_create.html:39
-#: course/templates/classroom/classroom_update.html:88 exam/UtilsLatex.py:461
+#: course/templates/classroom/classroom_update.html:88 exam/UtilsLatex.py:464
 msgid "Room"
 msgstr "Sala"
 
@@ -427,7 +427,7 @@ msgstr "Detalhar Turma"
 #: course/templates/classroom/classroom_detail.html:16
 #: course/templates/classroom/classroom_list_who_created_user.html:64
 #: course/templates/discipline/discipline_detail.html:168 course/views.py:149
-#: exam/UtilsLatex.py:460
+#: exam/UtilsLatex.py:463
 msgid "Classroom"
 msgstr "Turma"
 
@@ -454,7 +454,7 @@ msgstr "ID"
 
 #: course/templates/classroom/classroom_detail.html:43
 #: course/templates/classroom/classroom_detail.html:111 exam/CVMCTest.py:1541
-#: exam/UtilsLatex.py:470 exam/UtilsLatex.py:525 exam/models.py:201
+#: exam/UtilsLatex.py:473 exam/UtilsLatex.py:528 exam/models.py:201
 #: exam/models.py:237
 msgid "Student"
 msgstr "Estudante"
@@ -576,7 +576,7 @@ msgstr "Código da Turma"
 #: course/templates/classroom/classroom_list_who_created_user.html:21
 #: course/templates/course/course_detail.html:75
 #: course/templates/discipline/discipline_detail.html:16
-#: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:459
+#: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:462
 #: exam/templates/exam/exam_list.html:21
 #: exam/templates/exam/exam_list_who_created_user.html:22
 #: topic/templates/topic/topic_list.html:23
@@ -1029,7 +1029,7 @@ msgstr ""
 msgid "Grade"
 msgstr "Nota"
 
-#: exam/CVMCTest.py:1550 exam/UtilsLatex.py:1000
+#: exam/CVMCTest.py:1550 exam/UtilsLatex.py:1003
 msgid "Multiple Choice Questions"
 msgstr "Questões de Múltipla Escolha"
 
@@ -1053,21 +1053,21 @@ msgstr "Retorno"
 msgid "Invalid answer!"
 msgstr "Alternativa inválida!"
 
-#: exam/UtilsLatex.py:420 exam/UtilsLatex.py:463 exam/forms.py:142
+#: exam/UtilsLatex.py:423 exam/UtilsLatex.py:466 exam/forms.py:142
 #: exam/models.py:164 exam/templates/exam/exam_update2.html:390
 msgid "Instructions"
 msgstr "Instruções"
 
-#: exam/UtilsLatex.py:464
+#: exam/UtilsLatex.py:467
 msgid "Prof."
 msgstr "Prof."
 
-#: exam/UtilsLatex.py:465 exam/forms.py:130 exam/models.py:150
+#: exam/UtilsLatex.py:468 exam/forms.py:130 exam/models.py:150
 #: exam/templates/exam/exam_update2.html:367
 msgid "Term"
 msgstr "Período"
 
-#: exam/UtilsLatex.py:466 exam/models.py:196 exam/models.py:232
+#: exam/UtilsLatex.py:469 exam/models.py:196 exam/models.py:232
 #: exam/templates/exam/exam_detail.html:15
 #: exam/templates/exam/exam_list.html:23 exam/templates/exam/exam_list.html:86
 #: exam/templates/exam/exam_list_who_created_user.html:24
@@ -1075,19 +1075,19 @@ msgstr "Período"
 msgid "Exam"
 msgstr "Exame"
 
-#: exam/UtilsLatex.py:467 exam/templates/exam/exam_update2.html:360
+#: exam/UtilsLatex.py:470 exam/templates/exam/exam_update2.html:360
 msgid "Date"
 msgstr "Data"
 
-#: exam/UtilsLatex.py:469 exam/UtilsLatex.py:524
+#: exam/UtilsLatex.py:472 exam/UtilsLatex.py:527
 msgid "ID/RA"
 msgstr ""
 
-#: exam/UtilsLatex.py:505
+#: exam/UtilsLatex.py:508
 msgid "Sig."
 msgstr "Ass."
 
-#: exam/UtilsLatex.py:555
+#: exam/UtilsLatex.py:558
 msgid ""
 "validateNumQuestions: The number of selected multiple-choice questions is "
 "inconsistent"
@@ -1095,20 +1095,20 @@ msgstr ""
 "validateNumQuestions: o número de questões de múltipla-escolha escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:559
+#: exam/UtilsLatex.py:562
 msgid "validateNumQuestions: the number of Text questions is inconsistent"
 msgstr ""
 "validateNumQuestions: o número de questões dissertativa escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:564
+#: exam/UtilsLatex.py:567
 msgid ""
 "validateNumQuestions: You chose Both. Is it right? Number of QM questions >=3"
 msgstr ""
 "validateNumQuestions: você escolher Ambos. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:569
+#: exam/UtilsLatex.py:572
 msgid ""
 "validateNumQuestions: You chose Anwsers. Is it right? Number of QM questions "
 ">=3"
@@ -1116,7 +1116,7 @@ msgstr ""
 "validateNumQuestions: você escolhe Alternativas. Isto está correto? Número "
 "de questões QM >=3"
 
-#: exam/UtilsLatex.py:574
+#: exam/UtilsLatex.py:577
 msgid ""
 "validateNumQuestions: You chose Questions. Is it right? Number of QM "
 "questions >=2"
@@ -1124,27 +1124,27 @@ msgstr ""
 "validateNumQuestions: você escolher Questões. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:585
+#: exam/UtilsLatex.py:588
 msgid "validateNumQuestions: number of QM difficulty questions var1"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var1"
 
-#: exam/UtilsLatex.py:588
+#: exam/UtilsLatex.py:591
 msgid "validateNumQuestions: number of QM difficulty questions var2"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var2"
 
-#: exam/UtilsLatex.py:591
+#: exam/UtilsLatex.py:594
 msgid "validateNumQuestions: number of QM difficulty questions var3"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var3"
 
-#: exam/UtilsLatex.py:594
+#: exam/UtilsLatex.py:597
 msgid "validateNumQuestions: number of QM difficulty questions var4"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var4"
 
-#: exam/UtilsLatex.py:597
+#: exam/UtilsLatex.py:600
 msgid "validateNumQuestions: number of QM difficulty questions var5"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var5"
 
-#: exam/UtilsLatex.py:794
+#: exam/UtilsLatex.py:797
 msgid ""
 "drawQuestionsMCDifficulty: Topic of the chosen question does not belong to "
 "the discipline"
@@ -1152,30 +1152,30 @@ msgstr ""
 "drawQuestionsMCDifficulty: Tópico da questão escolhida não pertence à "
 "disciplina "
 
-#: exam/UtilsLatex.py:828
+#: exam/UtilsLatex.py:831
 msgid "drawQuestionsMCDifficulty: Error in parametric question"
 msgstr "drawQuestionsMCDifficulty: erro na questão paramétrica"
 
-#: exam/UtilsLatex.py:836
+#: exam/UtilsLatex.py:839
 msgid ""
 "drawQuestionsMCDifficulty: number of answers different: Exam; Question: "
 msgstr ""
 "drawQuestionsMCDifficulty: número de alternativas são diferentes: Exame; "
 "Questão"
 
-#: exam/UtilsLatex.py:865 exam/UtilsLatex.py:1043
+#: exam/UtilsLatex.py:868 exam/UtilsLatex.py:1046
 msgid "Text Questions"
 msgstr "Questões Dissertativas"
 
-#: exam/UtilsLatex.py:875
+#: exam/UtilsLatex.py:878
 msgid "drawQuestionsTDifficulty: Error in QT question"
 msgstr "drawQuestionsTDifficulty: erro na questão QT"
 
-#: exam/UtilsLatex.py:903
+#: exam/UtilsLatex.py:906
 msgid "drawQuestionsTDifficulty: Error in compression textual questions"
 msgstr "drawQuestionsTDifficulty: erro na compressão da questão dissertativa"
 
-#: exam/UtilsLatex.py:934
+#: exam/UtilsLatex.py:937
 msgid ""
 "drawQuestionsTDifficultyVariations: Topic of the chosen question does not "
 "belong to the discipline"
@@ -1970,8 +1970,10 @@ msgstr "Enviar email para"
 msgid "if I forgot anyone"
 msgstr "se eu esqueci de alguém"
 
-#: main/templates/index-mctest.html:16
-msgid "webMCTest"
+#: main/templates/index-mctest.html:16 main/templates/index-vision.html:16
+#: main/templates/index-vision.html:410 main/templates/index.html:16
+#: main/templates/index.html:412
+msgid "MCTest"
 msgstr ""
 
 #: main/templates/index-mctest.html:58 main/templates/index-mctest.html:74
@@ -2320,11 +2322,6 @@ msgstr "Último Acesso"
 msgid "Send improvement suggestions to"
 msgstr "Enviar sugestões de melhoria para"
 
-#: main/templates/index-vision.html:16 main/templates/index-vision.html:410
-#: main/templates/index.html:16 main/templates/index.html:412
-msgid "MCTest"
-msgstr ""
-
 #: main/templates/index-vision.html:16 main/templates/index.html:16
 msgid "development"
 msgstr "desenvolvimento"
@@ -2665,38 +2662,107 @@ msgid "Write a complete tutorial to install and use MCTest"
 msgstr "Escrever um tutorial completo para instalar e usar o MCTest"
 
 #: main/templates/readme.html:113
+msgid "Collaboration proposal with experts to write articles"
+msgstr "Propostas de colaborações com especialistas para escrever artigos"
+
+#: main/templates/readme.html:115
+msgid "A maximum of 5 per article"
+msgstr "Máximo de 5 por artigo"
+
+#: main/templates/readme.html:116
+msgid "Authors' order proportional to the number of pages written"
+msgstr "Ordem dos autores proporcional ao número de páginas escritas"
+
+#: main/templates/readme.html:117
+msgid "I already have data/implementations for some topics"
+msgstr "Já tenho dados/implementações para alguns tópicos"
+
+#: main/templates/readme.html:122
+msgid "Security in exams using QRcode"
+msgstr "Segurança em exames utilizando QRCode"
+
+#: main/templates/readme.html:125
+msgid ""
+"Exams with multiple-choice questions and different weights in the answers"
+msgstr ""
+"Exames com questões de múltipla-escolha e diferentes pesos nas alternativas"
+
+#: main/templates/readme.html:128
+msgid "Answer sheet design comparisons"
+msgstr "Comparações com diferentes folhas de respostas"
+
+#: main/templates/readme.html:131
+msgid "A case study using Item Response Theory"
+msgstr "Um estudo de casos utilizando Teoria de Resposta ao Item"
+
+#: main/templates/readme.html:134
+msgid ""
+"Individualized online activities with multiple-choice parametric questions"
+msgstr ""
+"Atividades online individualizadas com questões paramétricas de múltipla-"
+"escolha"
+
+#: main/templates/readme.html:137
+msgid "MCTest: Software Requirements Specification"
+msgstr "MCTest: Especificações de Requisitos de Software"
+
+#: main/templates/readme.html:140
+msgid "MCTest: graphic interface"
+msgstr "MCTest: interfaces gráficas"
+
+#: main/templates/readme.html:143
+msgid "MCTest: data base"
+msgstr "MCTest: banco de dados"
+
+#: main/templates/readme.html:146
+msgid "MCTest: software architecture"
+msgstr "MCTest: arquitetura de software"
+
+#: main/templates/readme.html:149
+msgid "MCTest: software deployment"
+msgstr "MCTest: implantação de software"
+
+#: main/templates/readme.html:152
+msgid ""
+"Individualized parametric questions using MCTest+Moodle+VPL (I already have "
+"the 4 co-authors)"
+msgstr ""
+"Questões paramétricas individualizadas utilizando MCTest+Moodle+VPL (já "
+"tenho os 4 co-autores)"
+
+#: main/templates/readme.html:159
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:120
+#: main/templates/readme.html:166
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:121
+#: main/templates/readme.html:167
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:128
+#: main/templates/readme.html:174
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:129
+#: main/templates/readme.html:175
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:130
+#: main/templates/readme.html:176
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:137
+#: main/templates/readme.html:183
 msgid "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)"
 msgstr ""
 "processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo (FAPESP)"
 
-#: main/templates/readme.html:138
+#: main/templates/readme.html:184
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"

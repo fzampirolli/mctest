@@ -16,8 +16,7 @@ MCTest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000.
 
 Define specific data in the file [_settings.env](_settings.env).
 
-### After downloading in [github.com/fzampirolli/mctest](https://github.com/fzampirolli/mctest), 
-install MCTest with:
+### After downloading in [github.com/fzampirolli/mctest](https://github.com/fzampirolli/mctest), install MCTest with:
 ```
 sudo su
 source _setup_all.sh 
@@ -66,6 +65,34 @@ source _setup_all.sh
 13) Run the parametric question codes on other servers, similar to those used in the Moodle VPL plug-in;
 
 14) Write a complete tutorial to install and use MCTest.
+
+---
+### I would like to collaborate with experts to write articles 
+A maximum of 5 per article; Authors' order proportional to the number of pages written; I already have data/implementations for some topics:
+
+1) Security in exams using QRcode;
+
+2) Exams with multiple-choice questions and different weights in the answers;
+
+3) Answer sheet design comparisons;
+
+4) A case study using Item Response Theory;
+
+5) Individualized online activities with multiple-choice parametric questions;
+
+6) MCTest: Software Requirements Specification;
+
+7) MCTest: graphic interface;
+
+8) MCTest: data base;
+
+9) MCTest: software architecture;
+
+10) MCTest: software deployment;
+
+11) Individualized parametric questions using MCTest+Moodle+VPL (I already have the 4 co-authors).
+
+
 ---
 ### Versions 
 
