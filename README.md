@@ -67,7 +67,7 @@ source _setup_all.sh
 14) Write a complete tutorial to install and use MCTest.
 
 ---
-### I would like to collaborate with experts to write articles 
+### I would like to collaborate with experts to write articles or technical reports
 A maximum of 5 authors per article; Authors' order proportional to the number of pages written; I already have data/implementations for some topics:
 
 1) Security in exams using QRcode;
