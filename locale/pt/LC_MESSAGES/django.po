@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 11:06-0300\n"
+"POT-Creation-Date: 2020-04-24 15:55-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1007,7 +1007,7 @@ msgstr "StudentCreate: Já existe ID"
 msgid "StudentCreate: Created Student "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:443 exam/views.py:1073
+#: course/views.py:443 exam/views.py:1074
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1744,66 +1744,66 @@ msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
-#: exam/views.py:668
+#: exam/views.py:669
 msgid "Dear"
 msgstr ""
 
-#: exam/views.py:670
+#: exam/views.py:671
 msgid ""
 "This message contains the test cases to be inserted into moodle for "
 "automatic correction of student submitted codes."
 msgstr ""
 
-#: exam/views.py:671
+#: exam/views.py:672
 msgid "Follow these steps:"
 msgstr ""
 
-#: exam/views.py:673
+#: exam/views.py:674
 msgid ""
 "1. Use the pdf with the exams generated with this date and time (EXACTLY): "
 msgstr ""
 
-#: exam/views.py:674
+#: exam/views.py:675
 msgid "2. Save the following content to the linker.json file (RENAME)"
 msgstr ""
 
-#: exam/views.py:675
+#: exam/views.py:676
 msgid ""
 "3. After you create a Moodle VPL activity, in the runtime files, add linker."
 "json"
 msgstr ""
 
-#: exam/views.py:676
+#: exam/views.py:677
 msgid ""
 "4. Add too other files available at github.com/fzampirolli/mctest/"
 "VPL_modification2"
 msgstr ""
 
-#: exam/views.py:737
+#: exam/views.py:738
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr ""
 
-#: exam/views.py:746
+#: exam/views.py:747
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:808
+#: exam/views.py:809
 msgid "Error: there is no student in classroom(s)."
 msgstr "Error: não existe estudante na(s) turma(s)"
 
-#: exam/views.py:931
+#: exam/views.py:932
 msgid "Invalid Form! Verify if date follows the format, for example."
 msgstr ""
 
-#: exam/views.py:987
+#: exam/views.py:988
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:1002
+#: exam/views.py:1003
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:1021
+#: exam/views.py:1022
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -2658,74 +2658,78 @@ msgstr ""
 "semelhante ao usado ​​no plug-in VPL do Moodle"
 
 #: main/templates/readme.html:107
+msgid "Integrate with MakeTest"
+msgstr "Integrar com MakeTests"
+
+#: main/templates/readme.html:110
 msgid "Write a complete tutorial to install and use MCTest"
 msgstr "Escrever um tutorial completo para instalar e usar o MCTest"
 
-#: main/templates/readme.html:113
+#: main/templates/readme.html:116
 msgid ""
 "Collaboration proposal with experts to write articles or technical reports"
 msgstr ""
 "Propostas de colaborações com especialistas para escrever artigos ou "
 "relatórios técnicos"
 
-#: main/templates/readme.html:115
+#: main/templates/readme.html:118
 msgid "A maximum of 5 authors per article"
 msgstr "Máximo de 5 autores por artigo"
 
-#: main/templates/readme.html:116
+#: main/templates/readme.html:119
 msgid "Authors' order proportional to the number of pages written"
 msgstr "Ordem dos autores proporcional ao número de páginas escritas"
 
-#: main/templates/readme.html:117
+#: main/templates/readme.html:120
 msgid "I already have data/implementations for some topics"
 msgstr "Já tenho dados/implementações para alguns tópicos"
 
-#: main/templates/readme.html:122
+#: main/templates/readme.html:125
 msgid "Security in exams using QRcode"
 msgstr "Segurança em exames utilizando QRCode"
 
-#: main/templates/readme.html:125
+#: main/templates/readme.html:128
 msgid ""
 "Exams with multiple-choice questions and different weights in the answers"
 msgstr ""
 "Exames com questões de múltipla-escolha e diferentes pesos nas alternativas"
 
-#: main/templates/readme.html:128
+#: main/templates/readme.html:131
 msgid "Answer sheet design comparisons"
 msgstr "Comparações com diferentes folhas de respostas"
 
-#: main/templates/readme.html:131
+#: main/templates/readme.html:134
 msgid "A case study using Item Response Theory"
 msgstr "Um estudo de casos utilizando Teoria de Resposta ao Item"
 
-#: main/templates/readme.html:134
+#: main/templates/readme.html:137
 msgid ""
 "Individualized online activities with multiple-choice parametric questions"
 msgstr ""
 "Atividades online individualizadas com questões paramétricas de múltipla-"
 "escolha"
 
-#: main/templates/readme.html:137
+#: main/templates/readme.html:140
 msgid "MCTest: Software Requirements Specification"
 msgstr "MCTest: Especificações de Requisitos de Software"
 
-#: main/templates/readme.html:140
+#: main/templates/readme.html:143
 msgid "MCTest: graphic interface"
 msgstr "MCTest: interfaces gráficas"
 
-#: main/templates/readme.html:143
+#: main/templates/readme.html:146
 msgid "MCTest: data base"
 msgstr "MCTest: banco de dados"
 
-#: main/templates/readme.html:146
+#: main/templates/readme.html:149
 msgid "MCTest: software architecture"
 msgstr "MCTest: arquitetura de software"
 
-#: main/templates/readme.html:149
+#: main/templates/readme.html:152
 msgid "MCTest: software deployment"
 msgstr "MCTest: implantação de software"
 
-#: main/templates/readme.html:152
+#: main/templates/readme.html:155
 msgid ""
 "Individualized parametric questions using MCTest+Moodle+VPL (I already have "
 "the 4 co-authors)"
@@ -2733,39 +2737,39 @@ msgstr ""
 "Questões paramétricas individualizadas utilizando MCTest+Moodle+VPL (já "
 "tenho os 4 co-autores)"
 
-#: main/templates/readme.html:159
+#: main/templates/readme.html:162
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:166
+#: main/templates/readme.html:169
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:167
+#: main/templates/readme.html:170
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:174
+#: main/templates/readme.html:177
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:175
+#: main/templates/readme.html:178
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:176
+#: main/templates/readme.html:179
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:183
+#: main/templates/readme.html:186
 msgid "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)"
 msgstr ""
 "processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo (FAPESP)"
 
-#: main/templates/readme.html:184
+#: main/templates/readme.html:187
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"

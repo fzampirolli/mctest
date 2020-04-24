@@ -326,6 +326,7 @@ def correctStudentsExam(request, pk):
             return render(request, 'exam/exam_errors.html', {})
 
         passou = False
+
         try:
             imgs = cvMCTest.get_images_from_pdf(file)
             passou = True
