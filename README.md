@@ -64,7 +64,7 @@ source _setup_all.sh
 
 13) Run the parametric question codes on other servers, similar to those used in the Moodle VPL plug-in;
 
-14) Integrate with [MakeTest](https://github.com/fernandoteubl/MakeTests);
+14) Integrate with [MakeTests](https://github.com/fernandoteubl/MakeTests);
 
 15) Write a complete tutorial to install and use MCTest.
 

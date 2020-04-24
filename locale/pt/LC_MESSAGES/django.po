@@ -2658,7 +2658,7 @@ msgstr ""
 "semelhante ao usado ​​no plug-in VPL do Moodle"
 
 #: main/templates/readme.html:107
-msgid "Integrate with MakeTest"
+msgid "Integrate with MakeTests"
 msgstr "Integrar com MakeTests"
 
 #: main/templates/readme.html:110
