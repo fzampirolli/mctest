@@ -329,6 +329,11 @@ def ImportStudentsClassroom(request, pk):
                         student_name=nome,
                         student_email=email,
                     )
+                else: # if exists, update name and email
+                    allStudentsEqual = Student.objects.get(student_ID=ra)
+                    allStudentsEqual.student_name=nome
+                    allStudentsEqual.student_email=email
+                    allStudentsEqual.save()
 
                 for s in Student.objects.filter(student_ID=ra):
                     classroom.students.add(s)
