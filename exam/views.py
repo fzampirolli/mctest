@@ -181,7 +181,7 @@ def feedbackStudentsExamText(request, pk):
                 for f in myfiles:
                     if f[0] == str(exam.id) and f[2] == s.student_ID:
                         email = "fzampirolli@gmail.com"
-                        # email = s.student_email
+                        email = s.student_email
                         data_hora = datetime.datetime.now()
                         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
                         file_name = f[6]
@@ -414,10 +414,10 @@ def correctStudentsExam(request, pk):
                         fileMSG.close()
 
                 if countPage < numPAGES - 1:  # salva tb verso
-                    countPage += 1
-                    myfile2 = MYFILES + '_p' + str(countPage) + '.png'
+                    #countPage += 1
+                    #myfile2 = MYFILES + '_p' + str(countPage) + '.png'
 
-                    fileImages = [myfile0, myfile2]
+                    fileImages = [myfile0]#, myfile2]
 
                     flagOK = False  # continua salvando ate achar qrcode ou acabar
                     while not flagOK and countPage < numPAGES - 1:
