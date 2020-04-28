@@ -1,4 +1,4 @@
-# IN_FILES = espalhador.py interpreter.py linker_script.sh vpl_evaluate.cpp vpl_execution.sh vpl_runsh
+# IN_FILES = espalhador.py interpreter.py linker_script.sh vpl_evaluate.cpp vpl_execution.sh vpl_run.sh
 IN_FILES = ./*
 
 COMMAND_TAR = tar
