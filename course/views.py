@@ -52,7 +52,6 @@ def ImportClassroomsDiscipline(request, pk):
     else:
         return HttpResponseRedirect("/")
 
-
     discipline = get_object_or_404(Discipline, pk=pk)
 
     if request.method == 'POST':
@@ -70,12 +69,9 @@ def ImportClassroomsDiscipline(request, pk):
             for s in c.students.all():  # remover os alunos existentes da classe
                 c.students.remove(s)
 
-
-
         mystr4 = '/course/discipline/' + str(pk) + '/update'
         messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
         messages.info(request, _('Discipline name') + ' >> ' + discipline.discipline_name, extra_tags='upper')
-
 
         contS = 0
         for row in f.split('\n'):
@@ -112,6 +108,7 @@ def ImportClassroomsDiscipline(request, pk):
                 sala = r[4].lstrip().rstrip()
                 modo = r[5].lstrip().rstrip()
 
+                '''
                 try:  # ATENCAO: NAO FAZ NADA SE ESTUDANTE JÁ EXISTIR, PARA NAO APAGAR DADOS ANTIGOS NO BD
                     s = Student.objects.get(student_ID=ID)
                     #s.delete()
@@ -122,6 +119,34 @@ def ImportClassroomsDiscipline(request, pk):
                         student_name=nome,
                         student_email=emailSt,
                     )
+                '''
+                try:  # NOTE: update name and email if ID already exists
+                    s_all = Student.objects.filter(student_ID=ID)
+                    if len(s_all) > 1:
+                        for s in s_all:  # delete student equals
+                            if nome == s.student_name:
+                                s.delete()
+
+                    if not s_all:
+                        Student.objects.create(
+                            student_ID=ID,
+                            student_name=nome,
+                            student_email=emailSt,
+                        )
+                    else:  # if exists, update name and email
+                        s = Student.objects.get(student_ID=ID)
+                        s.student_name = nome
+                        s.student_email = emailSt
+                        s.save()
+                except:
+                    pass
+
+                # shows error message if exists more that one student with same ID
+                s_all = Student.objects.filter(student_ID=ID)
+                if len(s_all) > 1:
+                    messages.error(request, _(
+                        'ImportClassroomsDiscipline: exists more that one student with same ID:' + str(s_all)))
+                    return render(request, 'exam/exam_errors.html', {})
 
                 try:
                     c = Classroom.objects.get(classroom_code=codigo)
@@ -300,7 +325,7 @@ def ImportStudentsClassroom(request, pk):
                 r = row.split(';')
 
             if len(r) == 3 or len(r) == 2:
-                ra = r[0].lstrip().rstrip()
+                ID = r[0].lstrip().rstrip()
 
                 nome = r[1].lstrip().rstrip()
                 if len(nome) > 50:
@@ -311,31 +336,38 @@ def ImportStudentsClassroom(request, pk):
                     email = ""
 
                 try:
-                    ra_int = int(ra)
+                    ra_int = int(ID)
                 except:
-                    messages.error(request, _('ImportStudentsClassroom: ID must be digits only: ') + ra + '; ' + nome)
+                    messages.error(request, _('ImportStudentsClassroom: ID must be digits only: ') + ID + '; ' + nome)
                     return render(request, 'exam/exam_errors.html', {})
 
-                allStudentsEqual = Student.objects.filter(student_ID=ra)
+                s_all = Student.objects.filter(student_ID=ID)
 
-                if len(allStudentsEqual) > 1:
-                    for s in allStudentsEqual:  # delete student equals
+                if len(s_all) > 1:
+                    for s in s_all:  # delete student equals
                         if nome == s.student_name:
                             s.delete()
 
-                if not allStudentsEqual:
+                # shows error message if exists more that one student with same ID
+                s_all = Student.objects.filter(student_ID=ID)
+                if len(s_all) > 1:
+                    messages.error(request, _(
+                        'ImportStudentsClassroom: exists more that one student with same ID:' + str(s_all)))
+                    return render(request, 'exam/exam_errors.html', {})
+
+                if not s_all:
                     Student.objects.create(
-                        student_ID=ra,
+                        student_ID=ID,
                         student_name=nome,
                         student_email=email,
                     )
-                else: # if exists, update name and email
-                    allStudentsEqual = Student.objects.get(student_ID=ra)
-                    allStudentsEqual.student_name=nome
-                    allStudentsEqual.student_email=email
-                    allStudentsEqual.save()
+                else:  # if exists, update name and email
+                    s_all = Student.objects.get(student_ID=ID)
+                    s_all.student_name = nome
+                    s_all.student_email = email
+                    s_all.save()
 
-                for s in Student.objects.filter(student_ID=ra):
+                for s in Student.objects.filter(student_ID=ID):
                     classroom.students.add(s)
                     # return message
                     contS += 1
