@@ -1619,12 +1619,16 @@ class cvMCTest(object):
 
         # Anexa os arquivos
         for f in anexo:
-            # print(">>>>$$$$>>>>",f)
-            part = MIMEBase('application', 'octet-stream')
-            part.set_payload(open(f, 'rb').read())
-            encoders.encode_base64(part)
-            part.add_header('Content-Disposition', 'attachment;filename="%s"' % os.path.basename(f))
-            msg.attach(part)
+            if isinstance(f, list):
+                f=f[0]
+            try:
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload(open(f, 'rb').read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition', 'attachment;filename="%s"' % os.path.basename(f))
+                msg.attach(part)
+            except Exception:
+                raise Http404("Erro ao ler arquivo.\n Error:" + f )
 
         try:
             gm = smtplib.SMTP(servidor, porta)

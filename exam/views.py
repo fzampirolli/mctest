@@ -332,8 +332,8 @@ def correctStudentsExam(request, pk):
             passou = True
         except:
             pass
-            #messages.error(request, _("correctStudentsExam: Error in read PDF: ") + str(file))
-            #return render(request, 'exam/exam_errors.html', {})
+            # messages.error(request, _("correctStudentsExam: Error in read PDF: ") + str(file))
+            # return render(request, 'exam/exam_errors.html', {})
 
         # try reading the pdf file using another way
         pages = convert_from_path(file, 200)  # dpi 100=min 500=max
@@ -414,10 +414,10 @@ def correctStudentsExam(request, pk):
                         fileMSG.close()
 
                 if countPage < numPAGES - 1:  # salva tb verso
-                    #countPage += 1
-                    #myfile2 = MYFILES + '_p' + str(countPage) + '.png'
+                    # countPage += 1
+                    # myfile2 = MYFILES + '_p' + str(countPage) + '.png'
 
-                    fileImages = [myfile0]#, myfile2]
+                    fileImages = [myfile0]  # , myfile2]
 
                     flagOK = False  # continua salvando ate achar qrcode ou acabar
                     while not flagOK and countPage < numPAGES - 1:
@@ -494,7 +494,8 @@ def correctStudentsExam(request, pk):
                             testAnswers.append(
                                 cvMCTest.segmentAnswersHor([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
                         else:
-                            testAnswers.append(cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
+                            testAnswers.append(
+                                cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
 
                     qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)  # deixa as respostas de cada quadro em uma linha
 
@@ -556,13 +557,13 @@ def correctStudentsExam(request, pk):
             ### IRT begin
             try:
                 M = int(Utils.getNumMCQuestions(exam))  # Number of questions
-                X = pandas.read_csv(path_to_file, delimiter=',', usecols = [str(i) for i in range(1,M+1)])
-                N = len(X['1'])          # Number of students
+                X = pandas.read_csv(path_to_file, delimiter=',', usecols=[str(i) for i in range(1, M + 1)])
+                N = len(X['1'])  # Number of students
                 dados = np.zeros((N, M), dtype=int)
-                for q in X: # for each question
+                for q in X:  # for each question
                     for n, s in enumerate(X[q]):  # for each student
                         if len(str(s).split()[0]) == 1:
-                            dados[n][int(q)-1] = 1
+                            dados[n][int(q) - 1] = 1
 
                 with open(MYFILES + '_irt.csv', 'w') as csvfile:
                     spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
@@ -628,9 +629,11 @@ def generate_page(request, pk):
 
     print("generate_page-01-" + str(datetime.datetime.now()))
 
-    path_to_file_REPORT = BASE_DIR + "/report_Exam_" + str(pk) + ".csv"
-    path_to_file_VARIATIONS = BASE_DIR + "/report_Exam_" + str(pk) + "_variations.csv"
-    path_to_file_TEMPLATES = BASE_DIR + "/report_Exam_" + str(pk) + "_templates.csv"
+    path_aux = BASE_DIR + "/report_Exam_" + str(pk)
+    path_to_file_REPORT = path_aux + ".csv"
+    path_to_file_VARIATIONS = path_aux + "_variations.csv"
+    path_to_file_TEMPLATES = path_aux + "_templates.csv"
+    path_to_file_STUDENTS = path_aux + "_students.csv"
     # raise Http404("oi00")
     if request.POST:
         countStudentsAll = 0
@@ -641,7 +644,7 @@ def generate_page(request, pk):
         st = Utils.validateProf(exam, request.user)
         if st != None:
             return HttpResponse(st)
-        print("generate_page-02-"+str(datetime.datetime.now()))
+        print("generate_page-02-" + str(datetime.datetime.now()))
         listao = []  ############ gera X variacoes de exames
         for i in range(int(exam.exam_variations)):
             listao.append(Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam)))
@@ -649,43 +652,15 @@ def generate_page(request, pk):
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
-        try:
-            Utils.sendMailTemplates(exam,listao,path_to_file_TEMPLATES)
-            message_cases = 'Following templates for all variations\n\n'
-            cvMCTest.envia_email(webMCTest_SERVER,
-                                 587,
-                                 webMCTest_FROM,
-                                 webMCTest_PASS,
-                                 str(request.user),
-                                 'MCTest: Templates of all variations: ' + str(exam.exam_name) + ' - ' + data_hora,
-                                 message_cases, [path_to_file_TEMPLATES])
-        except:
-            pass
-
-        print("generate_page-03-"+str(datetime.datetime.now()))
-        # send by email all case tests of moodle
-        cases = Utils.get_cases(listao)
-        print("generate_page-04-"+str(datetime.datetime.now()))
-        message_cases = _('Dear') + '\n\n'
-        message_cases += _(
-            'This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
-        message_cases += _('Follow these steps:') + '\n\n'
-        message_cases += _(
-            '1. Use the pdf with the exams generated with this date and time (EXACTLY): ') + data_hora + '\n'
-        message_cases += _('2. Save the following content to the linker.json file (RENAME)') + '\n'
-        message_cases += _('3. After you create a Moodle VPL activity, in the runtime files, add linker.json') + '\n'
-        message_cases += _('4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification2') + '\n'
-        message_cases += '\n\n'
-
-        if len(cases['id'] and cases['id'][0]):
-            anexos = Utils.format_cases(cases, str(request.user) + '-' + str(exam.exam_name) + '-' + data_hora)
-            cvMCTest.envia_email(webMCTest_SERVER,
-                                 587,
-                                 webMCTest_FROM,
-                                 webMCTest_PASS,
-                                 str(request.user),
-                                 'MCTest: case test of moodle - Exam: ' + str(exam.exam_name) + ' - ' + data_hora,
-                                 message_cases, anexos)
+        # if maxStudentsClass < int(exam.exam_variations):
+        #     list_All_Students = [['Class', 'ID', "Name"]]
+        #     for room in exam.classrooms.all(): ############## PARA CADA TURMA
+        #         for s in room.students.all():  ############## PARA CADA ESTUDANTE DA TURMA
+        #             list_All_Students.append([room.classroom_code, s.student_ID, s.student_name])
+        #     with open(path_to_file_STUDENTS, 'w') as data:
+        #         writer = csv.writer(data)
+        #         for s in list_All_Students:
+        #             writer.writerow(s)
 
         storage = get_messages(request)
         for message in storage:
@@ -712,8 +687,12 @@ def generate_page(request, pk):
         # return render(request, 'exam/exam_errors.html', {})
         # raise Http404(exam.classrooms.all())
         listVariations = [['Room', 'ID', 'Name', 'Variation']]
+        maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             countStudents = 0
+            if maxStudentsClass < len(room.students.all()):
+                maxStudentsClass = len(room.students.all())
+
             file_name = "_e" + str(
                 exam.id) + "_" + room.classroom_code + "_" + room.classroom_type + "_" + exam.exam_name.replace(" ", "")
             file_name = file_name.replace(" ", "")
@@ -733,7 +712,8 @@ def generate_page(request, pk):
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     hash_num = Utils.distro_table(s.student_name)
-                    listVariations.append([room.classroom_code, s.student_ID, s.student_name, (hash_num % int(exam.exam_variations)) + 1])
+                    listVariations.append(
+                        [room.classroom_code, s.student_ID, s.student_name, (hash_num % int(exam.exam_variations)) + 1])
                     if hash_num == -1:
                         messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
                         return render(request, 'exam/exam_errors.html', {})
@@ -829,14 +809,57 @@ def generate_page(request, pk):
                 i.save()
                 break
 
-        if int(exam.exam_variations) > 0:
-            # send file by email with variation of each student
-            #path_to_file_VARIATIONS
-            with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
-                writer = csv.writer(file_var)
-                writer.writerows(listVariations)
-            auxSTR = 'In the attached file are the exam variations per student \n-----'
-            cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
+        try:
+            Utils.sendMailTemplates(exam, listao, path_to_file_TEMPLATES)
+            message_cases = 'Following templates for all templates and variations\n\n'
+            anexos = [path_to_file_TEMPLATES]
+
+            if int(exam.exam_variations) > 0: # send file by email with variation of each student
+                with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
+                    writer = csv.writer(file_var)
+                    writer.writerows(listVariations)
+                anexos.append([path_to_file_VARIATIONS])
+                #auxSTR = 'In the attached file are the exam variations per student \n-----'
+                #cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
+
+            cvMCTest.envia_email(webMCTest_SERVER,
+                                 587,
+                                 webMCTest_FROM,
+                                 webMCTest_PASS,
+                                 str(request.user),
+                                 'MCTest: Templates and Variations: ' + str(exam.exam_name) + ' - ' + data_hora,
+                                 message_cases, anexos)
+        except:
+            pass
+
+        print("generate_page-03-" + str(datetime.datetime.now()))
+        # send by email all case tests of moodle
+        cases = Utils.get_cases(listao)
+        if len(cases['id'] and cases['id'][0]):
+            print("generate_page-04-" + str(datetime.datetime.now()))
+            message_cases = _('Dear') + '\n\n'
+            message_cases += _(
+                'This message contains the test cases to be inserted into moodle for automatic correction of student submitted codes.') + '\n\n'
+            message_cases += _('Follow these steps:') + '\n\n'
+            message_cases += _(
+                '1. Use the pdf with the exams generated with this date and time (EXACTLY): ') + data_hora + '\n'
+            message_cases += _('2. Save the following content to the linker.json file (RENAME)') + '\n'
+            message_cases += _(
+                '3. After you create a Moodle VPL activity, in the runtime files, add linker.json') + '\n'
+            message_cases += _(
+                '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification2') + '\n'
+            message_cases += '\n\n'
+
+            anexos = [Utils.format_cases(cases, str(request.user) + '-' + str(exam.exam_name) + '-' + data_hora)]
+            if maxStudentsClass < int(exam.exam_variations):
+                anexos.append([path_to_file_VARIATIONS])
+            cvMCTest.envia_email(webMCTest_SERVER,
+                                 587,
+                                 webMCTest_FROM,
+                                 webMCTest_PASS,
+                                 str(request.user),
+                                 'MCTest: case test of moodle - Exam: ' + str(exam.exam_name) + ' - ' + data_hora,
+                                 message_cases, anexos)
 
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
