@@ -99,7 +99,7 @@ for i in $ALL_QUESTIONS ; do
 done
 
 FINAL=$(awk 'BEGIN { printf "%.3f\n", '$CURRENT_GRADE'/'$SCALE' }')
-FINAL_SHONW=$(awk 'BEGIN { printf "%.2f\n", '$FINAL' }')
+FINAL_SHONW=$(awk 'BEGIN { printf "%.2f\n", '$CURRENT_GRADE'/'$SCALE' }')
 
 echo "<|--" >> $BUFFER_FILE
 echo "-Nota: $FINAL_SHONW" >> $BUFFER_FILE
