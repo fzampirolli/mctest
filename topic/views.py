@@ -278,6 +278,11 @@ def see_question_PDF(request, pk):
         path = os.getcwd()
         os.system("cp " + file_name + ".pdf " + path + "/pdfQuestion/")
 
+        getuser = path.split('/')
+        getuser = getuser[1]
+        getuser = getuser + ':' + getuser
+        os.system('chown ' + getuser + ' ' + path + ' . -R')
+
         try:
             os.remove("{}.aux".format(file_name))
             os.remove("{}.log".format(file_name))

@@ -861,6 +861,13 @@ def generate_page(request, pk):
                                  'MCTest: case test of moodle - Exam: ' + str(exam.exam_name) + ' - ' + data_hora,
                                  message_cases, anexos)
 
+        # problem with permission ...
+        path = os.getcwd()
+        getuser = path.split('/')
+        getuser = getuser[1]
+        getuser = getuser + ':' + getuser
+        os.system('chown ' + getuser + ' ' + path + ' . -R')
+
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
             return serve(request, os.path.basename(path_to_file),
