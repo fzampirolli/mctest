@@ -72,8 +72,14 @@ class Utils(object):
                     q_str = q[-int(exam.exam_number_of_anwsers_question):]
                     q_ind = q_str.find('0')
                     varia_gab.append(letras_1[q_ind])
-            for qt in range(int(exam.exam_number_of_questions_text)):
-                varia_gab.append('Q' + str(qt + 1 + int(Utils.getNumMCQuestions(exam))))
+
+            for qt in varia[2]: # dissertation question: get correct answer for the template
+                start = '%%\{'
+                end = '\}%%'
+                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, qt[2]):
+                    print("))))))))))",answerCorrect)
+                    varia_gab.append(answerCorrect)
+
             if varia_gab:
                 varia_gab_all.append(varia_gab)
 

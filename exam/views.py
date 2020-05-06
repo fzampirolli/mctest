@@ -811,7 +811,7 @@ def generate_page(request, pk):
 
         try:
             Utils.sendMailTemplates(exam, listao, path_to_file_TEMPLATES)
-            message_cases = 'Following templates for all templates and variations\n\n'
+            message_cases = 'Following all templates and variations\n\n'
             anexos = [path_to_file_TEMPLATES]
 
             if int(exam.exam_variations) > 0: # send file by email with variation of each student
