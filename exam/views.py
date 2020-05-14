@@ -856,7 +856,7 @@ def generate_page(request, pk):
             message_cases += _(
                 '3. After you create a Moodle VPL activity, in the runtime files, add linker.json and students_variations.csv') + '\n'
             message_cases += _(
-                '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification2') + '\n'
+                '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification') + '\n'
             message_cases += '\n\n'
 
             anexos = [Utils.format_cases(cases, str(request.user) + '-' + str(exam.exam_name) + '-' + data_hora)]
