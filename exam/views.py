@@ -852,7 +852,7 @@ def generate_page(request, pk):
             message_cases += _('Follow these steps:') + '\n\n'
             message_cases += _(
                 '1. Use the pdf with the exams generated with this date and time (EXACTLY): ') + data_hora + '\n'
-            message_cases += _('2. Save the linker.json and students_variations.csv files') + '\n'
+            message_cases += _('2. Save linker.json and students_variations.csv files') + '\n'
             message_cases += _(
                 '3. After you create a Moodle VPL activity, in the runtime files, add linker.json and students_variations.csv') + '\n'
             message_cases += _(
