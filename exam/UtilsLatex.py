@@ -51,6 +51,7 @@ from django.http import Http404
 
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
+from mctest.settings import BASE_DIR
 
 class Utils(object):
 
@@ -145,6 +146,7 @@ class Utils(object):
     def format_cases(cases, file):  # _version1
         file = file.replace(' ', '').replace('/', '-').replace(':', '-')
         files = ['./tmp/' + file + ".json"]
+        files = [BASE_DIR + '/linker.json']
         formatCases = {}
         formatCases['variations'] = []  # variant/models
 
@@ -1083,7 +1085,7 @@ _inst1_
         if int(exam.exam_number_of_questions_text) and exam.exam_print in ['ques', 'both']:
             titl = _("Text Questions")
             if (exam.exam_print_eco == 'yes'):
-                str1 += "\\\\\\vspace{2mm}\\textbf{%s:}  \\hfill {\\color{white} VERSÃO: \\#v%s}} \\\n" % (
+                str1 += "\\\\\\vspace{2mm}\\textbf{%s:}  \\hfill {\\color{red} VERSÃO: \\#v%s}} \\\n" % (
                     titl, str(countVariations))
             else:
                 str1 += "\n\n\\newpage\n\n"

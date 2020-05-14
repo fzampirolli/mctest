@@ -632,6 +632,8 @@ def generate_page(request, pk):
     path_aux = BASE_DIR + "/report_Exam_" + str(pk)
     path_to_file_REPORT = path_aux + ".csv"
     path_to_file_VARIATIONS = path_aux + "_variations.csv"
+    path_to_file_VARIATIONS_VPL = BASE_DIR + "/students_variations.csv"
+
     path_to_file_TEMPLATES = path_aux + "_templates.csv"
     path_to_file_STUDENTS = path_aux + "_students.csv"
     # raise Http404("oi00")
@@ -689,10 +691,10 @@ def generate_page(request, pk):
         listVariations = [['Room', 'ID', 'Name', 'Variation']]
         maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
-            countStudents = 0
             if maxStudentsClass < len(room.students.all()):
                 maxStudentsClass = len(room.students.all())
 
+        for room in exam.classrooms.all():  ############## PARA CADA TURMA
             file_name = "_e" + str(
                 exam.id) + "_" + room.classroom_code + "_" + room.classroom_type + "_" + exam.exam_name.replace(" ", "")
             file_name = file_name.replace(" ", "")
@@ -702,6 +704,7 @@ def generate_page(request, pk):
             # /home/fz/django_webmctest/mctest/pdfExam/_e84_EE teste_PClass_Prova1.pdf
             strALL = ''
 
+            countStudents = 0
             countVariations = 0
             for s in room.students.all():  ############## PARA CADA ESTUDANTE DA TURMA
                 # start0 = time.time()
@@ -711,9 +714,15 @@ def generate_page(request, pk):
                 myqr = Utils.defineQRcode(exam, room, s.student_ID, s.student_name)
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
-                    hash_num = Utils.distro_table(s.student_name)
+
+                    if int(exam.exam_variations) < maxStudentsClass:
+                        hash_num = Utils.distro_table(s.student_name)
+                    else:
+                        hash_num = countStudents
+
                     listVariations.append(
-                        [room.classroom_code, s.student_ID, s.student_name, (hash_num % int(exam.exam_variations)) + 1])
+                        [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
+
                     if hash_num == -1:
                         messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
                         return render(request, 'exam/exam_errors.html', {})
@@ -722,7 +731,7 @@ def generate_page(request, pk):
                                                         listao[hash_num % int(exam.exam_variations)],
                                                         # uma variacao de prova por aluno
                                                         exam, room, s.student_ID, s.student_name, request.user,
-                                                        countVariations % int(exam.exam_variations), data_hora)
+                                                        hash_num % int(exam.exam_variations), data_hora)
                 else:
                     messages.error(request, _('ERROR in validateNumQuestions!!!!'))
 
@@ -843,16 +852,20 @@ def generate_page(request, pk):
             message_cases += _('Follow these steps:') + '\n\n'
             message_cases += _(
                 '1. Use the pdf with the exams generated with this date and time (EXACTLY): ') + data_hora + '\n'
-            message_cases += _('2. Save the following content to the linker.json file (RENAME)') + '\n'
+            message_cases += _('2. Save the linker.json and students_variations.csv files') + '\n'
             message_cases += _(
-                '3. After you create a Moodle VPL activity, in the runtime files, add linker.json') + '\n'
+                '3. After you create a Moodle VPL activity, in the runtime files, add linker.json and students_variations.csv') + '\n'
             message_cases += _(
                 '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification2') + '\n'
             message_cases += '\n\n'
 
             anexos = [Utils.format_cases(cases, str(request.user) + '-' + str(exam.exam_name) + '-' + data_hora)]
-            if maxStudentsClass < int(exam.exam_variations):
-                anexos.append([path_to_file_VARIATIONS])
+            anexos.append([path_to_file_VARIATIONS])
+            aux = np.array(listVariations)
+            with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
+                writer = csv.writer(file_var)
+                writer.writerows(aux[:,-2:]) # return name; variation
+            anexos.append([path_to_file_VARIATIONS_VPL])
             cvMCTest.envia_email(webMCTest_SERVER,
                                  587,
                                  webMCTest_FROM,
@@ -899,7 +912,6 @@ def SerializersExam(request, pk):
     classrooms = exam_inst.classrooms
 
     return render(request, 'exam/exam_list.html', {})
-
 
 @login_required
 def UpdateExam(request, pk):
