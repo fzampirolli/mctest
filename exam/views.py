@@ -43,7 +43,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages import get_messages
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
@@ -51,7 +51,6 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
 from pdf2image import convert_from_path
 from tablib import Dataset
-import subprocess
 
 from exam.CVMCTest import cvMCTest
 from exam.UtilsLatex import Utils
@@ -823,13 +822,14 @@ def generate_page(request, pk):
             message_cases = 'Following all templates and variations\n\n'
             anexos = [path_to_file_TEMPLATES]
 
-            if int(exam.exam_variations) > 0: # send file by email with variation of each student
+            if int(exam.exam_variations) > 0:  # send file by email with variation of each student
                 with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
-                    writer = csv.writer(file_var)
+                    writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
+                                        lineterminator='\n')
                     writer.writerows(listVariations)
                 anexos.append([path_to_file_VARIATIONS])
-                #auxSTR = 'In the attached file are the exam variations per student \n-----'
-                #cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
+                # auxSTR = 'In the attached file are the exam variations per student \n-----'
+                # cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
 
             cvMCTest.envia_email(webMCTest_SERVER,
                                  587,
@@ -863,8 +863,10 @@ def generate_page(request, pk):
             anexos.append([path_to_file_VARIATIONS])
             aux = np.array(listVariations)
             with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
-                writer = csv.writer(file_var)
-                writer.writerows(aux[:,-2:]) # return name; variation
+                writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
+                                    lineterminator='\n')
+                aux = aux[:, -2:]  # get last two columns
+                writer.writerows(aux)  # return name; variation
             anexos.append([path_to_file_VARIATIONS_VPL])
             cvMCTest.envia_email(webMCTest_SERVER,
                                  587,
@@ -912,6 +914,7 @@ def SerializersExam(request, pk):
     classrooms = exam_inst.classrooms
 
     return render(request, 'exam/exam_list.html', {})
+
 
 @login_required
 def UpdateExam(request, pk):
