@@ -1085,7 +1085,7 @@ _inst1_
         if int(exam.exam_number_of_questions_text) and exam.exam_print in ['ques', 'both']:
             titl = _("Text Questions")
             if (exam.exam_print_eco == 'yes'):
-                str1 += "\\\\\\vspace{2mm}\\textbf{%s:}  \\hfill {\\color{red} VERSÃO: \\#v%s}} \\\n" % (
+                str1 += "\\\\\\vspace{2mm}\\textbf{%s:}  \\hfill {\\color{white} VERSÃO: \\#v%s}} \\\n" % (
                     titl, str(countVariations))
             else:
                 str1 += "\n\n\\newpage\n\n"
