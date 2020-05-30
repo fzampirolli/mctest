@@ -176,7 +176,7 @@ python3 manage.py runserver $DB_HOST:8000 --noreload
 echo "  -- Popular mysql ??? ..."
 echo "mysql -u root -p '"$DB_NAME"' < 'mctest.sql'"
 # mysqldump --no-defaults -u root -p DB_MCTest -h 177.104.60.18 > mysql-2019-09--2.sql
-# mysql -u root -p DB_MCTest --binary-mode -o < mysql-2019-09--2.sql
+# l -u root -p DB_MCTest --binary-mode -o < mysql-2019-09--2.sql
 
 # OUTROS
 
