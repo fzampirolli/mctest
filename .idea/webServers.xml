@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b13e4cec-a848-4b72-a0e2-50873470683b" name="vision" url="http://vision.ufabc.edu.br">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="vision.ufabc.edu.br" port="22" sshConfigId="3ebce1e6-df9c-4939-9a61-d9e632e1c793" sshConfig="fz@vision.ufabc.edu.br:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="2a146b12-da0a-4e6b-87f6-6809deb7d208" name="mctest" url="http://mctest.ufabc.edu.br">
+        <fileTransfer rootFolder="/home/ufabc/django_webmctest/mctest" accessType="SFTP" host="mctest.ufabc.edu.br" port="22" sshConfigId="15ef7219-4251-4bd2-b067-e4c1d8fbc51e" sshConfig="ufabc@mctest.ufabc.edu.br:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="e256e704-13b9-4bcd-ad1b-6095541c56a6" name="nubisys" url="http://nubisys.ufabc.edu.br">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="nubisys.ufabc.edu.br" port="22" sshConfigId="c33c8dcc-e8d4-476e-9240-e3f17e2e07eb" sshConfig="fz@nubisys.ufabc.edu.br:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="e05c2dd6-30f1-4e69-9216-532ba8f46a44" name="vcad" url="http://vcad.ufabc.edu.br">
+        <fileTransfer rootFolder="/home/fz/django_webmctest/mctest" accessType="SFTP" host="vcad.ufabc.edu.br" port="22" sshConfigId="f5bfcfc0-a5dc-4f3b-a27f-3f3535ea19a0" sshConfig="fz@vcad.ufabc.edu.br:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="59c156a2-701b-4a2a-9bfd-9726319bd77f" name="acessivel" url="http://acessivel.ufabc.edu.br">
+        <fileTransfer rootFolder="/home/fz/" accessType="SFTP" host="acessivel.ufabc.edu.br" port="22" sshConfigId="6cc7a596-df54-4605-a957-e4dc9cfc3afa" sshConfig="fz@acessivel.ufabc.edu.br:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

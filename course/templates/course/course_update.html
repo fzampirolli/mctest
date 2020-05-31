@@ -1,0 +1,62 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Update Course" %}</h5>
+
+                        <hr>
+
+                        {% if user.is_staff %}
+
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <!-- institutes -->
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Institutes" %}</span>
+                                    </div>
+                                    {% render_field form.institutes class+="form-control" %}
+                                </div>
+
+                                <!-- course_name -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Name" %}</span>
+                                    </div>
+                                    {% render_field form.course_name class+="form-control" placeholder=form.course_name.help_text %}
+                                </div>
+
+                                <!-- course_code -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Code" %}</span>
+                                    </div>
+                                    {% render_field form.course_code class+="form-control" placeholder=form.course_code.help_text %}
+                                </div>
+
+                                <hr>
+                                <!-- Actions -->
+                                <div class="text-right">
+                                    <a href="{% url 'course:course-list' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                </div>
+                            </form>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Only admin can update/create/delete institutes/courses/disciplines" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

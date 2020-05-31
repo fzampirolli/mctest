@@ -1,0 +1,92 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Institute List" %}</h5>
+
+                        {% if institute_list|length > 0 %}
+
+                            <div class="card-body" style="background-color:#f3f3f3;">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">{% trans "Code" %}</th>
+                                        <th scope="col">{% trans "Name" %}</th>
+                                        <th scope="col">{% trans "URL" %}</th>
+                                        <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for institute in institute_list %}
+                                        <tr>
+                                            <td>
+                                                <a href="{% url 'course:institute-detail' pk=institute.pk %}"
+                                                   class="btn btn-outline-info text-dark btn-sm">
+                                                    {{ institute.institute_code }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'course:institute-detail' pk=institute.pk %}"
+                                                   class="btn btn-outline-info text-dark btn-sm">
+                                                    {{ institute }}
+                                                </a>
+                                            </td>
+                                            </td>
+                                            <td>
+                                                <a href="http://{{ institute.institute_url }}"
+                                                   class="btn btn-outline-warning text-dark btn-sm">
+                                                    {{ institute.institute_url }}
+                                                </a>
+                                            </td>
+                                            <td class="text-right">
+                                                {% if  user.is_staff %}
+
+                                                    <a href="{% url 'course:institute-update' pk=institute.pk %}"
+                                                       class="btn btn-outline-primary btn-sm">
+                                                        {% trans "Update" %}
+                                                    </a>
+
+                                                    <a href="{% url 'course:institute-delete' pk=institute.pk %}"
+                                                       class="btn btn-outline-danger btn-sm">
+                                                        {% trans "Delete" %}
+                                                    </a>
+                                                {% endif %}
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        {% else %}
+                            <div class="text-center mt-5 mb-5 jumbotron">
+                                <h5>{% trans "There is no" %}
+                                    <code> {% trans "Institute" %} </code> {% trans "registered yet." %}</h5>
+                            </div>
+                        {% endif %}
+
+                        {% if  user.is_staff %}
+                            <hr/>
+                            <div class="text-right">
+                                <a href="{% url 'course:institute-create' %}" class="btn btn-primary">
+                                    {% trans "Create a New Institute" %}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Only admin can update/create/delete institutes/courses/disciplines" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

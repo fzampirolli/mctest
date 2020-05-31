@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="vision.ufabc.edu.br" id="3ebce1e6-df9c-4939-9a61-d9e632e1c793" port="22" nameFormat="DESCRIPTIVE" username="fz" />
+      <sshConfig authType="PASSWORD" host="mctest.ufabc.edu.br" id="15ef7219-4251-4bd2-b067-e4c1d8fbc51e" port="22" nameFormat="DESCRIPTIVE" username="ufabc" />
+      <sshConfig authType="PASSWORD" host="nubisys.ufabc.edu.br" id="c33c8dcc-e8d4-476e-9240-e3f17e2e07eb" port="22" nameFormat="DESCRIPTIVE" username="fz" />
+      <sshConfig authType="PASSWORD" host="vcad.ufabc.edu.br" id="f5bfcfc0-a5dc-4f3b-a27f-3f3535ea19a0" port="22" nameFormat="DESCRIPTIVE" username="fz" />
+      <sshConfig authType="PASSWORD" host="acessivel.ufabc.edu.br" id="6cc7a596-df54-4605-a957-e4dc9cfc3afa" port="22" nameFormat="DESCRIPTIVE" username="fz" />
+    </configs>
+  </component>
+</project>

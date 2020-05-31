@@ -1,0 +1,660 @@
+{# base_generic.html it's the skeleton model #}
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <!-- title -->
+                <div class="container">
+                    <div class="text-center">
+                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
+                            <h1>{% trans "MCTest" %} - {% trans "development" %}</h1>
+                            {% trans "Improvements will be included all the time. USE ONLY service in production" %}: <a href="http://mctest.ufabc.edu.br">mctest</a> ({% trans "DB updated in" %} 03/01/2020 13:10h).
+                        </div>
+                    </div>
+                </div>
+
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="50000">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="6"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="7"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="8"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="9"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="10"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="11"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="12"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="13"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="14"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="15"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="16"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="17"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="18"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="19"></li>
+                    </ol>
+                    <div class="carousel-inner" style="background-color:#447e9b;">
+                        <!-- slide 1 -->
+                        <div class="carousel-item active">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/1.png">
+                                </div>
+                            </div>
+
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "A simple question with latex command" %}.
+                                    {% trans "After clicking Create-PDF, see the next slide" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 2 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/2.png">
+                                </div>
+                            </div>
+
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "The formulas between $ from the previous slide are presented differently" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 3 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/3.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "Adding an image that is on the web" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 4 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/4.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "Question with image to display on exam" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 5 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/5.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Exam Style" %}</h5>
+                                <p>{% trans "Exam only with answers (in the correction, the template is the first page of the PDF)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 5v -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/5v.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Exam Style - Vertical" %}</h5>
+                                <p>{% trans "Exam only with answers (in the correction, the template is the first page of the PDF)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 6 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/6.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Exam Style" %}</h5>
+                                <p>{% trans "Q&A (the correct answer can be found with '#0' in the PDF, details in yellow)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 7 parametric - part I -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/7.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Part I" %}</h5>
+                                <p>{% trans "In the description, we have python code between '[[code:' and ']]' - to '[[def:" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 8 parametric - part II -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/8.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Part II" %}</h5>
+                                <p>{% trans "Attributes and answers to a question. When creating a question, the first alternative is always the correct one" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 9 parametric - part III -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/9.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Part III" %}</h5>
+                                <p>{% trans "Question to be displayed. Note the order in which answers were drawn after '#'" %}
+                                {% trans "You can assign different weights for each anwers, on the exam grade" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 10 parametric - Example I-->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/10.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Example I" %}</h5>
+                                <p>{% trans "Example with equation and figure" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 11 parametric - Example II -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/11.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Example II" %}</h5>
+                                <p>{% trans "Example with graph" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 12 parametric - Example III -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/12.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Example III" %}</h5>
+                                <p>{% trans "Example with matrix" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 13 - CSV File with Exam Correction -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/13.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "CSV File with Exam Correction" %}</h5>
+                                <p>{% trans "In yellow, answer marked '/' correct answer" %}.
+                                    {% trans "In green, Question ID in the DB and answers order (0=A, 1=B, ...)" %}.
+                                 {% trans "ID here means exam variations" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 14 - Grade with weight -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/14.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Grade with weight" %}</h5>
+                                <p>{% trans "In yellow, answer marked '/' correct answer" %}.
+                                    {% trans "In green, answers with weight" %}. {% trans "ID here means exam variations" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 15 - parametric - Example IV - Text Question -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/15.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
+                                <p>{% trans "With random values ​​for a, b, c and d. In this case, it is possible to draw the answer in light colors, see next slide" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 16 - parametric - Example IV - Text Question - correct answer -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/16.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
+                                <p>{% trans "The answer in light colors, not to appear printed. You can program the answer to have a similar number of lines (same difficulty)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 17 - Email corrections to each student -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/17.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email corrections to each student" %}</h5>
+                                <p>{% trans "It is also possible to include in the email a PDF file with the text of the questions, the alternative the student has marked, the feedback and the correct alternative (if incorrect)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 18 - Email correction with statistics -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/18.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with some correction statistics" %}</h5>
+                                <p>{% trans "The teacher receives this email after sending a PDF of the scanned exams" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 19 - Email with case tests of Moodle + VPL -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/19.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with test cases of moodle + VPL" %}</h5>
+                                <p>{% trans "The teacher receives this email after creating a PDF when there is an exam that contains program exercises" %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+
+                </div>
+
+                <p></p>
+                <div class="container">
+                    <div class="text-center">
+                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.3s">
+                            <h5>{% trans "Welcome to <em>MCTest</em>, a website designed to assist with exams preparation and correction." %}</h5>
+                        </div>
+                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.3s">
+                            <p><a href="http://nubisys.ufabc.edu.br:8000">English version with
+                                different DB</a></p>
+                        </div>
+                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
+                            <p>{% trans "Attendance offered to the community to facilitate the process of automatic elaboration and correction of the exams, with generation and correction of approximately 10,000 annual exams." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h3>{% trans "Dynamic content" %}</h3>
+
+                <p>{% trans "The MCTest has the following record counts" %} ({% trans "see also:" %}
+                    <a href="http://vision.ufabc.edu.br/static/models.png">ER1</a>;
+                    <a href="http://vision.ufabc.edu.br/static/models_col.png">ER2</a>):</p>
+                <ul>
+                    <li><strong>{% trans "Institutes" %}:</strong> {{ num_institutes }}
+                        [{% trans "Institute has Courses" %}]
+                    </li>
+                    <li><strong>{% trans "Courses" %}:</strong> {{ num_courses }}
+                        [{% trans "Course has Disciplines" %}]
+                    </li>
+                    <li><strong>{% trans "Disciplines" %}:</strong> {{ num_disciplines }}
+                        [{% trans "Discipline has Topics and Classrooms" %}]
+                    </li>
+                    <li><strong>{% trans "Classrooms" %}:</strong> {{ num_classrooms }}
+                        [{% trans "Classroom has Exams, Profs and Student" %}]
+                    </li>
+                    <li><strong>{% trans "Exams" %}:</strong> {{ num_exams }}
+                        [{% trans "Exam has Classrooms and Questions" %}] - {% trans "motivations" %} [<a
+                                href="https://doi.org/10.1002/cae.22029">ref18a</a>]
+                    </li>
+                    <li><strong>{% trans "Topics" %}:</strong> {{ num_topics }}
+                        [{% trans "Topic has Questions" %}]
+                    </li>
+
+                    <hr>
+
+                    <li><strong>{% trans "Questions" %}:</strong> {{ num_questions }}
+                        - {% trans "motivations for the use of bloom taxonomy" %} [<a
+                                href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao">ref17cap2</a>;
+                        <a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517">ref18b</a>]
+                    </li>
+                    <ul>
+                        <li><strong>{% trans "Multiple Choice" %}:</strong> {{ num_QM }}</li>
+                        <li><strong>{% trans "Text" %}:</strong> {{ num_QT }}</li>
+                        <li><strong>{% trans "Parametric" %}:</strong> {{ num_Parametric }} [<a
+                                href="http://www.itng.info">ref19a</a>; <a href="http://csedu.org">ref19b</a>]
+                        </li>
+                    </ul>
+                    <li><strong>{% trans "Users" %}:</strong> {{ num_users }}</li>
+                </ul>
+
+                <hr>
+
+                <h3>{% trans "Explanatory videos" %} </h3>
+                <ol>
+                    <h6>{% trans "MCTest" %} - {% trans "version" %} 5.1:</h6>
+                    <li><a href="https://youtu.be/SxQlw9ADxe8">{% trans "global vision (in English)" %}</a></li>
+                    <br><strong>{% trans "in Portuguese" %}:</strong></br>
+                    <li><a href="https://youtu.be/tAMt7K74ELs">{% trans "global vision" %}</a></li>
+                    <li><a href="https://youtu.be/dnev3NUV7Gg">{% trans "create Classrooms and Exams" %}</a></li>
+                    <li><a href="https://youtu.be/2CqQeb3OXwY">{% trans "to correct Exams" %}</a></li>
+                    <li><a href="https://youtu.be/oOR4d54hWk4">{% trans "to create problems using the TXT file" %}</a>
+                    </li>
+                    <li>{% trans "create parametric questions" %}:</li>
+                    <ul>
+                        <li><a href="https://youtu.be/ycQRJ57Owsg">{% trans "part I" %}</a></li>
+                        <li><a href="https://youtu.be/t3_cMmuKAAw">{% trans "part II" %}</a></li>
+                        <li><a href="https://youtu.be/DfCNTuhoAX0">{% trans "part III" %}</a>
+                            - {% trans "use of the sympy library (URM and integral examples)" %}</li>
+                        <li><a href="https://youtu.be/hA_oHivIz6U">{% trans "part IV" %}</a>
+                            - {% trans "use of the sympy library (integral with figures)" %}</li>
+                    </ul>
+                    <li>
+                        <a href="https://youtu.be/NycuEqba14w">{% trans "to create exams with multiple choice questions and dissertations - conclusions" %}</a>
+                    </li>
+
+                </ol>
+
+                <hr>
+
+
+                <h3>{% trans "Historic" %} - {% trans "Software registration" %}</h3>
+
+                <ul>
+                    <table style="width: 97%;" border="1" cellspacing="0">
+                        <colgroup width="15%"></colgroup>
+                        <colgroup width="5%"></colgroup>
+                        <colgroup width="70%"></colgroup>
+                        <tbody>
+                        <tr style="height: 13px;">
+                            <td style="width: 90px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                    style="font-family: 'Liberation Serif';">{% trans "Order" %} -
+                        <a href="https://gru.inpi.gov.br/pePI/jsp/programas/ProgramaSearchBasico.jsp">INPI</a></span></strong>
+                            </td>
+
+                            <td style="width: 49px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                    style="font-family: 'Liberation Serif';">{% trans "Title" %}</span></strong></td>
+                            <td style="width: 49px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                    style="font-family: 'Liberation Serif';">{% trans "Description" %}</span></strong>
+                            </td>
+                        </tr>
+                        <tr style="height: 13px;">
+                            <td style="width: 90px; height: 13px;" align="center"></td>
+                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 5 (webMCTest)</strong>
+                            </td>
+                            <td style="width: 49px; height: 13px;"
+                                align="left">{% trans "Developed in Python (Django 2.0) for automatic correction - available in" %}
+                                <a
+                                        href="http://vision.ufabc.edu.br:8000">vision.ufabc.edu.br:8000</a>
+                                - {% trans "exams generated in LaTeX using a MySQL DB" %}
+                                [<a href="http://www.itng.info">ref19a</a>;
+                                <a href="http://csedu.org">ref19b</a>;
+                                <a href="http://csedu.org">ref19c</a>;
+                                <a href="https://doi.org/10.1002/cae.22029">ref18a</a>]
+                            </td>
+                        </tr>
+
+                        <tr style="height: 13px;">
+                            <td style="width: 90px; height: 13px;" align="center"><span
+                                    style="font-family: 'Liberation Serif';">BR 51 2018 001202 7</span>
+                            </td>
+                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 4.G</strong></td>
+                            <td style="width: 49px; height: 13px;"
+                                align="left">{% trans "Developed in Python for LaTeX generated exams" %} (<a
+                                    href="https://ieeexplore.ieee.org/document/7757467">ref16a;
+                                <a href="https://github.com/fzampirolli/mctest4">GitHub</a>)
+                            </td>
+                        </tr>
+                        <tr style="height: 13px;">
+                            <td align="center" style="width: 90px; height: 13px;"><span
+                                    style="font-family: 'Liberation Serif';">BR 51 2016 001344 3</span>
+                            </td>
+                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 4</strong></td>
+                            <td style="width: 49px; height: 13px;"
+                                align="left">{% trans "Developed in Python for automatic correction - available in" %}
+                                <a href="http://vision.ufabc.edu.br">vision.ufabc.edu.br</a> - {% trans "by ftp" %}
+                                [<a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a>]
+                            </td>
+                        </tr>
+                        <tr style="height: 13px;">
+                            <td style="width: 90px; height: 13px;" align="center"><span
+                                    style="font-family: 'Liberation Serif';">BR 51 2015 001445 5</span>
+                            </td>
+                            <td style="width: 49px; height: 13px;" align="left"><strong>MCTest 3</strong></td>
+                            <td style="width: 49px; height: 13px;"
+                                align="left">{% trans "Developed in Python for automatic correction - exams generated in Word / BROffic" %}</td>
+                        </tr>
+                        <tr style="height: 24px;">
+                            <td style="width: 90px; height: 13px;" align="center"><span
+                                    style="font-family: 'Liberation Serif';">BR 51 2015 001444 7</span>
+                            </td>
+                            <td style="width: 49px; height: 13px;" align="left"><strong><a
+                                    href="http://vision.ufabc.edu.br/MCTest/MCTest2-android/">MCTest 2</a></strong></td>
+                            <td style="fdwidth: 49px; height: 13px;" align="left">{% trans "Developed in Android" %} <a
+                                    href="http://vision.ufabc.edu.br/MCTest/MCTest2-android/">apk</a> {% trans "for automatic correction - exams generated in Word / BROffice" %}
+                                [<a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a>, <a
+                                        href="https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394">ref16b</a>]
+                            </td>
+                        </tr>
+                        <tr style="height: 13px;">
+                            <td style="width: 90px; height: 13px;" align="center"><span
+                                    style="font-family: 'Liberation Serif';">BR 51 2013 001231 7</span>
+                            </td>
+                            <td style="width: 49px; height: 13px;" align="left"><strong><a
+                                    href="http://vision.ufabc.edu.br/MCTest/MCTest1-matlab/">MCTest</a></strong></td>
+                            <td style="width: 49px; height: 13px;"
+                                align="left">{% trans "Developed in Matlab for automatic correction - exams generated in Word / BROffice" %}
+                                [<a href="http://iris.sel.eesc.usp.br/wvc/Anais_WVC2013/Poster/1/9.pdf">ref13</a>]
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </ul>
+
+                <hr>
+
+                <h3>{% trans "Publications" %}</h3>
+                <ul>
+                    <li><a href="http://www.itng.info">ref19a</a> - Zampirolli, F. A., Teubl, F. and Batista, V. R., "A
+                        Generator
+                        and Corrector of Parametric Questions in Hard Copy". International Conference on Information
+                        Technology: New
+                        Generations. Las Vegas, USA, 2019.
+                    </li>
+                    <li><a href="http://csedu.org">ref19b</a> - Zampirolli, F. A., Teubl, F. and Batista, V. R., "Online
+                        Generator
+                        and Corrector of Parametric Questions in Hard Copy Useful for the Elaboration of Thousands of
+                        Individualized
+                        Exams". International Conference on Computer Supported Education. Crete, Grécia, 2019.
+                        (<a href="http://vision.ufabc.edu.br/static/__CSEDU19_webMCTest.pdf">SLIDES</a>)
+                    </li>
+                    <li><a href="http://csedu.org">ref19c</a> - Rezende, F., Zampirolli, F. A. and Kobayashi, G.,
+                        "Convolutional
+                        Neural Network applied to Code Assignment Grading". International Conference on Computer
+                        Supported
+                        Education. Crete, Grécia, 2019.
+                    </li>
+                    <li><a href="https://doi.org/10.1002/cae.22029">ref18a</a> - Zampirolli, F. A., Goya, D., Pimentel,
+                        E. P., and
+                        Kobayashi, G. "Evaluation process for an introductory programming course using blended learning
+                        in
+                        engineering education". Computer Applications in Engineering Education. 2018.
+                    </li>
+                    <li><a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517">ref18b</a> -
+                        Calsavara, A.,
+                        Serra, A. P. G. Zampirolli, F. A., Carvalho, L. S. G., Jonathan, M. and Correia, R. C. M.
+                        "Método baseado
+                        nos Referenciais de Formação da SBC para reestruturação de descritivos de disciplinas de Ciência
+                        da
+                        Computação em conformidade com as DCN de 2016". Workshop sobre Educação em Computação
+                        (WEI_CSBC), [S.l.], v.
+                        26, n. 1/2018.
+                    </li>
+                    <li>
+                        <a href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao">ref17cap2</a>
+                        - Zorzo, A. F., Nunes, D., Matos, E., Steinmacher, I., Leite, J., Araujo, R. M., and Martins, S.
+                        "Referenciais de Formação para os Cursos de Graduação em Computação". Sociedade Brasileira de
+                        Computação
+                        (SBC). 153p, 2017.
+                    </li>
+                    <li><a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a> - Zampirolli, F. A., Batista,
+                        V. R., and
+                        Quilici-Gonzalez, J. A. "An automatic generator and corrector of multiple choice tests with
+                        random answer
+                        keys." Frontiers in Education Conference (FIE), 2016 IEEE.
+                        (<a href="http://vision.ufabc.edu.br/static/__FIE16_MCTest.pdf">SLIDES</a>)
+                    </li>
+                    <li><a href="https://periodicos.itp.ifsp.edu.br/index.php/IC/article/viewFile/221/394">ref16b</a> -
+                        China, R.
+                        T., Zampirolli, F. A., Neves, R. P. O. and Quilici-Gonzalez, J. A. (2016). An application for
+                        automatic
+                        multiple-choice test grading on android. Revista Brasileira de Iniciação Científica, 3(2).
+                    </li>
+                    <li><a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a> - Zampirolli, F. A.,
+                        China, R. T.,
+                        Neves, R. P. O. and QUILICI-GONZALEZ, J. A. "Automatic Correction of Multiple-Choice Tests on
+                        Android
+                        Devices". In: Workshop de Visão Computacional, 2015.
+                    </li>
+                    <li><a href="http://iris.sel.eesc.usp.br/wvc/Anais_WVC2013/Poster/1/9.pdf">ref13</a> - Zampirolli,
+                        F. A,
+                        Quilici-Gonzalez, J. A. and Neves, R. P. O. "Automatic Correction of Multiple-Choice Tests using
+                        Digital
+                        Cameras and Image Processing". In: Workshop de Visão Computacional, 2013.
+                    </li>
+
+                </ul>
+
+                <hr>
+
+                <h3>{% trans "For verification" %}</h3>
+
+                <ul>
+                    <font size="1">
+
+                        <table style="width: 327px;" border="0" cellspacing="0">
+                            <colgroup width="110"></colgroup>
+                            <colgroup width="250"></colgroup>
+                            <colgroup width="126"></colgroup>
+                            <tbody>
+                            <tr style="height: 24px;">
+                                <td style="width: 140px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                        style="font-family: 'Liberation Serif';">{% trans "Users" %}</span></strong>
+                                </td>
+                                <td style="width: 98px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                        style="font-family: 'Liberation Serif';">{% trans "Last Login" %}</span></strong>
+                                </td>
+                            </tr>
+                            {% for u in users_now %}
+                                <tr>
+                                    <td>{{ u.username }}</td>
+                                    <td style="padding:1px 10px;" align="right"> now</td>
+                                </tr>
+                            {% endfor %}
+
+
+                            {% for u in users %}
+                                {% if not u in users_now %}
+                                    <tr>
+                                        <td>{{ u.username }}</td>
+                                        <td style="padding:1px 10px;" align="right">{{ u.last_login }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </font>
+
+                </ul>
+
+                <hr>
+
+                <p>{% trans "You have visited this page" %} {{ num_visits }}
+                    {% if num_visits == 1 %} {% trans "time" %} {% else %} {% trans "times" %}{% endif %}.</p>
+
+                <p>{% trans "Send improvement suggestions to" %}: <a href="mailto:fzampirolli@ufabc.edu.br"
+                                                                     target="_top">fzampirolli@ufabc.edu.br</a>
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "README" %} - mctest v. 5.1 ({% trans "or" %} webMCTest 1.1)</h5>
+
+                <hr>
+
+                <p>{% trans "Welcome to MCTest, a website devoted to assist in preparing and correcting exams" %}.</p>
+                <p>
+                    {% trans "MCTest is a free open-source software (see" %}
+                    <a href="{% url 'main:license' %}">{% trans "License" %}</a>)
+                    {% trans "and its best advantage is the handling to parametric questions through LaTeX and Python, allowing for infinite variations of each same question" %}.
+                </p>
+
+                <p>
+                    {% trans "Please access " %}
+                    <a href="http://vision.ufabc.edu.br:8000">vision.ufabc.edu.br:8000</a>
+                    {% trans "for some " %}
+                    <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/">examples</a>.
+                    {% trans "Final URL :8000 is for development" %}.
+
+                </p>
+                <p>
+                <h6>{% trans "Help us spread MCTest. If more people use it, the faster the improvements" %}.</h6></p>
+                <p>{% trans "MCTest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000" %}.</p>
+                <p>{% trans "Define specific data in the file " %}
+                    <a href="http://vision.ufabc.edu.br/static/_settings.env">_settings.env</a>.
+                </p>
+                <p>
+                <h6>
+                    {% trans "After downloading in " %}
+                    <a href="http://github.com/fzampirolli/mctest">github.com/fzampirolli/mctest</a>
+                    {% trans "install MCTest with" %}:
+                </h6>
+                <ol>
+                <pre>
+                    sudo su
+                    source _setup_all.sh</pre>
+                </ol>
+
+                <p><h5>{% trans "Future Improvements" %}</h5></p>
+                <ol>
+                    <li>
+                        <p>{% trans "Error messages and Graphical interfaces" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Install" %} <a
+                                href="http://vision.ufabc.edu.br/static/_setup-all.sh">_setup-all.sh</a>
+                            ({% trans "including other operating systems" %});</p>
+                    </li>
+                    <li>
+                        <p>{% trans "The time to generate PDF from an exam with many students" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Site and DB in different languages. For example, edit the " %}
+                            locale/pt/LC_MESSAGES/django.po {% trans "for Portuguese and use the commands" %}:
+                        <pre>
+                django-admin.py makemessages -l pt
+                django-admin.py compilemessages</pre>
+                        </p>
+
+                        <p>{% trans "Afterwards make the following changes in " %}
+                            <a href="http://vision.ufabc.edu.br/static/_settings.env">_settings.env</a>:
+                        <pre>
+                LANGUAGE_CODE = 'pt-br'
+                TIME_ZONE = 'America/Sao_Paulo'</pre>
+                        {% trans "Please see 'locale' folder for other languages" %};
+                        </p>
+                    </li>
+                    <li>
+                        <p>{% trans "AI Exams Module: individual exams based on the students and the class history" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "AI Students Module: evaluation of how the weigh questions in order to show the skills and abilities of each student" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Use of blockchain to validate exams, history and other features" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Inclusion of facial recognition in the QR Code of the exams" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Improve of Item Response Theory;  " %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Use Markdown to describe questions and send exams or activities to students" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Adapt the Android application to this version of MCTest" %} [<a
+                                href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a>, <a
+                                href="https://itp.ifsp.edu.br/ojs/index.php/IC/article/viewFile/221/394">ref16b</a>];
+                        </p>
+                    </li>
+                    <li>
+                        <p>{% trans "Study the integration of MCTest with other systems, for example, SIGAA and Moodle, sharing different databases" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Run the parametric question codes on other servers, similar to those used in the Moodle VPL plug-in" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Integrate with MakeTests" %}: <a href="https://github.com/fernandoteubl/MakeTests">link</a>;</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Write a complete tutorial to install and use MCTest" %}.</p>
+                    </li>
+                </ol>
+
+                <hr>
+
+                <p><h5>{% trans "Collaboration proposal with experts to write articles or technical reports" %}</h5></p>
+                <ul>
+                    {% trans "A maximum of 5 authors per article" %};
+                    {% trans "Authors' order proportional to the number of pages written" %};
+                    {% trans "I already have data/implementations for some topics" %}:
+                </ul>
+
+                <ol>
+                    <li>
+                        <p>{% trans "Security in exams using QRcode" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Exams with multiple-choice questions and different weights in the answers" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Answer sheet design comparisons" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "A case study using Item Response Theory" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Individualized online activities with multiple-choice parametric questions" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "MCTest: Software Requirements Specification" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "MCTest: graphic interface" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "MCTest: data base" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "MCTest: software architecture" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "MCTest: software deployment" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Individualized parametric questions using MCTest+Moodle+VPL (I already have the 4 co-authors)" %}.</p>
+                    </li>
+
+                </ol>
+
+                <hr>
+
+                <p><h5>{% trans "Versions" %}</h5></p>
+
+
+                <ul>
+                    <li>
+                        <p><strong>webMCTest 1.0 (MCTest 5.0)</strong></p>
+                        <ul>
+                            <li>{% trans "August 2018" %}</li>
+                            <li>{% trans "Multiple choice test model in QR Code itself" %}</li>
+                        </ul>
+                    </li>
+                    <p></p>
+                    <li>
+                        <p><strong>webMCTest 1.1 (MCTest 5.1)</strong></p>
+                        <ul>
+                            <li>{% trans "August 2019" %}</li>
+                            <li>{% trans "New graphical interfaces" %}</li>
+                            <li>{% trans "The multiple-choice test template is now stored on the server" %}</li>
+                        </ul>
+                    </li>
+                    <p></p>
+                    <li>
+                        <p><strong>webMCTest 1.2 (MCTest 5.2)</strong></p>
+                        <ul>
+                            <li>{% trans "grant #2018/23561-1, São Paulo Research Foundation (FAPESP)" %}</li>
+                            <li>{% trans "Title: A universal system for generation and correction automatic of parametrized questions" %}</li>
+                            <li>01/09/2019 - 31/08/2021</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

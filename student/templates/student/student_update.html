@@ -1,0 +1,61 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Student Update" %}</h5>
+                        <hr>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <!-- student_ID -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Code" %}</span>
+                                    </div>
+                                    {% render_field form.student_ID class+="form-control" %}
+                                </div>
+
+                                <!-- student_name -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Name" %}</span>
+                                    </div>
+                                    {% render_field form.student_name class+="form-control" %}
+                                </div>
+
+                                <!-- student_email -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Email" %}</span>
+                                    </div>
+                                    {% render_field form.student_email class+="form-control" %}
+                                </div>
+
+                                <hr>
+                                <div class="text-right">
+                                    <!--
+                                    <a href="{ url 'student:student-list' }"
+                                       class="btn btn-outline-primary">{ trans "Back" }</a>-->
+                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                </div>
+                            </form>
+
+                        {% else %}
+                            {% trans "Only prof/coord can update/create/delete students" %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

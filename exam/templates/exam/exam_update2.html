@@ -1,0 +1,427 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Exame Update" %}</h5>
+
+                        <hr/>
+
+                        <h4>
+                            <code>
+                                {% trans "Attention" %}:
+                                {% trans "Each time you click Create-PDF, a different exam will be generated!" %}
+                                {% trans "After printing the PDF with the exam, SAVE IT TO YOUR COMPUTER and " %}
+                                {% trans "DO NOT CHANGE the attributes of this page; " %}
+                                {% trans "Otherwise automatic correction will not be possible on scanned exams in Upload-PDF." %}
+                            </code>
+                        </h4>
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            <!-- Create-PDF; Upload-PDF; Send-Feedback-Students Text; Send-Feedback-Students Buttons -->
+                            <table frame="hsides" rules="cols" style="width:100%">
+                                <tr>
+                                    <td>
+                                        <!-- Create-PDF -->
+                                        <form action="../generate/" class="input-group mb-3" method="post">
+                                            {% csrf_token %}
+                                            <input action="" class="btn btn-primary" type="submit"
+                                                   value={% trans "Create-PDF" %}>
+                                        </form>
+                                        <h6>{% trans "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, if the circles are defective, the broker may not work correctly - we recommend that you change the printer and print again. (3) Before applying the exam, it is strongly recommended to print a sheet, fill in, scan and follow the step on the right side. Upload-PDF >>>" %}</h6>
+                                    </td>
+                                    <td>
+                                        <!-- Upload-PDF -->
+                                        <form action="../correct/" class="input-group mb-3"
+                                              enctype="multipart/form-data"
+                                              method="POST">
+                                            {% csrf_token %}
+                                            <input type="file" name="myfilePDF">
+                                            <button class="btn btn-primary"
+                                                    type="submit">{% trans "Upload-PDF" %}</button>
+                                            {% trans "Choose PDF file for correction of exams" %}
+                                        </form>
+                                        <h6>{% trans "Caution: (1) Before scanning, make sure all circles have been filled correctly. If you to use correction fluid and erase part of the outline of the circle, the correction may not work. (2) Scan with a resolution of 150dpi (if you can not decode QRCode, use 200dpi), <code>gray levels</code>, just the front of the sheet and one PDF per class. (3) The 4 black disks can not be defective. (4) If you chose only answers on the screen of this exam, the first page of the PDF should contain the template and all questions will be disregarded. (5) If in this Exam screen the option to Return to Students was chosen, when enrolling the students in the class, you must also include the student's e-mail. If this has been done, you can follow the step to the right side Send-Return-Students, for each student receive the correction of your examination by email >>>" %}</h6>
+
+                                    </td>
+                                    <td>
+                                        <!-- Send-Feedback-Students Text -->
+                                        <form action="../sendFeedbackStudentsText/" method="post"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="file" name="myfileZIP"></input>
+                                            <button class="btn btn-primary"
+                                                    type="submit">{% trans "Send-Feedback-Students Text" %}</button>
+                                        </form>
+                                        <h6>{% trans "Caution: If you used exams with written questions and in non-ecological format, then one question was generated per sheet, right? If you want to submit manually corrections to each student's in PDFs, you will need to follow a few steps: (1) in the previous column step, when uploading all exams in PDF, a zip file with a folder for each question was generated (for example, Download.zip). Within this folder a pdf was generated for each student in the format _e1_c2_q3_p001_5.pdf, where 1 is the exam ID, 2 is the classroom ID, 3 is the question ID, 001 is the pdf page, and 5 is the student ID. The teacher can correct by making annotations in the PDF itself OR also can scan with annotations made in the pen. (2) manually change the file names of each question in the format _A;e1,e2,...;_e1_c2_q3_p001_5.pdf, where A is a concept or a note and ei are error code numbers (optional); in the question folder, it should have a _e1_c2_q3.txt file (<code>one for each classroom</code>), with a message to be sent to each student. (3) compress the folder of each question for all students (for example _e1_q3.zip) and press the button above. Each student will receive the PDF with the corrections and will also return a CSV file with the concepts of each student." %}</h6>
+
+                                        <hr>
+                                        <!-- Send-Feedback-Students Text -->
+                                        <form class="input-group mb-3 text-right" action="../sendFeedbackStudents/"
+                                              method="post"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input class="btn btn-primary text-right" type="submit" action=""
+                                                   value={% trans "Send-Feedback-Students" %}>
+                                        </form>
+                                        <h6>{% trans "This option is to send feedback ONLY from multiple choice exams after successfully completing the step from the previous column." %} </h6>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {{ form.management_form }}
+
+                                <!-- exam_name -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Name" %}</span>
+                                    </div>
+                                    {% render_field form.exam_name class+="form-control" placeholder=form.exam_name.help_text %}
+                                </div>
+
+                                <!-- classrooms -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Classrooms" %}</span>
+                                        <pre> </pre>
+                                        {% for c in form.classrooms %}
+                                            <div class="checkbox">
+                                                <label> {{ c }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <!-- questions -->
+                                <div class="card-body" style="background-color:#f3f3f3;">
+                                    <h5 class="card-title">{% trans "Questions List" %}</h5>
+                                    <script>
+                                        var count = 0;
+
+                                        function get_ID(con) {
+                                            var aux = "id_questions_" + con.toString();
+                                            var x = document.getElementById(aux).value;
+                                            return x.toString();
+                                        }
+
+                                        function get_Dif(con, str) {
+                                            var aux = "id_questions_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerText;
+                                            var ini = text.indexOf(str) + 6;
+                                            var sub = text.substring(ini, text.length);
+                                            var fim = sub.indexOf(';');
+                                            console.log(x);
+                                            return sub.substring(0, fim);
+                                        }
+
+                                        function get_Element(con) {
+                                            var aux = "id_questions_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerHTML;
+                                            var fim = text.indexOf('>');
+                                            var sub = text.substring(0, fim + 1);
+                                            var text1 = x.labels[1].innerText;
+                                            var ini = text1.indexOf('; des') + 6;
+                                            var des = text1.substring(ini, text1.length);
+                                            var res = des;// + "</input>";
+                                            console.log(res);
+                                            return res;
+                                        }
+                                    </script>
+
+
+                                    <table id="example1" class="table table-striped table-bordered"
+                                           style="width:100%">
+                                        <thead class="thead-light">
+                                        <!-- header -->
+                                        <tr>
+
+                                            <th scope="col">
+                                                <div class="checkbox mass_select_all_wrap">
+                                                    > <input type="checkbox" id="mass_select_all"
+                                                           data-to-table="tasks"><label></label></div>
+                                            </th>
+
+                                            <th scope="col">{% trans "Topic" %}</th> <!-- Choose -->
+                                            <th scope="col">{% trans "Description" %}</th>
+                                            <th scope="col">{% trans "Type" %}</th>
+                                            <th scope="col">{% trans "Dif." %}</th>
+                                            <th scope="col">{% trans "Group" %}</th>
+                                            <th scope="col">{% trans "Par." %}</th>
+                                            <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- questions -->
+                                        {% for q in form.questions %}
+                                            {% csrf_token %}
+                                            <tr>
+                                                <!-- question -->
+                                                <td class="text-center">
+                                                    <div class="btn btn-outline-primary btn-sm">
+                                                        <label>
+                                                            <div style="color:white;font-size:1px;width:12px">{{ q }}</div>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <!-- Topic -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif(count, '; top'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- description -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <label>
+                                                            <script>document.write(get_Element(count));</script>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <!-- Type -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif(count, '; typ'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Difficulty -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif(count, '; dif'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Group -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif(count, '; gro'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Parametric -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif(count, '; par'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- see -->
+                                                <td class="text-center">
+                                                    <script>
+                                                        document.write("<a href=\"/topic/question/" + get_ID(count++) + "\" ");
+                                                        document.write("class=\"btn btn-outline-primary btn-sm\"");
+                                                        document.write(">{% trans 'See' %}</a>");
+                                                    </script>
+                                                    {{ q.question_group }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <hr>
+                                </div>
+                                <p></p>
+
+                                <!-- many variables -->
+                                <table class="table">
+                                    <thead class="thead-light">
+                                    <!-- header -->
+                                    <tr>
+                                        <th scope="col"
+                                            style="width: 50%;">{% trans "Number of questions per Exam" %}</th>
+                                        <th scope="col" style="width: 50%;"
+                                            class="text-left">{% trans "Exam Style" %}</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <th class="text-left">
+                                            <div class="input-group mb-3">
+                                                <!-- exam_number_of_questions_var1 -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Difficulty 1" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_questions_var1 class+="form-control" placeholder=form.exam_number_of_questions_var1.help_text %}
+                                                </div>
+                                                <!-- exam_number_of_questions_var2 -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Difficulty 2" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_questions_var2 class+="form-control" placeholder=form.exam_number_of_questions_var2.help_text %}
+                                                </div>
+                                                <!-- exam_number_of_questions_var3 -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Difficulty 3" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_questions_var3 class+="form-control" placeholder=form.exam_number_of_questions_var3.help_text %}
+                                                </div>
+                                                <!-- exam_number_of_questions_var4 -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Difficulty 4" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_questions_var4 class+="form-control" placeholder=form.exam_number_of_questions_var4.help_text %}
+                                                </div>
+                                                <!-- exam_number_of_questions_var5 -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Difficulty 5" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_questions_var5 class+="form-control" placeholder=form.exam_number_of_questions_var5.help_text %}
+                                                </div>
+                                                <!-- exam_number_of_anwsers_question -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Answers per question" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_anwsers_question class+="form-control" placeholder=form.exam_number_of_anwsers_question.help_text %}
+                                                </div>
+                                                <!-- exam_number_of_questions_text -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Textual" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_number_of_questions_text class+="form-control" placeholder=form.exam_number_of_questions_text.help_text %}
+                                                </div>
+                                                <!-- exam_variations -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Variations" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_variations class+="form-control" placeholder=form.exam_variations.help_text %}
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th class="text-left">
+                                            <div class="input-group mb-3">
+                                                <!-- exam_max_questions_square -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Questions by block" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_max_questions_square class+="form-control" placeholder=form.exam_max_questions_square.help_text %}
+                                                </div>
+                                                <!-- exam_max_squares_horizontal -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Max blocks horiz." %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_max_squares_horizontal class+="form-control" placeholder=form.exam_max_squares_horizontal.help_text %}
+                                                </div>
+                                                <!-- exam_stylesheet -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Stylesheet" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_stylesheet class+="form-control" placeholder=form.exam_stylesheet.help_text %}
+                                                </div>
+                                                <!-- exam_print -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Answersheets/Questions/Both" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_print class+="form-control" placeholder=form.exam_print.help_text %}
+                                                </div>
+                                                <!-- exam_print_eco -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Ecological" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_print_eco class+="form-control" placeholder=form.exam_print_eco.help_text %}
+                                                </div>
+                                                <!-- exam_student_feedback -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Student Feedback" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_student_feedback class+="form-control" placeholder=form.exam_student_feedback.help_text %}
+                                                </div>
+                                                <!-- exam_hour -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Date" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_hour class+="form-control" placeholder=form.exam_hour.help_text %}
+                                                </div>
+                                                <!-- exam_term -->
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{% trans "Term" %}</span>
+                                                    </div>
+                                                    {% render_field form.exam_term class+="form-control" placeholder=form.exam_term.help_text %}
+                                                </div>
+
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </table>
+
+
+                                <p></p>
+
+                                <!-- exam_who_created -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Who created" %}</span>
+                                    </div>
+                                    {% render_field form.exam_who_created class+="form-control" placeholder=form.exam_who_created.help_text %}
+                                </div>
+                                <!-- exam_instructions -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Instructions" %}</span>
+                                    </div>
+                                    {% render_field form.exam_instructions class+="form-control" placeholder=form.exam_instructions.help_text %}
+                                </div>
+
+                                <hr>
+
+                                <!-- Actions buttons -->
+                                <div class="text-right">
+                                    <a href="{% url 'exam:myexams' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <input class="btn btn-primary" type="submit" value={% trans "Submit" %}>
+                                    <hr>
+                                </div>
+
+                            </form>
+
+                            <!-- Delete button -->
+                            <form action="../delete/" method="">
+                                {% csrf_token %}
+                                <div class="text-right">
+                                    <input class="btn btn-danger" type="submit" action=""
+                                           value={% trans "Delete this Exam" %}/>
+                                </div>
+
+                            </form>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Exam of the disciplines that I am enrolled" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

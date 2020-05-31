@@ -1,0 +1,71 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Created a new Classroom" %}</h5>
+
+                        <hr>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <!-- discipline -->
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Discipline" %}</span>
+                                    </div>
+                                    {% render_field form.discipline class+="form-control" %}
+                                </div>
+
+                                <!-- classroom_code -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Code" %}</span>
+                                    </div>
+                                    {% render_field form.classroom_code class+="form-control" placeholder=form.course_name.help_text %}
+                                </div>
+
+                                <!-- classroom_room -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Room" %}</span>
+                                    </div>
+                                    {% render_field form.classroom_room class+="form-control" placeholder=form.course_code.help_text %}
+                                </div>
+
+                                <!-- classroom_type -->
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Type" %}</span>
+                                    </div>
+                                    {% render_field form.classroom_type class+="form-control" %}
+                                </div>
+
+                                <hr>
+                                <div class="text-right">
+                                    <a href="{% url 'course:classroom-mylist' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                </div>
+                            </form>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Import students by csv file in My Classrooms" %}<br>
+                        {% trans "Only teacher registered in a discipline" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

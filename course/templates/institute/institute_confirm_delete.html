@@ -1,0 +1,38 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Delete Institute" %}</h5>
+
+                <hr>
+
+                {% if user.is_staff %}
+
+                    <p class="card-text">
+                        {% trans "Are you sure you want to delete the institute" %}: <code>{{ institute }}</code>?
+                    </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <hr/>
+                        <div class="text-left">
+                            <a href="{% url 'course:institute-list' %}" class="btn btn-outline-danger">
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-danger">{% trans "Delete" %}</button>
+                        </div>
+                    </form>
+
+                {% endif %}
+
+                <hr>
+                {% trans "Only admin can update/create/delete institutes/courses/disciplines" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

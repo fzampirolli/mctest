@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Student Detail" %}</h5>
+
+                        <hr>
+
+                        <h6><strong>{% trans "ID" %}: </strong>{{ student.student_ID }}</h6>
+                        <h6><strong>{% trans "Name" %}: </strong>{{ student.student_name }}</h6>
+                        <h6><strong>{% trans "Email" %}: </strong>{{ student.student_email }}</h6>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

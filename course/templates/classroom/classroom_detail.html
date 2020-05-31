@@ -1,0 +1,148 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Classroom Detail" %}</h5>
+
+                        <hr>
+
+                        <h5><strong>{% trans "Classroom" %}:</strong> {{ classroom.classroom_code }}</h5>
+                        <h6><strong>{% trans "Type" %}:</strong>{{ classroom.classroom_type }}</h6>
+                        <h6><strong>{% trans "Profs" %}:</strong>
+                            {% for prof in classroom.classroom_profs.all %}
+                                {{ prof }};
+                            {% endfor %}
+                            </h6>
+
+                        {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.discipline.discipline_profs.all %}
+
+                            <div style="margin-left:20px;margin-top:20px">
+                                <hr>
+
+                                {% csrf_token %}
+
+                                <!-- Shows students -->
+                                {% if classroom.students.all %}
+
+                                    <div class="card-body" style="background-color:#f3f3f3;">
+                                        <h5 class="card-title">{% trans "Students List" %}</h5>
+                                        <table id="example" class="table table-striped table-bordered"
+                                               style="width:100%">
+                                            <thead class="thead-light">
+
+                                            <!-- Topic header -->
+                                            <tr>
+                                                <th scope="col">{% trans "ID" %}</th>
+                                                <th scope="col">{% trans "Student" %}</th>
+                                                <th scope="col">{% trans "Email" %}</th>
+                                                <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for student in classroom.students.all %}
+                                                <tr>
+                                                    <!-- student_ID -->
+                                                    <td>
+                                                        <a href="{% url 'student:student-detail' pk=student.pk %}"
+                                                           class="btn btn-outline-info text-dark btn-sm">
+                                                            {{ student.student_ID }}
+                                                        </a>
+                                                    </td>
+                                                    <!-- student_name -->
+                                                    <td>
+                                                        <a href="{% url 'student:student-detail' pk=student.pk %}"
+                                                           class="btn btn-outline-info text-dark btn-sm">
+                                                            {{ student.student_name }}
+                                                        </a>
+                                                    </td>
+                                                    <!-- student_email -->
+                                                    <td>
+                                                        <a href="{% url 'student:student-detail' pk=student.pk %}"
+                                                           class="btn btn-outline-info text-dark btn-sm">
+                                                            {{ student.student_email }}
+                                                        </a>
+                                                    </td>
+
+                                                    <!-- Actions -->
+                                                    <td class="text-right">
+                                                        {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.discipline.discipline_profs.all %}
+                                                            <!-- Update -->
+                                                            <a href="{% url 'student:student-update'  pk=student.pk %}"
+                                                               class="btn btn-outline-primary btn-sm">
+                                                                {% trans "Update" %}
+                                                            </a>
+                                                            <!-- Delete -->
+                                                            <a href="{% url 'course:classroom-student-delete' pk1=classroom.pk pk2=student.pk %}"
+                                                               class="btn btn-outline-danger btn-sm">
+                                                                {% trans "Delete" %}
+                                                            </a>
+                                                        {% endif %}
+                                                    </td>
+
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {% if classroom.disciples2.all %}
+                                        <h1>{% trans "Classrooms" %}</h1>
+                                        <ul>
+                                            {% for c in classroom.disciples2.all %}
+                                                <li class="{% if c.is_overdue %}text-danger{% endif %}">
+                                                    <a href="{% url 'course:classroom-detail'  pk=c.pk %}">
+                                                        {{ c }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <div class="text-center mt-5 mb-5 jumbotron">
+                                        <h5>{% trans "There are no" %}
+                                            <code> {% trans "Student" %} </code> {% trans "registered yet." %}
+                                        </h5>
+                                    </div>
+
+                                {% endif %}
+                                <!-- End Shows students -->
+
+                            </div>
+                        {% endif %}
+
+                        {% if user.groups.all.0.name == 'professor' %}
+                            <hr/>
+                            <div class="text-right">
+                                <!-- Create a new Student BUG --
+                                <a href="{ url 'student:student-create' pk=classroom.pk}"
+                                   class="btn btn-primary">
+                                    { trans "Create a new Student - BUG" }
+                                </a> -->
+                                <a href="{% url 'course:classroom-update' pk=classroom.pk %}"
+                                   class="btn btn-primary">
+                                    {% trans "Update Classroom by CSV" %}
+                                </a>
+                            </div>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Attention, a student may be many classrooms" %}<br>
+                        {% trans "One student will be removed from the class" %}<br>
+                        {% trans "Import students by CSV file in Update Classroom" %}<br>
+                        {% trans "Only teacher registered in a discipline" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

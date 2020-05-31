@@ -1,0 +1,94 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Question Detail" %}</h5>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            <hr>
+                            <table style="width:100%">
+                                <tr>
+                                    <th>
+                                        <form class="input-group mb-3"
+                                              action="{% url 'topic:question-create-question-PDF' pk=question.id %}"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <input class="btn btn-primary" type="submit" action=""
+                                                   value={% trans "Create-PDF" %}>
+                                        </form>
+                                    </th>
+                                    <th>
+                                        <div class="text-right">
+                                            <a href="{% url 'topic:myquestions-list' %}"
+                                               class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                            <a href="{% url 'topic:question-update' pk=question.id %}"
+                                               class="btn btn-primary">{% trans "Update" %}</a><br>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </table>
+
+                            <hr>
+                            <!-- header -->
+                            <table>
+                                <tr>
+                                    <td><strong>{% trans "Topic" %}: </strong></td>
+                                    <td>{{ question.topic }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{% trans "Short Description" %}: </strong></td>
+                                    <td>{{ question.question_short_description }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{% trans "Group" %}: </strong></td>
+                                    <td>{{ question.question_group }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{% trans "Description" %}: </strong></td>
+                                    <td>{{ question.question_text }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{% trans "Type" %}: </strong></td>
+                                    <td>{{ question.question_type }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{% trans "Who Created" %}: </strong></td>
+                                    <td>{{ question.question_who_created }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{% trans "Last Update" %}: </strong></td>
+                                    <td>{{ question.question_last_update }}</td>
+                                </tr>
+
+                                <p>
+                                    <!-- Answers -->
+                                    {% for a in question.answers %}
+                                        <tr>
+                                            <td><strong>{% trans "Answer" %}: </strong></td>
+                                            <td>{{ a.answer_text }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans "Feedback" %}:</td>
+                                            <td>{{ a.answer_feedback }}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                            </table>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

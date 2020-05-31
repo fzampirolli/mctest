@@ -1,0 +1,196 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "My Questions List" %}</h5>
+
+                        {% if user.groups.all.0.name == 'professor' %}
+
+                            {% if question_list %}
+                                <div class="card-body" style="background-color:#f3f3f3;">
+                                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                        <thead class="thead-light">
+
+                                        <!-- header -->
+                                        <tr>
+                                            <th scope="col">{% trans "Topic" %}</th>
+                                            <th scope="col">{% trans "Type" %}</th>
+                                            <th scope="col">{% trans "Group" %}</th>
+                                            <th scope="col">{% trans "Dif." %}</th>
+                                            <th scope="col">{% trans "Par." %}</th>
+                                            <th scope="col">{% trans "ID" %}</th>
+                                            <th scope="col">{% trans "Short Description" %}</th>
+                                            <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for question in question_list %}
+                                            <tr>
+
+                                                <!-- topic -->
+                                                <td>
+                                                    <a href="{% url 'topic:topic-detail' pk=question.topic_id %}"
+                                                       class="btn btn-outline-warning text-dark btn-sm">
+                                                        {{ question.topic }}
+                                                    </a>
+                                                </td>
+
+                                                <!-- question_type -->
+                                                <td>
+                                                    <a href="{% url 'topic:question-detail' pk=question.topic_id %}"
+                                                       class="btn btn-outline-light text-dark btn-sm">
+                                                        {{ question.question_type }}
+                                                    </a>
+                                                </td>
+                                                <!-- question_group -->
+                                                <td>
+                                                    <a href="{% url 'topic:question-detail' pk=question.topic_id %}"
+                                                       class="btn btn-outline-light text-dark btn-sm">
+                                                        {{ question.question_group }}
+                                                    </a>
+                                                </td>
+                                                <!-- question_difficulty -->
+                                                <td>
+                                                    <a href="{% url 'topic:question-detail' pk=question.pk %}"
+                                                       class="btn btn-outline-light text-dark btn-sm">
+                                                        {{ question.question_difficulty }}
+                                                    </a>
+                                                </td>
+                                                <!-- question_parametric -->
+                                                <td>
+                                                    <a href="{% url 'topic:question-detail' pk=question.pk %}"
+                                                       class="btn btn-outline-light text-dark btn-sm">
+                                                        {{ question.question_parametric }}
+                                                    </a>
+                                                </td>
+                                                <!-- pk -->
+                                                <td>
+                                                    <a href="{% url 'topic:question-detail' pk=question.pk %}"
+                                                       class="btn btn-outline-light text-dark btn-sm">
+                                                        {{ question.pk }}
+                                                    </a>
+                                                </td>
+                                                <!-- question_short_description -->
+                                                <td>
+                                                    <a href="{% url 'topic:question-detail' pk=question.pk %}"
+                                                       class="btn btn-outline-info text-dark btn-sm">
+                                                        {{ question.question_short_description }}
+                                                    </a>
+                                                </td>
+
+                                                <td class="text-right">
+
+                                                    {% for d in question.topic.discipline.all %}
+
+                                                        {% if user.is_superuser or user in d.discipline_coords.all  or user in d.discipline_profs.all %}
+
+                                                            <!-- Update -->
+                                                            <a href="{% url 'topic:question-update'  pk=question.pk %}"
+                                                               class="btn btn-outline-primary btn-sm">
+                                                                {% trans "Update" %}
+                                                            </a>
+
+                                                            <!-- Delete -->
+                                                            <a href="{% url 'topic:question-delete'  pk=question.pk %}"
+                                                               class="btn btn-outline-danger btn-sm">
+                                                                {% trans "Delete" %}
+                                                            </a>
+
+                                                        {% endif %}
+
+                                                    {% endfor %}
+
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            {% else %}
+
+                                <!-- If there is no question -->
+                                <div class="text-center mt-5 mb-5 jumbotron">
+                                    <h5>{% trans "There is no" %}
+                                        <code> {% trans "Question" %} </code> {% trans "registered yet." %}
+                                    </h5>
+                                </div>
+
+                            {% endif %}
+
+                            <!-- Create a New Question    -->
+                            <script> var count = 0; </script>
+                            <hr/>
+                            <div class="text-right">
+                                             <script>
+                                                if (count == 0) {
+                                                    document.write("<a href=\"{% url 'topic:question-create' %}\" class=\"btn btn-primary\">");
+                                                    document.write("{%  trans 'Create a New Question' %}</a>")
+                                                }
+                                                count++;
+                                            </script>
+                            </div>
+                            <hr>
+
+                            <!-- Upload-Questions by TXT -->
+                            <h4>{% trans "Import questions from a file (MCTest4 format)" %}
+                                - {% trans "Only UTF-8 format" %}</h4>
+                            <form action="/topic/myquestions/import/" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="myfile">
+                                <button type="submit">{% trans "Upload-Questions" %}</button>
+                                {% trans "Choose TXT file for import questions" %}
+
+                                <h4>
+                                    <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-web/examples/">{% trans "see examples" %}</a>
+                                </h4>
+
+                                <h4>{% trans "TXT file syntax" %}
+                                    - {% trans "Create topic before, if it does not exist" %}: </h4>
+                                {% trans "QE::matrix::group A::    % QE, QM or QH :: topic :: group " %}<br>
+                                {% trans "Create a matrix 3 x 5 of integers, with elements (i, j) = i + j, with indices beginning at zero, print the sum of the elements of the matrix." %}<br>
+                                A: 44 % {% trans "correct awsers - always first" %} <br>
+                                A: 35<br>
+                                A: 43<br>
+                                A: 55<br>
+                                A: 47<p>
+
+                                {% trans "If necessary, use this to convert the accents" %}:
+                                <a href="http://w2.syronex.com/jmr/latex-symbols-converter">{% trans "convert" %}</a></br>
+                                {% trans "After importing the TXT file, make sure the new questions have been created" %}
+                            </p>
+
+                            </form>
+                            <hr>
+
+                            <!-- Upload-Questions by Json -->
+                            <h4>{% trans "Import questions from a file (Json format)" %}</h4>
+                            <form action="/topic/myquestions/importJson/" method="POST"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="myfile">
+                                <button type="submit">{% trans "Upload-Questions-Json" %}</button>
+                                {% trans "Download a question to view the Json format" %}<br>
+
+                            </form>
+
+                        {% endif %}
+
+                        <hr>
+                        {% trans "Questions of the disciplines that I am enrolled" %}<br>
+                        {% trans "Contact your discipline coordinator" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

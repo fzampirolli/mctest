@@ -1,0 +1,45 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Contributors" %}</h5>
+
+                <hr>
+
+                <ol>
+                    <li>
+                        {% trans "Thanks to many contributors who provided interesting information and are co-authors of the publications presented at" %}
+                        <a href="vision.ufabc.edu.br:8000">vision.ufabc.edu.br:8000</a>.
+                    </li>
+
+                    <li>
+                        {% trans "We also thank the contributors who helped codify MCTest, unknown in web discussion forums" %}.
+                    </li>
+
+                    <li>
+                        {% trans "I think the big difference with MCTest is the parameterized issue, which may need custom Python functions to make writing easier. In this regard, I also thank" %}
+                        (<a href="http://vision.ufabc.edu.br/static/Utils.py">Utils.py</a>):
+                    </li>
+                    <ul>
+                        <li>
+                            Jorge Tomioka -  UFABC
+                        </li>
+                    </ul>
+                </ol>
+
+                <hr>
+
+                <p>{% trans "I hope this list grows more and more" %} ...</p>
+
+                {% trans "Please email" %} <a
+                    href="mailto:fzampirolli@ufabc.edu.edu">fzampirolli@ufabc.edu.edu</a> {% trans "if I forgot anyone" %}.
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

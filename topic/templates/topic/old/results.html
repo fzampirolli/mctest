@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    {% if user.is_authenticated %}{% for group in user.groups.all %}
+        {% if group.name == 'professor' or group.name == 'coordenador' %}
+
+            <h1>{{ question.question_text }}</h1>
+
+            <ul>
+                {% for topic in question.topic_set.all %}
+                    <li>{{ topic.topic_text }} -- {{ topic.votes }} vote{{ choice.votes|pluralize }}</li>
+                {% endfor %}
+            </ul>
+
+            <a href="{% url 'topic:detail' question.id %}">Vote again?</a>
+
+        {% endif %}
+    {% endfor %}{% endif %}
+{% endblock %}

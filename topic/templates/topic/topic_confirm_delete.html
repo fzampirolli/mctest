@@ -1,0 +1,58 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Delete Topic" %}</h5>
+
+                <hr>
+
+                {% if user.groups.all.0.name == 'professor' %}
+
+                    <!-- message -->
+                    <script> var count = 0; </script>
+                    {% for d in topic.discipline.all %}
+                        {% if user in d.discipline_coords.all %}
+                            <script>
+                                if (count == 0) {
+                                    document.write("<p>{% trans 'Are you sure you want to delete the topic' %}: <code>{{ topic }}</code>?</p>");
+                                }
+                                count++;
+                            </script>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- actions -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <hr/>
+                        <div class="text-left">
+                            <a href="{% url 'topic:topic-list' %}" class="btn btn-outline-danger">
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-danger">{% trans "Delete" %}</button>
+                        </div>
+                    </form>
+
+                    <!-- message -->
+                    <script>
+                        document.write("<hr>");
+                        if (count > 1) {
+                            document.write("<br>{% trans 'Note that you will delete a topic that belongs to more than one discipline!' %}")
+                        }
+                    </script>
+
+                {% endif %}
+
+                <hr>
+                <h3><code>{% trans 'All questions connected this topic will be removed from the database!' %}</code>
+                </h3>
+            </div>
+        </div>
+    </div>
+{% endblock %}

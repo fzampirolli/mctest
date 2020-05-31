@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <h1>Delete Question</h1>
+
+    {% if user.is_authenticated %}{% for group in user.groups.all %}
+        {% if group.name == 'professor' or group.name == 'coordenador' %}
+
+            <p>Are you sure you want to delete the question: {{ question }}?</p>
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="submit" action="" value="Yes, delete."/>
+            </form>
+
+        {% else %}
+            <p>Restrict access</p>
+        {% endif %}
+    {% endfor %}{% endif %}
+{% endblock %}

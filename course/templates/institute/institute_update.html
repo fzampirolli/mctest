@@ -1,0 +1,92 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{% trans "Institute Update" %}</h5>
+                        <hr>
+
+                        {% if user.is_staff %}
+
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <!-- institute_name -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Name" %}</span>
+                                    </div>
+                                    {% render_field form.institute_name class+="form-control" %}
+                                </div>
+
+                                <!-- institute_code -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Code" %}</span>
+                                    </div>
+                                    {% render_field form.institute_code class+="form-control" %}
+                                </div>
+
+                                <!-- institute_logo -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Logo" %}</span>
+                                    </div>
+                                    {% render_field form.institute_logo class+="form-control" %}
+                                </div>
+
+                                <!-- institute_url -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "URL" %}</span>
+                                    </div>
+                                    {% render_field form.institute_url class+="form-control" placeholder=form.institute_url.help_text %}
+                                </div>
+
+                                <!-- institute_exams_generated -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Exams generated" %}</span>
+                                    </div>
+                                    {% render_field form.institute_exams_generated class+="form-control" %}
+                                </div>
+
+                                <!-- institute_exams_corrected -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Exams corrected" %}</span>
+                                    </div>
+                                    {% render_field form.institute_exams_corrected class+="form-control" %}
+                                </div>
+
+                                <!-- institute_questions_corrected -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Questions corrected" %}</span>
+                                    </div>
+                                    {% render_field form.institute_questions_corrected class+="form-control" %}
+                                </div>
+
+                                <hr>
+                                <div class="text-right">
+                                    <a href="{% url 'course:institute-list' %}"
+                                       class="btn btn-outline-primary">{% trans "Back" %}</a>
+                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                </div>
+                            </form>
+
+                        {% else %}
+                            {% trans "Only admin can update/create/delete institutes/courses/disciplines" %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+<h1>{{ question.question_short_description }}</h1>
+<h2>{{ question.question_text }}</h2>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {% for choice in question.topic_set.all %}
+        <input type="radio" name="topic" id="choice{{ forloop.counter }}" value="{{ topic.id }}"/>
+        <label for="topic{{ forloop.counter }}">{{ topic.topic_text }}</label><br/>
+    {% endfor %}
+    <input type="submit" value="Escolher"/>
+</form>
+
