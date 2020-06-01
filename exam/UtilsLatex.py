@@ -67,7 +67,7 @@ class Utils(object):
         for varia in listao:
             qts = varia[0]
             contVaria += 1
-            varia_gab = [str(contVaria)]
+            varia_gab = [str(contVaria-1)]
             for q in qts.split(';'):
                 if len(q):
                     q_str = q[-int(exam.exam_number_of_anwsers_question):]
