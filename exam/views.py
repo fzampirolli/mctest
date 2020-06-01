@@ -653,16 +653,6 @@ def generate_page(request, pk):
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
-        # if maxStudentsClass < int(exam.exam_variations):
-        #     list_All_Students = [['Class', 'ID', "Name"]]
-        #     for room in exam.classrooms.all(): ############## PARA CADA TURMA
-        #         for s in room.students.all():  ############## PARA CADA ESTUDANTE DA TURMA
-        #             list_All_Students.append([room.classroom_code, s.student_ID, s.student_name])
-        #     with open(path_to_file_STUDENTS, 'w') as data:
-        #         writer = csv.writer(data)
-        #         for s in list_All_Students:
-        #             writer.writerow(s)
-
         storage = get_messages(request)
         for message in storage:
             return render(request, 'exam/exam_errors.html', {})
@@ -717,7 +707,7 @@ def generate_page(request, pk):
                     if int(exam.exam_variations) < maxStudentsClass:
                         hash_num = Utils.distro_table(s.student_name)
                     else:
-                        hash_num = countStudents
+                        hash_num = countStudents - 1 # para iniciar de zero
 
                     listVariations.append(
                         [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
