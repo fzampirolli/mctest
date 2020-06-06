@@ -148,6 +148,16 @@ class Exam(models.Model):
         choices=exam_term_choice,
         help_text=_("Term of exam"),
         verbose_name=_("Term"))
+    # exam_output_choice = (
+    #     ('pdf', _('PDF output')),
+    #     ('moodle1', _('Moodle1 output')),
+    #     ('moodle2', _('Moodle1 output')),
+    # )
+    # exam_output = models.CharField(
+    #     default='pdf', max_length=2, null=True, blank=True,
+    #     choices=exam_output_choice,
+    #     help_text=_("Output of exam"),
+    #     verbose_name=_("Output"))
     exam_who_created = models.ForeignKey(User,
                                          on_delete=models.SET_NULL, null=True,
                                          help_text=_("Who created this exam"),

@@ -15,7 +15,7 @@ in any publication about it.
 MCTest is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License
 (gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) 
+Foundation, either version 3 of the License, or (at your option)
 any later version.
 
 MCTest is distributed in the hope that it will be useful,
@@ -647,8 +647,11 @@ def generate_page(request, pk):
             return HttpResponse(st)
         print("generate_page-02-" + str(datetime.datetime.now()))
         listao = []  ############ gera X variacoes de exames
+        db_questions_all = []
         for i in range(int(exam.exam_variations)):
-            listao.append(Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam)))
+            [qr_answers, str1, QT, db_questions] = Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam))
+            db_questions_all.append(db_questions)
+            listao.append([qr_answers, str1, QT])
 
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
@@ -707,7 +710,7 @@ def generate_page(request, pk):
                     if int(exam.exam_variations) < maxStudentsClass:
                         hash_num = Utils.distro_table(s.student_name)
                     else:
-                        hash_num = countStudents - 1 # para iniciar de zero
+                        hash_num = countStudents - 1  # para iniciar de zero
 
                     listVariations.append(
                         [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
@@ -808,16 +811,19 @@ def generate_page(request, pk):
                 break
 
         try:
-            Utils.sendMailTemplates(exam, listao, path_to_file_TEMPLATES)
+            path_to_file_VARIATIONS_DB = path_aux + "_variations_DB_aiken.txt"
+            Utils.createFileDB_aiken(exam, db_questions_all, path_to_file_VARIATIONS_DB)
+
+            Utils.createFileTemplates(exam, listao, path_to_file_TEMPLATES)
             message_cases = 'Following all templates and variations\n\n'
-            anexos = [path_to_file_TEMPLATES]
+            anexos = [path_to_file_TEMPLATES, path_to_file_VARIATIONS_DB]
 
             if int(exam.exam_variations) > 0:  # send file by email with variation of each student
                 with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
                     writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
                                         lineterminator='\n')
                     writer.writerows(listVariations)
-                anexos.append([path_to_file_VARIATIONS])
+                anexos.append(path_to_file_VARIATIONS)
                 # auxSTR = 'In the attached file are the exam variations per student \n-----'
                 # cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
 
@@ -946,6 +952,7 @@ def UpdateExam(request, pk):
             # exam_inst.exam_room = form.cleaned_data['exam_room']
             exam_inst.exam_hour = form.cleaned_data['exam_hour']
             exam_inst.exam_term = form.cleaned_data['exam_term']
+            # exam_inst.exam_output = form.cleaned_data['exam_output']
             exam_inst.exam_who_created = form.cleaned_data['exam_who_created']
             # exam_inst.exam_profs_header = form.cleaned_data['exam_profs_header']
             exam_inst.exam_instructions = form.cleaned_data['exam_instructions']
@@ -990,6 +997,7 @@ def UpdateExam(request, pk):
             # 'exam_room': exam_inst.exam_room,
             'exam_hour': exam_inst.exam_hour,
             'exam_term': exam_inst.exam_term,
+            # 'exam_output': exam_inst.exam_output,
             'exam_who_created': exam_inst.exam_who_created,
             # 'exam_profs_header': exam_inst.exam_profs_header,
             'exam_instructions': exam_inst.exam_instructions,

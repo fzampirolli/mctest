@@ -128,6 +128,10 @@ class UpdateExamForm(forms.Form):
         choices=Exam.exam_term_choice,
         help_text=_("Term of exam"),
         label=_("Term"))
+    # exam_output = forms.ChoiceField(
+    #     choices=Exam.exam_output_choice,
+    #     help_text=_("Output of exam"),
+    #     label=_("Output"))
     exam_who_created = forms.ModelChoiceField(
         queryset=User.objects.order_by('email'),
         help_text=_("Who created this exam"),

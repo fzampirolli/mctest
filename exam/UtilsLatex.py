@@ -26,6 +26,8 @@ GNU General Public License for more details.
 =====================================================================
 '''
 import binascii
+import csv
+import datetime
 import json
 import os
 import random
@@ -35,29 +37,77 @@ import subprocess
 import time
 import unicodedata
 import zlib
-import datetime
-import csv
 
 import bcrypt
 import numpy as np
 import pyqrcode
 from django.contrib import messages
-from django.core.serializers import serialize
 from django.http import HttpResponse
 # coding=UTF-8
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
-from django.http import Http404
 
+from mctest.settings import BASE_DIR
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
-from mctest.settings import BASE_DIR
+
 
 class Utils(object):
 
-    # create template of all variations in varia_gab_all
+    # create file DB with all variations
     @staticmethod
-    def sendMailTemplates(exam, listao, path_to_file_TEMPLATES):
+    def createFileDB_aiken(exam, db_questions_all, path_to_file_VARIATIONS_DB):
+        letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+        varia_gab_all = []
+        count_varia = 0
+        start = '%%\{'
+        end = '\}%%'
+        for varia in db_questions_all:
+            questions_DB = []
+            count_varia += 1
+            questions_QM = varia[0]
+            q_count_QM = 0
+            for q in questions_QM:
+                q_count_QM += 1
+                q_id = q[0]
+                q_bd = get_object_or_404(Question, pk=q_id)
+                questions_DB.append("#c:" + str(q_count_QM) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
+                questions_DB.append(q[1])
+                answers = q[2]
+                c = correct = 0
+                for a in answers:
+                    questions_DB.append(letras_1[c] + ") " + a[1])
+                    if not int(a[0]):
+                        correct = c
+                    c += 1
+                questions_DB.append('ANSWER: ' + letras_1[correct] + '\n')
+
+            questions_QT = varia[1:]
+            for q in questions_QT:
+                q_count = q_count_QM + int(q[0][0])
+                q_id = q[0][1]
+                q_text = str(q[0][2])
+                q_bd = get_object_or_404(Question, pk=q_id)
+                questions_DB.append("#c:" + str(q_count) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
+                questions_DB.append(q_text)
+                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
+                    questions_DB.append('ANSWER: ' + answerCorrect + '\n\n')
+
+            if questions_DB:
+                varia_gab_all.append(questions_DB)
+
+        if varia_gab_all:
+            with open(path_to_file_VARIATIONS_DB, 'w') as f:
+                c = 0
+                for varia in varia_gab_all:
+                    f.write("############# variation ########## " + str(c) + '\n\n')
+                    c += 1
+                    for q in varia:
+                        f.write(str(q) + '\n')
+
+    # create file template of all variations in varia_gab_all
+    @staticmethod
+    def createFileTemplates(exam, listao, path_to_file_TEMPLATES):
         contVaria = 0
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
         varia_gab_header = ['variation']
@@ -67,18 +117,17 @@ class Utils(object):
         for varia in listao:
             qts = varia[0]
             contVaria += 1
-            varia_gab = [str(contVaria-1)]
+            varia_gab = [str(contVaria - 1)]
             for q in qts.split(';'):
                 if len(q):
                     q_str = q[-int(exam.exam_number_of_anwsers_question):]
                     q_ind = q_str.find('0')
                     varia_gab.append(letras_1[q_ind])
 
-            for qt in varia[2]: # dissertation question: get correct answer for the template
+            for qt in varia[2]:  # dissertation question: get correct answer for the template
                 start = '%%\{'
                 end = '\}%%'
                 for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, qt[2]):
-                    print("))))))))))",answerCorrect)
                     varia_gab.append(answerCorrect)
 
             if varia_gab:
@@ -114,12 +163,12 @@ class Utils(object):
                 for qq in questions:
                     st = str(qq)
                     try:
-                        numQuestion = st.split(',')[1].replace(' ','')
+                        numQuestion = st.split(',')[1].replace(' ', '')
                     except:
-                        numQuestion = 'ERRO:'+st
+                        numQuestion = 'ERRO:' + st
                     for case in re.findall(start + '(.+?)' + end, st):
                         case = str(case)
-                        case = case[case.find("{"):len(case)-4]
+                        case = case[case.find("{"):len(case) - 4]
                         case = case.replace('\\\\', '\\')
                         case1 = json.loads(case)
                         aux_ids.append(numQuestion)
@@ -161,7 +210,7 @@ class Utils(object):
                 question = {}
                 question['key'] = str(cases['id'][v][q])
                 question['number'] = str(count_q)
-                question['file'] = 'Q'+str(count_q)
+                question['file'] = 'Q' + str(count_q)
                 try:
                     questionObject = get_object_or_404(Question, pk=question['number'])
                     question['weight'] = questionObject.question_difficulty
@@ -526,7 +575,7 @@ _inst1_
         str1 += "\\multirow{7}{*}{\\vspace{8mm}\\includegraphics[width=2cm]{./figs/%s}} \n" % logo
         str1 += "&\\textbf{%s} \n              " % (institute)
         str1 += "&\\multirow{7}{*}[2.5mm]{\\hspace{-2mm}\\includegraphics[scale=%s]{%s}}\\\\ \n" % (
-        size_qr / 3, myqr[0])
+            size_qr / 3, myqr[0])
 
         str1 += "&%s                        & \\\\ \n" % (course)
         str1 += "&%s                        & \\\\ \n" % (disc)
@@ -548,7 +597,8 @@ _inst1_
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
 
-        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (instURL)
+        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
+            instURL)
 
         str1 += '\n\n \\hfill \\tiny{{\\color{red}\#' + str(exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
 
@@ -816,6 +866,8 @@ _inst1_
 
     @staticmethod
     def drawQuestionsMCDifficulty(request, exam, count, diff, topics):
+        db_questions = []
+
         qr_bytes = ''
         str1 = '\n\n% QUESTOES DE MULTIPLA ESCOLHA\n\n'
         ss1 = "\n\n\hspace{-15mm}{\\tiny {\\color{white}\\@%s}} \\hspace{0mm}"
@@ -824,7 +876,6 @@ _inst1_
 
         _group = []  # pegar apenas uma questão por grupo
         for q in exam.questions.filter(question_type='QM').filter(question_difficulty=diff).order_by('?'):
-
             if (count >= Utils.getNumMCQuestions(exam)):
                 break
 
@@ -879,27 +930,29 @@ _inst1_
                     return -1
 
                 ss = ss1 % str(q.id).zfill(4)
-
                 str1 += "%s %s. %s\\vspace{0mm}\n" % (ss, count, quest)  # q.question_text)
                 str1 += "\n\\begin{oneparchoices}"
                 stra = ''
+                db_answers = []
                 for a in random.sample(ans, len(ans)):
-
                     stra += str(ans.index(a))
-                    if exam.exam_student_feedback: # se enviar pdf ao aluno, retira gabarito
+                    db_answers.append([str(ans.index(a)), a])
+                    if exam.exam_student_feedback:  # se enviar pdf ao aluno, retira gabarito
                         str1 += "\n\n\\choice %s" % a
                     else:
                         if ans.index(a) == 0:
                             str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}\#%s}}%s" % (str(ans.index(a)), a)
                         else:
                             str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (
-                            str(ans.index(a)), a)
+                                str(ans.index(a)), a)
 
                 str1 += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
 
+                db_questions.append([q.id, quest, db_answers])
+
                 qr_bytes += str(q.id) + stra + ';'
 
-        return ([str1, qr_bytes, count])
+        return ([str1, qr_bytes, count, db_questions])
 
     @staticmethod
     def drawQuestionsTDifficulty(request, QT, exam, room, student_ID, student_name, count, data_hora):
@@ -1038,17 +1091,18 @@ _inst1_
         qr_answers = ''
         count = 0
         numMC = int(Utils.getNumMCQuestions(exam))
-
+        db_questions = []
         if numMC and exam.exam_print in ['ques', 'both']:
             titl = _("Multiple Choice Questions")
             str1 += "\\\\\\vspace{2mm}\\hspace{-5mm}\\noindent\\textbf{%s:}\\vspace{2mm}\n" % titl
             for i in range(1, numMC + 1):  # para cada nivel de dificultade de questao MC
                 s = Utils.drawQuestionsMCDifficulty(request, exam, count, str(i), topics)
-
                 try:
                     str1 += s[0]
                     qr_answers += s[1]
                     count = int(s[2])
+                    if s[3]:
+                        db_questions.append(s[3])
                 except:
                     pass
 
@@ -1060,12 +1114,13 @@ _inst1_
                 count = len(s)
                 for q in s:
                     QT.append(q)
+                    db_questions.append([q, []])
 
                 if int(exam.exam_number_of_questions_text) <= count:
                     break
         # print(QT)
 
-        return [qr_answers, str1, QT]
+        return [qr_answers, str1, QT, db_questions]
 
     @staticmethod
     def drawQuestions(request, exam_i, exam, room, student_ID, student_name, user, countVariations, data_hora):
