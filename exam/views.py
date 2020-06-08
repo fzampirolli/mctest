@@ -811,12 +811,15 @@ def generate_page(request, pk):
                 break
 
         try:
-            path_to_file_VARIATIONS_DB = path_aux + "_variations_DB_aiken.txt"
-            Utils.createFileDB_aiken(exam, db_questions_all, path_to_file_VARIATIONS_DB)
+            path_to_file_VARIATIONS_DB_aiken = path_aux + "_variations_DB_aiken.txt"
+            Utils.createFileDB_aiken(exam, db_questions_all, path_to_file_VARIATIONS_DB_aiken)
+
+            path_to_file_VARIATIONS_DB_xml = path_aux + "_variations_DB.xml"
+            Utils.createFileDB_xml(exam, db_questions_all, path_to_file_VARIATIONS_DB_xml)
 
             Utils.createFileTemplates(exam, listao, path_to_file_TEMPLATES)
             message_cases = 'Following all templates and variations\n\n'
-            anexos = [path_to_file_TEMPLATES, path_to_file_VARIATIONS_DB]
+            anexos = [path_to_file_TEMPLATES, path_to_file_VARIATIONS_DB_aiken, path_to_file_VARIATIONS_DB_xml]
 
             if int(exam.exam_variations) > 0:  # send file by email with variation of each student
                 with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:

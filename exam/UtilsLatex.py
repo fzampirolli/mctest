@@ -54,7 +54,123 @@ from topic.models import Question
 
 class Utils(object):
 
-    # create file DB with all variations
+    # create file DB with all variations in aiken format
+    @staticmethod
+    def createFileDB_xml(exam, db_questions_all, path_to_file_VARIATIONS_DB):
+        letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+        varia_gab_all = []
+        count_varia = 0
+        start = '%%\{'
+        end = '\}%%'
+        question_model = '''
+        <!-- question: ___question_db_id___  -->
+          <question type="___question_type___">
+            <name>
+              <text>Questão ___question_id___</text>
+            </name>
+            <questiontext format="html">
+              <text><![CDATA[<p> ___question_text___ <br></p>]]></text>
+            </questiontext>
+            <generalfeedback format="html">
+              <text></text>
+            </generalfeedback>
+            <defaultgrade>1.0000000</defaultgrade>
+            <penalty>0.3333333</penalty>
+            <hidden>0</hidden>
+            <idnumber></idnumber>
+            <single>true</single>
+            <shuffleanswers>true</shuffleanswers>
+            <answernumbering>abc</answernumbering>
+            <correctfeedback format="html">
+              <text>Sua resposta está correta.</text>
+            </correctfeedback>
+            <partiallycorrectfeedback format="html">
+              <text>Sua resposta está parcialmente correta.</text>
+            </partiallycorrectfeedback>
+            <incorrectfeedback format="html">
+              <text>Sua resposta está incorreta.</text>
+            </incorrectfeedback>
+            <shownumcorrect/>        
+        '''
+
+        answers_model = '''
+            <answer fraction="___answer_value___" format="html">
+              <text><![CDATA[<p> ___answer_text___ <br></p>]]></text>
+              <feedback format="html">
+                <text></text>
+              </feedback>
+            </answer>
+        '''
+        for varia in db_questions_all:
+            questions_DB = []
+            count_varia += 1
+            questions_QM = varia[0]
+            q_count_QM = 0
+            for q in questions_QM:
+                q_count_QM += 1
+                q_id = q[0]
+                q_bd = get_object_or_404(Question, pk=q_id)
+
+                q_str = question_model
+                q_str = q_str.replace('___question_id___', str(q_count_QM))
+                q_str = q_str.replace('___question_db_id___', str(q_id))
+                q_str = q_str.replace('___question_text___', str(q[1]))
+                q_str = q_str.replace('___question_type___', 'multichoice')
+
+                answers = q[2]
+                for a in answers:
+                    a_str = answers_model
+                    a_str = a_str.replace('___answer_text___', a[1])
+
+                    if not int(a[0]):
+                        a_str = a_str.replace('___answer_value___','100')
+                    else:
+                        a_str = a_str.replace('___answer_value___','0')
+
+                    q_str += a_str
+
+                q_str += '</question>'
+                questions_DB.append(q_str)
+
+            questions_QT = varia[1:]
+            for q in questions_QT:
+                q_count = q_count_QM + int(q[0][0])
+                q_id = q[0][1]
+                q_text = str(q[0][2])
+                q_bd = get_object_or_404(Question, pk=q_id)
+
+                q_str = question_model
+                q_str = q_str.replace('___question_id___', str(q_count))
+                q_str = q_str.replace('___question_db_id___', str(q_id))
+                q_str = q_str.replace('___question_text___', q_text)
+                q_str = q_str.replace('___question_type___', 'essay')
+
+                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
+                    q_str += '<answer fraction="0"><text>' + answerCorrect + '</text></answer>\n'
+
+                q_str += '</question>'
+                questions_DB.append(q_str)
+
+            if questions_DB:
+                varia_gab_all.append(questions_DB)
+
+        if varia_gab_all:
+            with open(path_to_file_VARIATIONS_DB, 'w') as f:
+                c = 0
+                str_begin = '''
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+'''
+                f.write(str_begin)
+                for varia in varia_gab_all:
+                    f.write("\n\n<!-- ############# variation: %s ########## --> \n\n" % str(c))
+                    c += 1
+                    for q in varia:
+                        f.write(str(q) + '\n')
+
+                f.write('</quiz>')
+
+    # create file DB with all variations in aiken format
     @staticmethod
     def createFileDB_aiken(exam, db_questions_all, path_to_file_VARIATIONS_DB):
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
@@ -71,7 +187,8 @@ class Utils(object):
                 q_count_QM += 1
                 q_id = q[0]
                 q_bd = get_object_or_404(Question, pk=q_id)
-                questions_DB.append("#c:" + str(q_count_QM) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
+                questions_DB.append(
+                    "#c:" + str(q_count_QM) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
                 questions_DB.append(q[1])
                 answers = q[2]
                 c = correct = 0
@@ -88,7 +205,8 @@ class Utils(object):
                 q_id = q[0][1]
                 q_text = str(q[0][2])
                 q_bd = get_object_or_404(Question, pk=q_id)
-                questions_DB.append("#c:" + str(q_count) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
+                questions_DB.append(
+                    "#c:" + str(q_count) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
                 questions_DB.append(q_text)
                 for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
                     questions_DB.append('ANSWER: ' + answerCorrect + '\n\n')
