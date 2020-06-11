@@ -1180,7 +1180,7 @@ _inst1_
                 # str1+=Utils.drawSignatureQR(exam,room,student_ID,student_name).replace('_qrfile_',myqr[0])
                 str1 += "\\vspace{1mm}\\textbf{%s:}\n\\\\" % titl
 
-            str1 += "%s %s. %s\\\\\n" % (ss, count + int(Utils.getNumMCQuestions(exam)), q[4])
+            str1 += "%s %s. %s\\\\\n" % (ss, count + int(Utils.getNumMCQuestions(exam)), q[6])
             qr_bytes += str(q[1]) + ';'
             if (exam.exam_print_eco == 'no'):
                 str1 += Utils.drawJumpPage()
