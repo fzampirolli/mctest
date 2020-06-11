@@ -54,24 +54,61 @@ from topic.models import Question
 
 class Utils(object):
 
+    # sort DB question by topic, used in XML format of Moodle
+    @staticmethod
+    def sort_db_questions_by_topic(exam, db_questions_all):
+        count_varia = 0
+        # sorted_list = sorted(list_not_sorted, key=lambda x: x[2])
+        # db_questions_all_sort = sorted(db_questions_all, key=lambda x: x[2])
+        mysort = []
+        for varia in db_questions_all:
+            count_varia += 1
+            for qts in varia:
+                for q in qts:
+                    if q == None:
+                        break
+                    q.insert(0, count_varia)
+                    mysort.append(q)
+
+        mysort = sorted(mysort, key=lambda x: x[2])  # by question_id
+        mysort = sorted(mysort, key=lambda x: x[5])  # by difficulty
+        mysort = sorted(mysort, key=lambda x: x[3])  # by topic
+        mysort = sorted(mysort, key=lambda x: x[4])  # by type
+        return mysort
+
     # create file DB with all variations in aiken format
     @staticmethod
     def createFileDB_xml(exam, db_questions_all, path_to_file_VARIATIONS_DB):
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+
+        db_questions_all_sort = Utils.sort_db_questions_by_topic(exam, db_questions_all)
+
         varia_gab_all = []
         count_varia = 0
         start = '%%\{'
         end = '\}%%'
+        question_category = '''
+        <!-- category: ___category_comments___  -->
+        <question type="category">
+        <category>
+        <text>$course$/top/___question_type___/___question_topic___/diff___question_diff___/___question_short___</text>
+        </category>
+        <info format="moodle_auto_format">
+        <text></text>
+        </info>
+        <idnumber></idnumber>
+        </question>
+        '''
         question_model = '''
-        <!-- question: ___question_db_id___  -->
+        <!-- question: ___question_comments___  -->
           <question type="___question_type___">
             <name>
-              <text>Questão ___question_id___</text>
+              <text>Topico: ___question_topic___ Dificuldade: ___question_diff___ </text>
             </name>
-            <questiontext format="html">
+            <questiontext format="moodle_auto_format">
               <text><![CDATA[<p> ___question_text___ <br></p>]]></text>
             </questiontext>
-            <generalfeedback format="html">
+            <generalfeedback format="moodle_auto_format">
               <text></text>
             </generalfeedback>
             <defaultgrade>1.0000000</defaultgrade>
@@ -81,78 +118,88 @@ class Utils(object):
             <single>true</single>
             <shuffleanswers>true</shuffleanswers>
             <answernumbering>abc</answernumbering>
-            <correctfeedback format="html">
+            <correctfeedback format="moodle_auto_format">
               <text>Sua resposta está correta.</text>
             </correctfeedback>
-            <partiallycorrectfeedback format="html">
+            <partiallycorrectfeedback format="moodle_auto_format">
               <text>Sua resposta está parcialmente correta.</text>
             </partiallycorrectfeedback>
-            <incorrectfeedback format="html">
+            <incorrectfeedback format="moodle_auto_format">
               <text>Sua resposta está incorreta.</text>
             </incorrectfeedback>
             <shownumcorrect/>        
         '''
-
         answers_model = '''
-            <answer fraction="___answer_value___" format="html">
+            <answer fraction="___answer_value___" format="moodle_auto_format">
               <text><![CDATA[<p> ___answer_text___ <br></p>]]></text>
-              <feedback format="html">
+              <feedback format="moodle_auto_format">
                 <text></text>
               </feedback>
             </answer>
         '''
-        for varia in db_questions_all:
-            questions_DB = []
-            count_varia += 1
-            questions_QM = varia[0]
-            q_count_QM = 0
-            for q in questions_QM:
-                q_count_QM += 1
-                q_id = q[0]
-                q_bd = get_object_or_404(Question, pk=q_id)
+        question_ID_before = -1
+        for q in db_questions_all_sort:
+            q_str = ''
+            q_var = q[0]  # variations
+            q_count = q[1]  # cont questions by type
+            q_id = q[2]
+            q_topic = q[3]
+            q_type = q[4]
+            q_diff = q[5]
+            q_short = q[6]
+            q_text = q[7]
 
-                q_str = question_model
-                q_str = q_str.replace('___question_id___', str(q_count_QM))
-                q_str = q_str.replace('___question_db_id___', str(q_id))
-                q_str = q_str.replace('___question_text___', str(q[1]))
+            myflag = False
+            if question_ID_before != int(q_id):
+                myflag = True
+                question_ID_before = int(q_id)
+
+            q_str += question_model
+            q_str = q_str.replace('___question_db_id___', str(q_id))
+            q_str = q_str.replace('___question_text___', str(q_text))
+            q_str = q_str.replace('___question_diff___', str(q_diff))
+            q_str = q_str.replace('___question_id___', str(q_count))
+            q_str = q_str.replace('___question_topic___', str(q_topic))
+
+            answers = q[8]
+            if answers:  # QM
                 q_str = q_str.replace('___question_type___', 'multichoice')
-
-                answers = q[2]
+                q_type = 'multichoice'
                 for a in answers:
                     a_str = answers_model
                     a_str = a_str.replace('___answer_text___', a[1])
 
                     if not int(a[0]):
-                        a_str = a_str.replace('___answer_value___','100')
+                        a_str = a_str.replace('___answer_value___', '100')
                     else:
-                        a_str = a_str.replace('___answer_value___','0')
-
+                        a_str = a_str.replace('___answer_value___', '0')
                     q_str += a_str
 
-                q_str += '</question>'
-                questions_DB.append(q_str)
-
-            questions_QT = varia[1:]
-            for q in questions_QT:
-                q_count = q_count_QM + int(q[0][0])
-                q_id = q[0][1]
-                q_text = str(q[0][2])
-                q_bd = get_object_or_404(Question, pk=q_id)
-
-                q_str = question_model
-                q_str = q_str.replace('___question_id___', str(q_count))
-                q_str = q_str.replace('___question_db_id___', str(q_id))
-                q_str = q_str.replace('___question_text___', q_text)
+            else:  # QT
                 q_str = q_str.replace('___question_type___', 'essay')
-
+                q_type = 'essay'
                 for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
-                    q_str += '<answer fraction="0"><text>' + answerCorrect + '</text></answer>\n'
+                    q_str += '\n<answer fraction="0"><text>\n' + answerCorrect + '\n</text></answer>\n'
 
-                q_str += '</question>'
-                questions_DB.append(q_str)
+            mystr = " #id:" + str(q_id) + " #type:" + q_type + " #topic:" + str(
+                q_topic) + " #diff:" + str(
+                q_diff) + " #descr:" + str(
+                q_short)
+            q_str = q_str.replace('___question_comments___', "#c:" + str(q_count) + mystr + " #var:" + str(q_var))
+            q_str += '</question>'
 
-            if questions_DB:
-                varia_gab_all.append(questions_DB)
+            if myflag:
+                q_str = question_category + q_str
+                q_str = q_str.replace('___category_comments___', mystr)
+                q_str = q_str.replace('___question_db_id___', str(q_id))
+                q_str = q_str.replace('___question_text___', str(q_text))
+                q_str = q_str.replace('___question_diff___', str(q_diff))
+                q_str = q_str.replace('___question_id___', str(q_count))
+                q_str = q_str.replace('___question_topic___', str(q_topic))
+                q_str = q_str.replace('___question_type___', str(q_type))
+                q_str = q_str.replace('___question_short___', str(q_short))
+
+            varia_gab_all.append(q_str)
 
         if varia_gab_all:
             with open(path_to_file_VARIATIONS_DB, 'w') as f:
@@ -162,11 +209,8 @@ class Utils(object):
 <quiz>
 '''
                 f.write(str_begin)
-                for varia in varia_gab_all:
-                    f.write("\n\n<!-- ############# variation: %s ########## --> \n\n" % str(c))
-                    c += 1
-                    for q in varia:
-                        f.write(str(q) + '\n')
+                for q in varia_gab_all:
+                    f.write(str(q) + '\n')
 
                 f.write('</quiz>')
 
@@ -181,35 +225,39 @@ class Utils(object):
         for varia in db_questions_all:
             questions_DB = []
             count_varia += 1
-            questions_QM = varia[0]
-            q_count_QM = 0
-            for q in questions_QM:
-                q_count_QM += 1
-                q_id = q[0]
-                q_bd = get_object_or_404(Question, pk=q_id)
-                questions_DB.append(
-                    "#c:" + str(q_count_QM) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
-                questions_DB.append(q[1])
-                answers = q[2]
-                c = correct = 0
-                for a in answers:
-                    questions_DB.append(letras_1[c] + ") " + a[1])
-                    if not int(a[0]):
-                        correct = c
-                    c += 1
-                questions_DB.append('ANSWER: ' + letras_1[correct] + '\n')
-
-            questions_QT = varia[1:]
-            for q in questions_QT:
-                q_count = q_count_QM + int(q[0][0])
-                q_id = q[0][1]
-                q_text = str(q[0][2])
-                q_bd = get_object_or_404(Question, pk=q_id)
-                questions_DB.append(
-                    "#c:" + str(q_count) + " #id:" + str(q_id) + " #topic:" + str(q_bd.topic.topic_text) + "\n")
-                questions_DB.append(q_text)
-                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
-                    questions_DB.append('ANSWER: ' + answerCorrect + '\n\n')
+            count_QM = 0
+            for qts in varia:
+                for q in qts:
+                    if q == None:
+                        break
+                    q_count = q[0]
+                    q_id = q[1]
+                    q_topic = q[2]
+                    q_type = q[3]
+                    q_diff = q[4]
+                    q_short = q[5]
+                    q_text = q[6]
+                    answers = q[7]
+                    c = correct = 0
+                    if answers:  # QM
+                        count_QM += 1
+                        questions_DB.append(
+                            "#c:" + str(q_count) + " #id:" + str(q_id) + " #topic:" + str(q_topic) + " #type:" + str(
+                                q_type) + " #diff:" + str(q_diff) + "\n")
+                        questions_DB.append(q_text)
+                        for a in answers:
+                            questions_DB.append(letras_1[c] + ") " + a[1])
+                            if not int(a[0]):
+                                correct = c
+                            c += 1
+                        questions_DB.append('ANSWER: ' + letras_1[correct] + '\n')
+                    else:  # QT
+                        questions_DB.append(
+                            "#c:" + str(q_count + count_QM) + " #id:" + str(q_id) + " #topic:" + str(
+                                q_topic) + " #type:" + str(q_type) + " #diff:" + str(q_diff) + "\n")
+                        questions_DB.append(q_text)
+                        for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
+                            questions_DB.append('ANSWER: ' + answerCorrect + '\n\n')
 
             if questions_DB:
                 varia_gab_all.append(questions_DB)
@@ -245,7 +293,7 @@ class Utils(object):
             for qt in varia[2]:  # dissertation question: get correct answer for the template
                 start = '%%\{'
                 end = '\}%%'
-                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, qt[2]):
+                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, qt[7]):
                     varia_gab.append(answerCorrect)
 
             if varia_gab:
@@ -1066,7 +1114,9 @@ _inst1_
 
                 str1 += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
 
-                db_questions.append([q.id, quest, db_answers])
+                db_questions.append(
+                    [count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest,
+                     db_answers])
 
                 qr_bytes += str(q.id) + stra + ';'
 
@@ -1085,7 +1135,7 @@ _inst1_
 
             # q = q[0]
 
-            if len(q) != 3:
+            if len(q) != 8:
                 messages.error(request, _('drawQuestionsTDifficulty: Error in QT question'))
                 return -1
 
@@ -1130,7 +1180,7 @@ _inst1_
                 # str1+=Utils.drawSignatureQR(exam,room,student_ID,student_name).replace('_qrfile_',myqr[0])
                 str1 += "\\vspace{1mm}\\textbf{%s:}\n\\\\" % titl
 
-            str1 += "%s %s. %s\\\\\n" % (ss, count + int(Utils.getNumMCQuestions(exam)), q[2])
+            str1 += "%s %s. %s\\\\\n" % (ss, count + int(Utils.getNumMCQuestions(exam)), q[4])
             qr_bytes += str(q[1]) + ';'
             if (exam.exam_print_eco == 'no'):
                 str1 += Utils.drawJumpPage()
@@ -1171,7 +1221,7 @@ _inst1_
                     else:  # se não for QM entao nao pegar as alternativas
                         [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
 
-                bd_qT.append([count, q.id, quest])
+                bd_qT.append([count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest])
 
         return (bd_qT)
 
@@ -1232,7 +1282,7 @@ _inst1_
                 count = len(s)
                 for q in s:
                     QT.append(q)
-                    db_questions.append([q, []])
+                    db_questions.append([q, q.append([])])
 
                 if int(exam.exam_number_of_questions_text) <= count:
                     break
@@ -1319,7 +1369,7 @@ _inst1_
             safterScanmy = binascii.unhexlify(mysbeforeQR)
             safterScan = binascii.unhexlify(sbeforeQR)
             if safterScanmy != safterScan:
-                return HttpResponse("ERRO!!!!")
+                return HttpResponse("ERRO in safterScanmy != safterScan !!!!")
             un_hashed = safterScan[:53]
             safterScan = safterScan[53:]
             decompressed = zlib.decompress(safterScan)
