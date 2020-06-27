@@ -276,28 +276,31 @@ class Utils(object):
     def createFileTemplates(exam, listao, path_to_file_TEMPLATES):
         contVaria = 0
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
-        varia_gab_header = ['variation']
+        varia_gab_header = []
         for i in range(int(Utils.getNumMCQuestions(exam)) + int(exam.exam_number_of_questions_text)):
             varia_gab_header.append('Q' + str(i + 1))
-        varia_gab_all = [varia_gab_header]
+        varia_gab_all = [np.concatenate((['variation'],varia_gab_header,varia_gab_header), axis=0)]
         for varia in listao:
             qts = varia[0]
             contVaria += 1
             varia_gab = [str(contVaria - 1)]
+            varia_id_questions = []
             for q in qts.split(';'):
                 if len(q):
                     q_str = q[-int(exam.exam_number_of_anwsers_question):]
                     q_ind = q_str.find('0')
                     varia_gab.append(letras_1[q_ind])
+                    varia_id_questions.append(q)
 
             for qt in varia[2]:  # dissertation question: get correct answer for the template
                 start = '%%\{'
                 end = '\}%%'
                 for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, qt[7]):
                     varia_gab.append(answerCorrect)
+                    varia_id_questions.append(qt[2])
 
             if varia_gab:
-                varia_gab_all.append(varia_gab)
+                varia_gab_all.append(np.concatenate((varia_gab,varia_id_questions), axis=0))
 
         if varia_gab_all:
             with open(path_to_file_TEMPLATES, 'w') as data:
