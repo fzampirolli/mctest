@@ -332,7 +332,7 @@ class Utils(object):
                 for qq in questions:
                     st = str(qq)
                     try:
-                        numQuestion = st.split(',')[1].replace(' ', '')
+                        numQuestion = st.split(',')[2].replace(' ', '')
                     except:
                         numQuestion = 'ERRO:' + st
                     for case in re.findall(start + '(.+?)' + end, st):
