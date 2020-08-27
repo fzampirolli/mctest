@@ -1060,7 +1060,7 @@ _inst1_
                 if qg in _group:
                     flag_group = False
                 else:
-                    _group += str(qg)
+                    _group.append(qg)
 
             if flag_group:  # incluir apenas uma questao por grupo
 
@@ -1208,7 +1208,7 @@ _inst1_
                 if qg in _group:
                     flag_group = False
                 else:
-                    _group += str(qg)
+                    _group.append(qg)
 
             if flag_group:  # incluir apenas uma questao por grupo
 
