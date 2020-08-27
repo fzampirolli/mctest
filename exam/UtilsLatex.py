@@ -381,7 +381,7 @@ class Utils(object):
                 question['number'] = str(count_q)
                 question['file'] = 'Q' + str(count_q)
                 try:
-                    questionObject = get_object_or_404(Question, pk=question['number'])
+                    questionObject = get_object_or_404(Question, pk=question['key'])
                     question['weight'] = questionObject.question_difficulty
                 except:
                     question['weight'] = '1'
