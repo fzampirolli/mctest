@@ -779,6 +779,8 @@ def generate_page(request, pk):
                         writer = csv.writer(data)
                         writer.writerow(
                             [fileExamNameSTUDENT[:-4] + '.pdf', s.student_ID, email, s.student_name, data_hora])
+                    # apos enviar, remove do disco
+                    os.remove(myFILE)
 
                 #### Final dos estudantes de uma classe ###
 
@@ -888,6 +890,7 @@ def generate_page(request, pk):
                          os.path.dirname(path_to_file))
         else:
             fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
+            # zipar todos os exames das turmas
             os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
             return serve(request, os.path.basename(fzip),
                          os.path.dirname(fzip))
