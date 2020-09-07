@@ -615,7 +615,7 @@ class QuestionUpdate(UpdateView):
     success_url = reverse_lazy('topic:question-detail')
 
     def get_queryset(self):
-        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user).distinct()
 
 
 class QuestionDelete(DeleteView):

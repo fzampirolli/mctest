@@ -60,9 +60,9 @@ class UpdateQuestionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(UpdateQuestionForm, self).__init__(*args, **kwargs)
         try:
-            user = kwargs['initial']['question_who_created']
-            self.fields['topic'].queryset = Topic.objects.filter(discipline__discipline_profs=user)
-            # c = Discipline.objects.filter()
-            # self.fields['question_who_created'].queryset = Cou.objects.filter(discipline__discipline_profs=user)
+            #user = kwargs['initial']['question_who_created']
+            #self.fields['topic'].queryset = Topic.objects.filter(discipline__discipline_profs=user)
+            c = Discipline.objects.filter()
+            self.fields['question_who_created'].queryset = c.objects.filter(discipline__discipline_profs=user)
         except:
             pass

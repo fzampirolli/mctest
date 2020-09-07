@@ -51,6 +51,7 @@ from mctest.settings import BASE_DIR
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
 
+import codecs
 
 class Utils(object):
 
@@ -339,14 +340,31 @@ class Utils(object):
                         case = str(case)
                         case = case[case.find("{"):len(case) - 4]
                         case = case.replace('\\\\', '\\')
+                        #case = case.encode().decode('unicode_escape')
+                        #case1 = json.loads(json.dumps(case, sort_keys=True, indent=2, ensure_ascii=False))
+                        #print(json_string)
+                        #case = case.replace('\\\\', '\')
+                        #case = case.replace('\\', '')
                         case1 = json.loads(case)
                         aux_ids.append(numQuestion)
                         inp0 = []
                         for i in case1['input']:
-                            inp0.append([i])
+                            try:
+                                if isinstance(i, list):
+                                    inp0.append([i[0].encode('latin1').decode('unicode_escape')])
+                                else:
+                                    inp0.append([i.encode('latin1').decode('unicode_escape')])
+                            except:
+                                inp0.append([])
                         out0 = []
                         for i in case1['output']:
-                            out0.append([i])
+                            try:
+                                if isinstance(i, list):
+                                    out0.append([i[0].encode('latin1').decode('unicode_escape')])
+                                else:
+                                    out0.append([i.encode('latin1').decode('unicode_escape')])
+                            except:
+                                out0.append([])
                         aux_in.append(inp0)
                         aux_ou.append(out0)
                 cases['id'].append(aux_ids)
