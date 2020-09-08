@@ -122,6 +122,7 @@ echo $SECURE_MYSQL
 MYSQL_ROOT_PASSWORD=$DB_PASS
 
 mkdir tmp
+mkdir tmp/imgs180days
 mkdir tmpGAB
 mkdir pdfExam
 mkdir pdfQuestion
