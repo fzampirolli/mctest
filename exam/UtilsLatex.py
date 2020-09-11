@@ -1330,7 +1330,7 @@ _inst1_
             titl = _("Text Questions")
             if (exam.exam_print_eco == 'yes'):
                 str1 += "\\\\\\vspace{2mm}\\textbf{%s:}  \\hfill {\\color{white} VERSÃO: \\#v%s}} \\\n" % (
-                    titl, str(countVariations))
+                    titl, 'XXX') #str(countVariations))
             else:
                 str1 += "\n\n\\newpage\n\n"
 

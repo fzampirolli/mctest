@@ -30,6 +30,7 @@ GNU General Public License for more details.
 
 import binascii
 import csv
+import itertools as it
 import math
 import os
 import smtplib
@@ -40,27 +41,24 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart  # sudo pip install email
 from email.mime.text import MIMEText
 
-from mctest.settings import BASE_DIR
-
 import PyPDF2  # pip install PyPDF2
 import bcrypt
 import cv2  # pip install opencv-python
 import numpy as np
-from mctest.settings import webMCTest_FROM
-from mctest.settings import webMCTest_PASS
-from mctest.settings import webMCTest_SERVER
 from django.http import HttpResponse, Http404
 from django.utils.translation import gettext_lazy as _
-from more_itertools import chunked  # pip install more-itertools
-import itertools as it
 from pyzbar.pyzbar import decode
 from skimage.measure import label
 from skimage.measure import regionprops  # pip install scikit-image
 
 from exam.UtilsLatex import Utils
 from exam.models import Exam, StudentExam, StudentExamQuestion
+from mctest.settings import BASE_DIR
+from mctest.settings import webMCTest_FROM
+from mctest.settings import webMCTest_PASS
+from mctest.settings import webMCTest_SERVER
 from student.models import Student
-from topic.models import Question, Answer
+from topic.models import Question
 
 circle_min = 650
 circle_max = 940  # 895
@@ -1050,8 +1048,8 @@ class cvMCTest(object):
             count_aux = 0
             for cnt in contoursOrder:  # loop over the contours
                 area = cv2.contourArea(cnt)
-                if area > 100:   ################################# SENSIVEL!!!!!
-                    count_aux+=1
+                if area > 100:  ################################# SENSIVEL!!!!!
+                    count_aux += 1
                     x, y, w, h = cv2.boundingRect(cnt)
                     iii = im[y:y + h, x:x + w]
 
@@ -1066,7 +1064,7 @@ class cvMCTest(object):
                                 countSquare + 1) +
                             "_p_04_q" + str(q) + "_" + str(count_aux) + "_area_" + str(area) + ".png", iii)
 
-                    if area > 58: ################################# SENSIVEL!!!!!
+                    if area > 58:  ################################# SENSIVEL!!!!!
                         if DEBUG: rect.append([x, y, w, h])
 
                         n = notas[countQuestions]
@@ -1083,7 +1081,7 @@ class cvMCTest(object):
             if count == 1:  # somente uma marcação ==> OK
                 if count_aux == NUM_RESPOSTAS:
                     mr.append(n)
-                else: ################## ERRO na segmentacao das respostas
+                else:  ################## ERRO na segmentacao das respostas
                     mr.append('#')
 
             elif count == 0:  # sem marcação ==> questão inválida!
@@ -1098,8 +1096,10 @@ class cvMCTest(object):
                 aaux = {x: list(aux).count(x) for x in set(list(aux))}  # conta False e True
 
                 if count > 1 and False in aaux:  # salva somente as questoes com respostas duplicadas = areas > percOK
-                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[:-4]
-                    impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(q).zfill(3)
+                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[
+                                                                                                      :-4]
+                    impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(
+                        q).zfill(3)
                     if aaux[False] > 1:  # se tem mais que uma marcacao forte > percOK => questão inválida
                         impath += ".png"
                         if DEBUG:
@@ -1221,8 +1221,10 @@ class cvMCTest(object):
 
                 if count > 1 and False in aaux:  # salva somente as questoes com respostas duplicadas = areas > percOK
 
-                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[:-4]
-                    impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(q).zfill(3)
+                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[
+                                                                                                      :-4]
+                    impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(
+                        q).zfill(3)
                     if aaux[False] > 1:  # se tem mais que uma marcação forte > percOK => questão inválida
                         impath += ".png"
                         if DEBUG:
@@ -1524,7 +1526,6 @@ class cvMCTest(object):
                 except:
                     t.append(''.join(x for x in qr['correct']))
 
-
                 spamWriter.writerow(t)
 
     ####################################
@@ -1620,7 +1621,7 @@ class cvMCTest(object):
         # Anexa os arquivos
         for f in anexo:
             if isinstance(f, list):
-                f=f[0]
+                f = f[0]
             try:
                 part = MIMEBase('application', 'octet-stream')
                 part.set_payload(open(f, 'rb').read())
@@ -1628,7 +1629,7 @@ class cvMCTest(object):
                 part.add_header('Content-Disposition', 'attachment;filename="%s"' % os.path.basename(f))
                 msg.attach(part)
             except Exception:
-                raise Http404("Erro ao ler arquivo.\n Error:" + f )
+                raise Http404("Erro ao ler arquivo.\n Error:" + f)
 
         try:
             gm = smtplib.SMTP(servidor, porta)
@@ -1658,13 +1659,23 @@ class cvMCTest(object):
         myserver = webMCTest_SERVER
 
         # Assunto do email
-        assunto = "Mensagem enviada automaticamente por MCTest"
+        assunto = "Mensagem automática envidado por MCTest"
 
-        mensagem += "\n" + "Message sent automatically"
-        mensagem += "\n" + "MCTest project coordinator:" + " Prof. Francisco - email fzampirolli@ufabc.edu.br.\n"
-        mensagem += "\n\n" + "Notice: This is an automated message, the responses are not monitored.\n"
+        # mensagem += "\n" + "Message sent automatically"
+        # mensagem += "\n\n" + "Notice: This is an automated message, the responses are not monitored.\n"
+        # mensagem += "\n" + "MCTest project coordinator:" + " Prof. Francisco - email fzampirolli@ufabc.edu.br.\n"
+        mensagem += '''Esta mensagem foi enviada automaticamente pelo gerador e corretor automático de atividades, chamado MCTest.
 
-        # mensagem += "\n\n" + "* Atenção: Essa é uma mensagem automática, as respostas não são monitoradas.\n"
+Os emails enviados para webmctest@ufabc.edu.br não são monitorados. Assim, não retornar este email.
+
+Para dúvidas, entre em contato com o seu professor.
+
+Coordenador deste projeto: 
+Prof. Francisco Zampirolli
+Universidade Federal do ABC
+
+Obs.: Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
+'''
 
         # chamada a funcao de envio do email
         cvMCTest.envia_email(webMCTest_SERVER,
