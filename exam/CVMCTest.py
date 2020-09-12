@@ -1652,7 +1652,7 @@ class cvMCTest(object):
         myporta = 587
 
         # Assunto do email
-        assunto = "Mensagem automática envidado por MCTest"
+        assunto = "Mensagem automática envidada por MCTest"
 
         mensagem = "\n"
         mensagem += "Prezado(a) "
@@ -1665,13 +1665,13 @@ Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
 
 Não retornar este email para webmctest@ufabc.edu.br, pois não será monitorado. 
 
-Para dúvidas sobre esta atividade, entre em contato com o seu professor.
+Se tiver alguma dúvida, entre em contato com o seu professor.
 
---
+---
 O MCTest é de código aberto (GitHub) e desenvolvido com apoio: 
 * Universidade Federal do ABC
 * FAPESP
---
+---
 '''
 
         # chamada a funcao de envio do email
