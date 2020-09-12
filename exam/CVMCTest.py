@@ -1648,33 +1648,28 @@ class cvMCTest(object):
         destinatario = mailSend
         # destinatario = 'fzampirolli@gmail.com'
 
-        mensagem = "\n"
-        mensagem += "Prezado(a) "
-        mensagem += aluno + "\n\n"
-        mensagem += msg_str + "\n\n"
-        # mensagem += "Attached is the feedback from your test. Seek your teacher for questions."+"\n\n"
-
         # porta smtp do gmail e ufabc
         myporta = 587
-        myserver = webMCTest_SERVER
 
         # Assunto do email
         assunto = "Mensagem automática envidado por MCTest"
 
-        # mensagem += "\n" + "Message sent automatically"
-        # mensagem += "\n\n" + "Notice: This is an automated message, the responses are not monitored.\n"
-        # mensagem += "\n" + "MCTest project coordinator:" + " Prof. Francisco - email fzampirolli@ufabc.edu.br.\n"
-        mensagem += '''Esta mensagem foi enviada automaticamente pelo gerador e corretor automático de atividades, chamado MCTest.
+        mensagem = "\n"
+        mensagem += "Prezado(a) "
+        mensagem += aluno + "\n"
+        #mensagem += msg_str + "\n\n"
+        mensagem += '''
+Segue em anexo a sua atividade: Lista de Exercícios ou Exame.
 
-Os emails enviados para webmctest@ufabc.edu.br não são monitorados. Assim, não retornar este email.
+Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
 
-Para dúvidas, entre em contato com o seu professor.
+Não retornar este email para webmctest@ufabc.edu.br, pois não são monitorados. 
 
-Coordenador deste projeto: 
-Prof. Francisco Zampirolli
-Universidade Federal do ABC
+Para dúvidas sobre esta atividade, entre em contato com o seu professor.
 
-Obs.: Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
+--
+O MCTest é de código aberto (GitHub) e desenvolvido com apoio da Universidade Federal do ABC e da FAPESP
+--
 '''
 
         # chamada a funcao de envio do email
