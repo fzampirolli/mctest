@@ -1663,12 +1663,14 @@ Segue em anexo a sua atividade: Lista de Exercícios ou Exame.
 
 Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
 
-Não retornar este email para webmctest@ufabc.edu.br, pois não são monitorados. 
+Não retornar este email para webmctest@ufabc.edu.br, pois não será monitorado. 
 
 Para dúvidas sobre esta atividade, entre em contato com o seu professor.
 
 --
-O MCTest é de código aberto (GitHub) e desenvolvido com apoio da Universidade Federal do ABC e da FAPESP
+O MCTest é de código aberto (GitHub) e desenvolvido com apoio: 
+* Universidade Federal do ABC
+* FAPESP
 --
 '''
 
