@@ -3180,8 +3180,8 @@ msgstr "Sintaxe do arquivo TXT"
 #: topic/templates/question/question_list_who_created_user.html:157
 msgid "Create topic before, if it does not exist"
 msgstr ""
-"IMPORTANTE: CRIAR TÓPICOS NA DISCIPLINA QUE VOCÊ ESTÁ CADASTRADO ANTES DE "
-"FAZER UPLOAD, se não exirtir"
+"IMPORTANTE: CRIAR TÓPICOS NA DISCIPLINA EM QUE VOCÊ ESTÁ CADASTRADO ANTES DE "
+"FAZER UPLOAD, se não existir"
 
 #: topic/templates/question/question_list_who_created_user.html:158
 #, python-format
