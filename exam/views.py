@@ -653,9 +653,13 @@ def generate_page(request, pk):
             db_questions_all.append(db_questions)
             listao.append([qr_answers, str1, QT])
 
-        if len(db_questions_all[0])==0 & len(db_questions_all[1])==0:
-            messages.error(request, _('ERROR in drawQuestionsVariations!!!! - no questions'))
-            return render(request, 'exam/exam_errors.html', {})
+        if len(db_questions_all) == 2:
+            if len(db_questions_all[0])==0 & len(db_questions_all[1])==0:
+                messages.error(request, _('ERROR in drawQuestionsVariations!!!! - no questions'))
+                return render(request, 'exam/exam_errors.html', {})
+        elif len(db_questions_all[0])==0:
+                messages.error(request, _('ERROR in drawQuestionsVariations!!!! - no questions'))
+                return render(request, 'exam/exam_errors.html', {})
 
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
