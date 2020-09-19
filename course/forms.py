@@ -6,8 +6,8 @@ class UpdateClassroomForm(forms.Form):
     #    queryset=Classroom.objects.all(),
     #    help_text = _("Choose the classrooms"),
     #    label=_("Classrooms"))
-    # def __init__(self, *args, **kwargs):
-    # super(UpdateClassroomForm, self).__init__(*args, **kwargs)
+    #def __init__(self, *args, **kwargs):
+    #   super(UpdateClassroomForm, self).__init__(*args, **kwargs)
     pass
 
     def __init__(self, *args, **kwargs):

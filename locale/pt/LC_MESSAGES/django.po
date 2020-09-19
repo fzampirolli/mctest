@@ -880,7 +880,7 @@ msgstr "Upload-Turmas"
 msgid ""
 "ATTENTION: this scheme will remove all students from existing classrooms!"
 msgstr ""
-"ATENÇÃO: este esquema irá remover todos os estudantes existentes em uma turma"
+"ATENÇÃO: este esquema irá remover todos os estudantes existentes em *TODAS AS TURMAS* desta disciplina"
 
 #: course/templates/discipline/discipline_update.html:115
 msgid ""

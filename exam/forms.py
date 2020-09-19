@@ -33,13 +33,13 @@ from course.models import Classroom, Discipline
 from topic.models import Question, User
 from .models import Exam
 
-
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
     file = forms.FileField()
 
-
 class UpdateExamForm(forms.Form):
+    myclasses = forms.ModelChoiceField(queryset=Classroom.objects.none())
+
     exam_name = forms.CharField(
         max_length=20,
         help_text=_("Exam name, for examplo, Exam 1"),

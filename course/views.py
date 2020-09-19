@@ -63,7 +63,8 @@ def ImportClassroomsDiscipline(request, pk):
             messages.error(request, _('ImportClassroomsDiscipline: choose a CSV following the model'))
             return render(request, 'exam/exam_errors.html', {})
 
-        f = new_persons.read().decode('utf-8')
+        f = new_persons.read()#.decode('utf-8')
+        f = f.decode('latin-1')
 
         for c in discipline.classrooms2.all():  # para cada classe da disciplina
             for s in c.students.all():  # remover os alunos existentes da classe
@@ -148,10 +149,12 @@ def ImportClassroomsDiscipline(request, pk):
                         'ImportClassroomsDiscipline: exists more that one student with same ID:' + str(s_all)))
                     return render(request, 'exam/exam_errors.html', {})
 
-                try:
-                    c = Classroom.objects.get(classroom_code=codigo)
-                except Classroom.DoesNotExist:
-                    c = None
+                c = None
+                for caux in Classroom.objects.filter(classroom_code=codigo):
+                    if caux.discipline == discipline:
+                        c = caux
+                        break
+
                 if not c:
                     c = Classroom.objects.create(
                         discipline=discipline,

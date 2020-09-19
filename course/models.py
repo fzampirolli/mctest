@@ -198,8 +198,9 @@ class Classroom(models.Model):
         ordering = ["discipline__courses__institutes__institute_code", "discipline__discipline_code", "classroom_code"]
 
     def __str__(self):
-        return ' - '.join([', '.join([d.discipline_code for d in Discipline.objects.all() if (d == self.discipline)]),
-                           self.classroom_code])
+        return '*'+self.classroom_code
+        #return ' - '.join([', '.join([d.discipline_code for d in Discipline.objects.all() if (d == self.discipline)]),
+        #                   self.classroom_code])
         # return ' - '.join([', '.join([self.discipline.classrooms.all()]), self.classroom_code])
         # return self.classroom_code
         # return '[{0}]  {1}'.format(self.discipline.discipline_code, self.classroom_code)
