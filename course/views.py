@@ -74,7 +74,9 @@ def ImportClassroomsDiscipline(request, pk):
         messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
         messages.info(request, _('Discipline name') + ' >> ' + discipline.discipline_name, extra_tags='upper')
 
-        contS = 0
+        contALL = 0
+        contFault = 0
+        studentsFault = ''
         for row in f.split('\n'):
             r = row.split(',')
 
@@ -87,7 +89,8 @@ def ImportClassroomsDiscipline(request, pk):
                     if [i for u in discipline.courses.all() for i in u.institutes.all() if
                         i.institute_url[4:] == emailProf[emailProf.find('@') + 1:]]:
                         messages.error(request,
-                                       _('ImportClassroomsDiscipline: The teacher is not registered in MCTest'))
+                                       _('ImportClassroomsDiscipline: The teacher is not registered in MCTest')+
+                                       '  ' + emailProf)
                         return render(request, 'exam/exam_errors.html', {})
 
                 for p in User.objects.filter(email=emailProf):  # registrar prof na disciplina, se não estiver
@@ -139,7 +142,10 @@ def ImportClassroomsDiscipline(request, pk):
                         s.student_name = nome
                         s.student_email = emailSt
                         s.save()
+                    contALL += 1
                 except:
+                    contFault += 1
+                    studentsFault += row + '\n'
                     pass
 
                 # shows error message if exists more that one student with same ID
@@ -191,6 +197,11 @@ def ImportClassroomsDiscipline(request, pk):
             contS += 1
             mystr4 = str(contS) + ';    ' + p.first_name + '; ' + p.last_name + '; ' + p.email
             messages.info(request, mystr4)
+
+        messages.info(request, _('TOTAL'), extra_tags='upper')
+        messages.info(request, _('Registered: ') + str(contALL))
+        messages.info(request, _('Fault: ') + str(contFault))
+        messages.info(request, str(studentsFault))
 
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/discipline/" + str(pk) + "/update")
