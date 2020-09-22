@@ -782,23 +782,20 @@ def generate_page(request, pk):
                     Utils.genTex(fileExamNameSTUDENT, myPATH)
                     myFILE = BASE_DIR + "/" + myPATH + "/" + fileExamNameSTUDENT[:-4] + '.pdf'
                     email = s.student_email
-                    cvMCTest.sendMail(myFILE, "Exam by MCTest", email, str(s.student_name))
-                    with open(path_to_file_REPORT, 'a') as data:  # acrescenta no final do csv a cada envio
+                    enviaOK = cvMCTest.sendMail(myFILE, "Exam by MCTest", email, str(s.student_name))
+                    with open(path_to_file_REPORT, 'a+') as data:  # acrescenta no final do csv a cada envio
                         writer = csv.writer(data)
                         writer.writerow(
-                            [fileExamNameSTUDENT[:-4] + '.pdf', s.student_ID, email, s.student_name, data_hora])
+                            [fileExamNameSTUDENT[:-4] + '.pdf', s.student_ID, email+enviaOK, s.student_name, data_hora])
                     # apos enviar, remove do disco
                     os.remove(myFILE)
 
                 #### Final dos estudantes de uma classe ###
 
-            if exam.exam_student_feedback == 'yes':  # envia um relatório dos email enviados
-                cvMCTest.sendMail(path_to_file_REPORT, "REPORT", str(request.user), "name")
-                os.remove(path_to_file_REPORT)
-
             if not countStudents:
-                messages.error(request, _('Error: there is no student in classroom(s).'))
-                return render(request, 'exam/exam_errors.html', {})
+                pass
+                # messages.error(request, _('Error: there is no student in classroom(s).'))
+                # return render(request, 'exam/exam_errors.html', {})
 
             countStudentsAll += countStudents
 
@@ -813,6 +810,10 @@ def generate_page(request, pk):
             Utils.genTex(fileExamName, "pdfExam")
 
             ### Final das classes selecionadas ###
+
+        if exam.exam_student_feedback == 'yes':  # envia um relatório dos email enviados
+            cvMCTest.sendMail(path_to_file_REPORT, "REPORT", str(request.user), "name")
+            os.remove(path_to_file_REPORT)
 
         for d in room.discipline.courses.all():
             for i in d.institutes.all():
@@ -840,13 +841,14 @@ def generate_page(request, pk):
                 # auxSTR = 'In the attached file are the exam variations per student \n-----'
                 # cvMCTest.sendMail(path_to_file_VARIATIONS, auxSTR, str(request.user), str('Professor'))
 
-            cvMCTest.envia_email(webMCTest_SERVER,
+                enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
                                  587,
                                  webMCTest_FROM,
                                  webMCTest_PASS,
                                  str(request.user),
                                  'MCTest: Templates and Variations: ' + str(exam.exam_name) + ' - ' + data_hora,
                                  message_cases, anexos)
+
         except:
             pass
 
@@ -877,7 +879,7 @@ def generate_page(request, pk):
                 aux = aux[:, -2:]  # get last two columns
                 writer.writerows(aux)  # return name; variation
             anexos.append([path_to_file_VARIATIONS_VPL])
-            cvMCTest.envia_email(webMCTest_SERVER,
+            enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
                                  587,
                                  webMCTest_FROM,
                                  webMCTest_PASS,

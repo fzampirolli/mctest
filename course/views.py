@@ -199,8 +199,8 @@ def ImportClassroomsDiscipline(request, pk):
             messages.info(request, mystr4)
 
         messages.info(request, _('TOTAL'), extra_tags='upper')
-        messages.info(request, _('Registered: ') + str(contALL))
-        messages.info(request, _('Fault: ') + str(contFault))
+        messages.info(request, _('Registered;') + str(contALL))
+        messages.info(request, _('Not registered;') + str(contFault))
         messages.info(request, str(studentsFault))
 
     return render(request, 'exam/exam_msg.html', {})

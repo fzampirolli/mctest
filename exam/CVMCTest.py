@@ -1629,7 +1629,8 @@ class cvMCTest(object):
                 part.add_header('Content-Disposition', 'attachment;filename="%s"' % os.path.basename(f))
                 msg.attach(part)
             except Exception:
-                raise Http404("Erro ao ler arquivo.\n Error:" + f)
+                return "****ERROR****"
+                #raise Http404("Erro ao ler arquivo.\n Error:" + f)
 
         try:
             gm = smtplib.SMTP(servidor, porta)
@@ -1640,8 +1641,9 @@ class cvMCTest(object):
             gm.sendmail(FROM, TO, msg.as_string())
             gm.close()
         except Exception:
-            raise Http404(
-                "Nao Foi Possivel Enviar o Email.\n Error:" + str([servidor, porta, FROM, TO, subject, texto, anexo]))
+            #return "Nao Foi Possivel Enviar o Email.\n Error:" + str([servidor, porta, FROM, TO, subject, texto, anexo])
+            return "****ERROR****"
+        return ''
 
     @staticmethod
     def sendMail(arquivo, msg_str, mailSend, aluno):
@@ -1675,7 +1677,7 @@ O MCTest é de código aberto (GitHub) e desenvolvido com apoio:
 '''
 
         # chamada a funcao de envio do email
-        cvMCTest.envia_email(webMCTest_SERVER,
+        return cvMCTest.envia_email(webMCTest_SERVER,
                              myporta,
                              webMCTest_FROM,
                              webMCTest_PASS,
