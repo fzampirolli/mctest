@@ -37,6 +37,8 @@ import cv2  # pip install opencv-python
 import img2pdf
 import numpy as np
 import pandas
+import random
+
 from django.contrib import messages
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -704,6 +706,16 @@ def generate_page(request, pk):
             # /home/fz/django_webmctest/mctest/pdfExam/_e84_EE teste_PClass_Prova1.pdf
             strALL = ''
 
+            # distribute students without repetition
+            if maxStudentsClass >= len(room.students.all()):
+                distribute_students = []
+                for s in room.students.all():
+                    stname = s.student_name.split(' ')
+                    stname = stname[0] + ' ' + stname[-1]
+                    if not stname in distribute_students:
+                        distribute_students.append(stname)
+            distribute_students_random = random.sample(distribute_students, len(distribute_students))
+
             countStudents = 0
             countVariations = 0
             for s in room.students.all():  ############## PARA CADA ESTUDANTE DA TURMA
@@ -718,7 +730,10 @@ def generate_page(request, pk):
                     if int(exam.exam_variations) < maxStudentsClass:
                         hash_num = Utils.distro_table(s.student_name)
                     else:
-                        hash_num = countStudents - 1  # para iniciar de zero
+                        stname = s.student_name.split(' ')
+                        stname = stname[0] + ' ' + stname[-1]
+                        hash_num = int(distribute_students_random.index(stname) * int(exam.exam_variations) / len(distribute_students_random))
+                        #hash_num = countStudents - 1  # para iniciar de zero
 
                     listVariations.append(
                         [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
