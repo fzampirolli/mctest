@@ -908,6 +908,7 @@ def generate_page(request, pk):
         getuser = getuser[1]
         getuser = getuser + ':' + getuser
         os.system('chown ' + getuser + ' ' + path + ' . -R')
+        os.system('chgrp ' + getuser + ' ' + path + ' . -R')
 
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"

@@ -1654,7 +1654,7 @@ class cvMCTest(object):
         myporta = 587
 
         # Assunto do email
-        assunto = "Mensagem automática envidada por MCTest"
+        assunto = "Mensagem automática enviada pelo MCTest"
 
         mensagem = "\n"
         mensagem += "Prezado(a) "
@@ -1665,7 +1665,9 @@ Segue em anexo a sua atividade: Lista de Exercícios ou Exame.
 
 Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
 
-Não retornar este email para webmctest@ufabc.edu.br, pois não será monitorado. 
+***
+Não retornar este email para webmctest@ufabc.edu.br, pois não será monitorado.
+***
 
 Se tiver alguma dúvida, entre em contato com o seu professor.
 

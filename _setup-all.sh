@@ -70,6 +70,15 @@ apt install texlive-font-utils
 apt install texlive-latex-extra
 apt install zbar-tools
 
+apt update -y
+apt install -y python3-geopandas
+pip3 install --force geopandas
+pip3 install git+git://github.com/geopandas/geopandas.git
+pip3 install descartes
+# mac
+/usr/local/bin/python3.8 -m pip install geopandas
+python -c "from geopandas import __version__; print(__version__)"
+
 apt install python3.7-dev
 # deploy
 # pip freeze > requirements.txt
