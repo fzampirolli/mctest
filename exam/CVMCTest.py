@@ -1671,11 +1671,13 @@ Não retornar este email para webmctest@ufabc.edu.br, pois não será monitorado
 
 Se tiver alguma dúvida, entre em contato com o seu professor.
 
----
-O MCTest é de código aberto (GitHub) e desenvolvido com apoio: 
-* Universidade Federal do ABC
+===
+O MCTest é um software de código aberto (disponível no GitHub) para gerar e 
+corrigir questões (em especial as parametrizadas - com variações) de forma 
+automática e está sendo desenvolvido com apoio das instituições públicas: 
+* Universidade Federal do ABC (UFABC)
 * FAPESP
----
+===
 '''
 
         # chamada a funcao de envio do email
