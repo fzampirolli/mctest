@@ -9,7 +9,7 @@ This file is part of webMCTest 1.1 (or MCTest 5.1).
 Languages: Python 3.7, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
 
-You should cite some references included in vision.ufabc.edu.br:8000
+You should cite some references included in vision.ufabc.edu.br
 in any publication about it.
 
 MCTest is free software: you can redistribute it and/or modify
@@ -631,9 +631,10 @@ def generate_page(request, pk):
     print("generate_page-01-" + str(datetime.datetime.now()))
 
     path_aux = BASE_DIR + "/report_Exam_" + str(pk)
-    path_to_file_REPORT = path_aux + ".csv"
+    path_to_file_REPORT = path_aux + "_sendMails.csv"
     path_to_file_VARIATIONS = path_aux + "_variations.csv"
-    path_to_file_VARIATIONS_VPL = BASE_DIR + "/students_variations.csv"
+    path_to_file_VARIATIONS_VPL = path_aux + "_students_variations.csv"
+    path_to_file_LINKER_JSON = path_aux + "_linker.json"
 
     path_to_file_TEMPLATES = path_aux + "_templates.csv"
     path_to_file_STUDENTS = path_aux + "_students.csv"
@@ -651,6 +652,7 @@ def generate_page(request, pk):
         listao = []  ############ gera X variacoes de exames
         db_questions_all = []
         for i in range(int(exam.exam_variations)):
+            print("generate_page-02-" + str(datetime.datetime.now()) + ' var: ' + str(i))
             [qr_answers, str1, QT, db_questions] = Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam))
             db_questions_all.append(db_questions)
             listao.append([qr_answers, str1, QT])
@@ -828,7 +830,7 @@ def generate_page(request, pk):
 
         if exam.exam_student_feedback == 'yes':  # envia um relatório dos email enviados
             cvMCTest.sendMail(path_to_file_REPORT, "REPORT", str(request.user), "name")
-            os.remove(path_to_file_REPORT)
+            #os.remove(path_to_file_REPORT)
 
         for d in room.discipline.courses.all():
             for i in d.institutes.all():
@@ -885,7 +887,7 @@ def generate_page(request, pk):
                 '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification') + '\n'
             message_cases += '\n\n'
 
-            anexos = [Utils.format_cases(cases, str(request.user) + '-' + str(exam.exam_name) + '-' + data_hora)]
+            anexos = [Utils.format_cases(cases, path_to_file_LINKER_JSON)]
             anexos.append([path_to_file_VARIATIONS])
             aux = np.array(listVariations)
             with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
@@ -907,8 +909,8 @@ def generate_page(request, pk):
         getuser = path.split('/')
         getuser = getuser[1]
         getuser = getuser + ':' + getuser
-        os.system('chown ' + getuser + ' ' + path + ' . -R')
-        os.system('chgrp ' + getuser + ' ' + path + ' . -R')
+        os.system('chown -R ' + getuser + ' ' + path + ' .')
+        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
 
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"

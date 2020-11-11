@@ -9,7 +9,7 @@ This file is part of webMCTest 1.1 (or MCTest 5.1).
 Languages: Python 3.7, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
 
-You should cite some references included in vision.ufabc.edu.br:8000
+You should cite some references included in vision.ufabc.edu.br
 in any publication about it.
 
 MCTest is free software: you can redistribute it and/or modify
@@ -380,14 +380,15 @@ class Utils(object):
     # cases['output']= np.array([     [ [ [1,2], [3] ],  [[3, 4, 5]] ],      [ [[4, 5, 6], [[7, 8, 9]] ] ] )
     @staticmethod
     def format_cases(cases, file):  # _version1
-        file = file.replace(' ', '').replace('/', '-').replace(':', '-')
-        files = ['./tmp/' + file + ".json"]
-        files = [BASE_DIR + '/linker.json']
+        #file = file.replace(' ', '').replace('/', '-').replace(':', '-')
+        #files = ['./tmp/' + file + "_linker.json"]
+        #files = [BASE_DIR + '/linker.json']
+        files = [file]
         formatCases = {}
         formatCases['variations'] = []  # variant/models
 
         for v in range(len(cases['input'])):  # for each variant/model
-            st_f = './tmp/' + file + '-m' + str(v + 1) + ".cases"
+            #st_f = './tmp/' + file + '-m' + str(v + 1) + ".cases"
             variant = {}
             variant['variant'] = str(v + 1)
             variant['questions'] = []
@@ -1210,6 +1211,7 @@ _inst1_
 
     @staticmethod
     def drawQuestionsTDifficultyVariations(request, exam, count, diff, topics):
+        print("drawQuestionsTDifficultyVariations-00-" + str(datetime.datetime.now()))
         bd_qT = []  # pega questoes dissertativas
         _group = []  # pegar apenas uma questão por grupo
         for q in exam.questions.filter(question_type='QT').filter(question_difficulty=diff).order_by('?'):
@@ -1276,6 +1278,7 @@ _inst1_
     # antes de criar um exame para cada aluno, crio variacoes de exames
     @staticmethod
     def drawQuestionsVariations(request, exam, user, topics):
+        print("drawQuestionsVariations-00-" + str(datetime.datetime.now()))
         str1 = ''
         qr_answers = ''
         count = 0

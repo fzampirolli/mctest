@@ -9,7 +9,7 @@ This file is part of webMCTest 1.1 (or MCTest 5.1).
 Languages: Python 3.7, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
 
-You should cite some references included in vision.ufabc.edu.br:8000
+You should cite some references included in vision.ufabc.edu.br
 in any publication about it.
 
 MCTest is free software: you can redistribute it and/or modify

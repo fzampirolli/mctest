@@ -9,7 +9,7 @@ This file is part of webMCTest 1.1 (or MCTest 5.1).
 Languages: Python 3.7, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
 
-You should cite some references included in vision.ufabc.edu.br:8000
+You should cite some references included in vision.ufabc.edu.br
 in any publication about it.
 
 MCTest is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@ GNU General Public License for more details.
 
 import random
 import time
+import datetime
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -145,6 +146,7 @@ class UtilsMC(object):
 
     @staticmethod
     def questionParametric(question, answers):
+        print("questionParametric-00-" + str(datetime.datetime.now()))
 
         ############ question + def #####
 
@@ -156,14 +158,18 @@ class UtilsMC(object):
                 AllLines[i] = AllLines[i] + '\n'
         mystr = ''.join(AllLines).replace("\r", "")
 
+        print("questionParametric-01-" + str(datetime.datetime.now()))
         myDef = UtilsMC.get_code(mystr, 'def')
+        print("questionParametric-01-" + str(datetime.datetime.now()))
 
         if myDef is not None:
             exec('\n'.join(myDef))  # run the algorithm and variables
         else:
             return ["", AllLines]
 
+        print("questionParametric-02-" + str(datetime.datetime.now()))
         arg = UtilsMC.get_code(question, 'code')  # get the args in text
+        print("questionParametric-02-" + str(datetime.datetime.now()))
 
         i = 0
         tam = len(AllLines)
@@ -174,6 +180,8 @@ class UtilsMC(object):
                 tam = i
                 break
             i = i + 1
+
+        print("questionParametric-03-" + str(datetime.datetime.now()))
 
         q_param = ""
         for j in range(0, tam):

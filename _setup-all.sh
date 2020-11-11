@@ -298,4 +298,6 @@ sphinx-quickstart
 make html
 make man
 make spelling
+
+chown ufabc:ufabc . -R
 '

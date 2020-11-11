@@ -7,7 +7,7 @@ advantage is the handling to parametric questions through
 ![equation](http://latex.codecogs.com/gif.latex?\LaTeX) and Python, 
 **allowing for infinite variations of each same question**.
 
-Please access [vision.ufabc.edu.br:8000](http://vision.ufabc.edu.br:8000)
+Please access [vision.ufabc.edu.br](http://vision.ufabc.edu.br)
 for some [examples](http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/).
 
 #### Help us spread MCTest. If more people use it, the faster the improvements.
