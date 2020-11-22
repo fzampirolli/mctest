@@ -15,7 +15,7 @@
                         <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
                             <h1>{% trans "MCTest" %} - produção</h1>
                             Melhorias serão instaladas somente durante o recesso.
-                            NÃO USAR MAIS a <a href="http://vision.ufabc.edu.br">vision</a> (BD atualizado em 03/01/2020 13:10h).
+                            NÃO USAR MAIS a <a href="http://vision.ufabc.edu.br">vision</a>.
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,8 @@
                         <li data-target="#carouselExampleIndicators" data-slide-to="17"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="18"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="19"></li>
-                    </ol>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="20"></li>
+                   </ol>
                     <div class="carousel-inner" style="background-color:#447e9b;">
                         <!-- slide 1 -->
                         <div class="carousel-item active">
@@ -331,6 +332,20 @@
                                 <p>{% trans "The teacher receives this email after creating a PDF when there is an exam that contains program exercises" %}</p>
                             </div>
                         </div>
+                        <!-- slide 20 - Email with templates and variations -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/20.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with templates, DBs (for import into moodle) and variation per student" %}</h5>
+                                <p>{% trans "The teacher receives this email after creating a PDF when there is an exam containing multiple-choice questions or questions with answers" %}</p>
+                            </div>
+                        </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -371,7 +386,7 @@
                         [{% trans "Classroom has Exams, Profs and Student" %}]
                     </li>
                     <li><strong>{% trans "Exams" %}:</strong> {{ num_exams }}
-                        [{% trans "Exam has Classrooms and Questions" %}] - {% trans "motivations" %}
+                        [{% trans "Exam has Classrooms and Questions" %}]
                     </li>
                     <li><strong>{% trans "Topics" %}:</strong> {{ num_topics }}
                         [{% trans "Topic has Questions" %}]

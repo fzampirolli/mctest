@@ -300,4 +300,9 @@ make man
 make spelling
 
 chown ufabc:ufabc . -R
+
+vcad-vision https:
+
+/etc/apache2/sites-available$
+
 '
