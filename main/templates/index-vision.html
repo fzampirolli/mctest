@@ -14,7 +14,8 @@
                     <div class="text-center">
                         <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
                             <h1>{% trans "MCTest" %} - {% trans "development" %}</h1>
-                            {% trans "Improvements will be included all the time. USE ONLY service in production" %}: <a href="http://mctest.ufabc.edu.br">mctest</a> ({% trans "DB updated in" %} 03/01/2020 13:10h).
+                            {% trans "Improvements will be included all the time. USE ONLY service in production" %}: <a
+                                href="http://mctest.ufabc.edu.br">mctest</a>.
                         </div>
                     </div>
                 </div>
@@ -41,6 +42,7 @@
                         <li data-target="#carouselExampleIndicators" data-slide-to="17"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="18"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="19"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="20"></li>
                     </ol>
                     <div class="carousel-inner" style="background-color:#447e9b;">
                         <!-- slide 1 -->
@@ -184,7 +186,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Part III" %}</h5>
                                 <p>{% trans "Question to be displayed. Note the order in which answers were drawn after '#'" %}
-                                {% trans "You can assign different weights for each anwers, on the exam grade" %}</p>
+                                    {% trans "You can assign different weights for each anwers, on the exam grade" %}</p>
                             </div>
                         </div>
                         <!-- slide 10 parametric - Example I-->
@@ -242,7 +244,7 @@
                                 <h5>{% trans "CSV File with Exam Correction" %}</h5>
                                 <p>{% trans "In yellow, answer marked '/' correct answer" %}.
                                     {% trans "In green, Question ID in the DB and answers order (0=A, 1=B, ...)" %}.
-                                 {% trans "ID here means exam variations" %}</p>
+                                    {% trans "ID here means exam variations" %}</p>
                             </div>
                         </div>
                         <!-- slide 14 - Grade with weight -->
@@ -255,7 +257,7 @@
                                 </div>
                             </div>
                             <div class="carousel-caption d-none d-md-block">
-                                <h5>{% trans "Grade with weight" %}</h5>
+                                <h5>{% trans "Grade with weight" %} - <a href="http://vision.ufabc.edu.br/static/NOTAS.ods" style="color:darkblue">template</a></h5>
                                 <p>{% trans "In yellow, answer marked '/' correct answer" %}.
                                     {% trans "In green, answers with weight" %}. {% trans "ID here means exam variations" %}</p>
                             </div>
@@ -328,6 +330,20 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email with test cases of moodle + VPL" %}</h5>
                                 <p>{% trans "The teacher receives this email after creating a PDF when there is an exam that contains program exercises" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 20 - Email with templates and variations -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="http://vision.ufabc.edu.br/static/website/images/slider/20.png">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with templates, DBs (for import into moodle) and variation per student" %}</h5>
+                                <p>{% trans "The teacher receives this email after creating a PDF when there is an exam containing multiple-choice questions or questions with answers" %}</p>
                             </div>
                         </div>
                     </div>
@@ -433,7 +449,7 @@
                 <hr>
 
 
-                <h3>{% trans "Historic" %} - {% trans "Software registration" %}</h3>
+                <h3>{% trans "History" %} - {% trans "Software registration" %}</h3>
 
                 <ul>
                     <table style="width: 97%;" border="1" cellspacing="0">
@@ -530,35 +546,60 @@
                 <hr>
 
                 <h3>{% trans "Publications" %}</h3>
+
                 <ul>
-                    <li><a href="http://www.itng.info">ref19a</a> - Zampirolli, F. A., Teubl, F. and Batista, V. R., "A
+
+                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615">ref20a</a> - Zampirolli, F.A.; Batista, V.R.; Iriarte, E.A.A.; Antunes Jr.
+                        I."Online assessments with parametric questions and automatic corrections: an improvement
+                        for MCTest using Google Forms and Sheets".
+                        Simpósio Brasileiro de Informática na Educação, Natal, 2020.
+                        (<a href="http://vision.ufabc.edu.br/static/__SBIE20_mctestS.pdf">SLIDES</a>;
+                        <a href="https://www.youtube.com/watch?v=P6m04pBJDj0">Video</a>)
+                    </li>
+                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913/12767">ref20b</a> - Zampirolli, F.A.; Pisani, P.H.; Borovina
+                        Josko, J.M.; Kobayashi, G.; Fraga, F.;
+                        Goya, D.; Savegnago, H. R. "Parameterized and automated assessment on an introductory programming course".
+                        Simpósio Brasileiro de Informática na Educação, Natal, 2020.
+                        (<a href="http://vision.ufabc.edu.br/static/__SBIE20_opcaoB.pdf">SLIDES</a>;
+                        <a href="https://youtu.be/I4pvS04RiVg">Video</a>)
+                    </li>
+                    <li><a href="#">ref20c</a> - SILVA, D. G.; Zampirolli, F.A.;
+                    "Reconhecimento facial para validação de usuário durante um questionário no Moodle".
+                        Apps.edu, Natal, 2020.
+                        (<a href="https://www.youtube.com/watch?v=BL-Uscgc4tc">Video</a>)
+                    </li>
+                    <li><a href="http://www.itng.info">ref19a</a> - Zampirolli, F.A., Teubl, F. and Batista, V.R., "A
                         Generator
                         and Corrector of Parametric Questions in Hard Copy". International Conference on Information
                         Technology: New
                         Generations. Las Vegas, USA, 2019.
                     </li>
-                    <li><a href="http://csedu.org">ref19b</a> - Zampirolli, F. A., Teubl, F. and Batista, V. R., "Online
+                    <li><a href="http://csedu.org">ref19b</a> - Zampirolli, F.A., Teubl, F. and Batista, V.R., "Online
                         Generator
                         and Corrector of Parametric Questions in Hard Copy Useful for the Elaboration of Thousands of
                         Individualized
                         Exams". International Conference on Computer Supported Education. Crete, Grécia, 2019.
                         (<a href="http://vision.ufabc.edu.br/static/__CSEDU19_webMCTest.pdf">SLIDES</a>)
                     </li>
-                    <li><a href="http://csedu.org">ref19c</a> - Rezende, F., Zampirolli, F. A. and Kobayashi, G.,
+                    <li><a href="http://csedu.org">ref19c</a> - Rezende, F., Zampirolli, F.A. and Kobayashi, G.,
                         "Convolutional
                         Neural Network applied to Code Assignment Grading". International Conference on Computer
                         Supported
                         Education. Crete, Grécia, 2019.
                     </li>
-                    <li><a href="https://doi.org/10.1002/cae.22029">ref18a</a> - Zampirolli, F. A., Goya, D., Pimentel,
-                        E. P., and
+                    <li><a href="#">ref19d</a> - Silva, A.P.M,
+                        "Utilizando Ferramentas Gratuitas para Automatizar Testes de Software em Portais WEB".
+                        Trabalho de Conclusão de Curso, Engenharia da Informação, UFABC, 2019. (orientador).
+                    </li>
+                    <li><a href="https://doi.org/10.1002/cae.22029">ref18a</a> - Zampirolli, F.A., Goya, D., Pimentel,
+                        E.P., and
                         Kobayashi, G. "Evaluation process for an introductory programming course using blended learning
                         in
                         engineering education". Computer Applications in Engineering Education. 2018.
                     </li>
                     <li><a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517">ref18b</a> -
                         Calsavara, A.,
-                        Serra, A. P. G. Zampirolli, F. A., Carvalho, L. S. G., Jonathan, M. and Correia, R. C. M.
+                        Serra, A.P.G. Zampirolli, F.A., Carvalho, L.S.G., Jonathan, M. and Correia, R.C.M.
                         "Método baseado
                         nos Referenciais de Formação da SBC para reestruturação de descritivos de disciplinas de Ciência
                         da
@@ -568,13 +609,13 @@
                     </li>
                     <li>
                         <a href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao">ref17cap2</a>
-                        - Zorzo, A. F., Nunes, D., Matos, E., Steinmacher, I., Leite, J., Araujo, R. M., and Martins, S.
+                        - Zorzo, A.F., Nunes, D., Matos, E., Steinmacher, I., Leite, J., Araujo, R.M., and Martins, S.
                         "Referenciais de Formação para os Cursos de Graduação em Computação". Sociedade Brasileira de
                         Computação
                         (SBC). 153p, 2017.
                     </li>
-                    <li><a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a> - Zampirolli, F. A., Batista,
-                        V. R., and
+                    <li><a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a> - Zampirolli, F.A., Batista,
+                        V.R., and
                         Quilici-Gonzalez, J. A. "An automatic generator and corrector of multiple choice tests with
                         random answer
                         keys." Frontiers in Education Conference (FIE), 2016 IEEE.
@@ -582,19 +623,19 @@
                     </li>
                     <li><a href="https://periodicos.itp.ifsp.edu.br/index.php/IC/article/viewFile/221/394">ref16b</a> -
                         China, R.
-                        T., Zampirolli, F. A., Neves, R. P. O. and Quilici-Gonzalez, J. A. (2016). An application for
+                        T., Zampirolli, F.A., Neves, R.P.O. and Quilici-Gonzalez, J.A. (2016). An application for
                         automatic
                         multiple-choice test grading on android. Revista Brasileira de Iniciação Científica, 3(2).
                     </li>
                     <li><a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a> - Zampirolli, F. A.,
-                        China, R. T.,
-                        Neves, R. P. O. and QUILICI-GONZALEZ, J. A. "Automatic Correction of Multiple-Choice Tests on
+                        China, R.T.,
+                        Neves, R.P.O. and QUILICI-GONZALEZ, J.A. "Automatic Correction of Multiple-Choice Tests on
                         Android
                         Devices". In: Workshop de Visão Computacional, 2015.
                     </li>
                     <li><a href="http://iris.sel.eesc.usp.br/wvc/Anais_WVC2013/Poster/1/9.pdf">ref13</a> - Zampirolli,
                         F. A,
-                        Quilici-Gonzalez, J. A. and Neves, R. P. O. "Automatic Correction of Multiple-Choice Tests using
+                        Quilici-Gonzalez, J.A. and Neves, R.P.O. "Automatic Correction of Multiple-Choice Tests using
                         Digital
                         Cameras and Image Processing". In: Workshop de Visão Computacional, 2013.
                     </li>
