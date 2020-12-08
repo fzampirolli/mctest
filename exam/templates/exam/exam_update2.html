@@ -91,12 +91,12 @@
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Choose Classrooms" %}</span>
-                                        <table  style="width:100%">
+                                        <table class="table">
                                             {% for c in form.classrooms %}
                                                 {% if  forloop.counter0|divisibleby:10 %}
-                                                    <tr bgcolor="#e6f2ff">
+                                                    <tr>
                                                 {% endif %}
-                                                <td>
+                                                <td style="width: 140px; height: 10px;" align="left" bgcolor="#e6f2ff">
                                                     <div class="checkbox">
                                                         <label> {{ c }} </label>
                                                     </div>
