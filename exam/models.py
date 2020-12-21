@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -33,7 +33,6 @@ from account.models import User
 from course.models import Classroom
 from student.models import Student
 from topic.models import Question
-
 
 # Create your models here.
 class Exam(models.Model):
@@ -198,6 +197,18 @@ class Exam(models.Model):
             ','.join([c.classroom_code for c in self.classrooms.all()]),
             self.exam_name])
 
+# new 08/12/20: exame tem variacoes
+class VariationExam(models.Model):
+    exam = models.ForeignKey(Exam,
+                             related_name='variationsExams2',  # relacionamento reverso
+                             on_delete=models.CASCADE, null=True,
+                             verbose_name=_("Exam"),
+                             )
+    variation = models.TextField(default='', blank=True,
+                                 help_text=_(
+                                     "Accepts LaTeX description and parameterization using the Python language (see publications)."),
+                                 verbose_name=_("Description"),
+                                 )
 
 class StudentExam(models.Model):
     exam = models.ForeignKey(Exam,
@@ -213,7 +224,6 @@ class StudentExam(models.Model):
     grade = models.CharField(max_length=20,
                              verbose_name=_("Exam Grade"),
                              )
-
 
 class StudentExamQuestion(models.Model):
     studentExam = models.ForeignKey(StudentExam,
@@ -233,7 +243,6 @@ class StudentExamQuestion(models.Model):
                                     verbose_name=_("Answers Order"),
                                     )
 
-
 # new 30/7/19: nota final do aluno na disciplina/turma
 class ClassroomExam(models.Model):
     exam = models.ForeignKey(Exam,
@@ -249,3 +258,4 @@ class ClassroomExam(models.Model):
     grade = models.CharField(max_length=20,
                              verbose_name=_("Discipline Grade"),
                              )
+

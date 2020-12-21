@@ -27,7 +27,7 @@ defer==1.0.6
 defusedxml==0.6.0
 diff-match-patch==20181111
 distro-info===0.18ubuntu0.18.04.1
-Django==2.2.4
+Django==3.1.4
 django-extensions==2.2.1
 django-import-export==1.2.0
 django-widget-tweaks==1.4.5
@@ -64,7 +64,7 @@ numpy==1.17.0
 oauth==1.0.1
 odfpy==1.4.0
 olefile==0.45.1
-opencv-python==3.4.3.18
+opencv-python==3.4.*
 openpyxl==2.6.2
 pandas==0.25.0
 parsedatetime==2.4

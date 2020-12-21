@@ -33,6 +33,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True #os.getenv('DEBUG')
 
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+
 # For Mysql
 DB_PASS = os.getenv('DB_PASS')
 DB_USER = os.getenv('DB_USER')
@@ -75,6 +79,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'widget_tweaks',
+    #'sslserver',
     'django_extensions',
     'main.apps.MainConfig',
     'topic.apps.TopicConfig',

@@ -1,4 +1,4 @@
-# Integration: MCTest + Moodle + VPLAY
+# Integration: MCTest + Moodle + VPL
 ## Author of the VPL modifications: Heitor Savegnago
 ## Orientation: Paulo Pisani
 

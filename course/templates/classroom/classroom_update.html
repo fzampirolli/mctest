@@ -15,35 +15,24 @@
                         {% if user.groups.all.0.name == 'professor' %}
 
                             <!-- import students -->
-                            <form action="import/" method="POST" enctype="multipart/form-data">
+                            <form class="input-group mb-3 text-right" action="import/" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
-
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <button class="input-group-text"
+                                    <input type="file" name="myfile" id="inputGroupFile01">
+                                        <button class="btn btn-primary"
                                                 type="submit">{% trans "Upload-Students" %}</button>
-                                    </div>
-                                    <div class="custom-file">
-                                        <input type="file" name="myfile" class="custom-file-input"
-                                               id="inputGroupFile01"
-                                               aria-describedby="inputGroupFileAddon01">
-                                        <label class="custom-file-label"
-                                               for="inputGroupFile01">{% trans "Choose file" %}</label>
-                                    </div>
-                                </div>
-
-                                <h6>
-                                    <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-web/examples/">{% trans "see examples" %}</a>
-                                </h6>
-
-                                <h6>{% trans "CSV file syntax" %} - {% trans "Only UTF-8 format" %}: </h6>
-                                {% trans "123, joão,  joao@gmail.com" %}<br>
-                                {% trans "987, maria, maria@gmail.com" %}<p></p>
-
-                                {% trans "If necessary, use this to convert the accents" %}:
-                                <a href="http://w2.syronex.com/jmr/latex-symbols-converter">{% trans "convert" %}</a><br>
-                                {% trans "After importing CSV file, check below if students are marked in gray" %}<p>
                             </form>
+
+                            <h6>
+                                <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-web/examples/">{% trans "see examples" %}</a>
+                            </h6>
+
+                            <h6>{% trans "CSV file syntax" %} - {% trans "Only UTF-8 format" %}: </h6>
+                            {% trans "123, joão,  joao@gmail.com" %}<br>
+                            {% trans "987, maria, maria@gmail.com" %}<p></p>
+
+                            {% trans "If necessary, use this to convert the accents" %}:
+                            <a href="http://w2.syronex.com/jmr/latex-symbols-converter">{% trans "convert" %}</a><br>
+                            {% trans "After importing CSV file, check below if students are marked in gray" %}<p>
 
                             <hr>
 
@@ -104,7 +93,7 @@
                                 <div class="text-right">
                                     <a href="{% url 'course:classroom-mylist' %}"
                                        class="btn btn-outline-primary">{% trans "Back" %}</a>
-                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                    <button class="btn btn-primary">{% trans "Save" %}</button>
                                 </div>
                             </form>
 

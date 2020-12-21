@@ -17,11 +17,11 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="http://mctest.ufabc.edu.br:8080/static/webMCTest.png" type="image/png">
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
     {% block styles %}{% endblock %}
@@ -39,7 +39,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'main:index' %}">
-        <img src="http://mctest.ufabc.edu.br:8080/static/webMCTest.png" height="45px" >
+        <img src="http://mctest.ufabc.edu.br:8080/static/webMCTest.png" height="45px">
     </a>
     <button class="navbar-toggler" type="button"
             data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -63,52 +63,52 @@
             </li>
 
             {% if user.is_authenticated and user.groups.all.0.name == 'professor' %}
-            <li class="nav-item">
-                <a class="nav-link" href="/topic/topics">{% trans "All topics" %}</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topic/topics">{% trans "All topics" %}</a>
+                </li>
 
-            {% if user.groups.all.0.name == 'professor' %}
-            <li class="nav-item">
-                <a class="nav-link" href="/topic/questions">{% trans "All questions" %}</a>
-            </li>
+                {% if user.groups.all.0.name == 'professor' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/topic/questions">{% trans "All questions" %}</a>
+                    </li>
+                {% endif %}
+
+                {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/exam/exams/">{% trans "All exams" %}</a>
+                    </li>
+                    <p>
+                {% endif %}
             {% endif %}
-
-            {% if user.is_staff %}
-            <li class="nav-item">
-                <a class="nav-link" href="/exam/exams/">{% trans "All exams" %}</a>
-            </li>
-            <p>
-                {% endif %}
-                {% endif %}
 
         </ul>
         <ul class="navbar-nav float-right">
             {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="#">{{ user.username }}:</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">{{ user.username }}:</a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/topic/myquestions/">{% trans "Questions" %}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/course/classroomsmy/">{% trans "Classrooms" %}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/exam/myexams/">{% trans "Exams" %}</a>
-            </li>
-            <p>
-                {% if user.is_staff %}
-            <li class="nav-item">
-                <a class="nav-link" href="/admin">{% trans "Admin" %}</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}?next={{ request.path }}">{% trans "Logout" %}</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topic/myquestions/">{% trans "Questions" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/course/classroomsmy/">{% trans "Classrooms" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/exam/myexams/">{% trans "Exams" %}</a>
+                </li>
+                <p>
+                    {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">{% trans "Admin" %}</a>
+                        </li>
+                    {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}?next={{ request.path }}">{% trans "Logout" %}</a>
+                </li>
 
             {% else %}
-            <li><a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">{% trans "Login" %}</a></li>
+                <li><a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">{% trans "Login" %}</a></li>
             {% endif %}
 
             <li class="nav-item">
@@ -276,18 +276,23 @@
             var checkbox = $($(this).find('td').eq(0)).find('input').prop('checked', checked);
         });
     });
-
+    /* Create an array with the values of all the checkboxes in a column */
+    $.fn.dataTable.ext.order['dom-checkbox'] = function (settings, col) {
+        return this.api().column(col, {order: 'index'}).nodes().map(function (td, i) {
+            return $('input', td).prop('checked') ? '0' : '1';
+        });
+    }
     $(document).ready(function () {
         var table = $('#example1').DataTable({
             "columnDefs": [{
                 "targets": [0],
-                "orderable": false,
+                "orderDataType": 'dom-checkbox',
             }],
             dom: "Bfrtip",
             scrollY: "550px",
             scrollX: true,
             paging: false,
-            //bInfo: false,
+            bInfo: false,
             buttons: [
                 {
                     extend: 'copy',
@@ -337,6 +342,14 @@
 
         table.buttons().container()
             .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+        $(':checkbox').on('change', function (e) {
+            var row = $(this).closest('tr');
+            var hmc = row.find(':checkbox:checked').length;
+            var kluj = parseInt(hmc);
+            row.find('td.counter').text(kluj);
+            table.row(row).invalidate('dom');
+        });
     });
 </script>
 
@@ -348,23 +361,25 @@
 
 
 <ul>
-  <font size="2" color="black">
-        <a href="https://www.gnu.org/licenses/agpl-3.0.html"><img src="http://mctest.ufabc.edu.br:8080/static/agplv3.png"></a>
-        <a href="{% url 'main:license' %}">Copyright © 2019</a> {%  trans "by" %}
+    <font size="2" color="black">
+        <a href="https://www.gnu.org/licenses/agpl-3.0.html"><img
+                src="http://mctest.ufabc.edu.br:8080/static/agplv3.png"></a>
+        <a href="{% url 'main:license' %}">Copyright © 2021</a> {% trans "by" %}
         <a href="https://sites.google.com/site/fzampirolli/">Francisco de Assis Zampirolli</a>
-        {%  trans "from" %} <a href="http://www.ufabc.edu.br">{%  trans "Federal University of ABC" %}</a> {%  trans "and" %}
-        <a href="{% url 'main:contributors' %}">{%  trans "individual contributors" %}</a>;
-        <a href="{% url 'main:users' %}">{%  trans "Who use" %}</a>;
-        <a href="http://github.com/fzampirolli/mctest">{%  trans "Download" %}</a>;
-        <a href="https://docs.google.com/document/d/17OKZDVb13KUBwo-IM9OW6ASFSPUMMrTFf8HWZ8dum-o/edit?usp=sharing"> {%  trans "Manual" %};
-        <a href="{% url 'main:readme' %}"> {%  trans "README" %}.</a><br>
-    {%  trans "Grant" %}:
-    <a href="https://bv.fapesp.br/pt/auxilios/28430/modelagem-de-objetos-usando-morfologia-matematica-e-grafos-de-vizinhanca/">
-      #2009/14430–1</a> {%  trans "and" %}
-    <a href="https://bv.fapesp.br/pt/auxilios/105047/um-sistema-universal-para-geracao-e-correcao-automatica-de-questoes-parametrizadas/">
-      #2018/23561-1</a> - {% trans "São Paulo Research Foundation (FAPESP)" %}.
-    
-  </font>
+        {% trans "from" %} <a
+            href="http://www.ufabc.edu.br">UFABC</a> {% trans "and" %}
+        <a href="{% url 'main:contributors' %}">{% trans "individual contributors" %}</a>;
+        <a href="{% url 'main:users' %}">{% trans "Who use" %}</a>;
+        <a href="http://github.com/fzampirolli/mctest">{% trans "Download" %}</a>;
+        <a href="https://docs.google.com/document/d/17OKZDVb13KUBwo-IM9OW6ASFSPUMMrTFf8HWZ8dum-o/edit?usp=sharing"> {% trans "Manual" %};
+            <a href="{% url 'main:readme' %}"> {% trans "README" %}.</a><br>
+            {% trans "Grant" %}: <a href="http://www.ufabc.edu.br">UFABC</a>;
+            <a href="https://bv.fapesp.br/pt/auxilios/28430/modelagem-de-objetos-usando-morfologia-matematica-e-grafos-de-vizinhanca/">
+                #2009/14430–1</a> {% trans "and" %}
+            <a href="https://bv.fapesp.br/pt/auxilios/105047/um-sistema-universal-para-geracao-e-correcao-automatica-de-questoes-parametrizadas/">
+                #2018/23561-1</a> - <a href="http://fapesp.br">FAPESP</a>
+
+    </font>
 </ul>
 
 </body>

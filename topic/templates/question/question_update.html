@@ -136,7 +136,9 @@
                                 <div class="text-right">
                                     <a href="{% url 'topic:myquestions-list' %}"
                                        class="btn btn-outline-primary">{% trans "Back" %}</a>
-                                    <input class="btn btn-primary" type="submit" value={% trans "Submit" %}>
+                                    <a href="{% url 'main:According' %}" class="btn btn-outline-danger">
+                                        {% trans "According" %}</a>
+                                    <input class="btn btn-primary" type="submit" value={% trans "Save" %}>
                                     <hr>
                                 </div>
                             </form>

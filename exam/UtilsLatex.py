@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -31,7 +31,6 @@ import datetime
 import json
 import os
 import random
-import re
 import string
 import subprocess
 import time
@@ -47,22 +46,66 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
-from mctest.settings import BASE_DIR
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
 
-import codecs
 
 class Utils(object):
 
+    @staticmethod
+    def getstr_QM(exam, variation_i):
+        if int(Utils.getNumMCQuestions(exam)) == 0:
+            return ''
+        d = exam.variationsExams2.all()[variation_i]
+        s = eval(d.variation)
+        strQM = '\n\n% QUESTOES DE MULTIPLA ESCOLHA\n\n'
+        strQM += "\\\\\\vspace{2mm}\\hspace{-5mm}\\noindent\\textbf{%s:}\\vspace{2mm}\n" % _(
+            "Multiple Choice Questions")
+
+        ss1 = "\n\n\hspace{-15mm}{\\tiny {\\color{white}\\@%s}} \\hspace{0mm}"
+        for var in s['variations']:
+            for q in var['questions']:
+                if q['type'] == 'QM':
+                    ss = ss1 % str(q['key']).zfill(4)
+                    strQM += "%s %s. %s\\vspace{0mm}\n" % (ss, str(q['number']), q['text'])  # q.question_text)
+                    if len(q['answers']):
+                        strQM += "\n\\begin{oneparchoices}"
+                        for a in q['answers']:
+                            if exam.exam_student_feedback:  # se enviar pdf ao aluno, retira gabarito
+                                strQM += "\n\n\\choice %s" % a['text']
+                            else:
+                                if a['sort'] == 0:
+                                    strQM += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}\#%s}}%s" % (
+                                        str(a['sort']), a['text'])
+                                else:
+                                    strQM += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (
+                                        str(a['sort']), a['text'])
+                        strQM += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
+
+        return strQM
+
+    @staticmethod
+    def getQRanswers(exam):
+        qr_answers_all = []
+        for v in exam.variationsExams2.all():
+            qr_answers = ''
+            s = eval(v.variation)
+            for var in s['variations']:
+                for q in var['questions']:
+                    qr_answers += str(q['key'])
+                    for a in q['answers']:
+                        qr_answers += a['sort']
+                    qr_answers += ';'
+            qr_answers_all.append(qr_answers)
+        return qr_answers_all
+
     # sort DB question by topic, used in XML format of Moodle
     @staticmethod
-    def sort_db_questions_by_topic(exam, db_questions_all):
+    def sort_db_questions_by_topic_lixo(db_questions):
         count_varia = 0
-        # sorted_list = sorted(list_not_sorted, key=lambda x: x[2])
-        # db_questions_all_sort = sorted(db_questions_all, key=lambda x: x[2])
         mysort = []
-        for varia in db_questions_all:
+
+        for varia in db_questions:
             count_varia += 1
             for qts in varia:
                 for q in qts:
@@ -71,23 +114,30 @@ class Utils(object):
                     q.insert(0, count_varia)
                     mysort.append(q)
 
-        mysort = sorted(mysort, key=lambda x: x[2])  # by question_id
-        mysort = sorted(mysort, key=lambda x: x[5])  # by difficulty
-        mysort = sorted(mysort, key=lambda x: x[3])  # by topic
-        mysort = sorted(mysort, key=lambda x: x[4])  # by type
+        mysort = sorted(mysort, key=lambda x: x[1])  # by question_id
+        mysort = sorted(mysort, key=lambda x: x[4])  # by difficulty
+        mysort = sorted(mysort, key=lambda x: x[2])  # by topic
+        mysort = sorted(mysort, key=lambda x: x[3])  # by type
+
         return mysort
 
     # create file DB with all variations in aiken format
     @staticmethod
-    def createFileDB_xml(exam, db_questions_all, path_to_file_VARIATIONS_DB):
-        letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+    def createFileDB_xml(exam, path_to_file_VARIATIONS_DB):
+        db_questions, n = [], 0
+        for v in exam.variationsExams2.all():
+            s = eval(v.variation)
+            n += 1
+            for var in s['variations']:
+                for q in var['questions']:
+                    q_list = [n] + [v for v in q.values()]
+                    db_questions.append(q_list)
 
-        db_questions_all_sort = Utils.sort_db_questions_by_topic(exam, db_questions_all)
+        db_questions = sorted(db_questions, key=lambda x: x[0])  # by var
+        db_questions = sorted(db_questions, key=lambda x: x[2])  # by key
+        db_questions = sorted(db_questions, key=lambda x: x[3])  # by topic
+        db_questions = sorted(db_questions, key=lambda x: x[4])  # by type
 
-        varia_gab_all = []
-        count_varia = 0
-        start = '%%\{'
-        end = '\}%%'
         question_category = '''
         <!-- category: ___category_comments___  -->
         <question type="category">
@@ -139,7 +189,8 @@ class Utils(object):
             </answer>
         '''
         question_ID_before = -1
-        for q in db_questions_all_sort:
+        varia_gab_all = []
+        for q in db_questions:
             q_str = ''
             q_var = q[0]  # variations
             q_count = q[1]  # cont questions by type
@@ -149,8 +200,9 @@ class Utils(object):
             q_diff = q[5]
             q_short = q[6]
             q_text = q[7]
+            answers = q[8]
 
-            myflag = False
+            myflag = False  # criar nova categoria ao mudar de questao
             if question_ID_before != int(q_id):
                 myflag = True
                 question_ID_before = int(q_id)
@@ -162,15 +214,14 @@ class Utils(object):
             q_str = q_str.replace('___question_id___', str(q_count))
             q_str = q_str.replace('___question_topic___', str(q_topic))
 
-            answers = q[8]
-            if answers:  # QM
+            if len(answers) > 1:  # QM
                 q_str = q_str.replace('___question_type___', 'multichoice')
                 q_type = 'multichoice'
                 for a in answers:
                     a_str = answers_model
-                    a_str = a_str.replace('___answer_text___', a[1])
+                    a_str = a_str.replace('___answer_text___', a['text'])
 
-                    if not int(a[0]):
+                    if not int(a['sort']):
                         a_str = a_str.replace('___answer_value___', '100')
                     else:
                         a_str = a_str.replace('___answer_value___', '0')
@@ -179,7 +230,8 @@ class Utils(object):
             else:  # QT
                 q_str = q_str.replace('___question_type___', 'essay')
                 q_type = 'essay'
-                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
+                if len(answers) == 1:
+                    answerCorrect = answers[0]['text']
                     q_str += '\n<answer fraction="0"><text>\n' + answerCorrect + '\n</text></answer>\n'
 
             mystr = " #id:" + str(q_id) + " #type:" + q_type + " #topic:" + str(
@@ -199,6 +251,7 @@ class Utils(object):
                 q_str = q_str.replace('___question_topic___', str(q_topic))
                 q_str = q_str.replace('___question_type___', str(q_type))
                 q_str = q_str.replace('___question_short___', str(q_short))
+                myflag = False
 
             varia_gab_all.append(q_str)
 
@@ -217,48 +270,28 @@ class Utils(object):
 
     # create file DB with all variations in aiken format
     @staticmethod
-    def createFileDB_aiken(exam, db_questions_all, path_to_file_VARIATIONS_DB):
+    def createFileDB_aiken(exam, path_to_file_VARIATIONS_DB):
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
-        varia_gab_all = []
-        count_varia = 0
-        start = '%%\{'
-        end = '\}%%'
-        for varia in db_questions_all:
+        varia_gab_all, count_varia = [], 0
+        for v in exam.variationsExams2.all():
+            s = eval(v.variation)
             questions_DB = []
             count_varia += 1
-            count_QM = 0
-            for qts in varia:
-                for q in qts:
-                    if q == None:
-                        break
-                    q_count = q[0]
-                    q_id = q[1]
-                    q_topic = q[2]
-                    q_type = q[3]
-                    q_diff = q[4]
-                    q_short = q[5]
-                    q_text = q[6]
-                    answers = q[7]
-                    c = correct = 0
-                    if answers:  # QM
-                        count_QM += 1
-                        questions_DB.append(
-                            "#c:" + str(q_count) + " #id:" + str(q_id) + " #topic:" + str(q_topic) + " #type:" + str(
-                                q_type) + " #diff:" + str(q_diff) + "\n")
-                        questions_DB.append(q_text)
-                        for a in answers:
-                            questions_DB.append(letras_1[c] + ") " + a[1])
-                            if not int(a[0]):
-                                correct = c
-                            c += 1
+            for var in s['variations']:
+                for q in var['questions']:
+                    correct = 0
+                    questions_DB.append("#c:" + str(q['number']) + " #id:" + str(q['key']) + " #topic:" + str(
+                        q['topic']) + " #type:" + str(str(q['type'])) + " #diff:" + str(q['weight']) + "\n")
+                    questions_DB.append(q['text'])
+                    if q['type'] == 'QM':  # QM
+                        for k, a in enumerate(q['answers']):
+                            questions_DB.append(letras_1[int(a['answer'])] + ") " + a['text'])
+                            if not int(a['sort']):
+                                correct = k
                         questions_DB.append('ANSWER: ' + letras_1[correct] + '\n')
-                    else:  # QT
-                        questions_DB.append(
-                            "#c:" + str(q_count + count_QM) + " #id:" + str(q_id) + " #topic:" + str(
-                                q_topic) + " #type:" + str(q_type) + " #diff:" + str(q_diff) + "\n")
-                        questions_DB.append(q_text)
-                        for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, q_text):
-                            questions_DB.append('ANSWER: ' + answerCorrect + '\n\n')
+                    else:  # QT with
+                        if len(q['answers']) == 1:
+                            questions_DB.append('ANSWER: ' + q['answers'][0]['text'] + '\n\n')
 
             if questions_DB:
                 varia_gab_all.append(questions_DB)
@@ -272,36 +305,84 @@ class Utils(object):
                     for q in varia:
                         f.write(str(q) + '\n')
 
+    # create file DB with all variations in aiken format
+    @staticmethod
+    def createFile_Tex(request, exam, path_to_file_VARIATIONS_DB, data_hora):
+        room = exam.classrooms.all()[0]
+        varia_gab_all, s_student_ID = [], 0
+        for v in exam.variationsExams2.all():
+            s = eval(v.variation)
+            questions_DB = []
+            s_student_ID += 1
+            student_name = str(s_student_ID)
+            for var in s['variations']:
+                myqr = Utils.defineQRcode(exam, room, student_name)
+                strQuestions = Utils.drawCircles()
+                strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
+                                                data_hora)
+                strQuestions += Utils.drawAnswerSheet(exam)
+                strQuestions += Utils.drawCircles()
+                strQuestions += Utils.drawInstructions(exam)
+                hash_num = Utils.distro_table(str(s_student_ID))
+                var_hash = hash_num % int(exam.exam_variations)
+                try:
+                    myqr.append(qr_answers[var_hash])  # inclui as respostas
+                except:
+                    myqr.append('')
+                strQuestions += Utils.drawQuestions(request, myqr,
+                                                    exam, room, student_name, student_name,
+                                                    hash_num % int(exam.exam_variations), data_hora)
+
+                questions_DB.append(strQuestions + '\n\n')
+
+            if questions_DB:
+                varia_gab_all.append(questions_DB)
+
+        if varia_gab_all:
+            # start1 = time.time()
+            with open(path_to_file_VARIATIONS_DB, 'w') as f:
+                c = 0
+                f.write(Utils.getBegin())
+                for varia in varia_gab_all:
+                    f.write("%############# variation ########## " + str(c) + '\n\n')
+                    c += 1
+                    for q in varia:
+                        f.write(str(q) + '\n')
+                f.write("\\end{document}")
+                f.close()
+                Utils.genTex(path_to_file_VARIATIONS_DB, "pdfExam")
+
     # create file template of all variations in varia_gab_all
     @staticmethod
-    def createFileTemplates(exam, listao, path_to_file_TEMPLATES):
-        contVaria = 0
+    def createFileTemplates(exam, path_to_file_TEMPLATES):
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
-        varia_gab_header = []
-        for i in range(int(Utils.getNumMCQuestions(exam)) + int(exam.exam_number_of_questions_text)):
-            varia_gab_header.append('Q' + str(i + 1))
-        varia_gab_all = [np.concatenate((['variation'],varia_gab_header,varia_gab_header), axis=0)]
-        for varia in listao:
-            qts = varia[0]
-            contVaria += 1
-            varia_gab = [str(contVaria - 1)]
-            varia_id_questions = []
-            for q in qts.split(';'):
-                if len(q):
-                    q_str = q[-int(exam.exam_number_of_anwsers_question):]
-                    q_ind = q_str.find('0')
-                    varia_gab.append(letras_1[q_ind])
-                    varia_id_questions.append(q)
+        headerQM, headerQT, contVaria = [], [], 0
+        for i in range(int(Utils.getNumMCQuestions(exam))):
+            headerQM.append('Q' + str(i + 1))
+        for i in range(int(exam.exam_number_of_questions_text)):
+            headerQT.append('Q' + str(int(Utils.getNumMCQuestions(exam)) + i + 1))
+        varia_gab_all = [['variation'] + headerQM + headerQT + headerQM]
 
-            for qt in varia[2]:  # dissertation question: get correct answer for the template
-                start = '%%\{'
-                end = '\}%%'
-                for answerCorrect in re.findall(start + '(\S+|\w+|.*)' + end, qt[7]):
-                    varia_gab.append(answerCorrect)
-                    varia_id_questions.append(qt[2])
-
+        for v in exam.variationsExams2.all():
+            s = eval(v.variation)
+            varia_gab, varia_id_questions = [], []
+            for var in s['variations']:
+                contVaria += 1
+                for q in var['questions']:
+                    if q['type'] == 'QM':  # QM
+                        sort_list = []
+                        for k, a in enumerate(q['answers']):
+                            if not int(a['sort']):
+                                varia_gab.append(letras_1[k])
+                            sort_list.append(a['sort'])
+                        varia_id_questions.append(str(q['key']) + ''.join([i for i in sort_list]))
+                    else:  # QT with
+                        if 'answers' in q.keys() and len(q['answers']) == 1:
+                            varia_gab.append(q['answers'][0]['text'])
+                        else:
+                            varia_gab.append('')
             if varia_gab:
-                varia_gab_all.append(np.concatenate((varia_gab,varia_id_questions), axis=0))
+                varia_gab_all.append([str(contVaria-1)] + varia_gab + varia_id_questions)
 
         if varia_gab_all:
             with open(path_to_file_TEMPLATES, 'w') as data:
@@ -309,94 +390,58 @@ class Utils(object):
                 for varia in varia_gab_all:
                     writer.writerow(varia)
 
-    # return test case between begin{comment} and end{comment}
-    @staticmethod
-    def get_cases(listao):
-        print("get_cases-00-" + str(datetime.datetime.now()))
-        start_q = '\\color{white}\\\@'
-        start = 'begin{comment}'
-        end = 'end{comment}'
-        cases = {}
-        cases['id'] = []
-        cases['input'] = []
-        cases['output'] = []
-        if str(listao).find(start) == -1:  # se nao tem vpl, aborta listao
-            return cases
-        print("get_cases-01-" + str(datetime.datetime.now()))
-        for model in listao:
-            for questions in model:
-                if not str(questions):
-                    continue
-                aux_ids = []
-                aux_in = []
-                aux_ou = []
-                for qq in questions:
-                    st = str(qq)
-                    try:
-                        numQuestion = st.split(',')[2].replace(' ', '')
-                    except:
-                        numQuestion = 'ERRO:' + st
-                    for case in re.findall(start + '(.+?)' + end, st):
-                        case = str(case)
-                        case = case[case.find("{"):len(case) - 4]
-                        case = case.replace('\\\\', '\\')
-                        #case = case.encode().decode('unicode_escape')
-                        #case1 = json.loads(json.dumps(case, sort_keys=True, indent=2, ensure_ascii=False))
-                        #print(json_string)
-                        #case = case.replace('\\\\', '\')
-                        #case = case.replace('\\', '')
-                        case1 = json.loads(case)
-                        aux_ids.append(numQuestion)
-                        inp0 = []
-                        for i in case1['input']:
-                            try:
-                                if isinstance(i, list):
-                                    inp0.append([i[0].encode('latin1').decode('unicode_escape')])
-                                else:
-                                    inp0.append([i.encode('latin1').decode('unicode_escape')])
-                            except:
-                                inp0.append([])
-                        out0 = []
-                        for i in case1['output']:
-                            try:
-                                if isinstance(i, list):
-                                    out0.append([i[0].encode('latin1').decode('unicode_escape')])
-                                else:
-                                    out0.append([i.encode('latin1').decode('unicode_escape')])
-                            except:
-                                out0.append([])
-                        aux_in.append(inp0)
-                        aux_ou.append(out0)
-                cases['id'].append(aux_ids)
-                cases['input'].append(aux_in)
-                cases['output'].append(aux_ou)
-
-        return cases
-
     # cases = {}   #                      quest1          quest2               quest1       quest2
-    #              #            [mod1:[ [ [c1],[c2]  ],   [[c1]]     ], mod2:[ [[c1]]    ,  [[c2]]     ] ]
+    #              #            [var1:[ [ [c1],[c2]  ],   [[c1]]     ], var2:[ [[c1]]    ,  [[c2]]     ] ]
     # cases['id']    = np.array([     [     [id1]     ,    [id2]     ],      [  [id2]    ,   [id1]     ] ] )
     # cases['input'] = np.array([     [ [ [1], [2,3] ],  [[2, 2]]    ],      [ [[5, 5]   , [[6, 6]]    ] ] )
     # cases['output']= np.array([     [ [ [1,2], [3] ],  [[3, 4, 5]] ],      [ [[4, 5, 6], [[7, 8, 9]] ] ] )
+    # return all test cases from q['testcases']
     @staticmethod
+    def get_cases(exam):
+        print("get_cases-00-" + str(datetime.datetime.now()))
+        cases = {}
+        cases['key'], cases['input'], cases['output'] = [], [], []
+        for v in exam.variationsExams2.all():
+            d = eval(v.variation)
+            for var in d['variations']:
+                id_list, in_list, ou_list = [], [], []
+                for q in var['questions']:
+                    if q['type'] == 'QT':
+                        print("get_cases-01-" + str(datetime.datetime.now()))
+                        if 'testcases' in q.keys():
+                            case = q['testcases']
+                            # case1 = json.loads(case)
+                            id_list.append(case['key'])
+                            in_list.append(case['input'])
+                            ou_list.append(case['output'])
+                cases['key'].append(id_list)
+                cases['input'].append(in_list)
+                cases['output'].append(ou_list)
+        return cases
+
+    # cases = {}   #                      quest1          quest2               quest1       quest2
+    #              #            [var1:[ [ [c1],[c2]  ],   [[c1]]     ], var2:[ [[c1]]    ,  [[c2]]     ] ]
+    # cases['id']    = np.array([     [     [id1]     ,    [id2]     ],      [  [id2]    ,   [id1]     ] ] )
+    # cases['input'] = np.array([     [ [ [1], [2,3] ],  [[2, 2]]    ],      [ [[5, 5]   , [[6, 6]]    ] ] )
+    # cases['output']= np.array([     [ [ [1,2], [3] ],  [[3, 4, 5]] ],      [ [[4, 5, 6], [[7, 8, 9]] ] ] )
     def format_cases(cases, file):  # _version1
-        #file = file.replace(' ', '').replace('/', '-').replace(':', '-')
-        #files = ['./tmp/' + file + "_linker.json"]
-        #files = [BASE_DIR + '/linker.json']
-        files = [file]
+        # file = file.replace(' ', '').replace('/', '-').replace(':', '-')
+        # files = ['./tmp/' + file + "_linker.json"]
+        # files = [BASE_DIR + '/linker.json']
+
         formatCases = {}
         formatCases['variations'] = []  # variant/models
-
-        for v in range(len(cases['input'])):  # for each variant/model
-            #st_f = './tmp/' + file + '-m' + str(v + 1) + ".cases"
+        numVars = len(cases['key'])
+        for v in range(numVars):  # for each variant/model
+            # st_f = './tmp/' + file + '-m' + str(v + 1) + ".cases"
             variant = {}
             variant['variant'] = str(v + 1)
             variant['questions'] = []
-            count_q = 0
-            for q in range(len(cases['input'][v])):  # for each question
-                count_q += 1
+            numQuestoes = len(cases['key'][v])
+            for q in range(numQuestoes):  # for each question
+                count_q = q + 1
                 question = {}
-                question['key'] = str(cases['id'][v][q])
+                question['key'] = str(cases['key'][v][q][0])
                 question['number'] = str(count_q)
                 question['file'] = 'Q' + str(count_q)
                 try:
@@ -407,12 +452,68 @@ class Utils(object):
                 question['language'] = ['all']
                 question['cases'] = []
                 if isinstance(cases['input'][v][q], list):
-                    for c in range(len(cases['input'][v][q])):  # for each case
+                    numCases = len(cases['input'][v][q])
+                    for c in range(numCases):  # for each case
                         cases_q = {}
                         cases_q['case'] = "test_" + str(c + 1)
-                        cases_q['input'] = cases['input'][v][q][c]  ##################### AQUI
-                        cases_q['output'] = cases['output'][v][q][c]
+                        if  isinstance(cases['input'][v][q][c][0], list):
+                            cases_q['input'] = cases['input'][v][q][c][0]
+                        else:
+                            cases_q['input'] = cases['input'][v][q][c]
+
+                        if  isinstance(cases['output'][v][q][c][0], list):
+                            cases_q['output'] = cases['output'][v][q][c][0]
+                        else:
+                            cases_q['output'] = cases['output'][v][q][c]
                         question['cases'].append(cases_q)
+
+                variant['questions'].append(question)
+
+            formatCases['variations'].append(variant)
+
+        with open(file, "w") as out:
+            json.dump(formatCases, out, indent=2)
+
+        return file
+
+    @staticmethod
+    def format_cases_lixo(cases, file):  # _version1
+        # file = file.replace(' ', '').replace('/', '-').replace(':', '-')
+        # files = ['./tmp/' + file + "_linker.json"]
+        # files = [BASE_DIR + '/linker.json']
+        files = [file]
+        formatCases = {}
+        formatCases['variations'] = []  # variant/models
+
+        for i, v in enumerate(cases['id']):  # for each variant/model
+            variant = {}
+            variant['variant'] = str(i + 1)
+            variant['questions'] = []
+            count_q = 0
+            qvi = cases['input'][0][i]
+            qvo = cases['output'][0][i]
+            for q in range(len(qv[v])):  # for each question
+                count_q += 1
+                question = {}
+                question['key'] = str(cases['id'][0][v])
+                question['number'] = str(count_q)
+                question['file'] = 'Q' + str(count_q)
+                try:
+                    questionObject = get_object_or_404(Question, pk=question['key'])
+                    question['weight'] = questionObject.question_difficulty
+                except:
+                    question['weight'] = '1'
+                question['language'] = ['all']
+                question['cases'] = []
+
+                qvi = cases['input'][0][v]
+                qvo = cases['output'][0][v]
+                for c in range(len(qvi)):
+                    cases_q = {}
+                    cases_q['case'] = "test_" + str(c + 1)
+                    cases_q['input'] = qvi[c]
+                    cases_q['output'] = qvo[c]
+                    question['cases'].append(cases_q)
 
                 variant['questions'].append(question)
 
@@ -614,14 +715,19 @@ class Utils(object):
         return (hash_base_B + hash_base_C + hash_base_D + 5 * hash_base_E) // 8
 
     @staticmethod
-    def defineQRcode(exam, room, idStudent, nameStudent):
+    def defineQRcode(exam, room, idStudent):
         str1 = ''
         # if (exam.exam_print in ['ques','answ','both']):
         mill = str(int(round(time.time() * 1000)))
         str1 += str(exam.exam_hour)[2:10].replace("-", "") + '-' + mill + ';'  # 0 - marcador/data
-        str1 += str(room.id) + ';'  # 1 = id turma
+        try:
+            room_id = room.id
+        except:
+            room_id = 0
+
+        str1 += str(room_id) + ';'  # 1 = id turma
         str1 += str(exam.id) + ';'  # 2 = id exame
-        str1 += idStudent + ';'  # 3 = id aluno
+        str1 += str(idStudent) + ';'  # 3 = id aluno
         i = 0
         for ex in exam.exam_term_choice:
             if ex[0] == exam.exam_term:
@@ -647,8 +753,7 @@ class Utils(object):
         if exam.exam_print == 'ques':
             str1 += exam.exam_number_of_questions_text + ';'  # 13 = REMOVER ISSO POIS JÁ ESTÁ EM 11 #################
 
-        # qrfile = './tmp/QRCode_'+str(room.id)+'_'+exam.exam_name.replace(' ','')+'_'+str(idStudent)+'.eps'
-        qrfile = './tmp/QRCode_' + str(room.id) + '_' + str(exam.id) + '_' + str(idStudent) + '.eps'
+        qrfile = './tmp/QRCode_' + str(room_id) + '_' + str(exam.id) + '_' + str(idStudent) + '.eps'
         # print('$$$$$ QR0=',[qrfile,str1])
         return ([qrfile, str1])
 
@@ -662,6 +767,7 @@ class Utils(object):
 
         path = os.getcwd()
         os.system("cp " + file_name + ".pdf " + path + "/" + myPath + "/")
+        os.system("cp " + file_name + ".tex " + path + "/" + myPath + "/")
 
         try:
             os.remove("{}.aux".format(file_name))
@@ -788,8 +894,9 @@ _inst1_
         str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
             instURL)
 
-        str1 += '\n\n \\hfill \\tiny{{\\color{red}\#' + str(exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
-
+        str1 += '\n\n \\vspace{-2mm}\\hfill {\\tiny {\\color{red}\#' + str(
+            exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
+        str1 += '\\vspace{0.4mm}'
         if exam.exam_print == 'both':
             str1 += "\\vspace{%smm}\n\n" % (int(Utils.getNumMCQuestions(exam)) / 2)
         else:
@@ -1145,69 +1252,68 @@ _inst1_
         return ([str1, qr_bytes, count, db_questions])
 
     @staticmethod
-    def drawQuestionsTDifficulty(request, QT, exam, room, student_ID, student_name, count, data_hora):
+    def drawQuestionsTDifficulty(request, exam, room, student_ID, student_name, countVariations, data_hora):
         qr_bytes = ''
-        str1 = ''
         titl = _("Text Questions")
-        ss1 = "\n\\hspace{-15mm}{\\tiny {\\color{white}\\@%s}} \\hspace{0mm}"
+        strQT = '\n\n% QUESTOES DISSERTATIVAS\n\n'
+        ss1 = "\n\n\hspace{-15mm}{\\tiny {\\color{white}\\@%s}} \\hspace{0mm}"
 
-        _group = []  # pegar apenas uma questão por grupo
+        # _group = []  # pegar apenas uma questão por grupo
         # for q in exam.questions.filter(question_type = 'QT').filter(question_difficulty=diff).order_by('?'):
-        for q in QT:
+        # for q in QT:
+        # q = q[0]
 
-            # q = q[0]
+        d = exam.variationsExams2.all()[countVariations]
+        s = eval(d.variation)
 
-            if len(q) != 8:
-                messages.error(request, _('drawQuestionsTDifficulty: Error in QT question'))
-                return -1
+        for var in s['variations']:
+            for q in var['questions']:
+                if q['type'] == 'QT':
+                    ss = ss1 % str(q['key']).zfill(4)
+                    if (exam.exam_print_eco == 'no'):
 
-            count += 1
+                        # criar um qrcode por questao dissertativa, por pagina, se nao for ecologico
+                        myqr = Utils.defineQRcode(exam, room, student_ID)
+                        myqr[0] = myqr[0][:-4] + '_q' + str(q['key']) + '.eps'
+                        myqr[1] += str(q['key'])
 
-            ss = ss1 % str(q[1]).zfill(4)
-            if (exam.exam_print_eco == 'no'):
+                        # pip install bcrypt
+                        # import bcrypt
+                        # print (bcrypt.hashpw(b'teste123', bcrypt.gensalt()))
+                        # print (bcrypt.hashpw(b'teste123', b'$2b$12$cRYX2M9V6glSp/ip/cmF2Or1nKSvnFZ19pBwSfTH4QKBc5rD7bEW2'))
 
-                # criar um qrcode por questao dissertativa, por pagina, se nao for ecologico
-                myqr = Utils.defineQRcode(exam, room, student_ID, student_name)
-                myqr[0] = myqr[0][:-4] + '_q' + str(q[1]) + '.eps'
-                myqr[1] += str(q[1])
+                        s = str(myqr[1]).encode('utf-8')
+                        # print("s>>>>>>>",s)
+                        compressed = zlib.compress(s, 6)
+                        sbeforeQR = binascii.hexlify(compressed)
+                        # print("sbeforeQR",sbeforeQR)
 
-                # pip install bcrypt
-                # import bcrypt
-                # print (bcrypt.hashpw(b'teste123', bcrypt.gensalt()))
-                # print (bcrypt.hashpw(b'teste123', b'$2b$12$cRYX2M9V6glSp/ip/cmF2Or1nKSvnFZ19pBwSfTH4QKBc5rD7bEW2'))
+                        # para testar
+                        safterScan = binascii.unhexlify(sbeforeQR)
+                        decompressed = zlib.decompress(safterScan)
+                        if s != decompressed:
+                            messages.error(request,
+                                           _('drawQuestionsTDifficulty: Error in compression textual questions'))
+                            return -1
 
-                s = str(myqr[1]).encode('utf-8')
-                # print("s>>>>>>>",s)
-                compressed = zlib.compress(s, 6)
-                sbeforeQR = binascii.hexlify(compressed)
-                # print("sbeforeQR",sbeforeQR)
+                        # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
+                        qr = pyqrcode.create(sbeforeQR, error='M')  # myqr[1])
+                        # gerar qr após sorteio das questoes/respostas
+                        qr.eps(myqr[0])
 
-                # para testar
-                safterScan = binascii.unhexlify(sbeforeQR)
-                decompressed = zlib.decompress(safterScan)
-                if s != decompressed:
-                    messages.error(request, _('drawQuestionsTDifficulty: Error in compression textual questions'))
-                    return -1
+                        strQT += Utils.drawCircles()
+                        strQT += Utils.getHeader(request, exam, room, student_ID, student_name, myqr, data_hora)
+                        strQT += Utils.drawCircles()
+                        strQT += "\\vspace{-1mm}\n"
+                        strQT += Utils.drawInstructions(exam)
+                        strQT += "\\vspace{1mm}\\noindent\\textbf{%s:}\n\\\\" % titl
 
-                # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
-                qr = pyqrcode.create(sbeforeQR, error='M')  # myqr[1])
-                # gerar qr após sorteio das questoes/respostas
-                qr.eps(myqr[0])
+                    strQT += "%s %s. %s\\\\\n" % (ss, int(q['number']) + int(Utils.getNumMCQuestions(exam)), q['text'])
+                    qr_bytes += str(q['key']) + ';'
+                    if (exam.exam_print_eco == 'no'):
+                        strQT += Utils.drawJumpPage()
 
-                str1 += Utils.drawCircles()
-                str1 += Utils.getHeader(request, exam, room, student_ID, student_name, myqr, data_hora)
-                str1 += Utils.drawCircles()
-                str1 += "\\vspace{-1mm}\n"
-                str1 += Utils.drawInstructions(exam)
-                # str1+=Utils.drawSignatureQR(exam,room,student_ID,student_name).replace('_qrfile_',myqr[0])
-                str1 += "\\vspace{1mm}\\textbf{%s:}\n\\\\" % titl
-
-            str1 += "%s %s. %s\\\\\n" % (ss, count + int(Utils.getNumMCQuestions(exam)), q[6])
-            qr_bytes += str(q[1]) + ';'
-            if (exam.exam_print_eco == 'no'):
-                str1 += Utils.drawJumpPage()
-
-        return ([str1, qr_bytes])
+        return ([strQT, qr_bytes])
 
     @staticmethod
     def drawQuestionsTDifficultyVariations(request, exam, count, diff, topics):
@@ -1244,7 +1350,8 @@ _inst1_
                     else:  # se não for QM entao nao pegar as alternativas
                         [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
 
-                bd_qT.append([count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest])
+                bd_qT.append(
+                    [count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest])
 
         return (bd_qT)
 
@@ -1279,12 +1386,12 @@ _inst1_
     @staticmethod
     def drawQuestionsVariations(request, exam, user, topics):
         print("drawQuestionsVariations-00-" + str(datetime.datetime.now()))
-        str1 = ''
-        qr_answers = ''
-        count = 0
+        str1, qr_answers, count = '', '', 0
         numMC = int(Utils.getNumMCQuestions(exam))
         db_questions = []
-        if numMC and exam.exam_print in ['ques', 'both']:
+        if numMC == 0:
+            db_questions.append([])
+        elif exam.exam_print in ['ques', 'both']:
             titl = _("Multiple Choice Questions")
             str1 += "\\\\\\vspace{2mm}\\hspace{-5mm}\\noindent\\textbf{%s:}\\vspace{2mm}\n" % titl
             for i in range(1, numMC + 1):  # para cada nivel de dificultade de questao MC
@@ -1297,7 +1404,6 @@ _inst1_
                         db_questions.append(s[3])
                 except:
                     pass
-
         count = 0  # contador diferente para QT
         QT = []
         if int(exam.exam_number_of_questions_text) and exam.exam_print in ['ques', 'both']:
@@ -1310,52 +1416,31 @@ _inst1_
 
                 if int(exam.exam_number_of_questions_text) <= count:
                     break
-        # print(QT)
 
         return [qr_answers, str1, QT, db_questions]
 
     @staticmethod
-    def drawQuestions(request, exam_i, exam, room, student_ID, student_name, user, countVariations, data_hora):
-        # random.seed(int(student_ID))
-        str1 = ''
+    def drawQuestions(request, myqr, exam, room, student_ID, student_name, countVariations, data_hora):
         count = 0
 
-        myqr = Utils.defineQRcode(exam, room, student_ID, student_name)
-        numMC = int(Utils.getNumMCQuestions(exam))
-
         try:
-            str1 += exam_i[1]  # incluir as questões QM
+            str1 = Utils.getstr_QM(exam, countVariations)  # incluir as questões QM
         except:
-            return HttpResponse("drawQuestions:" + str(exam_i))
+            return HttpResponse("drawQuestions:" + str(countVariations))
 
         # incluir as questoes QT
         if int(exam.exam_number_of_questions_text) and exam.exam_print in ['ques', 'both']:
             titl = _("Text Questions")
             if (exam.exam_print_eco == 'yes'):
-                str1 += "\\\\\\vspace{2mm}\\textbf{%s:}  \\hfill {\\color{white} VERSÃO: \\#v%s}} \\\n" % (
-                    titl, 'XXX') #str(countVariations))
+                str1 += "\\\\\\vspace{2mm}\\noindent\\textbf{%s:}  \\hfill {\\color{white} VERSÃO: \\#v%s}} \\\n" % (
+                    titl, 'XXX')  # str(countVariations))
             else:
                 str1 += "\n\n\\newpage\n\n"
 
-            s = Utils.drawQuestionsTDifficulty(request, exam_i[2], exam, room, student_ID, student_name, count,
+            s = Utils.drawQuestionsTDifficulty(request, exam, room, student_ID, student_name, countVariations,
                                                data_hora)
-
             str1 += s[0]
-            myqr[1] += s[1]
             count += 1
-
-        # pip install bcrypt                                                                                                                   
-        # import bcrypt                                                                                 
-        # print (bcrypt.hashpw(b'teste123', bcrypt.gensalt()))                                  
-        # print (bcrypt.hashpw(b'teste123', b'$2b$12$cRYX2M9V6glSp/ip/cmF2Or1nKSvnFZ19pBwSfTH4QKBc5rD7bEW2'))
-
-        # s = str(myqr[1]).encode('utf-8')
-        # print("passou4",exam_i[0])
-        # s = str(myqr[1]+exam_i[0]).encode('utf-8')  # incluir as sequencias de respostas no qrcode
-        # print("passou5",s)
-        # compressed = zlib.compress(s,6)
-        # sbeforeQR = binascii.hexlify(compressed)
-        # print("passou6",sbeforeQR)
 
         ## chave hash
         if len(student_ID) >= 8:
@@ -1367,31 +1452,31 @@ _inst1_
         id_hashed = hashed[7:]
         print("passou11", len(id_hashed), id_hashed, hashed)
 
-        s = str(myqr[1] + exam_i[0]).encode('utf-8')  # incluir as sequencias de respostas no qrcode
-        s0 = str(myqr[1]).encode('utf-8')  # mudar para deixar em um arquivo
+        s = str(myqr[1]).encode('utf-8')  # qrcode and file name
+        s_ALL = str(myqr[1] + myqr[2]).encode('utf-8')  # also answers into file
 
+        # for compressed and cryptography
         compressed = zlib.compress(s, 6)
-        compressed0 = zlib.compress(s0, 6)
+        compressed_ALL = zlib.compress(s_ALL, 6)
         sbeforeQR = binascii.hexlify(id_hashed + compressed)
-        sbeforeQR0 = binascii.hexlify(id_hashed + compressed0)
+        sbeforeQR_ALL = binascii.hexlify(id_hashed + compressed_ALL)
 
-        # gabarito de cada exame vai para um arquivo no servidor
+        # template of each exam is save on service mctest
         if exam.exam_print == 'both':
-
             fileGAB = 'tmpGAB/' + myqr[1] + '.txt'
             with open(fileGAB, 'w') as myfile:
                 myfile = open(fileGAB, 'w')
-                myfile.write(sbeforeQR.decode('utf-8'))
+                myfile.write(sbeforeQR_ALL.decode('utf-8'))
                 myfile.close()
 
-            # para testar
+            # for test
             with open(fileGAB, 'r') as myfile:
-                mysbeforeQR = myfile.read()
+                mysbeforeQR_ALL = myfile.read()
                 myfile.close()
 
-            # para testar
-            safterScanmy = binascii.unhexlify(mysbeforeQR)
-            safterScan = binascii.unhexlify(sbeforeQR)
+            # for test
+            safterScanmy = binascii.unhexlify(mysbeforeQR_ALL)
+            safterScan = binascii.unhexlify(sbeforeQR_ALL)
             if safterScanmy != safterScan:
                 return HttpResponse("ERRO in safterScanmy != safterScan !!!!")
             un_hashed = safterScan[:53]
@@ -1403,12 +1488,12 @@ _inst1_
             if hashed == bcrypt.hashpw(stud, pre.encode('utf-8')):
                 print("passou19 = ok", pre)
 
-            if s != decompressed:
+            if s_ALL != decompressed:
                 return HttpResponse("ERROR: in compression")
 
         # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
-        qr = pyqrcode.create(sbeforeQR0, error='M')  # myqr[1]
-        qr.eps(myqr[0])  # gerar qr após sorteio das questoes/respostas
+        qr = pyqrcode.create(sbeforeQR, error='M')
+        qr.eps(myqr[0])
 
         if (exam.exam_print_eco == 'yes'):
             str1 += "\n \ \ \\ \n \\newpage\n"

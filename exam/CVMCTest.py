@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -85,20 +85,15 @@ class cvMCTest(object):
             cvMCTest.imgAnswers = img = cvMCTest.getAnswerArea(img, countPage)
             if DEBUG: cv2.imwrite("_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_01answerArea.png", img)
         except:
-            # messages.warning(request, "Error in find Answer Area, pag:"+ str(countPage))
-            # return HttpResponse("Error in find Answer Area, pag:"+ str(countPage))
             myFlagArea = False
             pass
 
-        try:  # try find QRcode
-            # if True:
+        try:
             imgQR = cvMCTest.segmentQRcode(img, countPage)
             if DEBUG: cv2.imwrite("_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_02qrcode.png", imgQR)
             qr = cvMCTest.decodeQRcode(imgQR)
 
         except:
-            # messages.warning(request, "Error in find QRCode, pag:"+ str(countPage))
-            # return HttpResponse("Error in find QRCode, pag:"+ str(countPage))
             pass
         return myFlagArea, qr
 
@@ -160,7 +155,6 @@ class cvMCTest(object):
         return images
 
     ################ para segmentar imagens #################
-
     @staticmethod
     def decodeQRcode(img):
         DEBUG = False
@@ -168,19 +162,13 @@ class cvMCTest(object):
 
         qr = dict()
         if True:
-            # print("################ decodeQRcode")
             dec0 = decode(img)
-            # print("################ QRcode0="+str(dec0))
             if not dec0:
                 return []
 
             dec0 = dec0[0][0]
             safterScan = binascii.unhexlify(dec0)
 
-            # print("############ QRcode1="+str(dec0))
-            # print("############ QRcode2="+str(len(safterScan)))
-
-            # raise Http404(len(safterScan))
             if len(safterScan) < 51:  ##### este caso é para questões dissertativas com uma questão por folha
                 dec = zlib.decompress(safterScan)
                 dec = dec.decode('utf-8')
@@ -222,14 +210,13 @@ class cvMCTest(object):
                 qr['var5'] = ss[10]
                 qr['text'] = ss[11]
                 numMCQ = int(ss[6]) + int(ss[7]) + int(ss[8]) + int(ss[9]) + int(ss[10])
+                numQT = int(qr['text'])
                 qr['answer'] = ss[12]
                 qr['numquest'] = numMCQ
                 qr['correct'] = ''  ### Quando o gabarito esta na primeira pagina do pdf
 
-                # print("############ QRcode3=" + str(qr))
-                # print("############ QRcode4=" + str(dec))
-
                 # ler gabarito do servidor
+                #fi = ';'.join([i for i in dec.split(';')[:-1]])
                 fileGAB = 'tmpGAB/' + dec + '.txt'
                 if os.path.exists(fileGAB):
                     with open(fileGAB, 'r') as myfile:
@@ -251,8 +238,8 @@ class cvMCTest(object):
                     raise Http404("ERRO:", ss, '!=', ss0)
 
                 if len(ss0) > 12:  ### Quando as respostas corretas estao no QRcode
-                    qr['correct'] = ss0[len(ss0) - numMCQ - 1:-1]
-                    qr['dbtext'] = ss0[13:13 + int(ss0[11])]
+                    qr['correct'] = ss0[len(ss0) - numMCQ - numQT - 1:-1 - numQT]
+                    qr['dbtext'] = ss0[len(ss0) - numQT - 1: -1]
 
         return qr
 
@@ -1364,6 +1351,8 @@ class cvMCTest(object):
             pass
             count += 1
 
+        qr['respgrade'] = coresp
+
         if not count:
             if not qr['correct'] and int(qr['page']):  # comparar com o gabarito da primeira pagina
 
@@ -1395,8 +1384,6 @@ class cvMCTest(object):
             studentExam.save()
         except:
             pass
-
-        qr['respgrade'] = coresp
 
         # for s in StudentExam.objects.all(): print(s.grade)
         # for q in StudentExamQuestion.objects.all(): print(q.studentAnswer,q.answersOrder)
@@ -1555,11 +1542,9 @@ class cvMCTest(object):
             for qe in StudentExamQuestion.objects.filter(studentExam=sex):
                 count += 1
                 str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (str(count), qe.question.question_text)
-                # index = qe.answersOrder.find('0')
-                # aa = [a for a in Answer.objects.all() if a.question == qe.question]                         ###### VALIDAR ISSO !!!!!!
+                ###### VALIDAR ISSO !!!!!!
                 aa = [a for a in qe.question.answers2.all()]  ###### VALIDAR ISSO !!!!!!
                 str1 += "\\textbf{%s:} \t%s\n\n" % (_("Correct answer"), aa[0].answer_text)
-                # str1+="\\textbf{%s:} \t%s\n\n" % (_("Your answer"), qe.studentAnswer )
 
                 if qe.studentAnswer in notas:
                     index1 = notas.index(qe.studentAnswer)
@@ -1568,8 +1553,6 @@ class cvMCTest(object):
                                                                         qe.studentAnswer,
                                                                         _("INCORRECT"),
                                                                         aa[int(qe.answersOrder[index1])].answer_text)
-                        # str1+="\\textbf{%s.} \t%s\n\n" % (_("Your answer"), aa[int(qe.answersOrder[index1])].answer_text )
-
                     if aa[index1].answer_feedback:
                         str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa[index1].answer_feedback)
                 else:
@@ -1595,6 +1578,8 @@ class cvMCTest(object):
         cmd = ['pdflatex', '-interaction', 'nonstopmode', fileExameName]
         proc = subprocess.Popen(cmd)
         proc.communicate()
+
+        enviaOK = cvMCTest.sendMail(file_name + ".pdf", "Exam Correction by MCTest", s.student_email, str(s.student_name))
 
         path = os.getcwd()
         os.system("cp " + file_name + ".pdf " + path + "/pdfStudentEmail/")
@@ -1630,7 +1615,6 @@ class cvMCTest(object):
                 msg.attach(part)
             except Exception:
                 return "****ERROR****"
-                #raise Http404("Erro ao ler arquivo.\n Error:" + f)
 
         try:
             gm = smtplib.SMTP(servidor, porta)
@@ -1641,7 +1625,6 @@ class cvMCTest(object):
             gm.sendmail(FROM, TO, msg.as_string())
             gm.close()
         except Exception:
-            #return "Nao Foi Possivel Enviar o Email.\n Error:" + str([servidor, porta, FROM, TO, subject, texto, anexo])
             return "****ERROR****"
         return ''
 
@@ -1659,7 +1642,7 @@ class cvMCTest(object):
         mensagem = "\n"
         mensagem += "Prezado(a) "
         mensagem += aluno + "\n"
-        #mensagem += msg_str + "\n\n"
+        # mensagem += msg_str + "\n\n"
         mensagem += '''
 Segue em anexo a sua atividade: Lista de Exercícios ou Exame.
 
@@ -1682,10 +1665,10 @@ automática e está sendo desenvolvido com apoio das instituições públicas:
 
         # chamada a funcao de envio do email
         return cvMCTest.envia_email(webMCTest_SERVER,
-                             myporta,
-                             webMCTest_FROM,
-                             webMCTest_PASS,
-                             destinatario,
-                             assunto,
-                             mensagem,
-                             [arquivo])
+                                    myporta,
+                                    webMCTest_FROM,
+                                    webMCTest_PASS,
+                                    destinatario,
+                                    assunto,
+                                    mensagem,
+                                    [arquivo])

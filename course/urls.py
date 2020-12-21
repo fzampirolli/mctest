@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -63,9 +63,9 @@ urlpatterns += [
     path('classroomsmy/', views.LoanedClassroomByUserListView.as_view(), name='classroom-mylist'),
     path('classroom/create/', views.ClassroomCreate.as_view(), name='classroom-create'),
     path('classroom/<int:pk1>/student/<int:pk2>/delete', views.ClassroomStudentDelete, name='classroom-student-delete'),
-    # path('classroom/<int:pk>/student/create', views.ClassroomStudentCreate, name='classroom-student-create'),
     path('classroom/<int:pk>', views.ClassroomDetailView.as_view(), name='classroom-detail'),
     path('classroom/<int:pk>/delete/', views.ClassroomDelete.as_view(), name='classroom-delete'),
     path('classroom/<int:pk>/update', views.ClassroomUpdate.as_view(), name='classroom-update'),
     path('classroom/<int:pk>/import/', views.ImportStudentsClassroom, name='classroom-students-import'),
+    path('classroom/<int:pk>/createNewStudent/', views.ClassroomStudentCreate, name='classroom-student-create'),
 ]

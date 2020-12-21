@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -28,7 +28,7 @@ GNU General Public License for more details.
 from django.contrib import admin
 
 # Register your models here.
-from .models import Exam, StudentExam, StudentExamQuestion, ClassroomExam
+from .models import Exam, StudentExam, StudentExamQuestion, ClassroomExam, VariationExam
 
 
 @admin.register(Exam)
@@ -44,10 +44,15 @@ class StudentExamAdmin(admin.ModelAdmin):
 
 
 @admin.register(StudentExamQuestion)
-class StudentExamAdmin(admin.ModelAdmin):
+class StudentExamQuestionAdmin(admin.ModelAdmin):
     pass
 
 
 @admin.register(ClassroomExam)
-class StudentExamAdmin(admin.ModelAdmin):
+class ClassroomExamAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(VariationExam)
+class VariationExamAdmin(admin.ModelAdmin):
     pass

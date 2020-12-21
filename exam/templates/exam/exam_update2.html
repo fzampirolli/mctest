@@ -16,7 +16,7 @@
                         <h4>
                             <code>
                                 {% trans "Attention" %}:
-                                {% trans "Each time you click Create-PDF, a different exam will be generated!" %}
+                                {% trans "Each time you click Create-Variations, a different exam will be generated!" %}
                                 {% trans "After printing the PDF with the exam, SAVE IT TO YOUR COMPUTER and " %}
                                 {% trans "DO NOT CHANGE the attributes of this page; " %}
                                 {% trans "Otherwise automatic correction will not be possible on scanned exams in Upload-PDF." %}
@@ -29,7 +29,7 @@
                                 <tr>
                                     <td>
                                         <!-- Create-PDF -->
-                                        <form action="../generate/" class="input-group mb-3" method="post">
+                                        <form action="../generate/" class="input-group mb-3" method="post" target="_blank">
                                             {% csrf_token %}
                                             <input action="" class="btn btn-primary" type="submit"
                                                    value={% trans "Create-PDF" %}>
@@ -40,7 +40,7 @@
                                         <!-- Upload-PDF -->
                                         <form action="../correct/" class="input-group mb-3"
                                               enctype="multipart/form-data"
-                                              method="POST">
+                                              method="POST" target="_blank">
                                             {% csrf_token %}
                                             <input type="file" name="myfilePDF">
                                             <button class="btn btn-primary"
@@ -53,7 +53,7 @@
                                     <td>
                                         <!-- Send-Feedback-Students Text -->
                                         <form action="../sendFeedbackStudentsText/" method="post"
-                                              enctype="multipart/form-data">
+                                              enctype="multipart/form-data" target="_blank">
                                             {% csrf_token %}
                                             <input type="file" name="myfileZIP"></input>
                                             <button class="btn btn-primary"
@@ -65,7 +65,7 @@
                                         <!-- Send-Feedback-Students Text -->
                                         <form class="input-group mb-3 text-right" action="../sendFeedbackStudents/"
                                               method="post"
-                                              enctype="multipart/form-data">
+                                              enctype="multipart/form-data" target="_blank">
                                             {% csrf_token %}
                                             <input class="btn btn-primary text-right" type="submit" action=""
                                                    value={% trans "Send-Feedback-Students" %}>
@@ -74,7 +74,45 @@
                                     </td>
                                 </tr>
                             </table>
+
+                            <form action="../variation/" class="input-group mb-3" method="POST">
+                                {% trans "Before creating the exams in the button above, first create the variations. It is necessary to create new variations of the exam each time you change the questions and the number of variations in the attributes below." %}
+                                {% trans "The options marked below will be sent to your email." %}
+                                {% csrf_token %}
+                                <table class="table">
+                                    <tr>
+                                        <td style="width: 140px; height: 10px; font-size: 20px;" align="left"
+                                            bgcolor="#e6f2ff">
+                                            <input action="" class="btn btn-primary" type="submit"
+                                                   value={% trans "Create-Variations" %}>
+                                        </td>
+                                        <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
+                                            bgcolor="#e6f2ff">
+                                            <input type="checkbox" value="JSON" name="choicesJSON"><!--checked="checked"-->
+                                            Json
+                                        </td>
+                                        <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
+                                            bgcolor="#e6f2ff">
+                                            <input type="checkbox" value="TemplateCSV" name="choicesTemplateCSV"> Template
+                                        </td>
+                                        <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
+                                            bgcolor="#e6f2ff">
+                                            <input type="checkbox" value="Aiken" name="choicesAiken"> Aiken
+                                        </td>
+                                        <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
+                                            bgcolor="#e6f2ff">
+                                            <input type="checkbox" value="XML" name="choicesXML"> XML
+                                        </td>
+                                        <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
+                                            bgcolor="#e6f2ff">
+                                            <input type="checkbox" value="Latex" name="choicesLatex"> LaTeX+PDF
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+
                             <hr>
+
                             <form action="" method="post">
                                 {% csrf_token %}
                                 {{ form.management_form }}
@@ -90,23 +128,39 @@
                                 <!-- classrooms -->
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">{% trans "Choose Classrooms" %}</span>
+                                        <script>
+                                            var countClassrrom = 0;
+
+                                            function get_ID_classroom(countClassrrom) {
+                                                var aux = "id_classrooms_" + countClassrrom.toString();
+                                                var x = document.getElementById(aux).value;
+                                                return x.toString();
+                                            }
+                                        </script>
                                         <table class="table">
+                                            <tr bgcolor="#e6f2ff" style="width:140px; height: 20px;">
+                                                <span class="input-group-text">{% trans "Choose Classrooms" %}</span>
+                                            </tr>
                                             {% for c in form.classrooms %}
                                                 {% if  forloop.counter0|divisibleby:10 %}
                                                     <tr>
                                                 {% endif %}
-                                                <td style="width: 140px; height: 10px;" align="left" bgcolor="#e6f2ff">
-                                                    <div class="checkbox">
-                                                        <label> {{ c }} </label>
-                                                    </div>
-                                                </td>
-                                                {% if  forloop.counter|divisibleby:10 %}
-                                                    </tr>
-                                                {% endif %}
+                                            <td style="width:120px; height: 5px; font-size:15px" align="left" bgcolor="#e6f2ff">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        {{ c }}
+                                                    </label>
+                                                    <script>
+                                                        document.write("<a href=\"/course/classroom/" + get_ID_classroom(countClassrrom++) + "\" ");
+                                                        document.write(" target=\"_blank\">*</a>");
+                                                    </script>
+                                                </div>
+                                            </td>
+                                            {% if  forloop.counter|divisibleby:10 %}
+                                                </tr>
+                                            {% endif %}
                                             {% endfor %}
                                         </table>
-
                                     </div>
                                 </div>
 
@@ -146,8 +200,13 @@
                                             console.log(res);
                                             return res;
                                         }
-                                    </script>
 
+                                        function selectAll() {
+                                            this.emp.forEach(element => {
+                                                element.checked = true;
+                                            });
+                                        }
+                                    </script>
 
                                     <table id="example1" class="table table-striped table-bordered"
                                            style="width:100%">
@@ -156,9 +215,9 @@
                                         <tr>
 
                                             <th scope="col">
-                                                <div class="checkbox mass_select_all_wrap">
-                                                    > <input type="checkbox" id="mass_select_all"
-                                                           data-to-table="tasks"><label></label></div>
+                                                    >
+                                                <input type="checkbox" id="mass_select_all"
+                                                       data-to-table="tasks">
                                             </th>
 
                                             <th scope="col">{% trans "Topic" %}</th> <!-- Choose -->
@@ -167,7 +226,7 @@
                                             <th scope="col">{% trans "Dif." %}</th>
                                             <th scope="col">{% trans "Group" %}</th>
                                             <th scope="col">{% trans "Par." %}</th>
-                                            <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                            <th scope="col" class="text-right">{% trans "See" %}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -234,9 +293,9 @@
                                                 <!-- see -->
                                                 <td class="text-center">
                                                     <script>
-                                                        document.write("<a href=\"/topic/question/" + get_ID(count++) + "\" ");
+                                                        document.write("<a href=\"/topic/question/" + get_ID(count) + "/update/\"");
                                                         document.write("class=\"btn btn-outline-primary btn-sm\"");
-                                                        document.write(">{% trans 'See' %}</a>");
+                                                        document.write(" target=\"_blank\">"+get_ID(count++)+"</a>");
                                                     </script>
                                                     {{ q.question_group }}
                                                 </td>
@@ -244,10 +303,10 @@
                                         {% endfor %}
                                         </tbody>
                                     </table>
+
                                     <hr>
                                 </div>
                                 <p></p>
-
                                 <!-- many variables -->
                                 <table class="table">
                                     <thead class="thead-light">
@@ -378,12 +437,10 @@
                                                     </div>
                                                     {% render_field form.exam_term class+="form-control" placeholder=form.exam_term.help_text %}
                                                 </div>
-
                                             </div>
                                         </th>
                                     </tr>
                                 </table>
-
 
                                 <p></p>
 
@@ -408,7 +465,7 @@
                                 <div class="text-right">
                                     <a href="{% url 'exam:myexams' %}"
                                        class="btn btn-outline-primary">{% trans "Back" %}</a>
-                                    <input class="btn btn-primary" type="submit" value={% trans "Submit" %}>
+                                    <input class="btn btn-primary" type="submit" value={% trans "Save" %}>
                                     <hr>
                                 </div>
 

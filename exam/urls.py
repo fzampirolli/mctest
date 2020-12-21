@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -40,6 +40,7 @@ urlpatterns = [
     path('exam/<int:pk>/delete/', views.ExamDelete.as_view(), name='exam-delete'),
     path('exam/<int:pk>/update/', views.UpdateExam, name='exam_update'),
     path('exam/<int:pk>/correct/', views.correctStudentsExam, name='exam-correct'),
+    path('exam/<int:pk>/variation/', views.variationsExam, name='exam-variation'),
     path('exam/<int:pk>/sendFeedbackStudents/', views.feedbackStudentsExam, name='exam-feedback'),
     path('exam/<int:pk>/sendFeedbackStudentsText/', views.feedbackStudentsExamText, name='exam-feedback'),
 ]

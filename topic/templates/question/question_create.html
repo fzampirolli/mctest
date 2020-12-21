@@ -87,7 +87,9 @@
                                 <div class="text-right">
                                     <a href="{% url 'topic:myquestions-list' %}"
                                        class="btn btn-outline-primary">{% trans "Back" %}</a>
-                                    <button class="btn btn-primary">{% trans "Submit" %}</button>
+                                    <a href="{% url 'main:According' %}" class="btn btn-outline-danger">
+                                        {% trans "According" %}</a>
+                                    <button class="btn btn-primary">{% trans "Save" %}</button>
                                 </div>
                             </form>
 

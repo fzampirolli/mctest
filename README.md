@@ -90,24 +90,21 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 
 9) MCTest: software architecture;
 
-10) MCTest: software deployment;
-
-11) Individualized parametric questions using MCTest+Moodle+VPL (I already have the 4 co-authors).
-
+10) MCTest: software deployment.
 
 ---
 ### Versions 
 
-##### webMCTest 1.0 (ou MCTest 5.0)
+##### MCTest 5.0
 * August 2018
 * Multiple choice test model in QR Code itself
 
-##### webMCTest 1.1
+##### MCTest 5.1
 * August 2019
 * New graphical interfaces
 * The multiple-choice test template is now stored on the server
 
-##### webMCTest 1.2
+##### MCTest 5.2
 * grant #2018/23561-1, São Paulo Research Foundation (FAPESP)
 * 01/09/2019 - 31/08/2021
 * Title: A universal system for generation and correction automatic of parametrized questions

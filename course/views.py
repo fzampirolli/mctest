@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -41,7 +41,6 @@ from account.models import User
 from student.models import Student
 from .models import Institute, Course, Discipline, Classroom
 from .resources import StudentResource
-
 
 @login_required
 def ImportClassroomsDiscipline(request, pk):
@@ -419,13 +418,13 @@ def ClassroomStudentDelete(request, pk1, pk2):
 
 
 # Create a new Student BUG
-from student.forms import CreateStudentForm
-from django.forms.models import inlineformset_factory
-from django.forms import Textarea
+from django.views.decorators.csrf import csrf_protect
 
 
 @login_required
+@csrf_protect
 def ClassroomStudentCreate(request, pk):
+    print('ClassroomStudentCreate')
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
         if not 'exam.change_exam' in perm:
@@ -435,26 +434,19 @@ def ClassroomStudentCreate(request, pk):
 
     classroom = get_object_or_404(Classroom, pk=pk)
 
-    # question_inst = get_object_or_404(Question, pk=pk)
-    StudentInlineFormSet = inlineformset_factory(
-        Classroom, Student, fk_name='classroom', fields=('student_ID', 'student_name', 'student_email',),
-        widgets={'student_ID': Textarea(attrs={'cols': 80, 'rows': 1}),
-                 'student_name': Textarea(attrs={'cols': 40, 'rows': 1}),
-                 'student_email': Textarea(attrs={'cols': 40, 'rows': 1}),
-                 },
-        extra=1)  # quantidade de estudantes na tela
-
     if request.method == 'POST':
+        id = request.POST.getlist('student_ID')[0]
+        name = request.POST.getlist('student_name')[0]
+        email = request.POST.getlist('student_email')[0]
 
-        form = CreateStudentForm(request.POST)
-        if form.is_valid():  # Check if the forms are valid:
-            id = form.cleaned_data['student_ID']
-            name = form.cleaned_data['student_name']
-            email = form.cleaned_data['student_email']
-
-        if Student.objects.filter(student_ID=id):
-            messages.error(request, _('StudentCreate: There is ID: ') + id + '; ' + name + '; ' + email)
-            return render(request, 'exam/exam_errors.html', {})
+        s0 = Student.objects.filter(student_ID=id)
+        if s0:
+            for s in s0:
+                classroom.students.add(s)
+                messages.info(request,
+                              _('Added student - there is ID: ') + id +
+                              '; name: ' + s.student_name +
+                              '; email: ' + s.student_email)
         else:
             s = Student.objects.create(
                 student_ID=id,
@@ -462,14 +454,10 @@ def ClassroomStudentCreate(request, pk):
                 student_email=email,
             )
             classroom.students.add(s)
-            messages.info(request, _('StudentCreate: Created Student ') + id + '; ' + name + '; ' + email)
-
-    else:  # If this is a GET (or any other method) create the default form.
-        formset = StudentInlineFormSet(instance=classroom)
-
-        form = CreateStudentForm(initial={
-            'students': classroom.students,
-        })
+            messages.info(request,
+                          _('Created student: Created Student ID: ') + id +
+                          '; name: ' + name +
+                          '; email: ' + email)
 
     return render(request, 'exam/exam_msg.html', {})
 

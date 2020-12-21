@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2019 Francisco de Assis Zampirolli
+Copyright (C) 2021 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of webMCTest 1.1 (or MCTest 5.1).
+This file is part of MCTest 5.2.
 
-Languages: Python 3.7, Django 2.2.4 and many libraries described at
+Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -31,7 +31,6 @@ from django.utils.translation import gettext_lazy as _
 
 from account.models import User
 from student.models import Student
-
 
 # Create your models here.
 class Institute(models.Model):
@@ -86,7 +85,6 @@ class Institute(models.Model):
     def __str__(self):
         return self.institute_name
 
-
 class Course(models.Model):
     institutes = models.ManyToManyField(Institute,
                                         related_name='courses2',  # relacionamento reverso
@@ -114,7 +112,6 @@ class Course(models.Model):
     def __str__(self):
         # return self.course_name
         return ' - '.join([', '.join([i.institute_code for i in self.institutes.all()]), self.course_name])
-
 
 class Discipline(models.Model):
     courses = models.ManyToManyField(Course,
@@ -157,7 +154,6 @@ class Discipline(models.Model):
         ])
         # return '[{0}]  {1}'.format(self.courses.course_name, self.discipline_name)
         # return Classroom.objects.filter(discipline__discipline_profs=self.request.user)
-
 
 class Classroom(models.Model):
     students = models.ManyToManyField(Student,

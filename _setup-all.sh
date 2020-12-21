@@ -215,12 +215,14 @@ grant all privileges on DB_MCTest.* to 'root'@'localhost';
 grant usage on *.* to 'root'@'localhost';
 FLUSH PRIVILEGES;
 
-sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-sudo find . -path "*/migrations/*.pyc"  -delete
-python3 manage.py makemigrations
-python3 manage.py migrate
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/migrations/*.pyc"  -delete
+python manage.py showmigrations
+python manage.py makemigrations
+python manage.py migrate
 
-python3 manage.py squashmigrations account 0001
+python manage.py squashmigrations account 0001
+python manage.py sqlmigrate exam 0001_initial
 
 
 sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
@@ -262,7 +264,7 @@ python manage.py graph_models -a -o myapp_models.png
 
 pip install pydotplus
 python manage.py graph_models -a -o myapp_models2.png
-manage.py graph_models -a -g -o my_project_visualized.png
+python manage.py graph_models -a -g -o my_project_visualized.png
 
 alterar senha mysql
 sudo systemctl stop mysql
@@ -290,7 +292,9 @@ sudo rm *.pdf
 sudo rm *.csv
 
 
-mysql -u root -p DB_MCTest < "mysql-2019-12-07.sql"
+tar -xvf mysql-2020-12-19.tar
+cat /etc/mysql/mysql.cnf
+mysql -u root -p DB_MCTest < "mysql-2020-12-19.sql"
 
 # write code documentation
 pip3 install Sphinx
@@ -304,5 +308,28 @@ chown ufabc:ufabc . -R
 vcad-vision https:
 
 /etc/apache2/sites-available$
+
+python3 -m pip install --upgrade pip
+pip3 install --upgrade django
+python3 manage.py sqlmigrate exam 0001_initial
+sudo mysql -u root
+use DB_MCTest;
+
+#### para criar uma nova tabela em exam:
+
+python manage.py sqlmigrate exam 0001_initial
+CREATE TABLE `exam_variationexam` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `variation` longtext NOT NULL, `exam_id` integer NULL);
+ALTER TABLE `exam_variationexam` ADD CONSTRAINT `exam_variationexam_exam_id_ba3b75d0_fk_exam_exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exam_exam` (`id`);
+
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/migrations/*.pyc"  -delete
+python3 manage.py showmigrations
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py squashmigrations account 0001
+
+pip3 install django-import-export
+pip3 install django-utils-six
+pip3 install django-widget-tweaks
 
 '

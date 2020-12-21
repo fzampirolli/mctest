@@ -28,11 +28,14 @@
                                 </div>
                                 </p>
                             {% endfor %}
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
-                    </div>
-
+                        <div class="text-right">
+                            <a href="{% url 'main:According' %}" class="btn btn-outline-danger">
+                                {% trans "According" %}</a>
+                            <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+                        </div>
                     </form>
+
+
                 </div>
             </div>
         </div>

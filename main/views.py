@@ -7,6 +7,7 @@ from account.models import User
 from course.models import Institute, Course, Classroom, Discipline
 from topic.models import Topic, Question, Answer
 from exam.models import Exam
+from student.models import Student
 
 # Create your views here.
 
@@ -20,6 +21,8 @@ class SignUp(generic.CreateView):
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 
+def According(request):
+    return render(request, 'According.html', {})
 
 def contributors(request):
     return render(request, 'contributors.html', {})
@@ -52,10 +55,9 @@ def index(request):
     num_courses = Course.objects.all().count()
     num_disciplines = Discipline.objects.all().count()
     num_classrooms = Classroom.objects.all().count()
-
     num_exams = Exam.objects.all().count()
-
     num_users = User.objects.all().count()
+    num_students = Student.objects.all().count()
 
     num_questions = Question.objects.all().count()
     num_topics = Topic.objects.all().count()
@@ -78,6 +80,7 @@ def index(request):
                            'num_Parametric': num_Parametric,
                            'num_exams': num_exams,
                            'num_users': num_users,
+                           'num_students': num_students,
                            'users_now': users_now,
                            'users': users,
                            'num_visits': num_visits})

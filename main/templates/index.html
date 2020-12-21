@@ -15,7 +15,7 @@
                         <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
                             <h1>{% trans "MCTest" %} - {% trans "development" %}</h1>
                             {% trans "Improvements will be included all the time. USE ONLY service in production" %}: <a
-                                href="http://mctest.ufabc.edu.br">mctest</a>.
+                                href="http://mctest.ufabc.edu.br">mctest</a> (BACKUP 21/12/2020).
                         </div>
                     </div>
                 </div>
@@ -379,8 +379,8 @@
                 <h3>{% trans "Dynamic content" %}</h3>
 
                 <p>{% trans "The MCTest has the following record counts" %} ({% trans "see also:" %}
-                    <a href="http://vision.ufabc.edu.br/static/models.png">ER1</a>;
-                    <a href="http://vision.ufabc.edu.br/static/models_col.png">ER2</a>):</p>
+                    <a href="http://vision.ufabc.edu.br/static/MCTest_UML_comp.png">DB1</a>;
+                    <a href="http://vision.ufabc.edu.br/static/MCTest_DB.png">DB2</a>):</p>
                 <ul>
                     <li><strong>{% trans "Institutes" %}:</strong> {{ num_institutes }}
                         [{% trans "Institute has Courses" %}]
@@ -416,6 +416,7 @@
                                 href="http://www.itng.info">ref19a</a>; <a href="http://csedu.org">ref19b</a>]
                         </li>
                     </ul>
+                    <li><strong>{% trans "Students" %}:</strong> {{ num_students }}</li>
                     <li><strong>{% trans "Users" %}:</strong> {{ num_users }}</li>
                 </ul>
 
@@ -551,8 +552,12 @@
                 <h3>{% trans "Publications" %}</h3>
 
                 <ul>
-
-                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615">ref20a</a> - Zampirolli, F.A.; Batista, V.R.; Iriarte, E.A.A.; Antunes Jr.
+                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913/12767">ref20a</a> - Zampirolli, F.A.; Borovina
+                        Josko, J.M.; Venero, M.L.F. (In memoriam); Kobayashi, G.; Fraga, F.;
+                        Goya, D.; Savegnago, H. R. "An experience of automated assessment in a large-scale introduction programming course".
+                        Computer Applications in Engineering Education (no prelo).
+                    </li>
+                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615">ref20b</a> - Zampirolli, F.A.; Batista, V.R.; Iriarte, E.A.A.; Antunes Jr.
                         I."Online assessments with parametric questions and automatic corrections: an improvement
                         for MCTest using Google Forms and Sheets".
                         Simpósio Brasileiro de Informática na Educação, Natal, 2020.
@@ -560,7 +565,7 @@
                         <a href="https://www.youtube.com/watch?v=P6m04pBJDj0">Video</a>;
                         <a href="https://www.youtube.com/watch?v=BGldl9ZjEiE">Sessão</a>)
                     </li>
-                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913/12767">ref20b</a> - Zampirolli, F.A.; Pisani, P.H.; Borovina
+                    <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913/12767">ref20c</a> - Zampirolli, F.A.; Pisani, P.H.; Borovina
                         Josko, J.M.; Kobayashi, G.; Fraga, F.;
                         Goya, D.; Savegnago, H. R. "Parameterized and automated assessment on an introductory programming course".
                         Simpósio Brasileiro de Informática na Educação, Natal, 2020.
@@ -568,7 +573,7 @@
                         <a href="https://youtu.be/I4pvS04RiVg">Video</a>;
                         <a href="https://www.youtube.com/watch?v=kCnLcIliwaM">Sessão</a>)
                     </li>
-                    <li><a href="https://sol.sbc.org.br/index.php/wcbie/article/view/13036/12889">ref20c (menção honrosa)</a> - SILVA, D. G.; Zampirolli, F.A.;
+                    <li><a href="https://sol.sbc.org.br/index.php/wcbie/article/view/13036/12889">ref20d (menção honrosa)</a> - SILVA, D. G.; Zampirolli, F.A.;
                     "Reconhecimento facial para validação de usuário durante um questionário no Moodle".
                         Apps.edu (WCBIE), Natal, 2020.
                         (<a href="https://www.youtube.com/watch?v=BL-Uscgc4tc">Video</a>;
