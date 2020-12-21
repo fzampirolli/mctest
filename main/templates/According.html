@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "According" %}</h5>
+
+                <hr>
+                <p>
+                    {% trans "MCTest (available for free on GitHub) was deployed on the UFABC server:" %}<a href="http://mctest.ufabc.edu.br"> mctest.ufabc.edu.br</a>.
+                </p>
+                <p>
+                    {% trans "At UFABC, MCTest is a collaborative service for the automatic generation and correction of training activities (such as Exercise Lists) and assessment activities (such as Evidence Examples)." %}
+                </p>
+                <p>
+                    {% trans "This service is available free of charge to all professors at the UFABC." %}
+                </p>
+                <p>
+                    {% trans "To use MCTest, the teacher must register on the platform and be enrolled in a discipline by its coordinator." %}
+                </p>
+                <p>
+                    {% trans "All intellectual material (classes, videos, questions, etc.) made available on this site is protected by the copyright of its respective authors and, ultimately, is the property of UFABC." %}
+                    {% trans "The authors who have the material available on the website agree to release its use without restrictions on the part of the institution's professors to whom they are linked only within the scope of the disciplines and courses of this institution. In addition, when I sign up for this service at this institution, I ACCEPT that:" %}
+                </p>
+                <ol>
+                    <li>
+                        {% trans "I can use for free all available questions already registered in the discipline in my exams;" %}
+                    </li>
+                    <li>
+                        {% trans "I cannot publish questions created by other teachers in any other medium, such as books and articles;" %}
+                    </li>
+                    <li>
+                        {% trans "All new questions that I create can be reused in tests prepared by other teachers of the same subject, without prior notice;" %}
+                    </li>
+                    <li>
+                        {% trans "I can change other teachers' questions only if there is an error. However, without changing the authorship of the issue." %}
+                    </li>
+                </ol>
+
+                <hr>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
