@@ -1,4 +1,4 @@
-# MCTest v. 5.1 (or webMCTest 1.1)
+# MCTest v. 5.2
 
 Welcome to MCTest, a website devoted to assist in preparing and correcting exams.
 
