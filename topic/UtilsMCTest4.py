@@ -45,7 +45,10 @@ matplotlib.use('Agg')
 
 from django.http import HttpResponse
 
-from topic.Utils import *
+try:
+    from topic.Utils import *
+except:
+    pass
 
 def createWrongAnswers(a):
     global correctAnswer, a0, a1, a2
