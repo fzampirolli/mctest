@@ -17,16 +17,27 @@
                                 <tr>
                                     <th><br>
                                         <!-- Create-PDF -->
-                                        <form class="input-group mb-3" action="../createPDF/" method="post">
+                                        <form class="input-group mb-3" action="../createPDF/" method="post" target="_blank">
                                             {% csrf_token %}
                                             <input class="btn btn-primary" type="submit" action=""
                                                    value={% trans "Create-PDF" %}>
                                         </form>
                                         <h6>{% trans "See this question in PDF format" %}</h6>
                                     </th>
+
+                                      <th><br>
+                                        <!-- Colab-Compile -->
+                                          <a href="https://colab.research.google.com/drive/1R7eyIorqdJMSW5XSI1NjD8jD4MEY0zRt#scrollTo=r9LuQe6AqlEd"
+                                             class="btn btn-outline-danger" target="_blank">
+                                        {% trans "Compile-Colab" %}</a><p>
+                                        <h6>{% trans "Copy-Paste the description of question for test in Colab Google" %}</h6>
+
+                                    </th>
+
+
                                     <th><br>
                                         <!-- Save-Json -->
-                                        <form class="input-group mb-3 text-right" action="../saveJson/"
+                                        <form class="input-group mb-3 text-right" action="../saveJson/"  target="_blank"
                                               method="post">
                                             {% csrf_token %}
                                             <input class="btn btn-primary" type="submit" action=""

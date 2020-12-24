@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-20 06:20-0300\n"
+"POT-Creation-Date: 2020-12-24 11:21-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgstr "Coordenadores do Curso"
 msgid "Discipline course"
 msgstr "Disciplinas do Curso"
 
-#: course/models.py:123 course/views.py:75
+#: course/models.py:123 course/views.py:74
 msgid "Discipline name"
 msgstr "Nome Disciplina"
 
@@ -199,7 +199,7 @@ msgstr "Professores da Disciplina"
 msgid "Discipline coordinators"
 msgstr "Coordenadores da Disciplina"
 
-#: course/models.py:162 course/views.py:333
+#: course/models.py:162 course/views.py:332
 msgid "Classroom students"
 msgstr "Estudantes da Turma"
 
@@ -320,7 +320,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 #: topic/templates/question/question_confirm_delete.html:39
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:189
-#: topic/templates/question/question_update.html:160
+#: topic/templates/question/question_update.html:171
 #: topic/templates/topic/topic_create.html:61
 #: topic/templates/topic/topic_update.html:71
 msgid "Contact your discipline coordinator"
@@ -373,7 +373,7 @@ msgstr "Sala"
 #: topic/templates/question/question_detail.html:58
 #: topic/templates/question/question_list.html:23
 #: topic/templates/question/question_list_who_created_user.html:23
-#: topic/templates/question/question_update.html:81
+#: topic/templates/question/question_update.html:92
 #: topic/templates/topic/topic_detail.html:43
 msgid "Type"
 msgstr "Tipo"
@@ -391,7 +391,7 @@ msgstr "Tipo"
 #: student/templates/student/student_create.old.html:47
 #: topic/templates/question/question_create.html:89
 #: topic/templates/question/question_detail.html:30
-#: topic/templates/question/question_update.html:138
+#: topic/templates/question/question_update.html:149
 #: topic/templates/topic/topic_create.html:48
 #: topic/templates/topic/topic_update.html:52
 msgid "Back"
@@ -411,7 +411,7 @@ msgstr "Voltar"
 #: student/templates/student/student_create.old.html:48
 #: student/templates/student/student_update.html:48
 #: topic/templates/question/question_create.html:92
-#: topic/templates/question/question_update.html:141
+#: topic/templates/question/question_update.html:152
 #: topic/templates/topic/topic_create.html:49
 #: topic/templates/topic/topic_update.html:53
 #, fuzzy
@@ -429,7 +429,7 @@ msgstr "Detalhar Turma"
 
 #: course/templates/classroom/classroom_detail.html:16
 #: course/templates/classroom/classroom_list_who_created_user.html:64
-#: course/templates/discipline/discipline_detail.html:168 course/views.py:183
+#: course/templates/discipline/discipline_detail.html:168 course/views.py:182
 #: exam/UtilsLatex.py:843
 msgid "Classroom"
 msgstr "Turma"
@@ -971,84 +971,84 @@ msgstr "Atualizar Instituto"
 msgid "Create a new Institute"
 msgstr "Criar um novo Instituto"
 
-#: course/views.py:63
+#: course/views.py:62
 msgid "ImportClassroomsDiscipline: choose a CSV following the model"
 msgstr "ImportClassroomsDiscipline: escolher um arquivo CSV seguindo o modelo"
 
-#: course/views.py:74 course/views.py:231
+#: course/views.py:73 course/views.py:230
 msgid "Return to: "
 msgstr "Retorno para: "
 
-#: course/views.py:92
+#: course/views.py:91
 msgid "ImportClassroomsDiscipline: The teacher is not registered in MCTest"
 msgstr "ImportClassroomsDiscipline: o professor não está registrado em MCTest"
 
-#: course/views.py:104
+#: course/views.py:103
 msgid "ImportClassroomsDiscipline: ID must be digits only: "
 msgstr "ImportClassroomsDiscipline: ID tem que ter somente dígitos: "
 
-#: course/views.py:155
+#: course/views.py:154
 msgid "ImportClassroomsDiscipline: exists more that one student with same ID:"
 msgstr ""
 "ImportClassroomsDiscipline: existe mais que um estudantes com o mesmo ID: "
 
-#: course/views.py:194 course/views.py:232
+#: course/views.py:193 course/views.py:231
 msgid "Discipline profs"
 msgstr "Professores da Disciplina"
 
-#: course/views.py:201
+#: course/views.py:200
 msgid "TOTAL"
 msgstr ""
 
-#: course/views.py:202
+#: course/views.py:201
 msgid "Registered;"
 msgstr "Registrado;"
 
-#: course/views.py:203
+#: course/views.py:202
 msgid "Not registered;"
 msgstr "Não registrado;"
 
-#: course/views.py:225
+#: course/views.py:224
 msgid "ImportProfsDiscipline: choose a CSV following the model!"
 msgstr "ImportProfsDiscipline; escolher um arquivo CVS seguindo o modelo"
 
-#: course/views.py:293
+#: course/views.py:292
 msgid "ImportStudentsClassroom: choose a CSV following the model"
 msgstr "ImportStudentsClassroom: escolher um arquivo CSV seguindo o modelo"
 
-#: course/views.py:355
+#: course/views.py:354
 msgid "ImportStudentsClassroom: ID must be digits only: "
 msgstr "ImportStudentsClassroom: ID tem que ter somente dígitos: "
 
-#: course/views.py:369
+#: course/views.py:368
 msgid "ImportStudentsClassroom: exists more that one student with same ID:"
 msgstr "ImportStudentsClassroom: existe mais que um estudante com o mesmo ID "
 
-#: course/views.py:395
+#: course/views.py:394
 msgid "Back to Classroom Detail"
 msgstr "Voltar para detalhes da turma"
 
-#: course/views.py:457
+#: course/views.py:447
 msgid "Added student - there is ID: "
 msgstr "StudentCreate: Já existe ID"
 
-#: course/views.py:468
+#: course/views.py:458
 msgid "Created student: Created Student ID: "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:492 exam/views.py:1309
+#: course/views.py:482 exam/views.py:1309
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
-#: course/views.py:528
+#: course/views.py:518
 msgid "ClassroomCreate: The teacher is not registered in a Discipline"
 msgstr "ClassroomCreate: o professor não está registrado na disciplina"
 
-#: course/views.py:550
+#: course/views.py:540
 msgid "ClassroomDelete: The teacher is not registered in a Discipline"
 msgstr "ClassroomDelete: o professor não está registrado na disciplina"
 
-#: course/views.py:567
+#: course/views.py:557
 msgid ""
 "LoanedClassroomByUserListView: The teacher is not registered in a Discipline"
 msgstr ""
@@ -1442,7 +1442,7 @@ msgstr ""
 #: topic/forms.py:44 topic/models.py:50 topic/models.py:94
 #: topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
-#: topic/templates/question/question_update.html:73
+#: topic/templates/question/question_update.html:84
 #: topic/templates/topic/topic_create.html:39
 #: topic/templates/topic/topic_detail.html:25
 #: topic/templates/topic/topic_update.html:44
@@ -1711,7 +1711,7 @@ msgstr ""
 #: topic/templates/question/question_detail.html:50
 #: topic/templates/question/question_list.html:24
 #: topic/templates/question/question_list_who_created_user.html:24
-#: topic/templates/question/question_update.html:65
+#: topic/templates/question/question_update.html:76
 #: topic/templates/topic/topic_detail.html:44
 msgid "Group"
 msgstr "Grupo"
@@ -1946,7 +1946,7 @@ msgstr "ExamDetailView: o professor não está registrado na disciplina"
 #: main/templates/According.html:10 main/templates/signup.html:33
 #: topic/templates/question/question_confirm_delete.html:30
 #: topic/templates/question/question_create.html:91
-#: topic/templates/question/question_update.html:140
+#: topic/templates/question/question_update.html:151
 msgid "According"
 msgstr "De Acordo"
 
@@ -2148,10 +2148,6 @@ msgstr "LEIA-ME"
 #: main/templates/base_generic.html:376
 msgid "Grant"
 msgstr "Apoio"
-
-#: main/templates/base_generic.html:380
-msgid "São Paulo Research Foundation: "
-msgstr "Fundação de Amparo à Pesquisa do Estado de São Paulo: "
 
 #: main/templates/contributors.html:10
 msgid "Contributors"
@@ -2533,7 +2529,7 @@ msgstr "Dissertativa"
 #: main/templates/index-mctest.html:402 main/templates/index-vision.html:415
 #: main/templates/index.html:415
 #: topic/templates/question/question_create.html:80
-#: topic/templates/question/question_update.html:105
+#: topic/templates/question/question_update.html:116
 msgid "Parametric"
 msgstr "Paramétrica"
 
@@ -2748,10 +2744,6 @@ msgstr ""
 #: main/templates/license.html:9 main/templates/readme.html:17
 msgid "License"
 msgstr "Licença"
-
-#: main/templates/readme.html:10
-msgid "or"
-msgstr "ou"
 
 #: main/templates/readme.html:14
 msgid ""
@@ -3017,11 +3009,11 @@ msgstr ""
 msgid "Federal University of ABC"
 msgstr "Universidade Federal do ABC"
 
-#: mctest/settings.py:194
+#: mctest/settings.py:199
 msgid "English"
 msgstr "Inglês"
 
-#: mctest/settings.py:195
+#: mctest/settings.py:200
 msgid "Portugues"
 msgstr "Português"
 
@@ -3171,7 +3163,7 @@ msgstr ""
 #: topic/templates/question/question_detail.html:46
 #: topic/templates/question/question_list.html:28
 #: topic/templates/question/question_list_who_created_user.html:28
-#: topic/templates/question/question_update.html:57
+#: topic/templates/question/question_update.html:68
 #: topic/templates/topic/topic_detail.html:48
 msgid "Short Description"
 msgstr "Descrição curta"
@@ -3190,7 +3182,7 @@ msgstr "Dificuldade"
 
 #: topic/forms.py:50 topic/models.py:126
 #: topic/templates/question/question_create.html:72
-#: topic/templates/question/question_update.html:97
+#: topic/templates/question/question_update.html:108
 msgid "Bloom Taxonomy"
 msgstr "Taxonomia de Bloom"
 
@@ -3204,13 +3196,13 @@ msgstr "Questão Paramétrica"
 
 #: topic/forms.py:56 topic/models.py:142
 #: topic/templates/question/question_detail.html:62
-#: topic/templates/question/question_update.html:113
+#: topic/templates/question/question_update.html:124
 msgid "Who Created"
 msgstr "Quem criou"
 
 #: topic/forms.py:58 topic/models.py:139
 #: topic/templates/question/question_detail.html:66
-#: topic/templates/question/question_update.html:121
+#: topic/templates/question/question_update.html:132
 msgid "Last Update"
 msgstr "Última atualização"
 
@@ -3308,7 +3300,7 @@ msgstr "Tem certeza que deseja apagar esta questão"
 #: topic/templates/question/question_create.html:100
 #: topic/templates/question/question_list.html:131
 #: topic/templates/question/question_list_who_created_user.html:188
-#: topic/templates/question/question_update.html:159
+#: topic/templates/question/question_update.html:170
 msgid "Questions of the disciplines that I am enrolled"
 msgstr "Questões das disciplinas em que participo"
 
@@ -3317,12 +3309,12 @@ msgid "Create a new Question"
 msgstr "Criar uma nova Questão"
 
 #: topic/templates/question/question_create.html:24
-#: topic/templates/question/question_update.html:49
+#: topic/templates/question/question_update.html:60
 msgid "Choose Topic"
 msgstr "Escolher Tópico"
 
 #: topic/templates/question/question_create.html:64
-#: topic/templates/question/question_update.html:89
+#: topic/templates/question/question_update.html:100
 msgid "Difficult"
 msgstr "Dificuldade"
 
@@ -3424,15 +3416,23 @@ msgstr "Atualizar Questão"
 msgid "See this question in PDF format"
 msgstr "Ver esta questão no formato PDF"
 
+#: topic/templates/question/question_update.html:32
+msgid "Compile-Colab"
+msgstr ""
+
 #: topic/templates/question/question_update.html:33
+msgid "Copy-Paste the description of question for test in Colab Google"
+msgstr "Copie-Cole a descrição da questão para testar no Colab do Google"
+
+#: topic/templates/question/question_update.html:44
 msgid "Save-Json"
 msgstr "Salva-Json"
 
-#: topic/templates/question/question_update.html:35
+#: topic/templates/question/question_update.html:46
 msgid "It will save all your questions to a file in json format"
 msgstr "Salvar questões de um arquivo (formato Json)"
 
-#: topic/templates/question/question_update.html:151
+#: topic/templates/question/question_update.html:162
 msgid "Delete this Question"
 msgstr "Apagar esta Questão"
 
@@ -3525,6 +3525,12 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 #: topic/views.py:600
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid "São Paulo Research Foundation: "
+#~ msgstr "Fundação de Amparo à Pesquisa do Estado de São Paulo: "
+
+#~ msgid "or"
+#~ msgstr "ou"
 
 #~ msgid ""
 #~ "To be able to use MCTest, the teacher must be enrolled in some "
