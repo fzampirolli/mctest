@@ -54,7 +54,7 @@ class Utils(object):
 
     @staticmethod
     def getstr_QM(exam, variation_i):
-        if int(Utils.getNumMCQuestions(exam)) == 0:
+        if int(Utils.getNumMCQuestions(exam)) == 0 or exam.exam_print in ['answ']:
             return ''
         d = exam.variationsExams2.all()[variation_i]
         s = eval(d.variation)
@@ -1453,7 +1453,10 @@ _inst1_
         print("passou11", len(id_hashed), id_hashed, hashed)
 
         s = str(myqr[1]).encode('utf-8')  # qrcode and file name
-        s_ALL = str(myqr[1] + myqr[2]).encode('utf-8')  # also answers into file
+        if not exam.exam_print in ['answ']:
+            s_ALL = str(myqr[1] + myqr[2]).encode('utf-8')  # also answers into file
+        else:
+            s_ALL = str(myqr[1]).encode('utf-8')  # also answers into file
 
         # for compressed and cryptography
         compressed = zlib.compress(s, 6)

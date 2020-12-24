@@ -932,16 +932,18 @@ def generate_page(request, pk):
                     listVariations.append(
                         [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
 
+                    var_hash = hash_num % int(exam.exam_variations)
                     if hash_num == -1:
                         messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
                         return render(request, 'exam/exam_errors.html', {})
 
-                    var_hash = hash_num % int(exam.exam_variations)
-                    myqr.append(qr_answers[var_hash])  # inclui as respostas
                     if exam.exam_print != 'answ':
-                        strQuestions += Utils.drawQuestions(request, myqr,
-                                                            exam, room, s.student_ID, s.student_name,
-                                                            var_hash, data_hora)
+                        myqr.append(qr_answers[var_hash])  # inclui as respostas
+
+                    strQuestions += Utils.drawQuestions(request, myqr,
+                                                        exam, room, s.student_ID, s.student_name,
+                                                        var_hash, data_hora)
+
 
                 else:
                     messages.error(request, _('ERROR in validateNumQuestions!!!!'))
