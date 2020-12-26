@@ -146,7 +146,7 @@
                             <form action="/topic/myquestions/import/" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <input type="file" name="myfile">
-                                <button type="submit">{% trans "Upload-Questions" %}</button>
+                                <button class="btn btn-primary" type="submit">{% trans "Upload-Questions" %}</button>
                                 {% trans "Choose TXT file for import questions" %}
 
                                 <h4>
@@ -177,7 +177,7 @@
                                   enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <input type="file" name="myfile">
-                                <button type="submit">{% trans "Upload-Questions-Json" %}</button>
+                                <button class="btn btn-primary" type="submit">{% trans "Upload-Questions-Json" %}</button>
                                 {% trans "Download a question to view the Json format" %}<br>
 
                             </form>

@@ -139,7 +139,7 @@ class UtilsMC(object):
 
             for i in ['exec', 'cmd', 'open', 'import os', '.remove', 'mkdir',
                       'cmd', 'sys', 'gnureadline', 'subprocess', 'getopt',
-                      'shlex', 'wget', 'commands', 'system', 'exec', 'eval']:
+                      'shlex', 'wget', 'commands', 'system', 'eval']:
                 if i in groups:
                     return None  # HttpResponse('ERROR: do not use that word in the code: '+i)
 

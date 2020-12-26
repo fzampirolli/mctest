@@ -230,6 +230,21 @@ sudo rm -rf /etc/mysql /var/lib/mysql
 sudo apt-get autoremove
 sudo apt-get autoclean
 
+sudo apt -y install mysql-server mysql-client
+sudo mysql_secure_installation
+sudo mysql -u root -p
+...
+sudo emacs -nw /etc/mysql/my.cnf
+sudo emacs -nw /etc/mysql/mysql.conf.d/mysqld.cnf
+bind-address            = 0.0.0.0
+sudo apt-get install python-mysqldb
+sudo apt-get install libmysqlclient-dev
+sudo apt-get install python3-pymysql
+sudo apt-get install python3.6-dev
+sudo apt-get install libssl-dev
+sudo systemctl daemon-reload
+sudo systemctl restart mysql
+
 ### editar locale/*
 django-admin.py makemessages -l pt
 django-admin.py compilemessages
@@ -331,5 +346,18 @@ python3 manage.py squashmigrations account 0001
 pip3 install django-import-export
 pip3 install django-utils-six
 pip3 install django-widget-tweaks
+
+
+########################
+
+MCTEST:
+pip3 install Django==2.2.4
+
+ERRO na versão 3.1.4:
+python manage.py migrate
+django.db.migrations.exceptions.InconsistentMigrationHistory:
+Migration account.0001_squashed_0001_initial is applied before
+its dependency auth.0012_alter_user_first_name_max_length on
+database default.
 
 '
