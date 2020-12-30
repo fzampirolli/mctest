@@ -293,20 +293,6 @@ pip3 install django-widget-tweaks
 pip3 install django-extensions
 pip3 install python-decouple
 
-sudo find . -name "*~"  -exec rm {} \;
-sudo find . -name "*#"  -exec rm {} \;
-sudo find . -name ".DS_Store"  -exec rm {} \;
-sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-sudo find . -path "*/migrations/*.pyc"  -delete
-sudo find . -path "*/__pycache__/*.pyc"  -delete
-sudo find . -path "*/tmp/*"  -exec rm {} \;
-#sudo find . -path "*/tmp*/*"  -exec rm {} \;
-sudo find . -path "*/pdf*/*"  -exec rm {} \;
-sudo rm *.tex
-sudo rm *.pdf
-sudo rm *.csv
-
-
 tar -xvf mysql-2020-12-19.tar
 cat /etc/mysql/mysql.cnf
 mysql -u root -p DB_MCTest < "mysql-2020-12-19.sql"
