@@ -171,8 +171,10 @@ class Question(models.Model):
 
     def __str__(self):
         # u  = ';'.join([d. for d in Discipline.objects.all() if (self.user
-        d = ';'.join([d.discipline_code for d in Discipline.objects.all() if (d in self.topic.discipline.all())])
-        t = ';'.join([t.topic_text for t in Topic.objects.all() if (t == self.topic)])
+        # d = ';'.join([d.discipline_code for d in Discipline.objects.all() if (d in self.topic.discipline.all())])
+        d = 'oi_d1_lento'
+        # t = ';'.join([t.topic_text for t in Topic.objects.all() if (t == self.topic)])
+        t = self.topic.topic_text
         df = "dif " + self.question_difficulty
         g = "gro " + self.question_group
         p = "par " + self.question_parametric
