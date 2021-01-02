@@ -1213,11 +1213,11 @@ class ExamListView(generic.ListView):
 
     def get_queryset(self):
         li = Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)
-        qs = Exam.objects.none()
-        t = []
-        for e in li:
-            if not e.pk in t:
-                t.append(e.pk)
+        # qs = Exam.objects.none()
+        # t = []
+        # for e in li:
+        #     if not e.pk in t:
+        #         t.append(e.pk)
         return li.order_by('exam_name').distinct()
 
     def form_valid(self, form):
@@ -1247,11 +1247,6 @@ class ExamDetailView(generic.DetailView):
 
     def get_queryset(self):
         li = Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)
-        qs = Exam.objects.none()
-        t = []
-        for e in li:
-            if not e.pk in t:
-                t.append(e.pk)
         return li.order_by('exam_name').distinct()
 
     def form_valid(self, form):
@@ -1303,6 +1298,7 @@ class ExamDelete(DeleteView):
     template_name = 'exam/exam_confirm_delete.html'
     success_url = '/exam/myexams'
 
+
     def get_queryset(self):
         return Exam.objects.filter(exam_who_created=self.request.user).distinct()
 
@@ -1320,9 +1316,9 @@ class LoanedExamByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         li = Exam.objects.filter(exam_who_created=self.request.user)
-        qs = Exam.objects.none()
-        t = []
-        for e in li:
-            if not e.pk in t:
-                t.append(e.pk)
+        # qs = Exam.objects.none()
+        # t = []
+        # for e in li:
+        #     if not e.pk in t:
+        #         t.append(e.pk)
         return li.order_by('exam_name').distinct()

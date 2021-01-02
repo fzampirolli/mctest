@@ -45,5 +45,5 @@ class Student(models.Model):
     class Meta:
         ordering = ["student_name"]
 
-    # def __str__(self):
-    #     return '; '.join([self.student_ID, self.student_name, self.student_email])
+    def __str__(self):
+        return '; '.join([self.student_ID, self.student_name, self.student_email])
