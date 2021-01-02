@@ -82,7 +82,7 @@ class Institute(models.Model):
     class Meta:
         ordering = ["institute_code", "institute_name"]
 
-    def __str__(self):
+    def __str__(self): # ok
         return self.institute_name
 
 class Course(models.Model):
@@ -109,7 +109,7 @@ class Course(models.Model):
     class Meta:
         ordering = ["institutes__institute_code", "course_name"]
 
-    def __str__(self):
+    def __str__(self): # ok
         # return self.course_name
         return ' - '.join([', '.join([i.institute_code for i in self.institutes.all()]), self.course_name])
 
@@ -141,7 +141,7 @@ class Discipline(models.Model):
     class Meta:
         ordering = ["courses__institutes__institute_code", "courses__course_code", "discipline_name"]
 
-    def __str__(self):
+    def __str__(self): # ok
         str = []
         for c in self.courses.all():
             for i in c.institutes.all():
@@ -193,8 +193,8 @@ class Classroom(models.Model):
     class Meta:
         ordering = ["discipline__courses__institutes__institute_code", "discipline__discipline_code", "classroom_code"]
 
-    def __str__(self):
-        return self.classroom_code#+';'
+    # def __str__(self):
+    #     return self.classroom_code#+';'
         #return ' - '.join([', '.join([d.discipline_code for d in Discipline.objects.all() if (d == self.discipline)]),
         #                   self.classroom_code])
         # return ' - '.join([', '.join([self.discipline.classrooms.all()]), self.classroom_code])

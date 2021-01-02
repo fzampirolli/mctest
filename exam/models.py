@@ -185,17 +185,17 @@ class Exam(models.Model):
         return form
     '''
 
-    def __str__(self):
+    def __str__(self): # ok
         return self.exam_name
-        cod = [c.discipline.discipline_code for c in self.classrooms.all()]
-        if cod:
-            cod = str(cod[0])
-        else:
-            cod = ''
-        return ' - '.join([
-            cod,
-            ','.join([c.classroom_code for c in self.classrooms.all()]),
-            self.exam_name])
+        # cod = [c.discipline.discipline_code for c in self.classrooms.all()]
+        # if cod:
+        #     cod = str(cod[0])
+        # else:
+        #     cod = ''
+        # return ' - '.join([
+        #     cod,
+        #     ','.join([c.classroom_code for c in self.classrooms.all()]),
+        #     self.exam_name])
 
 # new 08/12/20: exame tem variacoes
 class VariationExam(models.Model):

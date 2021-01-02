@@ -68,7 +68,7 @@ class Topic(models.Model):
     class Meta:
         ordering = ["discipline__discipline_code", "topic_text"]
 
-    def __str__(self):
+    def __str__(self): # ok
         d = ','.join([d.discipline_code for d in self.discipline.all()])
         t = self.topic_text
         return '[{0}]<{1}>'.format(d, t)
@@ -169,11 +169,11 @@ class Question(models.Model):
     def get_absolute_url(self):
         return "../question/%i" % self.id
 
-    def __str__(self):
+    def __str__(self): # ok
         # u  = ';'.join([d. for d in Discipline.objects.all() if (self.user
         # d = ';'.join([d.discipline_code for d in Discipline.objects.all() if (d in self.topic.discipline.all())])
-        d = 'oi_d1_lento'
         # t = ';'.join([t.topic_text for t in Topic.objects.all() if (t == self.topic)])
+        d = 'oi_d_lento'
         t = self.topic.topic_text
         df = "dif " + self.question_difficulty
         g = "gro " + self.question_group
@@ -205,5 +205,5 @@ class Answer(models.Model):
     class Meta:
         ordering = ["id"]
 
-    def __str__(self):
-        return '[{0}]  {1}'.format(self.question.question_short_description, self.answer_text)
+    # def __str__(self):
+    #     return '[{0}]  {1}'.format(self.question.question_short_description, self.answer_text)
