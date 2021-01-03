@@ -31,7 +31,7 @@ load_dotenv(os.path.join(BASE_DIR, '../_settings.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #os.getenv('DEBUG')
+DEBUG = False #os.getenv('DEBUG')
 
 #SECURE_SSL_REDIRECT = True
 #SESSION_COOKIE_SECURE = True
@@ -170,26 +170,27 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/dev/howto/static-files/
-
-# PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
+#STATIC_URL = "http://vision.ufabc.edu.br/static/"
+#STATIC_URL = "http://nubisys.ufabc.edu.br/static/"
+STATIC_URL = "http://mctest.ufabc.edu.br:8000/static/"
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = "http://nubisys.ufabc.edu.br/static"
+#STATIC_ROOT = "http://vision.ufabc.edu.br/static"
+#STATIC_ROOT = "/var/www/html/static"
+# python manage.py collectstatic
 
-STATIC_ROOT = "http://vision.ufabc.edu.br/static"
+# STATICFILES_FINDERS = [
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+# ]
 
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-]
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'static'),
 #    os.path.join(BASE_DIR, 'topic/static'),
-    '/var/www/html/static'
-]
+#    '/var/www/html/static'
+#]
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),

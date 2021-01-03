@@ -149,7 +149,8 @@ class UtilsMC(object):
 
     @staticmethod
     def questionParametric(question, answers):
-        print("questionParametric-00-" + str(datetime.datetime.now()))
+        dt0 = datetime.datetime.now()
+        print("questionParametric-00-" + str(dt0))
 
         ############ question + def #####
 
@@ -161,18 +162,14 @@ class UtilsMC(object):
                 AllLines[i] = AllLines[i] + '\n'
         mystr = ''.join(AllLines).replace("\r", "")
 
-        print("questionParametric-01-" + str(datetime.datetime.now()))
         myDef = UtilsMC.get_code(mystr, 'def')
-        print("questionParametric-01-" + str(datetime.datetime.now()))
 
-        if myDef is not None:
+        if myDef is not None:  # spend more time
             exec('\n'.join(myDef))  # run the algorithm and variables
         else:
             return ["", AllLines]
 
-        print("questionParametric-02-" + str(datetime.datetime.now()))
         arg = UtilsMC.get_code(question, 'code')  # get the args in text
-        print("questionParametric-02-" + str(datetime.datetime.now()))
 
         i = 0
         tam = len(AllLines)
@@ -183,8 +180,6 @@ class UtilsMC(object):
                 tam = i
                 break
             i = i + 1
-
-        print("questionParametric-03-" + str(datetime.datetime.now()))
 
         q_param = ""
         for j in range(0, tam):
@@ -215,8 +210,6 @@ class UtilsMC(object):
                                     m += 1
                     i -= 1
                     tam = tam + m
-                # print("####",i,j,str(eval(j)), AllLines[i])
-                # print("###",AllLines[i].replace("[[code:"+j+"]]", str(eval(j))))
                 AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
 
             if i >= len(AllLines) or AllLines[i].find("[[def:") > -1:

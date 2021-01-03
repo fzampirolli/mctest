@@ -346,4 +346,8 @@ Migration account.0001_squashed_0001_initial is applied before
 its dependency auth.0012_alter_user_first_name_max_length on
 database default.
 
+# erro table Admin -> Exam
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
+mysql -u root -p -e "flush tables;" mysql
+
 '
