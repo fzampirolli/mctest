@@ -1,0 +1,457 @@
+{# base_generic.html it's the skeleton model #}
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+    <div class="container mt-5" style="max-width: 87rem;">
+        <div class="card">
+            <div class="card-body">
+
+                <!-- title -->
+                <div class="container">
+                    <div class="text-center">
+                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
+                            <h1>{% trans "MCTest" %} - {% trans "produção" %}</h1>
+                            {% trans "Improvements will be included all the time. USE ONLY service in production" %}: <a
+                                href="http://vision.ufabc.edu.br">vision</a> (BACKUP 21/12/2020).
+                        </div>
+                    </div>
+                </div>
+
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="50000">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="6"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="7"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="8"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="9"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="10"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="11"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="12"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="13"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="14"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="15"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="16"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="17"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="18"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="19"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="20"></li>
+                    </ol>
+                    <div class="carousel-inner" style="background-color:#447e9b;">
+                        <!-- slide 1 -->
+                        <div class="carousel-item active">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/1.png' %}">
+                                </div>
+                            </div>
+
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "A simple question with latex command" %}.
+                                    {% trans "After clicking Create-PDF, see the next slide" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 2 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/2.png' %}">
+                                </div>
+                            </div>
+
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "The formulas between $ from the previous slide are presented differently" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 3 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/3.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "Adding an image that is on the web" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 4 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/4.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "LaTeX Command" %}</h5>
+                                <p>{% trans "Question with image to display on exam" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 5 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/5.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Exam Style" %}</h5>
+                                <p>{% trans "Exam only with answers (in the correction, the template is the first page of the PDF)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 5v -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/5v.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Exam Style - Vertical" %}</h5>
+                                <p>{% trans "Exam only with answers (in the correction, the template is the first page of the PDF)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 6 -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/6.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Exam Style" %}</h5>
+                                <p>{% trans "Q&A (the correct answer can be found with '#0' in the PDF, details in yellow)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 7 parametric - part I -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/7.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Part I" %}</h5>
+                                <p>{% trans "In the description, we have python code between '[[code:' and ']]' - to '[[def:" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 8 parametric - part II -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/8.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Part II" %}</h5>
+                                <p>{% trans "Attributes and answers to a question. When creating a question, the first alternative is always the correct one" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 9 parametric - part III -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/9.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Part III" %}</h5>
+                                <p>{% trans "Question to be displayed. Note the order in which answers were drawn after '#'" %}
+                                    {% trans "You can assign different weights for each anwers, on the exam grade" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 10 parametric - Example I-->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/10.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Example I" %}</h5>
+                                <p>{% trans "Example with equation and figure" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 11 parametric - Example II -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/11.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Example II" %}</h5>
+                                <p>{% trans "Example with graph" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 12 parametric - Example III -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/12.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Parametric Question - Example III" %}</h5>
+                                <p>{% trans "Example with matrix" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 13 - CSV File with Exam Correction -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/13.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "CSV File with Exam Correction" %}</h5>
+                                <p>{% trans "In yellow, answer marked '/' correct answer" %}.
+                                    {% trans "In green, Question ID in the DB and answers order (0=A, 1=B, ...)" %}.
+                                    {% trans "ID here means exam variations" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 14 - Grade with weight -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/14.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Grade with weight" %} - <a href="{% static 'NOTAS.ods' %}" style="color:darkblue">template</a></h5>
+                                <p>{% trans "In yellow, answer marked '/' correct answer" %}.
+                                    {% trans "In green, answers with weight" %}. {% trans "ID here means exam variations" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 15 - parametric - Example IV - Text Question -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/15.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
+                                <p>{% trans "With random values ​​for a, b, c and d. In this case, it is possible to draw the answer in light colors, see next slide" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 16 - parametric - Example IV - Text Question - correct answer -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/16.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
+                                <p>{% trans "The answer in light colors, not to appear printed. You can program the answer to have a similar number of lines (same difficulty)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 17 - Email corrections to each student -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/17.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email corrections to each student" %}</h5>
+                                <p>{% trans "It is also possible to include in the email a PDF file with the text of the questions, the alternative the student has marked, the feedback and the correct alternative (if incorrect)" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 18 - Email correction with statistics -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/18.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with some correction statistics" %}</h5>
+                                <p>{% trans "The teacher receives this email after sending a PDF of the scanned exams" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 19 - Email with case tests of Moodle + VPL -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/19.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with test cases of moodle + VPL" %}</h5>
+                                <p>{% trans "The teacher receives this email after creating a PDF when there is an exam that contains program exercises" %}</p>
+                            </div>
+                        </div>
+                        <!-- slide 20 - Email with templates and variations -->
+                        <div class="carousel-item">
+                            <p>
+                            <div class="row">
+                                <div class="mx-auto text-center">
+                                    <img class="d-block" width="630" height="350"
+                                         src="{% static 'website/images/slider/20.png' %}">
+                                </div>
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{% trans "Email with templates, DBs (for import into moodle) and variation per student" %}</h5>
+                                <p>{% trans "The teacher receives this email after creating a PDF when there is an exam containing multiple-choice questions or questions with answers" %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+
+                </div>
+
+                <hr>
+
+                <h3>{% trans "Dynamic content" %}</h3>
+
+                <p>{% trans "The MCTest has the following record counts" %} :</p>
+                <ul>
+                    <li><strong>{% trans "Institutes" %}:</strong> {{ num_institutes }}
+                        [{% trans "Institute has Courses" %}]
+                    </li>
+                    <li><strong>{% trans "Courses" %}:</strong> {{ num_courses }}
+                        [{% trans "Course has Disciplines" %}]
+                    </li>
+                    <li><strong>{% trans "Disciplines" %}:</strong> {{ num_disciplines }}
+                        [{% trans "Discipline has Topics and Classrooms" %}]
+                    </li>
+                    <li><strong>{% trans "Classrooms" %}:</strong> {{ num_classrooms }}
+                        [{% trans "Classroom has Exams, Profs and Student" %}]
+                    </li>
+                    <li><strong>{% trans "Exams" %}:</strong> {{ num_exams }}
+                        [{% trans "Exam has Classrooms and Questions" %}]
+                    </li>
+                    <li><strong>{% trans "Topics" %}:</strong> {{ num_topics }}
+                        [{% trans "Topic has Questions" %}]
+                    </li>
+
+                    <hr>
+
+                    <li><strong>{% trans "Questions" %}:</strong> {{ num_questions }}
+                        - {% trans "motivations for the use of bloom taxonomy" %}
+                    </li>
+                    <ul>
+                        <li><strong>{% trans "Multiple Choice" %}:</strong> {{ num_QM }}</li>
+                        <li><strong>{% trans "Text" %}:</strong> {{ num_QT }}</li>
+                        <li><strong>{% trans "Parametric" %}:</strong> {{ num_Parametric }} 
+                        </li>
+                    </ul>
+                    <li><strong>{% trans "Students" %}:</strong> {{ num_students }}</li>
+                    <li><strong>{% trans "Users" %}:</strong> {{ num_users }}</li>
+                </ul>
+
+                <hr>
+
+                <h3>{% trans "For verification" %}</h3>
+
+                <ul>
+                    <font size="1">
+
+                        <table style="width: 327px;" border="0" cellspacing="0">
+                            <colgroup width="110"></colgroup>
+                            <colgroup width="250"></colgroup>
+                            <colgroup width="126"></colgroup>
+                            <tbody>
+                            <tr style="height: 24px;">
+                                <td style="width: 140px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                        style="font-family: 'Liberation Serif';">{% trans "Users" %}</span></strong>
+                                </td>
+                                <td style="width: 98px; height: 24px;" align="center" bgcolor="#B5D6AD"><strong><span
+                                        style="font-family: 'Liberation Serif';">{% trans "Last Login" %}</span></strong>
+                                </td>
+                            </tr>
+                            {% for u in users_now %}
+                                <tr>
+                                    <td>{{ u.username }}</td>
+                                    <td style="padding:1px 10px;" align="right"> now</td>
+                                </tr>
+                            {% endfor %}
+
+
+                            {% for u in users %}
+                                {% if not u in users_now %}
+                                    <tr>
+                                        <td>{{ u.username }}</td>
+                                        <td style="padding:1px 10px;" align="right">{{ u.last_login }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </font>
+
+                </ul>
+
+                <hr>
+
+                <p>{% trans "You have visited this page" %} {{ num_visits }}
+                    {% if num_visits == 1 %} {% trans "time" %} {% else %} {% trans "times" %}{% endif %}.</p>
+
+                <p>{% trans "Send improvement suggestions to" %}: <a href="mailto:fzampirolli@ufabc.edu.br"
+                                                                     target="_top">fzampirolli@ufabc.edu.br</a>
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
