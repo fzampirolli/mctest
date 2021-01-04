@@ -178,6 +178,7 @@ STATIC_URL = "http://mctest.ufabc.edu.br:8000/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #STATIC_ROOT = "http://nubisys.ufabc.edu.br/static"
 #STATIC_ROOT = "http://vision.ufabc.edu.br/static"
+
 #STATIC_ROOT = "/var/www/html/static"
 # python manage.py collectstatic
 
