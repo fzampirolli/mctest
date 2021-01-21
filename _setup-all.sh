@@ -157,6 +157,7 @@ pip install django-import-export
 pip install django-widget-tweaks
 pip install django-extensions
 pip install python-decouple
+pip install scikit-image
 
 #service mysql restart
 systemctl daemon-reload
