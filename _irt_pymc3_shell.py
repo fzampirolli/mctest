@@ -26,6 +26,9 @@ if len(sys.argv) != 2:
     print("Use >> python3 _irt_pymc3_shell.py file.csv")
     exit(0)
 
+import sys
+sys.stdout=open(str(sys.argv[1]) + ".txt","w")
+
 print("File: " + str(sys.argv[1]))
 
 X = np.genfromtxt(str(sys.argv[1]), delimiter=',', dtype=int)
@@ -80,3 +83,6 @@ v_waic = az.waic(trace)
 
 print('\nWAIC = {0:.3f}  for the number of stages = {1}'.format(v_waic['waic'], NStg))
 print('\nWAIC statistics...\n', v_waic)
+
+sys.stdout.close()
+
