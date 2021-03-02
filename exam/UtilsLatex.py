@@ -36,6 +36,7 @@ import subprocess
 import time
 import unicodedata
 import zlib
+import re
 
 import bcrypt
 import numpy as np
@@ -94,7 +95,7 @@ class Utils(object):
                 for q in var['questions']:
                     qr_answers += str(q['key'])
                     for a in q['answers']:
-                        qr_answers += a['sort']
+                        qr_answers += str(a['sort'])
                     qr_answers += ';'
             qr_answers_all.append(qr_answers)
         return qr_answers_all
@@ -202,6 +203,9 @@ class Utils(object):
             q_text = q[7]
             answers = q[8]
 
+            # remove all occurance singleline comments (%%COMMENT\n ) from string
+            q_text = re.sub(re.compile("%%.*?\n" ) ,"" ,q_text)
+
             myflag = False  # criar nova categoria ao mudar de questao
             if question_ID_before != int(q_id):
                 myflag = True
@@ -228,11 +232,14 @@ class Utils(object):
                     q_str += a_str
 
             else:  # QT
-                q_str = q_str.replace('___question_type___', 'essay')
-                q_type = 'essay'
                 if len(answers) == 1:
+                    q_str = q_str.replace('___question_type___', 'shortanswer')
+                    q_type = 'shortanswer'
                     answerCorrect = answers[0]['text']
-                    q_str += '\n<answer fraction="0"><text>\n' + answerCorrect + '\n</text></answer>\n'
+                    q_str += '\n<answer fraction="100" format="moodle_auto_format"><text>\n' + answerCorrect + '\n</text></answer>\n'
+                else:  # no answers
+                    q_str = q_str.replace('___question_type___', 'essay')
+                    q_type = 'essay'
 
             mystr = " #id:" + str(q_id) + " #type:" + q_type + " #topic:" + str(
                 q_topic) + " #diff:" + str(
