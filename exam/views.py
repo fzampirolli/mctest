@@ -115,7 +115,7 @@ def variationsExam(request, pk):
         formatVariations = {}
         formatVariations['variations'] = []
         print("variationsExam-02-" + str(datetime.datetime.now()) + ' var: ' + str(v))
-        [qr_answers, str1, QT, db_questions] = Utils.drawQuestionsVariations(request, exam, request.user,
+        db_questions = Utils.drawQuestionsVariations(request, exam, request.user,
                                                                              Utils.getTopics(exam))
         # db_questions_all.append(db_questions)
         # listao.append([qr_answers, str1, QT])

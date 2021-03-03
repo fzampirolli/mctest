@@ -1315,7 +1315,7 @@ _inst1_
                         strQT += Utils.drawInstructions(exam)
                         strQT += "\\vspace{1mm}\\noindent\\textbf{%s:}\n\\\\" % titl
 
-                    strQT += "%s %s. %s\\\\\n" % (ss, int(q['number']) + int(Utils.getNumMCQuestions(exam)), q['text'])
+                    strQT += "%s %s. %s\\\\\n" % (ss, int(q['number']), q['text'])
                     qr_bytes += str(q['key']) + ';'
                     if (exam.exam_print_eco == 'no'):
                         strQT += Utils.drawJumpPage()
@@ -1393,38 +1393,33 @@ _inst1_
     @staticmethod
     def drawQuestionsVariations(request, exam, user, topics):
         print("drawQuestionsVariations-00-" + str(datetime.datetime.now()))
-        str1, qr_answers, count = '', '', 0
+        count = 0
         numMC = int(Utils.getNumMCQuestions(exam))
         db_questions = []
-        if numMC == 0:
-            db_questions.append([])
-        elif exam.exam_print in ['ques', 'both']:
-            titl = _("Multiple Choice Questions")
-            str1 += "\\\\\\vspace{2mm}\\hspace{-5mm}\\noindent\\textbf{%s:}\\vspace{2mm}\n" % titl
-            for i in range(1, numMC + 1):  # para cada nivel de dificultade de questao MC
+        db_questions.append([])
+        if exam.exam_print in ['ques', 'both']:
+            for i in range(1, 6):  # para cada nivel de dificultade de questao MC
                 s = Utils.drawQuestionsMCDifficulty(request, exam, count, str(i), topics)
                 try:
-                    str1 += s[0]
-                    qr_answers += s[1]
-                    count = int(s[2])
                     if s[3]:
-                        db_questions.append(s[3])
+                        count += len(s[3])
+                        for qq in s[3]:
+                            db_questions[0].append(qq)
                 except:
                     pass
         count = 0  # contador diferente para QT
-        QT = []
         if int(exam.exam_number_of_questions_text) and exam.exam_print in ['ques', 'both']:
             for i in range(1, 6):  # para cada nivel de dificultade de questao textual/dissertativa
                 s = Utils.drawQuestionsTDifficultyVariations(request, exam, count, str(i), topics)
-                count = len(s)
+                count += len(s)
                 for q in s:
-                    QT.append(q)
+                    q[0] += numMC
                     db_questions.append([q, q.append([])])
 
-                if int(exam.exam_number_of_questions_text) <= count:
+                if count >= int(exam.exam_number_of_questions_text):
                     break
 
-        return [qr_answers, str1, QT, db_questions]
+        return db_questions
 
     @staticmethod
     def drawQuestions(request, myqr, exam, room, student_ID, student_name, countVariations, data_hora):
