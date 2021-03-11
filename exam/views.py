@@ -890,6 +890,48 @@ def generate_page(request, pk):
             if maxStudentsClass < len(room.students.all()):
                 maxStudentsClass = len(room.students.all())
 
+        # create directory with key is room
+        distribute_students_by_room_random = {}
+        for room in exam.classrooms.all():  ############## PARA CADA TURMA
+            distribute_students = []
+            for s in room.students.all():
+                stname = s.student_name.split(' ')
+                stname = stname[0] + ' ' + stname[-1]
+                if not stname in distribute_students:
+                    distribute_students.append(stname)
+
+            distribute_students_random = []
+            if int(exam.exam_variations) < maxStudentsClass:
+                for s in distribute_students:
+                    try:
+                        hash_num = Utils.distro_table(s)
+                    except:
+                        messages.error(request, _('ERROR in Utils.distro_table, student: ') + s)
+                        return render(request, 'exam/exam_errors.html', {})
+                    distribute_students_random.append([s,hash_num])
+            else:
+                # distribute students without repetition
+                vetRandomRoom = np.arange(int(exam.exam_variations))
+                np.random.shuffle(vetRandomRoom)
+                vetRandomRoom = vetRandomRoom[:len(distribute_students)]
+                for s in distribute_students:
+
+                    hash_num = distribute_students.index(s)
+                    hash_num = vetRandomRoom[hash_num]
+
+                    # verify if exist name/surname
+                    for key, list_of_values in distribute_students_by_room_random.items():
+                        ss = np.array(list_of_values)
+                        sss = ss[:,0]
+                        if s in sss:
+                            hash_num = np.where(sss == s)
+                            hash_num = int(ss[hash_num,1][0])
+                            break
+
+                    distribute_students_random.append([s,hash_num])
+
+            distribute_students_by_room_random[room.id] = distribute_students_random
+
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             file_name = "_e" + str(
                 exam.id) + "_" + room.classroom_code + "_" + room.classroom_type + "_" + exam.exam_name.replace(" ", "")
@@ -900,15 +942,7 @@ def generate_page(request, pk):
             # /home/fz/django_webmctest/mctest/pdfExam/_e84_EE teste_PClass_Prova1.pdf
             strALL = ''
 
-            # distribute students without repetition
-            if maxStudentsClass >= len(room.students.all()):
-                distribute_students = []
-                for s in room.students.all():
-                    stname = s.student_name.split(' ')
-                    stname = stname[0] + ' ' + stname[-1]
-                    if not stname in distribute_students:
-                        distribute_students.append(stname)
-            distribute_students_random = random.sample(distribute_students, len(distribute_students))
+            distribute_students_random = np.array(distribute_students_by_room_random[room.id])
 
             countStudents = 0
             countVariations = 0
@@ -920,14 +954,14 @@ def generate_page(request, pk):
                 myqr = Utils.defineQRcode(exam, room, s.student_ID)
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
+                    stname = s.student_name.split(' ')
+                    stname = stname[0] + ' ' + stname[-1]
 
-                    if int(exam.exam_variations) < maxStudentsClass:
-                        hash_num = Utils.distro_table(s.student_name)
-                    else:
-                        stname = s.student_name.split(' ')
-                        stname = stname[0] + ' ' + stname[-1]
-                        hash_num = int(distribute_students_random.index(stname) * int(exam.exam_variations) / len(
-                            distribute_students_random))
+                    indStudent = np.where(distribute_students_random[:,0] == stname)
+                    hash_num = int(distribute_students_random[indStudent, 1][0])
+
+                    #indStudent = distribute_students_random[:,0].index(stname)
+                    #hash_num = distribute_students_random[indStudent,1]
 
                     listVariations.append(
                         [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
