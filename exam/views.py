@@ -163,6 +163,8 @@ def variationsExam(request, pk):
                         case['key'] = [str(question['key'])]
                         question['testcases'] = case
 
+
+
         formatVariations['variations'].append(variant)
         v = VariationExam.objects.create(variation=formatVariations)
         exam.variationsExams2.add(v)

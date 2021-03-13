@@ -330,11 +330,12 @@ class Utils(object):
                 strQuestions += Utils.drawAnswerSheet(exam)
                 strQuestions += Utils.drawCircles()
                 strQuestions += Utils.drawInstructions(exam)
-                hash_num = Utils.distro_table(str(s_student_ID))
-                var_hash = int(var)# hash_num % int(exam.exam_variations)
                 try:
+                    hash_num = Utils.distro_table(str(s_student_ID))
+                    var_hash = int(var)# hash_num % int(exam.exam_variations)
                     myqr.append(qr_answers[var_hash])  # inclui as respostas
                 except:
+                    hash_num = int(s_student_ID)
                     myqr.append('')
 
                 strQuestions += Utils.drawQuestions(request, myqr,
@@ -1435,7 +1436,7 @@ _inst1_
         if int(exam.exam_number_of_questions_text) and exam.exam_print in ['ques', 'both']:
             titl = _("Text Questions")
             if (exam.exam_print_eco == 'yes'):
-                str1 += "\\\\\\vspace{2mm}\\noindent\\textbf{%s}  \\hfill {\\color{red} \\#v%s}} \\\n" % (
+                str1 += "\\\\\\vspace{2mm}\\noindent\\textbf{%s}  \\hfill {\\color{white} \\#v%s}} \\\n" % (
                     titl, str(countVariations))
             else:
                 str1 += "\n\n\\newpage\n\n"

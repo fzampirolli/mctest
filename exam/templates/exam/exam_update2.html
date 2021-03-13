@@ -29,11 +29,15 @@
                                 <tr>
                                     <td>
                                         <!-- Create-PDF -->
-                                        <form action="../generate/" class="input-group mb-3" method="post" target="_blank">
+                                        <form action="../generate/" class="input-group mb-3" method="post"
+                                              target="_blank">
                                             {% csrf_token %}
                                             <input action="" class="btn btn-primary" type="submit"
                                                    value={% trans "Create-PDF" %}>
+                                            <input type="button" value="{% trans "video" %}" class="btn btn-outline-danger"
+                                                   onclick="window.open('https://youtu.be/WBruh6wqIDw')">
                                         </form>
+
                                         <h6>{% trans "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, if the circles are defective, the broker may not work correctly - we recommend that you change the printer and print again. (3) Before applying the exam, it is strongly recommended to print a sheet, fill in, scan and follow the step on the right side. Upload-PDF >>>" %}</h6>
                                     </td>
                                     <td>
@@ -83,17 +87,19 @@
                                     <tr>
                                         <td style="width: 140px; height: 10px; font-size: 20px;" align="left"
                                             bgcolor="#e6f2ff">
-                                            <input action="" class="btn btn-primary" type="submit"
+                                            <input action="" class="btn btn-danger" type="submit"
                                                    value={% trans "Create-Variations" %}>
                                         </td>
                                         <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
                                             bgcolor="#e6f2ff">
-                                            <input type="checkbox" value="JSON" name="choicesJSON"><!--checked="checked"-->
+                                            <input type="checkbox" value="JSON" name="choicesJSON">
+                                            <!--checked="checked"-->
                                             Json
                                         </td>
                                         <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
                                             bgcolor="#e6f2ff">
-                                            <input type="checkbox" value="TemplateCSV" name="choicesTemplateCSV"> Template
+                                            <input type="checkbox" value="TemplateCSV" name="choicesTemplateCSV">
+                                            Template
                                         </td>
                                         <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
                                             bgcolor="#e6f2ff">
@@ -145,7 +151,8 @@
                                                 {% if  forloop.counter0|divisibleby:10 %}
                                                     <tr>
                                                 {% endif %}
-                                            <td style="width:120px; height: 5px; font-size:15px" align="left" bgcolor="#e6f2ff">
+                                            <td style="width:120px; height: 5px; font-size:15px" align="left"
+                                                bgcolor="#e6f2ff">
                                                 <div class="checkbox">
                                                     <label>
                                                         {{ c }}
@@ -215,7 +222,7 @@
                                         <tr>
 
                                             <th scope="col">
-                                                    >
+                                                >
                                                 <input type="checkbox" id="mass_select_all"
                                                        data-to-table="tasks">
                                             </th>
@@ -295,7 +302,7 @@
                                                     <script>
                                                         document.write("<a href=\"/topic/question/" + get_ID(count) + "/update/\"");
                                                         document.write("class=\"btn btn-outline-primary btn-sm\"");
-                                                        document.write(" target=\"_blank\">"+get_ID(count++)+"</a>");
+                                                        document.write(" target=\"_blank\">" + get_ID(count++) + "</a>");
                                                     </script>
                                                     {{ q.question_group }}
                                                 </td>

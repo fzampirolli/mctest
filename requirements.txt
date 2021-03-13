@@ -60,7 +60,7 @@ ndg-httpsclient==0.4.4
 netCDF4==1.5.1.2
 netifaces==0.10.4
 networkx==2.3
-numpy==1.17.0
+numpy==1.19.5
 oauth==1.0.1
 odfpy==1.4.0
 olefile==0.45.1
