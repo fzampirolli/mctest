@@ -311,6 +311,8 @@ def ImportQuestions(request):
     else:
         return HttpResponseRedirect("/")
 
+    #topic = get_object_or_404(Topic, pk=pk)
+
     if request.method == 'POST':
         teste2 = config('webMCTest_PASS')
 
@@ -322,7 +324,15 @@ def ImportQuestions(request):
             messages.error(request, _('ImportQuestions: choose a TXT following the model!'))
             return render(request, 'exam/exam_errors.html', {})
 
-        listao = UtilsMC.questionsReadFiles(new_persons)
+        #mystr4 = '/topic/topic/' + str(pk) + '/update'
+        #messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
+        #messages.info(request, _('Topic name') + ' >> ' + topic.topic_text, extra_tags='upper')
+
+
+        listao = UtilsMC.questionsReadFiles(request,new_persons)
+        if listao == '':
+            return render(request, 'exam/exam_errors.html', {})
+
         count = 0
         for qq in listao:
             flagIncludeQuestion = False
@@ -377,7 +387,8 @@ def ImportQuestions(request):
                             answer_feedback='',
                         )
 
-    return HttpResponseRedirect("../")
+    #return HttpResponseRedirect("../")
+    return render(request, 'exam/exam_msg.html', {})
 
 
 

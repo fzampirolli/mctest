@@ -44,6 +44,9 @@ from sympy import *
 matplotlib.use('Agg')
 
 from django.http import HttpResponse
+from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
+from django.shortcuts import get_object_or_404, render
 
 try:
     from topic.Utils import *
@@ -221,7 +224,7 @@ class UtilsMC(object):
         return [q_param, AllLines]
 
     @staticmethod
-    def questionsReadFiles(file):
+    def questionsReadFiles(request, file):
         # estados possiveis: fora de alguma questao
         #                    dentro de uma questao - 'QT','QE','QM','QH' - pergunta
         #                    dentro de uma questao - A - respostas
@@ -380,6 +383,7 @@ class UtilsMC(object):
             respostas = []
             contRespostas = 0
             if d["t"] != "QT":
+                linha_i = AllLines[i]
                 while i < tam and AllLines[i][:AllLines[i].find(':')] in ['A']:
                     i, r = UtilsMC.getAnswer(i, AllLines)
                     # print (i,r)
@@ -397,29 +401,28 @@ class UtilsMC(object):
                     contRespostas += 1
 
                 if contRespostas == 0:
-                    return HttpResponse('ERROR: question without answers')
+                    messages.error(request, _('ImportQuestions: ERROR question without answers: '+str(d['q'])))
+                    return ''
 
             d["a"] = respostas
 
             listao.append(d)
             questnum += 1
 
-        # arq.close()
         arqnum += 1
-        print("read the %d question(s)" % (len(listao) - questions_file))
-        questions_file = len(listao)
+        messages.info(request, _("read question(s): ") + str(len(listao) - questions_file))
 
-        print("\nTotal of questions without suptype:")
-        print("Easy questions QE: %d" % (len([y for y in listao if y['t'] == 'QE' and y['st'] == ''])))
-        print("Mean questions QM: %d" % (len([y for y in listao if y['t'] == 'QM' and y['st'] == ''])))
-        print("Hard questions QH: %d" % (len([y for y in listao if y['t'] == 'QH' and y['st'] == ''])))
-        print("Text questions QT: %d" % (len([y for y in listao if y['t'] == 'QT' and y['st'] == ''])))
+        messages.info(request, _("Total of questions without groups:"))
+        messages.info(request, _("Easy questions QE: ") + str(len([y for y in listao if y['t'] == 'QE' and y['st'] == ''])))
+        messages.info(request, _("Mean questions QM: ") + str(len([y for y in listao if y['t'] == 'QM' and y['st'] == ''])))
+        messages.info(request, _("Hard questions QH: ") + str(len([y for y in listao if y['t'] == 'QH' and y['st'] == ''])))
+        messages.info(request, _("Text questions QT: ") + str(len([y for y in listao if y['t'] == 'QT' and y['st'] == ''])))
 
-        print("\nTotal of questions with suptype:")
-        print("Easy questions QE: %d" % (len([y for y in listao if y['t'] == 'QE' and y['st'] != ''])))
-        print("Mean questions QM: %d" % (len([y for y in listao if y['t'] == 'QM' and y['st'] != ''])))
-        print("Hard questions QH: %d" % (len([y for y in listao if y['t'] == 'QH' and y['st'] != ''])))
-        print("Text questions QT: %d" % (len([y for y in listao if y['t'] == 'QT' and y['st'] != ''])))
+        messages.info(request, _("Total of questions with groups:"))
+        messages.info(request, _("Easy questions QE: ") + str(len([y for y in listao if y['t'] == 'QE' and y['st'] != ''])))
+        messages.info(request, _("Mean questions QM: ") + str(len([y for y in listao if y['t'] == 'QM' and y['st'] != ''])))
+        messages.info(request, _("Hard questions QH: ") + str(len([y for y in listao if y['t'] == 'QH' and y['st'] != ''])))
+        messages.info(request, _("Text questions QT: ") + str(len([y for y in listao if y['t'] == 'QT' and y['st'] != ''])))
 
         return listao
 
