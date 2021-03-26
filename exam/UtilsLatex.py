@@ -965,7 +965,7 @@ _inst1_
         if exam.exam_print == 'ques':
             if int(exam.exam_number_of_questions_text) < 1:
                 messages.error(request,
-                               _('validateNumQuestions: You chose Questions. Is it right? Number of QM questions >=2'))
+                               _('validateNumQuestions: You chose Questions. Is it right? Number of QM questions >=3'))
                 return False
 
                 # PROBLEMAS COM QUESTOES PARAMETRICAS

@@ -26,6 +26,8 @@ GNU General Public License for more details.
 =====================================================================
 '''
 import datetime
+###################################################################
+import json
 import os
 import random
 import subprocess
@@ -34,8 +36,10 @@ from django.contrib import messages
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.serializers import serialize
 from django.forms import Textarea
 from django.forms.models import inlineformset_factory
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -45,11 +49,9 @@ from django.views.static import serve
 from tablib import Dataset
 
 ###################################################################
-from account.forms import UserCreateForm
 from account.models import User
-from course.models import Institute, Course, Classroom, Discipline
+from course.models import Discipline
 from exam.UtilsLatex import Utils
-from exam.models import Exam
 from mctest.settings import BASE_DIR
 from topic.UtilsMCTest4 import UtilsMC
 from .forms import UpdateQuestionForm
@@ -59,13 +61,6 @@ from .resources import QuestionResource
 
 
 # from sympy import *
-
-
-
-###################################################################
-import json
-from django.core.serializers import serialize
-from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 
 @login_required
@@ -334,6 +329,8 @@ def ImportQuestions(request):
             return render(request, 'exam/exam_errors.html', {})
 
         count = 0
+        questions_created = []
+        questions_equal = []
         for qq in listao:
             flagIncludeQuestion = False
 
@@ -347,6 +344,7 @@ def ImportQuestions(request):
                         a = Answer.objects.filter(question=q)
                         if a[0].answer_text == qq['a'][0]:  # if also the first answers is equal
                             flagIncludeQuestion = False
+                            questions_equal.append(str(q.pk))
                             break
 
             if flagIncludeQuestion:
@@ -372,7 +370,7 @@ def ImportQuestions(request):
                     newQ = Question.objects.create(
                         topic=topic,
                         question_group=qq['st'],
-                        question_short_description=qq['c'] + str(qq['n']),
+                        question_short_description=qq['c'] + str(qq['n']).zfill(3),
                         question_text=qq['q'],
                         question_type=tp,
                         question_difficulty=df,
@@ -380,12 +378,29 @@ def ImportQuestions(request):
                         question_last_update=datetime.date.today(),
                         question_who_created=User.objects.get(username=request.user.username),
                     )
+
+                    questions_created.append([str(newQ.pk), topic])
+
                     for a in qq['a']:
                         Answer.objects.create(
                             question=newQ,
                             answer_text=a,
                             answer_feedback='',
                         )
+
+        messages.info(request, _('Questions Created:'))
+        for q in questions_created:
+            str_d = ''
+            for d in Discipline.objects.all():
+                for t in d.topics2.all():
+                    if t.topic_text == q[1].topic_text:
+                        str_d += d.discipline_name + '; '
+                        break
+            messages.info(request, str(q[0]) + ' - ' + str(q[1].topic_text) + ' - ' + str_d)
+
+        if questions_equal:
+            messages.info(request, _('Similar question(s) exist in the DB:'))
+            messages.info(request, '; '.join([k for k in questions_equal]))
 
     #return HttpResponseRedirect("../")
     return render(request, 'exam/exam_msg.html', {})
