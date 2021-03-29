@@ -78,7 +78,7 @@ pycairo==1.16.2
 pycparser==2.19
 pycrypto==2.6.1
 pycups==1.9.73
-Pygments==2.2.0
+Pygments==2.7.4
 pygobject==3.26.1
 PyICU==1.9.8
 pymacaroons==0.13.0
