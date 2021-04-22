@@ -359,7 +359,8 @@ class Utils(object):
                         f.write(str(q) + '\n')
                 f.write("\\end{document}")
                 f.close()
-                Utils.genTex(path_to_file_VARIATIONS_DB, "pdfExam")
+                if not Utils.genTex(path_to_file_VARIATIONS_DB, "pdfExam"):
+                    messages.error(request, _('ERROR in genTex') + ': ' + path_to_file_VARIATIONS_DB)
 
     # create file template of all variations in varia_gab_all
     @staticmethod
@@ -771,12 +772,15 @@ class Utils(object):
         file_name = fileName[:-4]
 
         cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode', fileName]
-        proc = subprocess.Popen(cmd)
-        proc.communicate()
+        try:
+            proc = subprocess.Popen(cmd)
+            proc.communicate()
 
-        path = os.getcwd()
-        os.system("cp " + file_name + ".pdf " + path + "/" + myPath + "/")
-        os.system("cp " + file_name + ".tex " + path + "/" + myPath + "/")
+            path = os.getcwd()
+            os.system("cp " + file_name + ".pdf " + path + "/" + myPath + "/")
+            os.system("cp " + file_name + ".tex " + path + "/" + myPath + "/")
+        except Exception as e:
+            return 0
 
         try:
             os.remove("{}.aux".format(file_name))
@@ -788,6 +792,8 @@ class Utils(object):
             pass
         except Exception as e:
             pass
+
+        return 1
 
     @staticmethod
     def getBegin():

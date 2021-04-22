@@ -1020,14 +1020,22 @@ def generate_page(request, pk):
 
                 if exam.exam_student_feedback == 'yes':  ##################### cria um tex para cada estudante >> email
                     fileExamNameSTUDENT = file_name + '_' + s.student_ID + '.tex'
-                    with open(fileExamNameSTUDENT, 'w') as fileExamSTUDENT:
-                        fileExamSTUDENT = open(fileExamNameSTUDENT, 'w')
-                        fileExamSTUDENT.write(Utils.getBegin())
-                        fileExamSTUDENT.write(strSTUDENT)
-                        fileExamSTUDENT.write("\\end{document}")
-                        fileExamSTUDENT.close()
+                    try:
+                        with open(fileExamNameSTUDENT, 'w') as fileExamSTUDENT:
+                            fileExamSTUDENT = open(fileExamNameSTUDENT, 'w')
+                            fileExamSTUDENT.write(Utils.getBegin())
+                            fileExamSTUDENT.write(strSTUDENT)
+                            fileExamSTUDENT.write("\\end{document}")
+                            fileExamSTUDENT.close()
+                    except:
+                        messages.error(request,
+                                       _('ERROR - watch out for special characters in exam name') + ': ' + file_name)
+                        return render(request, 'exam/exam_errors.html', {})
+
                     myPATH = "pdfExam"
-                    Utils.genTex(fileExamNameSTUDENT, myPATH)
+                    if not Utils.genTex(fileExamNameSTUDENT, myPATH):
+                        messages.error(request, _('ERROR in genTex')+': '+fileExamNameSTUDENT)
+
                     myFILE = BASE_DIR + "/" + myPATH + "/" + fileExamNameSTUDENT[:-4] + '.pdf'
                     email = s.student_email
                     enviaOK = cvMCTest.sendMail(myFILE, "Exam by MCTest", email, str(s.student_name))
@@ -1037,7 +1045,12 @@ def generate_page(request, pk):
                             [fileExamNameSTUDENT[:-4] + '.pdf', s.student_ID, email + enviaOK, s.student_name,
                              data_hora])
                     # apos enviar, remove do disco
-                    os.remove(myFILE)
+                    try:
+                        os.remove(myFILE)
+                    except:
+                        messages.error(request,
+                                       _('ERROR - watch out for special characters in exam name') + ': ' + file_name)
+                        return render(request, 'exam/exam_errors.html', {})
 
                 #### Final dos estudantes de uma classe ###
 
@@ -1047,16 +1060,21 @@ def generate_page(request, pk):
                 # return render(request, 'exam/exam_errors.html', {})
 
             countStudentsAll += countStudents
-
-            with open(fileExamName, 'w') as fileExam:
-                fileExam = open(fileExamName, 'w')
-                fileExam.write(Utils.getBegin())
-                fileExam.write(strALL)
-                fileExam.write("\\end{document}")
-                fileExam.close()
+            try:
+                with open(fileExamName, 'w') as fileExam:
+                    fileExam = open(fileExamName, 'w')
+                    fileExam.write(Utils.getBegin())
+                    fileExam.write(strALL)
+                    fileExam.write("\\end{document}")
+                    fileExam.close()
+            except:
+                messages.error(request, _('ERROR - watch out for special characters in exam name')+': '+fileExamName[:-4])
+                return render(request, 'exam/exam_errors.html', {})
 
             # start1 = time.time()
-            Utils.genTex(fileExamName, "pdfExam")
+            if not Utils.genTex(fileExamName, "pdfExam"):
+                messages.error(request, _('ERROR in genTex') + ': ' + fileExamName)
+                return render(request, 'exam/exam_errors.html', {})
 
             ### Final das classes selecionadas ###
 
@@ -1109,9 +1127,13 @@ def generate_page(request, pk):
         os.system('chgrp -R ' + getuser + ' ' + path + ' .')
 
         if exam.classrooms.all().count() == 1:
-            path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
-            return serve(request, os.path.basename(path_to_file),
-                         os.path.dirname(path_to_file))
+            try:
+                path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
+                return serve(request, os.path.basename(path_to_file),
+                             os.path.dirname(path_to_file))
+            except:
+                messages.error(request, _('ERROR - watch out for special characters in exam name')+': '+file_name)
+                return render(request, 'exam/exam_errors.html', {})
         else:
             fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
             # zipar todos os exames das turmas
