@@ -412,14 +412,15 @@ class TopicListView(LoginRequiredMixin, generic.ListView):
     model = Topic
     fields = '__all__'
 
-    # paginate_by = 100
+    #paginate_by = 10
 
     def get_queryset(self):
         if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
-            return Topic.objects.filter(discipline__discipline_coords=self.request.user)
+            lista = Topic.objects.filter(discipline__discipline_coords=self.request.user)
+            return lista.order_by('topic_text').distinct()
         if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
-            return Topic.objects.filter(discipline__discipline_profs=self.request.user)
-
+            lista = Topic.objects.filter(discipline__discipline_profs=self.request.user)
+            return lista.order_by('topic_text').distinct()
 
 class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Topic
@@ -455,9 +456,9 @@ class TopicCreate(LoginRequiredMixin, generic.CreateView):
 
     def get_queryset(self):
         if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
-            return Topic.objects.filter(discipline__discipline_coords=self.request.user)
+            return Topic.objects.filter(discipline__discipline_coords=self.request.user).distinct()
         if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
-            return Topic.objects.filter(discipline__discipline_profs=self.request.user)
+            return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
 
 
 class TopicDelete(LoginRequiredMixin, generic.DeleteView):
@@ -480,7 +481,9 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 100
 
     def get_queryset(self):
-        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        #return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        return lista.order_by('question_text').distinct()
 
 
 class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
@@ -490,8 +493,9 @@ class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 100
 
     def get_queryset(self):
-        return Question.objects.filter(question_who_created=self.request.user)
-
+        #return Question.objects.filter(question_who_created=self.request.user)
+        lista = Question.objects.filter(question_who_created=self.request.user)
+        return lista.order_by('question_text').distinct()
 
 class QuestionDetailView(generic.DetailView):
     model = Question

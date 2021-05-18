@@ -43,14 +43,13 @@
                                                         <a href="{% url 'course:discipline-detail' pk=d.pk %}"
                                                            class="btn btn-outline-warning text-dark btn-sm">
                                                         {{ d }}
+                                                        </a><br>
                                                     {% endfor %}
-                                                    </a>
-
 
                                                 </td>
 
                                                 <td class="text-right">
-                                                    {% for d in topic.discipline.all %}
+                                                    {% for d in topic.discipline.all|slice:":1"%}
                                                         {% if user.is_superuser or user in d.discipline_coords.all %}
                                                             <!-- Update -->
                                                             <a href="{% url 'topic:topic-update'  pk=topic.pk %}"

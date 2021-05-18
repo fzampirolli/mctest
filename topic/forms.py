@@ -34,6 +34,7 @@ from .models import Question, Topic, User
 class UpdateQuestionForm(forms.Form):
     topic = forms.ModelChoiceField(queryset=Topic.objects.all(),
                                    label=_("Topic"))
+
     question_short_description = forms.CharField(
         label=_("Short Description"))
     question_group = forms.CharField(required=False,
