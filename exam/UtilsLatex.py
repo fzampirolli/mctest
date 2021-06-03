@@ -906,10 +906,10 @@ _inst1_
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
 
-        str1 += "\\vspace{-4.4mm}\\hspace{-5mm}\\footnote[2]{\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
+        str1 += "\\footnote[2]{\\vspace{10mm}\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
             instURL)
 
-        str1 += '\n\n \\vspace{-2mm}\\hfill {\\tiny {\\color{red}\#' + str(
+        str1 += '\n\n \\vspace{-6mm}\\hfill {\\tiny {\\color{red}\#' + str(
             exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
         str1 += '\\vspace{0.4mm}'
         if exam.exam_print == 'both':

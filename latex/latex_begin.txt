@@ -4,6 +4,9 @@
 \usepackage[brazilian]{babel}
 \usepackage[table,xcdraw]{xcolor}
 
+\usepackage[hidelinks]{hyperref}
+
+
 %sudo apt install linuxbrew-wrapper
 %sudo apt install texlive-extra-utils
 %sudo apt install texlive-font-utils
@@ -19,8 +22,8 @@
 
 \usepackage{listings} % para códigos
 
-%\usepackage[top=.4in, bottom=.1in, left=1in, right=.4in]{geometry}
-\textheight=6in
+\usepackage[top=8mm, bottom=5mm, left=12mm, right=10mm]{geometry}
+%\textheight=6in
 \usepackage{tikz}
 \usepackage{enumitem}
 %\usepackage[shortlabels]{enumerate}
@@ -38,13 +41,14 @@
 %\usepackage{multido}  % border
 %\usepackage{pst-barcode}
 
-\setlength{\textwidth}{185mm}
-\setlength{\oddsidemargin}{-0.5in}
-\setlength{\evensidemargin}{0in}
-\setlength{\columnsep}{8mm}
-\setlength{\topmargin}{-28mm}
-\setlength{\textheight}{282mm}
-\setlength{\itemsep}{0in}
+%\setlength{\textwidth}{185mm}
+%\setlength{\oddsidemargin}{-0.5in}
+%\setlength{\evensidemargin}{0in}
+%\setlength{\columnsep}{8mm}
+%\setlength{\topmargin}{-28mm}
+%\setlength{\textheight}{287mm}
+%\setlength{\itemsep}{0in}
+\setlength{\paperheight}{881pt}
 
 \newcommand*\varhrulefill[1][0.4pt]{\leavevmode\leaders\hrule height#1\hfill\kern0pt}
 \def\drawLines#1{{\color{lightgray}\foreach \x in {1,...,#1}{\par\vspace{2mm}\noindent\hrulefill}}}       
