@@ -1137,6 +1137,8 @@ def generate_page(request, pk):
         else:
             fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
             # zipar todos os exames das turmas
+            os.system('rm -rf ' + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*.tex")
+
             os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
             return serve(request, os.path.basename(fzip),
                          os.path.dirname(fzip))
