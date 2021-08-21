@@ -108,7 +108,7 @@
 
                                                     <!-- actions -->
                                                     <td class="text-right">
-                                                        {% for d in question.topic.discipline.all %}
+                                                        {% for d in question.topic.discipline.all|slice:":1"%}
                                                             {% if user.is_superuser or user in d.discipline_coords.all  or user in d.discipline_profs.all %}
                                                                 <!-- Update -->
                                                                 <a href="{% url 'topic:question-update'  pk=question.pk %}"
