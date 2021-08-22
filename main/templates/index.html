@@ -681,7 +681,7 @@
                 <ul>
                     <font size="1">
 
-                        <table style="width: 327px;" border="0" cellspacing="0">
+                        <table style="width: 400px;" border="0" cellspacing="0">
                             <colgroup width="110"></colgroup>
                             <colgroup width="250"></colgroup>
                             <colgroup width="126"></colgroup>
@@ -697,16 +697,15 @@
                             {% for u in users_now %}
                                 <tr>
                                     <td>{{ u.username }}</td>
-                                    <td style="padding:1px 10px;" align="right"> now</td>
+                                    <td align="right"> now</td>
                                 </tr>
                             {% endfor %}
-
 
                             {% for u in users %}
                                 {% if not u in users_now %}
                                     <tr>
                                         <td>{{ u.username }}</td>
-                                        <td style="padding:1px 10px;" align="right">{{ u.last_login }}</td>
+                                        <td align="right">{{ u.last_login }}</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}

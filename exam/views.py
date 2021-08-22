@@ -1212,6 +1212,10 @@ def UpdateExam(request, pk):
             exam_inst.exam_instructions = form.cleaned_data['exam_instructions']
 
             classrooms = form.cleaned_data['classrooms']
+
+            if not exam_inst.classrooms.all().count(): # if there is not at least one room marked
+                return HttpResponse('ERROR')
+
             for q in exam_inst.classrooms.all():
                 exam_inst.classrooms.remove(q)
             exam_inst.classrooms.add(*classrooms)
@@ -1225,7 +1229,7 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            return HttpResponse(_("Invalid Form! Verify if date follows the format, for example."))
+            return HttpResponse(_("Invalid Form! Verify if date follows the format or if there is at least one room marked, for example."))
 
 
     else:
