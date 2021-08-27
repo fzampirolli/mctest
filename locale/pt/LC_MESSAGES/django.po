@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-22 09:08-0300\n"
+"POT-Creation-Date: 2021-08-27 09:06-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1212,8 +1212,8 @@ msgstr ""
 "drawQuestionsTDifficultyVariations: tópico da questão escolhida não pertence "
 "à disciplina"
 
-#: exam/forms.py:45
-msgid "Exam name, for examplo, Exam 1"
+#: exam/forms.py:45 exam/models.py:41
+msgid "Exam name, for example, Exam 1"
 msgstr "Nome do exame, ex. Exame 1"
 
 #: exam/forms.py:46 exam/models.py:42
@@ -1372,10 +1372,6 @@ msgstr "Quem criou"
 #: exam/forms.py:145 exam/models.py:172
 msgid "Exam instructions, for example, '\\item turning off the phone'"
 msgstr "Instruções do exame, por exemplo '\\item desligar o celular'"
-
-#: exam/models.py:41
-msgid "Exam name, for example, Exam 1"
-msgstr "Nome do exame, ex. Exame 1"
 
 #: exam/models.py:103
 msgid "Answers"
@@ -2328,7 +2324,7 @@ msgstr "Questão Paramétrica - Exemplo II"
 
 #: main/templates/index-mctest.html:217 main/templates/index.html:217
 msgid "Example with graph"
-msgstr "Examplo com grafo"
+msgstr "Exemplo com grafo"
 
 #: main/templates/index-mctest.html:230 main/templates/index.html:230
 msgid "Parametric Question - Example III"
@@ -2336,7 +2332,7 @@ msgstr "Questão Paramétrica - Exemplo III"
 
 #: main/templates/index-mctest.html:231 main/templates/index.html:231
 msgid "Example with matrix"
-msgstr "Examplo com matriz"
+msgstr "Exemplo com matriz"
 
 #: main/templates/index-mctest.html:244 main/templates/index.html:244
 msgid "CSV File with Exam Correction"
@@ -3537,84 +3533,3 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 #: topic/views.py:630
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
-
-#~ msgid "São Paulo Research Foundation: "
-#~ msgstr "Fundação de Amparo à Pesquisa do Estado de São Paulo: "
-
-#~ msgid "or"
-#~ msgstr "ou"
-
-#~ msgid ""
-#~ "To be able to use MCTest, the teacher must be enrolled in some "
-#~ "discipline, by the coordinator of his discipline, after registering in "
-#~ "this service."
-#~ msgstr ""
-#~ "Para poder utilizar o MCTest, o professor deve estar inscrito em alguma "
-#~ "disciplina, pelo coordenador de sua disciplina, após se cadastrar neste "
-#~ "serviço."
-
-#~ msgid ""
-#~ "MCTest is a collaborative service for automatic exam generation and "
-#~ "correction."
-#~ msgstr ""
-#~ "O MCTest é um serviço colaborativo para geração e correção automática de "
-#~ "provas e exames."
-
-#~ msgid "All intellectual material (classes, videos, questions, etc.) "
-#~ msgstr "Todo o material intelectual (aulas, vídeos, questões, etc.) "
-
-#~ msgid ""
-#~ "ultimately, is the property of UFABC. The authors who have the material "
-#~ "available on the "
-#~ msgstr ""
-#~ "em última instância, é propriedade da UFABC. Os autores proprietários do "
-#~ "material disponibilizado no "
-
-#~ msgid ""
-#~ "site agree to release its use without restrictions by the professors of "
-#~ "UFABC only within "
-#~ msgstr ""
-#~ "site concordam em liberar o seu uso sem restrições pelos professores da "
-#~ "UFABC somente no "
-
-#~ msgid "the scope of the disciplines and courses at this university."
-#~ msgstr "âmbito das disciplinas e cursos desta universidade."
-
-#~ msgid ""
-#~ "In addition, when I sign up for this service at this institution, I "
-#~ "ACCEPT that:"
-#~ msgstr ""
-#~ "Além disso, quando me inscrevo neste serviço nesta instituição, CONCORDO "
-#~ "que: "
-
-#~ msgid ""
-#~ "Individualized parametric questions using MCTest+Moodle+VPL (I already "
-#~ "have the 4 co-authors)"
-#~ msgstr ""
-#~ "Questões paramétricas individualizadas utilizando MCTest+Moodle+VPL (já "
-#~ "tenho os 4 co-autores)"
-
-#~ msgid "Submit"
-#~ msgstr "Enviar"
-
-#~ msgid "Choose file"
-#~ msgstr "Escolha arquivo"
-
-#~ msgid ""
-#~ "For details see version 1 of integration MCTest+Moodle+VPL in \"https://"
-#~ "doi.org/10.5753/cbie.sbie.2020.1573\"."
-#~ msgstr ""
-#~ "Para detalhes, veja versão 1 da integração MCTest+Moodle+VPL em \"https://"
-#~ "doi.org/10.5753/cbie.sbie.2020.1573\"."
-
-#~ msgid "drawQuestionsTDifficulty: Error in QT question"
-#~ msgstr "drawQuestionsTDifficulty: erro na questão QT"
-
-#~ msgid "Error: there is no student in classroom(s)."
-#~ msgstr "Error: não existe estudante na(s) turma(s)"
-
-#~ msgid "DB updated in"
-#~ msgstr "BD atualizado em"
-
-#~ msgid "Historic"
-#~ msgstr "Histórico"
