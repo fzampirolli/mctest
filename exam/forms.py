@@ -42,7 +42,7 @@ class UploadFileForm(forms.Form):
 class UpdateExamForm(forms.Form):
     exam_name = forms.CharField(
         max_length=20,
-        help_text=_("Exam name, for examplo, Exam 1"),
+        help_text=_("Exam name, for example, Exam 1"),
         label=_("Exam name"))
     classrooms = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,

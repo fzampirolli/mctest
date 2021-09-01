@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 09:15-0300\n"
+"POT-Creation-Date: 2021-08-27 09:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2409,7 +2409,7 @@ msgstr ""
 msgid "Email with test cases of moodle + VPL"
 msgstr "Email com os casos de teste do moodle + VPL"
 
-#: main/templates/index-mctest.html:332
+#: main/templates/index-mctest.html:332 main/templates/index.html:333
 msgid ""
 "The teacher receives this email after creating the variations when there is "
 "an exam that contains program exercises"
@@ -2423,7 +2423,7 @@ msgid ""
 msgstr ""
 "Email com gabaritos, BDs (para importação no moodle) e variação por aluno"
 
-#: main/templates/index-mctest.html:346
+#: main/templates/index-mctest.html:346 main/templates/index.html:347
 msgid ""
 "The teacher receives this email after creating the variations when there is "
 "an exam containing multiple-choice questions or questions with answers"
@@ -2530,22 +2530,6 @@ msgstr "Enviar sugestões de melhoria para"
 #: main/templates/index.html:16
 msgid "development"
 msgstr "desenvolvimento"
-
-#: main/templates/index.html:333
-msgid ""
-"The teacher receives this email after creating a PDF when there is an exam "
-"that contains program exercises"
-msgstr ""
-"O professor recebe esse email após criar um PDF quando houver um exame que "
-"contenha exercícios programa"
-
-#: main/templates/index.html:347
-msgid ""
-"The teacher receives this email after creating a PDF when there is an exam "
-"containing multiple-choice questions or questions with answers"
-msgstr ""
-"O professor recebe esse email após criar um PDF quando houver um exame que "
-"contenha questões de múltipla-escolha ou questões com respostas"
 
 #: main/templates/index.html:366
 msgid ""
@@ -3549,3 +3533,17 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 #: topic/views.py:630
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid ""
+#~ "The teacher receives this email after creating a PDF when there is an "
+#~ "exam containing multiple-choice questions or questions with answers"
+#~ msgstr ""
+#~ "O professor recebe esse email após criar um PDF quando houver um exame "
+#~ "que contenha questões de múltipla-escolha ou questões com respostas"
+
+#~ msgid ""
+#~ "The teacher receives this email after creating a PDF when there is an "
+#~ "exam that contains program exercises"
+#~ msgstr ""
+#~ "O professor recebe esse email após criar um PDF quando houver um exame "
+#~ "que contenha exercícios programa"
