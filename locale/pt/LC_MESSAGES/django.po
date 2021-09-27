@@ -2047,7 +2047,7 @@ msgid ""
 "I can change other teachers' questions only if there is an error. However, "
 "without changing the authorship of the issue."
 msgstr ""
-"Só posso mudar as questões dos outros professores se houver algum erro. "
+"Só posso mudar as questões dos outros professores SOMENTE SE HOUVER ALGUM ERRO. "
 "Porém, sem alterar a autoria da questão."
 
 #: main/templates/base_generic.html:61
