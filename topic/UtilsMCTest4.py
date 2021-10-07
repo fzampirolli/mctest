@@ -140,7 +140,7 @@ class UtilsMC(object):
         reg = re.compile(start + '(\S+|\w+|.*)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
         for groups in reg.findall(s):
 
-            for i in ['exec', 'cmd', 'import os', '.remove', 'mkdir',
+            for i in ['exec', 'cmd', 'import os', 'mkdir',
                       'cmd', 'sys', 'gnureadline', 'subprocess', 'getopt',
                       'shlex', 'commands', 'system', 'eval']:
                 if i in groups:

@@ -396,8 +396,9 @@
                         [{% trans "Classroom has Exams, Profs and Student" %}]
                     </li>
                     <li><strong>{% trans "Exams" %}:</strong> {{ num_exams }}
-                        [{% trans "Exam has Classrooms and Questions" %}] - {% trans "motivations" %} [<a
-                                href="https://doi.org/10.1002/cae.22029">ref18a</a>]
+                        [{% trans "Exam has Classrooms and Questions" %}] - {% trans "motivations" %} [
+                        <a href="https://doi.org/10.1002/cae.22029">ref18a</a>;
+                        <a href="https://doi.org/10.1002/cae.22385">ref21g</a>; etc.]
                     </li>
                     <li><strong>{% trans "Topics" %}:</strong> {{ num_topics }}
                         [{% trans "Topic has Questions" %}]
@@ -413,8 +414,12 @@
                     <ul>
                         <li><strong>{% trans "Multiple Choice" %}:</strong> {{ num_QM }}</li>
                         <li><strong>{% trans "Text" %}:</strong> {{ num_QT }}</li>
-                        <li><strong>{% trans "Parametric" %}:</strong> {{ num_Parametric }} [<a
-                                href="http://www.itng.info">ref19a</a>; <a href="http://csedu.org">ref19b</a>]
+                        <li><strong>{% trans "Parametric" %}:</strong> {{ num_Parametric }} [
+                            <a href="http://www.itng.info">ref19a</a>;
+                            <a href="http://csedu.org">ref19b</a>;
+                            <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615">ref20a</a>;
+                            <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913/12767">ref20b</a>;
+                            refs21*]
                         </li>
                     </ul>
                     <li><strong>{% trans "Students" %}:</strong> {{ num_students }}</li>
@@ -554,9 +559,9 @@
 
                 <h3>{% trans "Publications" %}</h3>
 
-                <ul>
+                <ol>
                     <li><a href="https://ceie.sbc.org.br/evento/2021/SBIE.html">ref21a</a> -
-                        Zampirolli, F.A.; Teubl, F.; Kobayashi, G.; Neves, R.; Rozante, L.; Batista, V.R.
+                        Zampirolli, F.A., Teubl, F., Kobayashi, G., Neves, R.P.O., Rozante, L., Batista, V.R.
                         "Introductory Computer Science Course by Adopting Many Programming Languages".
                         Simpósio Brasileiro de Informática na Educação, 2021.
                         (<a href="{% static '__SBIE21_filterNotebook.pdf' %}">SLIDES</a>;
@@ -565,27 +570,53 @@
                     </li>
 
                     <li><a href="https://www.fie2021.org/">ref21b</a> - Zampirolli, F.A., Batista,
-                        V.R., Pimentel, E.P. and Braga, J. "Facilitating the Generation of Parametric Questions and
+                        V.R., Pimentel, E.P., Braga, J. "Facilitating the Generation of Parametric Questions and
                         their export to Moodle." Frontiers in Education Conference (FIE), 2021 IEEE.
                         (<a href="{% static '__FIE21_MCTestQB.pdf' %}">SLIDES</a>; Aceito)
                     </li>
-                    <li><a href="https://doi.org/10.1002/cae.22385">ref21c</a> - Zampirolli, F.A.; Borovina
-                        Josko, J.M.; Venero, M.L.F. (In memoriam); Kobayashi, G.; Fraga, F.;
-                        Goya, D.; Savegnago, H. R. "An experience of automated assessment in a large-scale introduction
+
+                    <li><a href="https://www.laclolala.com/#/laclo">ref21c</a> - Zampirolli, F.A., Sato, C., Savegnago,
+                        H.R.,
+                        Batista, V.R., Kobayashi, G.
+                        "Automated assessment of parametric programming in a large-scale course."
+                        Latin American Conference on Learning Technologies (LACLO), 2021.
+                        (<a href="{% static '#' %}">SLIDES</a>; Aceito)
+                    </li>
+                    <li><a href="https://www.laclolala.com/#/laclo">ref21d</a> - Zampirolli, F.A., Batista, V.R., Josko,
+                        J.M.B., Steil, L., Trevisan, S.
+                        "Experiments in selection processes of students for a crammer."
+                        Latin American Conference on Learning Technologies (LACLO), 2021.
+                        (<a href="{% static '#' %}">SLIDES</a>; Aceito)
+                    </li>
+                    <li><a href="https://www.laclolala.com/#/laclo">ref21e</a> - Zampirolli, F.A., Antunes Jr, I.,
+                        Steil, L., Teodoro Jr, L.
+                        "Interactive ENEM: exams with statistics and free access."
+                        Latin American Conference on Learning Technologies (LACLO), 2021.
+                        (<a href="{% static '#' %}">SLIDES</a>; Aceito)
+                    </li>
+                    <li><a href="https://www.laclolala.com/#/laclo">ref21f</a> - Silva, D.G., Zampirolli, F.A.,
+                        "Face Verification Experiments on Moodle Quiz."
+                        Latin American Conference on Learning Technologies (LACLO), 2021.
+                        (<a href="{% static '#' %}">SLIDES</a>; Aceito)
+                    </li>
+
+                    <li><a href="https://doi.org/10.1002/cae.22385">ref21g</a> - Zampirolli, F.A.,
+                        Josko, J.M.B., Venero, M.L.F. (In memoriam., Kobayashi, G., Fraga, F.,
+                        Goya, D., Savegnago, H.R. "An experience of automated assessment in a large-scale introduction
                         programming course".
                         Computer Applications in Engineering Education, 2021.
                     </li>
-                    <li><a href="http://csedu.org">ref21d</a> - Teubl, F.; Batista, V.R.; Zampirolli, F.A.
-                        "MakeTests: Generate and Correct Individualized Questions with Many Styles". International
-                        Conference on Computer Supported Education. 2021.
-                    </li>
-                    <li><a href="http://csedu.org">ref21e</a> - Zampirolli, F.A.; Batista, V.R.; Rodriguez, C.L,; Goya,
-                        D.; Rocha. R.
+                    <li><a href="http://csedu.org">ref21h</a> - Zampirolli, F.A., Batista, V.R., Rodriguez, C.L., Goya,
+                        D., Rocha. R.
                         "Automated assessment with multiple-choice questions using weighted answers". International
                         Conference on Computer Supported Education. 2021.
                     </li>
+                    <li><a href="http://csedu.org">ref21i</a> - Teubl, F., Batista, V.R., Zampirolli, F.A.
+                        "MakeTests: Generate and Correct Individualized Questions with Many Styles". International
+                        Conference on Computer Supported Education. 2021.
+                    </li>
                     <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615">ref20a</a> -
-                        Zampirolli, F.A.; Batista, V.R.; Iriarte, E.A.A.; Antunes Jr.
+                        Zampirolli, F.A., Batista, V.R., Iriarte, E.A.A., Antunes Jr.
                         I."Online assessments with parametric questions and automatic corrections: an improvement
                         for MCTest using Google Forms and Sheets".
                         Simpósio Brasileiro de Informática na Educação, Natal, 2020.
@@ -594,36 +625,36 @@
                         <a href="https://www.youtube.com/watch?v=BGldl9ZjEiE">Sessão</a>)
                     </li>
                     <li><a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913/12767">ref20b</a> -
-                        Zampirolli, F.A.; Pisani, P.H.; Borovina
-                        Josko, J.M.; Kobayashi, G.; Fraga, F.;
-                        Goya, D.; Savegnago, H. R. "Parameterized and automated assessment on an introductory
+                        Zampirolli, F.A., Pisani, P.H.,
+                        Josko, J.M.B., Kobayashi, G., Fraga, F.,
+                        Goya, D., Savegnago, H.R. "Parameterized and automated assessment on an introductory
                         programming course".
                         Simpósio Brasileiro de Informática na Educação, Natal, 2020.
                         (<a href="{% static '__SBIE20_opcaoB.pdf' %}">SLIDES</a>;
                         <a href="https://youtu.be/I4pvS04RiVg">Video</a>;
                         <a href="https://www.youtube.com/watch?v=kCnLcIliwaM">Sessão</a>)
                     </li>
-                    <li><a href="https://sol.sbc.org.br/index.php/wcbie/article/view/13036/12889">ref20c (menção
-                        honrosa)</a> - SILVA, D. G.; Zampirolli, F.A.;
+                    <li><a href="https://sol.sbc.org.br/index.php/wcbie/article/view/13036/12889">ref20c</a> - Silva,
+                        D.G., Zampirolli, F.A.,
                         "Reconhecimento facial para validação de usuário durante um questionário no Moodle".
                         Apps.edu (WCBIE), Natal, 2020.
                         (<a href="https://www.youtube.com/watch?v=BL-Uscgc4tc">Video</a>;
-                        <a href="https://www.youtube.com/watch?v=cLCE8idn6ws">Sessão</a>))
+                        <a href="https://www.youtube.com/watch?v=cLCE8idn6ws">Sessão</a>; menção honrosa)
                     </li>
-                    <li><a href="http://www.itng.info">ref19a</a> - Zampirolli, F.A., Teubl, F. and Batista, V.R., "A
+                    <li><a href="http://www.itng.info">ref19a</a> - Zampirolli, F.A., Teubl, F., Batista, V.R., "A
                         Generator
                         and Corrector of Parametric Questions in Hard Copy". International Conference on Information
                         Technology: New
                         Generations. Las Vegas, USA, 2019.
                     </li>
-                    <li><a href="http://csedu.org">ref19b</a> - Zampirolli, F.A., Teubl, F. and Batista, V.R., "Online
+                    <li><a href="http://csedu.org">ref19b</a> - Zampirolli, F.A., Teubl, F., Batista, V.R., "Online
                         Generator
                         and Corrector of Parametric Questions in Hard Copy Useful for the Elaboration of Thousands of
                         Individualized
                         Exams". International Conference on Computer Supported Education. Crete, Grécia, 2019.
                         (<a href="{% static '__CSEDU19_webMCTest.pdf' %}">SLIDES</a>)
                     </li>
-                    <li><a href="http://csedu.org">ref19c</a> - Rezende, F., Zampirolli, F.A. and Kobayashi, G.,
+                    <li><a href="http://csedu.org">ref19c</a> - Rezende, F., Zampirolli, F.A., Kobayashi, G.,
                         "Convolutional
                         Neural Network applied to Code Assignment Grading". International Conference on Computer
                         Supported
@@ -634,55 +665,52 @@
                         Trabalho de Conclusão de Curso, Engenharia da Informação, UFABC, 2019. (orientador).
                     </li>
                     <li><a href="https://doi.org/10.1002/cae.22029">ref18a</a> - Zampirolli, F.A., Goya, D., Pimentel,
-                        E.P., and
-                        Kobayashi, G. "Evaluation process for an introductory programming course using blended learning
-                        in
-                        engineering education". Computer Applications in Engineering Education. 2018.
+                        E.P., Kobayashi, G.
+                        "Evaluation process for an introductory programming course using blended learning
+                        in engineering education". Computer Applications in Engineering Education. 2018.
                     </li>
                     <li><a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517">ref18b</a> -
                         Calsavara, A.,
-                        Serra, A.P.G. Zampirolli, F.A., Carvalho, L.S.G., Jonathan, M. and Correia, R.C.M.
+                        Serra, A.P.G. Zampirolli, F.A., Carvalho, L.S.G., Jonathan, M., Correia, R.C.M.
                         "Método baseado
                         nos Referenciais de Formação da SBC para reestruturação de descritivos de disciplinas de Ciência
                         da
-                        Computação em conformidade com as DCN de 2016". Workshop sobre Educação em Computação
-                        (WEI_CSBC), [S.l.], v.
+                        Computação em conformidade com as DCN de 2016". WEI-CSBC, [S.l.], v.
                         26, n. 1/2018.
                     </li>
                     <li>
                         <a href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao">ref17cap2</a>
-                        - Zorzo, A.F., Nunes, D., Matos, E., Steinmacher, I., Leite, J., Araujo, R.M., and Martins, S.
+                        - Zorzo, A.F., Nunes, D., Matos, E., Steinmacher, I., Leite, J., Araujo, R.M., Martins, S.
                         "Referenciais de Formação para os Cursos de Graduação em Computação". Sociedade Brasileira de
                         Computação
                         (SBC). 153p, 2017.
                     </li>
                     <li><a href="https://ieeexplore.ieee.org/document/7757467">ref16a</a> - Zampirolli, F.A., Batista,
-                        V.R., and
-                        Quilici-Gonzalez, J. A. "An automatic generator and corrector of multiple choice tests with
-                        random answer
-                        keys." Frontiers in Education Conference (FIE), 2016 IEEE.
+                        V.R., Quilici-Gonzalez, J.A.
+                        "An automatic generator and corrector of multiple choice tests with
+                        random answer keys."
+                        Frontiers in Education Conference (FIE), 2016 IEEE.
                         (<a href="{% static '__FIE16_MCTest.pdf' %}">SLIDES</a>)
                     </li>
                     <li><a href="https://periodicos.itp.ifsp.edu.br/index.php/IC/article/viewFile/221/394">ref16b</a> -
-                        China, R.
-                        T., Zampirolli, F.A., Neves, R.P.O. and Quilici-Gonzalez, J.A. (2016). An application for
+                        China, R.T., Zampirolli, F.A., Neves, R.P.O., Quilici-Gonzalez, J.A. (2016). An application for
                         automatic
                         multiple-choice test grading on android. Revista Brasileira de Iniciação Científica, 3(2).
                     </li>
-                    <li><a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a> - Zampirolli, F. A.,
+                    <li><a href="http://www.lbd.dcc.ufmg.br/colecoes/wvc/2015/018.pdf">ref15</a> - Zampirolli, F.A.,
                         China, R.T.,
-                        Neves, R.P.O. and QUILICI-GONZALEZ, J.A. "Automatic Correction of Multiple-Choice Tests on
+                        Neves, R.P.O., Quilici-Gonzalez, J.A. "Automatic Correction of Multiple-Choice Tests on
                         Android
                         Devices". In: Workshop de Visão Computacional, 2015.
                     </li>
                     <li><a href="http://iris.sel.eesc.usp.br/wvc/Anais_WVC2013/Poster/1/9.pdf">ref13</a> - Zampirolli,
-                        F. A,
-                        Quilici-Gonzalez, J.A. and Neves, R.P.O. "Automatic Correction of Multiple-Choice Tests using
+                        F.A.,
+                        Quilici-Gonzalez, J.A., Neves, R.P.O. "Automatic Correction of Multiple-Choice Tests using
                         Digital
                         Cameras and Image Processing". In: Workshop de Visão Computacional, 2013.
                     </li>
 
-                </ul>
+                </ol>
 
                 <hr>
 
