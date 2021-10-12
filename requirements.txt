@@ -64,7 +64,7 @@ numpy==1.19.5
 oauth==1.0.1
 odfpy==1.4.0
 olefile==0.45.1
-opencv-python==3.4.3.18
+opencv-python==3.4.7.28
 openpyxl==2.6.2
 pandas==1.2.1
 parsedatetime==2.4
