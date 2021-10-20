@@ -66,7 +66,7 @@ odfpy==1.4.0
 olefile==0.45.1
 opencv-python==3.4.3.18
 openpyxl==2.6.2
-pandas==1.2.1
+pandas==1.2.2
 parsedatetime==2.4
 pbr==3.1.1
 pexpect==4.2.1
