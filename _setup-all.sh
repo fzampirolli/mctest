@@ -135,6 +135,7 @@ mkdir tmp/imgs180days
 mkdir tmpGAB
 mkdir pdfExam
 mkdir pdfQuestion
+mkdir pdfTopic
 mkdir pdfStudentEmail
 mkdir /backup
 mkdir /backup/json

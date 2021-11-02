@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 09:31-0300\n"
+"POT-Creation-Date: 2021-11-02 16:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -291,7 +291,7 @@ msgstr "Cancelar"
 #: topic/templates/question/question_list.html:103
 #: topic/templates/question/question_list_who_created_user.html:103
 #: topic/templates/topic/topic_confirm_delete.html:38
-#: topic/templates/topic/topic_detail.html:121
+#: topic/templates/topic/topic_detail.html:139
 #: topic/templates/topic/topic_list.html:62
 msgid "Delete"
 msgstr "Apagar"
@@ -374,7 +374,7 @@ msgstr "Sala"
 #: topic/templates/question/question_list.html:23
 #: topic/templates/question/question_list_who_created_user.html:23
 #: topic/templates/question/question_update.html:92
-#: topic/templates/topic/topic_detail.html:43
+#: topic/templates/topic/topic_detail.html:61
 msgid "Type"
 msgstr "Tipo"
 
@@ -452,7 +452,7 @@ msgstr "Listar Estudantes"
 #: student/templates/student/student_detail.html:15
 #: topic/templates/question/question_list.html:27
 #: topic/templates/question/question_list_who_created_user.html:27
-#: topic/templates/topic/topic_detail.html:47
+#: topic/templates/topic/topic_detail.html:65
 msgid "ID"
 msgstr "ID"
 
@@ -485,7 +485,7 @@ msgstr "Email"
 #: student/templates/student/student_list.html:21
 #: topic/templates/question/question_list.html:29
 #: topic/templates/question/question_list_who_created_user.html:29
-#: topic/templates/topic/topic_detail.html:49
+#: topic/templates/topic/topic_detail.html:67
 #: topic/templates/topic/topic_list.html:24
 msgid "Actions"
 msgstr "Ações"
@@ -506,7 +506,7 @@ msgstr "Ações"
 #: topic/templates/question/question_detail.html:32
 #: topic/templates/question/question_list.html:97
 #: topic/templates/question/question_list_who_created_user.html:97
-#: topic/templates/topic/topic_detail.html:116
+#: topic/templates/topic/topic_detail.html:134
 #: topic/templates/topic/topic_list.html:57
 msgid "Update"
 msgstr "Atualizar "
@@ -514,7 +514,7 @@ msgstr "Atualizar "
 #: course/templates/classroom/classroom_detail.html:95 exam/forms.py:51
 #: exam/models.py:47 exam/templates/exam/exam_list.html:22
 #: exam/templates/exam/exam_list_who_created_user.html:23
-#: main/templates/base_generic.html:100 main/templates/index-mctest.html:376
+#: main/templates/base_generic.html:103 main/templates/index-mctest.html:376
 #: main/templates/index.html:395
 msgid "Classrooms"
 msgstr "Turmas"
@@ -537,7 +537,7 @@ msgstr "Não existe"
 #: student/templates/student/student_list.html:71
 #: topic/templates/question/question_list.html:122
 #: topic/templates/question/question_list_who_created_user.html:123
-#: topic/templates/topic/topic_detail.html:138
+#: topic/templates/topic/topic_detail.html:156
 #: topic/templates/topic/topic_list.html:79
 msgid "registered yet."
 msgstr "registrada(o) ainda"
@@ -627,7 +627,7 @@ msgstr "Disciplina"
 #: student/templates/student/student_list.html:70
 #: topic/templates/question/question_list.html:121
 #: topic/templates/question/question_list_who_created_user.html:122
-#: topic/templates/topic/topic_detail.html:137
+#: topic/templates/topic/topic_detail.html:155
 #: topic/templates/topic/topic_list.html:78
 msgid "There is no"
 msgstr "Não existe"
@@ -667,6 +667,14 @@ msgstr "Sintaxe do arquivo CSV"
 msgid "Only UTF-8 format"
 msgstr "Somente formato UTF-8"
 
+#: course/templates/classroom/classroom_update.html:29
+#: course/templates/discipline/discipline_update.html:89
+#: course/templates/discipline/discipline_update.html:114
+#, fuzzy
+#| msgid "Maximum number of blocks horizontally"
+msgid "Maximum number of characters for student is 45"
+msgstr "Número máximo de blocos na horizontal"
+
 #: course/templates/classroom/classroom_update.html:30
 msgid "123, joão,  joao@gmail.com"
 msgstr "123, joão,  joao@gmail.com"
@@ -696,7 +704,7 @@ msgstr ""
 "em cinza"
 
 #: course/templates/classroom/classroom_update.html:53
-#: main/templates/index-mctest.html:397 main/templates/index.html:420
+#: main/templates/index-mctest.html:397 main/templates/index.html:425
 msgid "Students"
 msgstr "Estudantes"
 
@@ -820,7 +828,7 @@ msgstr "Listar Tópicos"
 #: topic/templates/question/question_list_who_created_user.html:22
 #: topic/templates/topic/topic_create.html:31
 #: topic/templates/topic/topic_detail.html:24
-#: topic/templates/topic/topic_detail.html:42
+#: topic/templates/topic/topic_detail.html:60
 #: topic/templates/topic/topic_list.html:22
 #: topic/templates/topic/topic_list.html:79
 #: topic/templates/topic/topic_update.html:36
@@ -1231,8 +1239,8 @@ msgid "Choose the questions"
 msgstr "Escolha as Questões (de Disciplinas que você está cadastrado)"
 
 #: exam/forms.py:57 exam/models.py:52 exam/models.py:104
-#: main/templates/base_generic.html:97 main/templates/index-mctest.html:388
-#: main/templates/index.html:408
+#: main/templates/base_generic.html:100 main/templates/index-mctest.html:388
+#: main/templates/index.html:409
 msgid "Questions"
 msgstr "Questões"
 
@@ -1438,7 +1446,7 @@ msgstr ""
 "(consulte as publicações)."
 
 #: exam/models.py:210 exam/templates/exam/exam_update2.html:231
-#: main/templates/index.html:477 topic/forms.py:45 topic/models.py:50
+#: main/templates/index.html:482 topic/forms.py:45 topic/models.py:50
 #: topic/models.py:94 topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
 #: topic/templates/question/question_update.html:84
@@ -1566,6 +1574,7 @@ msgstr ""
 #: exam/templates/exam/exam_update2.html:36
 #: topic/templates/question/question_detail.html:24
 #: topic/templates/question/question_update.html:23
+#: topic/templates/topic/topic_detail.html:37
 msgid "Create-PDF"
 msgstr "Criar-PDF"
 
@@ -1693,19 +1702,19 @@ msgstr ""
 msgid "The options marked below will be sent to your email."
 msgstr "As opções marcadas abaixo serão enviadas para o seu e-mail."
 
-#: exam/templates/exam/exam_update2.html:91 main/templates/index.html:447
+#: exam/templates/exam/exam_update2.html:91 main/templates/index.html:452
 msgid "Create-Variations"
 msgstr "Criar-Variações"
 
 #: exam/templates/exam/exam_update2.html:176
-#: topic/templates/topic/topic_detail.html:35
+#: topic/templates/topic/topic_detail.html:53
 msgid "Questions List"
 msgstr "Listar Questões"
 
 #: exam/templates/exam/exam_update2.html:233
 #: topic/templates/question/question_list.html:25
 #: topic/templates/question/question_list_who_created_user.html:25
-#: topic/templates/topic/topic_detail.html:45
+#: topic/templates/topic/topic_detail.html:63
 msgid "Dif."
 msgstr ""
 
@@ -1715,14 +1724,14 @@ msgstr ""
 #: topic/templates/question/question_list.html:24
 #: topic/templates/question/question_list_who_created_user.html:24
 #: topic/templates/question/question_update.html:76
-#: topic/templates/topic/topic_detail.html:44
+#: topic/templates/topic/topic_detail.html:62
 msgid "Group"
 msgstr "Grupo"
 
 #: exam/templates/exam/exam_update2.html:235
 #: topic/templates/question/question_list.html:26
 #: topic/templates/question/question_list_who_created_user.html:26
-#: topic/templates/topic/topic_detail.html:46
+#: topic/templates/topic/topic_detail.html:64
 msgid "Par."
 msgstr ""
 
@@ -2047,119 +2056,119 @@ msgid ""
 "I can change other teachers' questions only if there is an error. However, "
 "without changing the authorship of the issue."
 msgstr ""
-"Só posso mudar as questões dos outros professores SOMENTE SE HOUVER ALGUM ERRO. "
-"Porém, sem alterar a autoria da questão."
+"Só posso mudar as questões dos outros professores SOMENTE SE HOUVER ALGUM "
+"ERRO. Porém, sem alterar a autoria da questão."
 
-#: main/templates/base_generic.html:61
+#: main/templates/base_generic.html:64
 msgid "All institutes"
 msgstr "Institutos"
 
-#: main/templates/base_generic.html:64
+#: main/templates/base_generic.html:67
 msgid "All courses"
 msgstr "Cursos"
 
-#: main/templates/base_generic.html:67
+#: main/templates/base_generic.html:70
 msgid "All disciplines"
 msgstr "Disciplinas"
 
-#: main/templates/base_generic.html:72
+#: main/templates/base_generic.html:75
 msgid "All topics"
 msgstr "Tópicos"
 
-#: main/templates/base_generic.html:77
+#: main/templates/base_generic.html:80
 msgid "All questions"
 msgstr "Questões"
 
-#: main/templates/base_generic.html:83
+#: main/templates/base_generic.html:86
 msgid "All exams"
 msgstr "Exames"
 
-#: main/templates/base_generic.html:103 main/templates/index-mctest.html:379
+#: main/templates/base_generic.html:106 main/templates/index-mctest.html:379
 #: main/templates/index.html:398
 msgid "Exams"
 msgstr "Exames"
 
-#: main/templates/base_generic.html:108
+#: main/templates/base_generic.html:111
 msgid "Admin"
 msgstr "Admin"
 
-#: main/templates/base_generic.html:112
+#: main/templates/base_generic.html:115
 msgid "Logout"
 msgstr "Sair"
 
-#: main/templates/base_generic.html:116 templates/registration/login.html:11
+#: main/templates/base_generic.html:119 templates/registration/login.html:11
 #: templates/registration/login.html:44
 msgid "Login"
 msgstr "Entrar"
 
-#: main/templates/base_generic.html:120 main/templates/signup.html:11
+#: main/templates/base_generic.html:123 main/templates/signup.html:11
 #: main/templates/signup.html:14 main/templates/signup.html:34
 msgid "Sign up"
 msgstr "Inscrever"
 
-#: main/templates/base_generic.html:164 main/templates/base_generic.html:226
-#: main/templates/base_generic.html:304
+#: main/templates/base_generic.html:167 main/templates/base_generic.html:229
+#: main/templates/base_generic.html:307
 msgid "copy"
 msgstr "copiar"
 
-#: main/templates/base_generic.html:171 main/templates/base_generic.html:233
-#: main/templates/base_generic.html:311
+#: main/templates/base_generic.html:174 main/templates/base_generic.html:236
+#: main/templates/base_generic.html:314
 msgid "csv"
 msgstr ""
 
-#: main/templates/base_generic.html:178 main/templates/base_generic.html:240
-#: main/templates/base_generic.html:318
+#: main/templates/base_generic.html:181 main/templates/base_generic.html:243
+#: main/templates/base_generic.html:321
 msgid "excel"
 msgstr ""
 
-#: main/templates/base_generic.html:185 main/templates/base_generic.html:247
-#: main/templates/base_generic.html:325
+#: main/templates/base_generic.html:188 main/templates/base_generic.html:250
+#: main/templates/base_generic.html:328
 msgid "pdf"
 msgstr ""
 
-#: main/templates/base_generic.html:192 main/templates/base_generic.html:254
-#: main/templates/base_generic.html:332
+#: main/templates/base_generic.html:195 main/templates/base_generic.html:257
+#: main/templates/base_generic.html:335
 msgid "print"
 msgstr "imprimir"
 
-#: main/templates/base_generic.html:200 main/templates/base_generic.html:261
-#: main/templates/base_generic.html:340
+#: main/templates/base_generic.html:203 main/templates/base_generic.html:264
+#: main/templates/base_generic.html:343
 msgid "column visibility"
 msgstr "colunas visíveis"
 
-#: main/templates/base_generic.html:372
+#: main/templates/base_generic.html:375
 msgid "by"
 msgstr "por"
 
-#: main/templates/base_generic.html:374
+#: main/templates/base_generic.html:377
 msgid "from"
 msgstr "da"
 
-#: main/templates/base_generic.html:375 main/templates/base_generic.html:383
+#: main/templates/base_generic.html:378 main/templates/base_generic.html:386
 msgid "and"
 msgstr "e"
 
-#: main/templates/base_generic.html:376
+#: main/templates/base_generic.html:379
 msgid "individual contributors"
 msgstr "Colaboradores"
 
-#: main/templates/base_generic.html:377 main/templates/users.html:10
+#: main/templates/base_generic.html:380 main/templates/users.html:10
 msgid "Who use"
 msgstr "Quem utiliza"
 
-#: main/templates/base_generic.html:378
+#: main/templates/base_generic.html:381
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:379
+#: main/templates/base_generic.html:382
 msgid "Manual"
 msgstr ""
 
-#: main/templates/base_generic.html:380 main/templates/readme.html:10
+#: main/templates/base_generic.html:383 main/templates/readme.html:10
 msgid "README"
 msgstr "LEIA-ME"
 
-#: main/templates/base_generic.html:381
+#: main/templates/base_generic.html:384
 msgid "Grant"
 msgstr "Apoio"
 
@@ -2206,7 +2215,7 @@ msgid "if I forgot anyone"
 msgstr "se eu esqueci de alguém"
 
 #: main/templates/index-mctest.html:16 main/templates/index.html:16
-#: main/templates/index.html:428
+#: main/templates/index.html:433
 msgid "MCTest"
 msgstr ""
 
@@ -2472,58 +2481,58 @@ msgstr "Turmas tem Exames, Profs e Estudantes"
 msgid "Exam has Classrooms and Questions"
 msgstr "Exame tem Turmas e Questões"
 
-#: main/templates/index-mctest.html:382 main/templates/index.html:402
+#: main/templates/index-mctest.html:382 main/templates/index.html:403
 msgid "Topics"
 msgstr "Tópicos"
 
-#: main/templates/index-mctest.html:383 main/templates/index.html:403
+#: main/templates/index-mctest.html:383 main/templates/index.html:404
 msgid "Topic has Questions"
 msgstr "Tópico tem Questões"
 
-#: main/templates/index-mctest.html:389 main/templates/index.html:409
+#: main/templates/index-mctest.html:389 main/templates/index.html:410
 msgid "motivations for the use of bloom taxonomy"
 msgstr "motivações para o uso da taxonomia de bloom"
 
-#: main/templates/index-mctest.html:392 main/templates/index.html:414
+#: main/templates/index-mctest.html:392 main/templates/index.html:415
 msgid "Multiple Choice"
 msgstr "Múltipla Escolha"
 
-#: main/templates/index-mctest.html:393 main/templates/index.html:415
+#: main/templates/index-mctest.html:393 main/templates/index.html:416
 msgid "Text"
 msgstr "Dissertativa"
 
-#: main/templates/index-mctest.html:394 main/templates/index.html:416
+#: main/templates/index-mctest.html:394 main/templates/index.html:417
 #: topic/templates/question/question_create.html:80
 #: topic/templates/question/question_update.html:116
 msgid "Parametric"
 msgstr "Paramétrica"
 
 #: main/templates/index-mctest.html:398 main/templates/index-mctest.html:415
-#: main/templates/index.html:421 main/templates/index.html:691
+#: main/templates/index.html:426 main/templates/index.html:729
 msgid "Users"
 msgstr "Usuários"
 
-#: main/templates/index-mctest.html:403 main/templates/index.html:679
+#: main/templates/index-mctest.html:403 main/templates/index.html:717
 msgid "For verification"
 msgstr "Para verificação"
 
-#: main/templates/index-mctest.html:418 main/templates/index.html:694
+#: main/templates/index-mctest.html:418 main/templates/index.html:732
 msgid "Last Login"
 msgstr "Último Acesso"
 
-#: main/templates/index-mctest.html:445 main/templates/index.html:720
+#: main/templates/index-mctest.html:445 main/templates/index.html:758
 msgid "You have visited this page"
 msgstr "Você visitou esta página"
 
-#: main/templates/index-mctest.html:446 main/templates/index.html:721
+#: main/templates/index-mctest.html:446 main/templates/index.html:759
 msgid "time"
 msgstr "vez"
 
-#: main/templates/index-mctest.html:446 main/templates/index.html:721
+#: main/templates/index-mctest.html:446 main/templates/index.html:759
 msgid "times"
 msgstr "vezes"
 
-#: main/templates/index-mctest.html:448 main/templates/index.html:723
+#: main/templates/index-mctest.html:448 main/templates/index.html:761
 msgid "Send improvement suggestions to"
 msgstr "Enviar sugestões de melhoria para"
 
@@ -2556,79 +2565,79 @@ msgstr "veja também"
 msgid "motivations"
 msgstr "motivações"
 
-#: main/templates/index.html:426
+#: main/templates/index.html:431
 msgid "Explanatory videos"
 msgstr "Vídeos explicativos"
 
-#: main/templates/index.html:428
+#: main/templates/index.html:433
 msgid "version"
 msgstr "versão"
 
-#: main/templates/index.html:429
+#: main/templates/index.html:434
 msgid "global vision (in English)"
 msgstr "versão global (em Inglês)"
 
-#: main/templates/index.html:430
+#: main/templates/index.html:435
 msgid "in Portuguese"
 msgstr "Português"
 
-#: main/templates/index.html:431
+#: main/templates/index.html:436
 msgid "global vision"
 msgstr "versão global"
 
-#: main/templates/index.html:432
+#: main/templates/index.html:437
 msgid "create Classrooms and Exams"
 msgstr "Criar Turmas e Exames"
 
-#: main/templates/index.html:433
+#: main/templates/index.html:438
 msgid "to correct Exams"
 msgstr "Corrigir Exames"
 
-#: main/templates/index.html:434
+#: main/templates/index.html:439
 msgid "to create problems using the TXT file"
 msgstr "para criar questões utilizando arquivo TXT"
 
-#: main/templates/index.html:436
+#: main/templates/index.html:441
 msgid "create parametric questions"
 msgstr "Criar Questões Paramétricas"
 
-#: main/templates/index.html:438
+#: main/templates/index.html:443
 msgid "part I"
 msgstr "parte I"
 
-#: main/templates/index.html:439
+#: main/templates/index.html:444
 msgid "part II"
 msgstr "parte II"
 
-#: main/templates/index.html:440
+#: main/templates/index.html:445
 msgid "part III"
 msgstr "parte III"
 
-#: main/templates/index.html:441
+#: main/templates/index.html:446
 msgid "use of the sympy library (URM and integral examples)"
 msgstr "usar a biblioteca sympy (exemplo com MRU e integral"
 
-#: main/templates/index.html:442
+#: main/templates/index.html:447
 msgid "part IV"
 msgstr "parte IV"
 
-#: main/templates/index.html:443
+#: main/templates/index.html:448
 msgid "use of the sympy library (integral with figures)"
 msgstr "usar a biblioteca sympy (integral com figuras)"
 
-#: main/templates/index.html:444
+#: main/templates/index.html:449
 msgid "part V"
 msgstr "parte V"
 
-#: main/templates/index.html:445
+#: main/templates/index.html:450
 msgid "MCTest+Moodle+VPL"
 msgstr ""
 
-#: main/templates/index.html:446
+#: main/templates/index.html:451
 msgid "part VI"
 msgstr "parte VI"
 
-#: main/templates/index.html:452
+#: main/templates/index.html:457
 msgid ""
 "to create exams with multiple choice questions and dissertations - "
 "conclusions"
@@ -2636,46 +2645,46 @@ msgstr ""
 "para criar exames com questões de múltipla escolha e dissertativas - "
 "conclusões"
 
-#: main/templates/index.html:460
+#: main/templates/index.html:465
 msgid "History"
 msgstr "Histórico"
 
-#: main/templates/index.html:460
+#: main/templates/index.html:465
 msgid "Software registration"
 msgstr "Registro de software"
 
-#: main/templates/index.html:470
+#: main/templates/index.html:475
 msgid "Order"
 msgstr "Pedido"
 
-#: main/templates/index.html:475
+#: main/templates/index.html:480
 msgid "Title"
 msgstr "Título"
 
-#: main/templates/index.html:485
+#: main/templates/index.html:490
 msgid ""
 "Developed in Python (Django 2.0) for automatic correction - available in"
 msgstr ""
 "Desenvolvido em Python (Django 2.0) para a correção automática - disponível "
 "em"
 
-#: main/templates/index.html:488
+#: main/templates/index.html:493
 msgid "exams generated in LaTeX using a MySQL DB"
 msgstr "exames gerados em LaTeX usando o BD MySQL"
 
-#: main/templates/index.html:501
+#: main/templates/index.html:506
 msgid "Developed in Python for LaTeX generated exams"
 msgstr "Desenvolvido em Python para exames gerados em Latex"
 
-#: main/templates/index.html:512
+#: main/templates/index.html:517
 msgid "Developed in Python for automatic correction - available in"
 msgstr "Desenvolvido em Python para a correção automática - disponível em"
 
-#: main/templates/index.html:513
+#: main/templates/index.html:518
 msgid "by ftp"
 msgstr "por ftp"
 
-#: main/templates/index.html:523
+#: main/templates/index.html:528
 msgid ""
 "Developed in Python for automatic correction - exams generated in Word / "
 "BROffic"
@@ -2683,15 +2692,15 @@ msgstr ""
 "Desenvolvido em Python para a correção automática - exames gerados em Word/"
 "BROffice"
 
-#: main/templates/index.html:531
+#: main/templates/index.html:536
 msgid "Developed in Android"
 msgstr "Desenvolvido em Android"
 
-#: main/templates/index.html:532
+#: main/templates/index.html:537
 msgid "for automatic correction - exams generated in Word / BROffice"
 msgstr "para correção automática - exames gerados em Word/BROffice"
 
-#: main/templates/index.html:544
+#: main/templates/index.html:549
 msgid ""
 "Developed in Matlab for automatic correction - exams generated in Word / "
 "BROffice"
@@ -2699,7 +2708,7 @@ msgstr ""
 "Desenvolvido em Matlab  para a correção automática - exames gerados em Word/"
 "BROffice"
 
-#: main/templates/index.html:555
+#: main/templates/index.html:560
 msgid "Publications"
 msgstr "Publicações"
 
@@ -3164,7 +3173,7 @@ msgstr "Total de questões com grupos"
 #: topic/templates/question/question_list.html:28
 #: topic/templates/question/question_list_who_created_user.html:28
 #: topic/templates/question/question_update.html:68
-#: topic/templates/topic/topic_detail.html:48
+#: topic/templates/topic/topic_detail.html:66
 msgid "Short Description"
 msgstr "Descrição curta"
 
@@ -3337,7 +3346,7 @@ msgstr "Listar Questões"
 
 #: topic/templates/question/question_list.html:122
 #: topic/templates/question/question_list_who_created_user.html:123
-#: topic/templates/topic/topic_detail.html:138
+#: topic/templates/topic/topic_detail.html:156
 msgid "Question"
 msgstr "Questão"
 
@@ -3346,7 +3355,7 @@ msgid "My Questions List"
 msgstr "Minha Lista de Questões"
 
 #: topic/templates/question/question_list_who_created_user.html:136
-#: topic/templates/topic/topic_detail.html:154
+#: topic/templates/topic/topic_detail.html:172
 msgid "Create a New Question"
 msgstr "Criar uma nova Questão"
 
@@ -3475,12 +3484,18 @@ msgstr "Somente coordenador cadastrado em disciplinas"
 msgid "Topic Detail"
 msgstr "Detalhar Tópico"
 
-#: topic/templates/topic/topic_detail.html:167
+#: topic/templates/topic/topic_detail.html:41
+msgid "View all questions in this topic in PDF format, sorted by similarity"
+msgstr ""
+"Veja todas as questões deste tópico em formato PDF, classificadas por "
+"similaridade"
+
+#: topic/templates/topic/topic_detail.html:185
 msgid "Note: For each exam, only one question is taken from each group"
 msgstr ""
 "Importante: para cada exame, somente uma questão é escolhida de cada grupo"
 
-#: topic/templates/topic/topic_detail.html:168
+#: topic/templates/topic/topic_detail.html:186
 msgid "Only the teacher registered in the course can see more details"
 msgstr "Somente professores cadastrados em curso pode ver mais detalhes"
 
@@ -3496,11 +3511,11 @@ msgstr "Somente coordenandor pode criar/atualizar tópicos"
 msgid "Topic Update"
 msgstr "Atualizar Tópico"
 
-#: topic/views.py:131
+#: topic/views.py:132
 msgid "ImportQuestionsJson: choose a JSON following the model!"
 msgstr "ImportQuestionsJson: escolher um arquivo JSON seguindo o modelo"
 
-#: topic/views.py:248
+#: topic/views.py:249 topic/views.py:536
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -3510,27 +3525,31 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:319
+#: topic/views.py:320
 msgid "ImportQuestions: choose a TXT following the model!"
 msgstr "ImportQuestions: escolher um arquivo TXT seguindo o modelo"
 
-#: topic/views.py:366
+#: topic/views.py:367
 msgid "ImportQuestions: topic does not exist - created before in Topic: "
 msgstr "ImportQuestions: tópico não existe - cirar antes em Tópico"
 
-#: topic/views.py:391
+#: topic/views.py:392
 msgid "Questions Created:"
 msgstr "Questões Criadas"
 
-#: topic/views.py:402
+#: topic/views.py:403
 msgid "Similar question(s) exist in the DB:"
 msgstr "Questões similares no BD:"
 
-#: topic/views.py:452
+#: topic/views.py:453
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:630
+#: topic/views.py:489
+msgid "The professor does not have permission!"
+msgstr ""
+
+#: topic/views.py:748
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 

@@ -39,6 +39,7 @@ urlpatterns += [
     path('topic/create/', views.TopicCreate.as_view(), name='topic-create'),
     path('topic/<int:pk>/delete/', views.TopicDelete.as_view(), name='topic-delete'),
     path('topic/<int:pk>/update', views.TopicUpdate.as_view(), name='topic-update'),
+    path('topic/<int:pk>/createPDFtopic/', views.see_topic_PDF, name='topic-create-PDF'),
     path('course/<int:pk>/', vi.DisciplineDetailView.as_view(), name='discipline-detail'),
 ]
 

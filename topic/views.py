@@ -31,6 +31,7 @@ import json
 import os
 import random
 import subprocess
+import difflib
 
 from django.contrib import messages
 # Create your views here.
@@ -472,6 +473,123 @@ class TopicDelete(LoginRequiredMixin, generic.DeleteView):
         if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
             return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
 
+@login_required
+def see_topic_PDF(request, pk):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    topic = get_object_or_404(Topic, pk=pk)
+
+    if not len(Topic.objects.filter(discipline__discipline_profs=request.user)):
+        messages.error(request,
+                       _('The professor does not have permission!'))
+        return render(request, 'exam/exam_errors.html', {})
+
+    if request.POST:
+        file_name = request.user.username
+        fileQuestionName = file_name + ".tex"
+        fileQuestion = open(fileQuestionName, 'w')
+        fileQuestion.write(Utils.getBegin())
+
+        with open(fileQuestionName, 'w') as fileExam:
+
+            allQuestionsStr = []
+            countQuestions = 0
+            for q in topic.questions2.all().order_by('question_text').distinct():
+                #Utils.validateProfByQuestion(q, request.user)
+                countQuestions += 1
+                str1 = "\\noindent\\rule{\\textwidth}{0.8pt}\\\\\n"
+                str1 += "\\noindent\\textbf{Count:} %d\\\\\n" % countQuestions
+                str1 += "\\noindent\\textbf{Short Description:} %s\\\\\n" % q.question_short_description
+                str1 += "\\noindent\\textbf{Group:} %s\\\\\n" % q.question_group
+                str1 += "\\noindent\\textbf{Type:} %s\\\\\n" % q.question_type
+                str1 += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric
+                str1 += "\\noindent\\textbf{Difficulty:} %s\\\\\n" % q.question_difficulty
+                str1 += "\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy
+                str1 += "\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update
+                str1 += "\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created
+                str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (os.getenv('IP_HOST'), q.id)
+
+                ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
+                ss = ss1 % str(q.id).zfill(3)
+
+                str1 += "%s %s." % (ss, 1)
+
+                if q.question_parametric == 'no':
+                    quest = q.question_text + '\n'
+                    ans = []
+                    if q.question_type == "QM":
+                        for a in q.answers():
+                            ans.append(a.answer_text + '\n')
+                else:  # QUESTOES PARAMETRICAS
+                    try:
+                        if q.question_type == "QM":
+                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers())
+                        else:  # se for dissertativa, não colocar alternativas
+                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
+                        if quest == "":
+                            messages.error(request,
+                                           _('UtilsMC.questionParametric: do not use some words in the code, '
+                                             'for ex. exec, cmd, open, import os, remove, mkdir, sys, gnureadline, '
+                                             'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
+                            messages.error(request, 'Question: %d' % q.id)
+                            return render(request, 'exam/exam_errors.html', {})
+                    except:
+                        str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
+                        continue
+
+                str1 += r' %s\n\n' % ''.join(quest)
+                str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\n"
+                for a in random.sample(ans, len(ans)):
+                    if ans.index(a) == 0:
+                        str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
+                    else:
+                        str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (str(ans.index(a)), a)
+                str1 += "\\end{oneparchoices}\\vspace{0mm}\\\\\n"
+
+                allQuestionsStr.append(str1)
+
+            fileQuestion.write("\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n")
+            fileQuestion.write("\\noindent\\textbf{Topic:} %s\\\\\n" % topic.topic_text)
+            for st in allQuestionsStr:
+                fileQuestion.write(st)
+
+            fileQuestion.write("\\end{document}")
+            fileQuestion.close()
+
+        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode', fileQuestionName]
+        proc = subprocess.Popen(cmd)
+        proc.communicate()
+        proc = subprocess.Popen(cmd)
+        proc.communicate()
+
+        path = os.getcwd()
+        os.system("cp " + file_name + ".pdf " + path + "/pdfTopic/")
+
+        getuser = path.split('/')
+        getuser = getuser[1]
+        getuser = getuser + ':' + getuser
+        os.system('chown -R ' + getuser + ' ' + path + ' .')
+        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
+
+        try:
+            os.remove("{}.aux".format(file_name))
+            os.remove("{}.log".format(file_name))
+            os.remove("{}.tex".format(file_name))
+            os.remove("{}.pdf".format(file_name))
+            os.remove("{}.out".format(file_name))
+            os.remove("temp.txt")
+            pass
+        except Exception as e:
+            pass
+
+
+        path_to_file = BASE_DIR + "/pdfTopic/" + file_name + ".pdf"
+        return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
 
 ###################################################################
 class QuestionListView(LoginRequiredMixin, generic.ListView):
