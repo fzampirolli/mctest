@@ -499,8 +499,18 @@ def see_topic_PDF(request, pk):
 
             allQuestionsStr = []
             countQuestions = 0
+
+            questions_id, questions_text = [], []
             for q in topic.questions2.all().order_by('question_text').distinct():
-                #Utils.validateProfByQuestion(q, request.user)
+                questions_id.append(q.id)
+                questions_text.append(q.question_text)
+
+            new_order = UtilsMC.sortedBySimilarity(questions_text)
+
+            #for q in topic.questions2.all():
+            for qid in new_order:
+                q = get_object_or_404(Question, pk=questions_id[qid])
+
                 countQuestions += 1
                 str1 = "\\noindent\\rule{\\textwidth}{0.8pt}\\\\\n"
                 str1 += "\\noindent\\textbf{Count:} %d\\\\\n" % countQuestions
@@ -540,6 +550,9 @@ def see_topic_PDF(request, pk):
                             return render(request, 'exam/exam_errors.html', {})
                     except:
                         str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
+                        messages.error(request,_('"ERRO NA PARTE PARAMÉTRICA!!!'))
+                        messages.error(request, 'Question: %d' % q.id)
+                        return render(request, 'exam/exam_errors.html', {})
                         continue
 
                 str1 += r' %s\n\n' % ''.join(quest)
@@ -603,7 +616,6 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
         lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         return lista.order_by('question_text').distinct()
 
-
 class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     model = Question
     template_name = 'question/question_list_who_created_user.html'
@@ -622,8 +634,8 @@ class QuestionDetailView(generic.DetailView):
     # paginate_by = 100
 
     def get_queryset(self):
-        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-
+        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        return lista.order_by('question_text').distinct()
 
 ####################################################################
 # answers = Answer.objects.filter(question=question_inst)
@@ -754,8 +766,8 @@ class QuestionCreate(LoginRequiredMixin, generic.CreateView):
         return super(QuestionCreate, self).form_valid(form)
 
     def get_queryset(self):
-        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-
+        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        return lista.order_by('question_text').distinct()
 
 class QuestionUpdate(UpdateView):
     model = Question
@@ -764,8 +776,8 @@ class QuestionUpdate(UpdateView):
     success_url = reverse_lazy('topic:question-detail')
 
     def get_queryset(self):
-        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user).distinct()
-
+        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        return lista.order_by('question_text').distinct()
 
 class QuestionDelete(DeleteView):
     model = Question
@@ -773,4 +785,5 @@ class QuestionDelete(DeleteView):
     success_url = reverse_lazy('topic:myquestions-list')
 
     def get_queryset(self):
-        return Question.objects.filter(topic__discipline__discipline_profs=self.request.user).distinct()
+        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        return lista.order_by('question_text').distinct()

@@ -51,7 +51,9 @@ class Topic(models.Model):
                                          )
 
     def questions(self):
-        return [a for a in Question.objects.all() if a.topic.topic_text == self.topic_text]
+        mylist = [a for a in Question.objects.all() if a.topic.topic_text == self.topic_text]
+        mylist = list(dict.fromkeys(mylist)) # remove duplicates
+        return mylist
 
     questions.short_description = 'Questions'
 

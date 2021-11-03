@@ -450,3 +450,57 @@ class UtilsMC(object):
             return []
 
         return questTipo
+
+
+    @staticmethod
+    def sortedBySimilarity(questions, limiar=0.8):
+        from difflib import SequenceMatcher
+
+        n = len(questions)
+        m = np.zeros((n, n))  # matriz de similaridades
+        for i in range(n):
+            for j in range(n):
+                m[i, j] = round(SequenceMatcher(None, questions[i], questions[j]).ratio(), 3)
+
+        np.fill_diagonal(m, 0)  # preenche a diagonal com zero
+
+        idLMax = 0
+        questions_new = []
+        id_del = []
+        while m.max() >= limiar and not idLMax in id_del:  # enquanto existir questões similares
+
+            v = m.sum(axis=1)  # soma cada linha
+            vL = np.argsort(v)[::-1][:n]  # índice ordem reversa
+
+            try:
+                vC = np.argsort(m[vL[idLMax]])[::-1][:n]  # índice ordem reversa na linha
+            except:
+                break
+
+            questions_new.append(questions[vL[idLMax]])
+            id_del.append(vL[idLMax])
+
+            vC = np.argsort(m[vL[idLMax]])[::-1][:n]
+            for i in vC:
+                if i != vL[idLMax] and m[vL[idLMax]][i] >= limiar:
+                    # print(i, m[vL[idLMax]][i], questions[vL[idLMax]], questions[i])
+                    questions_new.append(questions[i])
+                    id_del.append(i)
+            for i in id_del:
+                m[:, i] = 0  # zera a coluna da questão
+                m[i] = 0  # zera a linha da questão
+
+            idLMax += 1
+
+        questions_aux = questions.copy()
+        for i in sorted(id_del, reverse=True):
+            del questions[i]
+
+        new_order = id_del
+        for v in questions:
+            new_order.append(questions_aux.index(v))
+
+        # for q in questions_new + questions:
+        #  print(q)
+
+        return (new_order)
