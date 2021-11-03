@@ -501,7 +501,7 @@ def see_topic_PDF(request, pk):
             countQuestions = 0
 
             questions_id, questions_text = [], []
-            for q in topic.questions2.all().order_by('question_text').distinct():
+            for q in topic.questions2.all().order_by('question_text'):
                 questions_id.append(q.id)
                 questions_text.append(q.question_text)
 
