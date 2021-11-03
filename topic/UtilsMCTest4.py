@@ -27,31 +27,26 @@ GNU General Public License for more details.
 '''
 # coding=UTF-8
 
-import random
-import time
 import datetime
+import random
 
 import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-#import matplotlib.pyplot as plt
-#import numpy as np
 
-from sympy import *
+# import matplotlib.pyplot as plt
+# import numpy as np
 
 # do not delete - for parametric questions
 
 matplotlib.use('Agg')
 
-from django.http import HttpResponse
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import get_object_or_404, render
 
 try:
     from topic.Utils import *
 except:
     pass
+
 
 def createWrongAnswers(a):
     global correctAnswer, a0, a1, a2
@@ -78,6 +73,7 @@ def createWrongAnswers(a):
                 respostas += str(i) + "\n"
 
     return respostas
+
 
 class UtilsMC(object):
 
@@ -401,7 +397,7 @@ class UtilsMC(object):
                     contRespostas += 1
 
                 if contRespostas == 0:
-                    messages.error(request, _('ImportQuestions: ERROR question without answers: '+str(d['q'])))
+                    messages.error(request, _('ImportQuestions: ERROR question without answers: ' + str(d['q'])))
                     return ''
 
             d["a"] = respostas
@@ -413,16 +409,24 @@ class UtilsMC(object):
         messages.info(request, _("read question(s): ") + str(len(listao) - questions_file))
 
         messages.info(request, _("Total of questions without groups:"))
-        messages.info(request, _("Easy questions QE: ") + str(len([y for y in listao if y['t'] == 'QE' and y['st'] == ''])))
-        messages.info(request, _("Mean questions QM: ") + str(len([y for y in listao if y['t'] == 'QM' and y['st'] == ''])))
-        messages.info(request, _("Hard questions QH: ") + str(len([y for y in listao if y['t'] == 'QH' and y['st'] == ''])))
-        messages.info(request, _("Text questions QT: ") + str(len([y for y in listao if y['t'] == 'QT' and y['st'] == ''])))
+        messages.info(request,
+                      _("Easy questions QE: ") + str(len([y for y in listao if y['t'] == 'QE' and y['st'] == ''])))
+        messages.info(request,
+                      _("Mean questions QM: ") + str(len([y for y in listao if y['t'] == 'QM' and y['st'] == ''])))
+        messages.info(request,
+                      _("Hard questions QH: ") + str(len([y for y in listao if y['t'] == 'QH' and y['st'] == ''])))
+        messages.info(request,
+                      _("Text questions QT: ") + str(len([y for y in listao if y['t'] == 'QT' and y['st'] == ''])))
 
         messages.info(request, _("Total of questions with groups:"))
-        messages.info(request, _("Easy questions QE: ") + str(len([y for y in listao if y['t'] == 'QE' and y['st'] != ''])))
-        messages.info(request, _("Mean questions QM: ") + str(len([y for y in listao if y['t'] == 'QM' and y['st'] != ''])))
-        messages.info(request, _("Hard questions QH: ") + str(len([y for y in listao if y['t'] == 'QH' and y['st'] != ''])))
-        messages.info(request, _("Text questions QT: ") + str(len([y for y in listao if y['t'] == 'QT' and y['st'] != ''])))
+        messages.info(request,
+                      _("Easy questions QE: ") + str(len([y for y in listao if y['t'] == 'QE' and y['st'] != ''])))
+        messages.info(request,
+                      _("Mean questions QM: ") + str(len([y for y in listao if y['t'] == 'QM' and y['st'] != ''])))
+        messages.info(request,
+                      _("Hard questions QH: ") + str(len([y for y in listao if y['t'] == 'QH' and y['st'] != ''])))
+        messages.info(request,
+                      _("Text questions QT: ") + str(len([y for y in listao if y['t'] == 'QT' and y['st'] != ''])))
 
         return listao
 
@@ -451,9 +455,18 @@ class UtilsMC(object):
 
         return questTipo
 
-
     @staticmethod
     def sortedBySimilarity(questions, limiar=0.8):
+        '''
+        Esta função (1) cria uma matriz nxn de similaridades de n questões.
+        (2) Retira primeiro a questão com maior SOMA das similaridade entre
+        as outras questões (max(sum(m)). (3) Retira também essas outras
+        questões com similaridade >= limiar. Retorna para o passo (2),
+        desconsiderando as questões já retiradas.
+        :param questions: list of questions
+        :param limiar: limiar
+        :return: sort by similarity of text
+        '''
         from difflib import SequenceMatcher
 
         n = len(questions)
@@ -472,10 +485,10 @@ class UtilsMC(object):
             v = m.sum(axis=1)  # soma cada linha
             vL = np.argsort(v)[::-1][:n]  # índice ordem reversa
 
-            try:
-                vC = np.argsort(m[vL[idLMax]])[::-1][:n]  # índice ordem reversa na linha
-            except:
-                break
+            #try:
+            #    vC = np.argsort(m[vL[idLMax]])[::-1][:n]  # índice ordem reversa na linha
+            #except:
+            #    break
 
             questions_new.append(questions[vL[idLMax]])
             id_del.append(vL[idLMax])
@@ -500,7 +513,56 @@ class UtilsMC(object):
         for v in questions:
             new_order.append(questions_aux.index(v))
 
-        # for q in questions_new + questions:
-        #  print(q)
+        return (new_order)
+
+    @staticmethod
+    def sortedBySimilarity2(questions, limiar=0.8):
+        '''
+        Esta função (1) cria uma matriz nxn de similaridades de n questões.
+        (2) Retira primeiro a questão com maior similaridade entre as outras
+        questões (max(m)). (3) Retira também essas outras questões com
+        similaridade >= limiar. Retorna para o passo (2), desconsiderando
+        as questões já retiradas.
+        :param questions: list of questions
+        :param limiar: limiar
+        :return: sort by similarity of text
+        '''
+        from difflib import SequenceMatcher
+
+        n = len(questions)
+        m = np.zeros((n, n))  # matriz de similaridades
+        for i in range(n):
+            for j in range(n):
+                m[i, j] = round(SequenceMatcher(None, questions[i], questions[j]).ratio(), 2)
+
+        np.fill_diagonal(m, 0)  # preenche a diagonal com zero
+
+        questions_new = []
+        id_del = []
+        while m.max() > 0:
+            idLMax = np.where(m == np.amax(m))[0][0]
+
+            questions_new.append(questions[idLMax])
+            id_del.append(idLMax)
+
+            vC = np.argsort(m[idLMax])[::-1][:n]
+            for i in vC:
+                if i != idLMax and m[idLMax][i] >= limiar:
+                    # print(i, m[idLMax][i], questions[idLMax], "~=", questions[i])
+                    questions_new.append(questions[i])
+                    id_del.append(i)
+            for i in id_del:
+                m[:, i] = 0  # zera a coluna da questão
+                m[i] = 0  # zera a linha da questão
+
+            idLMax += 1
+
+        questions_aux = questions.copy()
+        for i in sorted(id_del, reverse=True):
+            del questions[i]
+
+        new_order = id_del
+        for v in questions:
+            new_order.append(questions_aux.index(v))
 
         return (new_order)
