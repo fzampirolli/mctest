@@ -505,7 +505,7 @@ def see_topic_PDF(request, pk):
                 questions_id.append(q.id)
                 questions_text.append(q.question_text)
 
-            new_order = UtilsMC.sortedBySimilarity(questions_text)
+            new_order = UtilsMC.sortedBySimilarity2(questions_text)
 
             #for q in topic.questions2.all():
             for qid in new_order:

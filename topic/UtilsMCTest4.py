@@ -456,7 +456,7 @@ class UtilsMC(object):
         return questTipo
 
     @staticmethod
-    def sortedBySimilarity(questions, limiar=0.8):
+    def sortedBySimilarity(questions, limiar=0.7):
         '''
         Esta função (1) cria uma matriz nxn de similaridades de n questões.
         (2) Retira primeiro a questão com maior SOMA das similaridade entre
@@ -473,37 +473,27 @@ class UtilsMC(object):
         m = np.zeros((n, n))  # matriz de similaridades
         for i in range(n):
             for j in range(n):
-                m[i, j] = round(SequenceMatcher(None, questions[i], questions[j]).ratio(), 3)
+                m[i, j] = round(SequenceMatcher(None, questions[i], questions[j]).ratio(), 2)
 
         np.fill_diagonal(m, 0)  # preenche a diagonal com zero
 
-        idLMax = 0
         questions_new = []
         id_del = []
-        while m.max() >= limiar and not idLMax in id_del:  # enquanto existir questões similares
-
+        while m.max() > 0:
             v = m.sum(axis=1)  # soma cada linha
             vL = np.argsort(v)[::-1][:n]  # índice ordem reversa
-
-            #try:
-            #    vC = np.argsort(m[vL[idLMax]])[::-1][:n]  # índice ordem reversa na linha
-            #except:
-            #    break
-
-            questions_new.append(questions[vL[idLMax]])
-            id_del.append(vL[idLMax])
-
-            vC = np.argsort(m[vL[idLMax]])[::-1][:n]
+            questions_new.append(questions[vL[0]])
+            vC = np.argsort(m[vL[0]])[::-1][:n]
+            id_aux = [vL[0]]
             for i in vC:
-                if i != vL[idLMax] and m[vL[idLMax]][i] >= limiar:
-                    # print(i, m[vL[idLMax]][i], questions[vL[idLMax]], questions[i])
+                if i != vL[0] and m[vL[0]][i] >= limiar:
                     questions_new.append(questions[i])
-                    id_del.append(i)
-            for i in id_del:
+                    id_aux.append(i)
+
+            for i in id_aux:
                 m[:, i] = 0  # zera a coluna da questão
                 m[i] = 0  # zera a linha da questão
-
-            idLMax += 1
+            id_del += id_aux
 
         questions_aux = questions.copy()
         for i in sorted(id_del, reverse=True):
@@ -537,25 +527,24 @@ class UtilsMC(object):
 
         np.fill_diagonal(m, 0)  # preenche a diagonal com zero
 
-        questions_new = []
-        id_del = []
+        questions_new, id_del = [], []
         while m.max() > 0:
-            idLMax = np.where(m == np.amax(m))[0][0]
+            idLMax = np.where(m == np.amax(m))[0][0] # linha com maior similaridade
 
             questions_new.append(questions[idLMax])
-            id_del.append(idLMax)
+            id_aux = [idLMax]
 
-            vC = np.argsort(m[idLMax])[::-1][:n]
+            vC = np.argsort(m[idLMax])[::-1][:n] # maiores similaridades da linha
             for i in vC:
                 if i != idLMax and m[idLMax][i] >= limiar:
                     # print(i, m[idLMax][i], questions[idLMax], "~=", questions[i])
                     questions_new.append(questions[i])
-                    id_del.append(i)
-            for i in id_del:
+                    id_aux.append(i)
+
+            for i in id_aux:
                 m[:, i] = 0  # zera a coluna da questão
                 m[i] = 0  # zera a linha da questão
-
-            idLMax += 1
+            id_del += id_aux
 
         questions_aux = questions.copy()
         for i in sorted(id_del, reverse=True):
