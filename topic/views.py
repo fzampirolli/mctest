@@ -505,7 +505,7 @@ def see_topic_PDF(request, pk):
                 questions_id.append(q.id)
                 questions_text.append(q.question_text)
 
-            new_order = UtilsMC.sortedBySimilarity2(questions_text)
+            new_order = UtilsMC.sortedBySimilarity(questions_text)
 
             #for q in topic.questions2.all():
             for qid in new_order:
@@ -556,10 +556,10 @@ def see_topic_PDF(request, pk):
                             return render(request, 'exam/exam_errors.html', {})
                     except:
                         str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
-                        #messages.error(request,_('"ERRO NA PARTE PARAMÉTRICA!!!'))
-                        #messages.error(request, 'Question: %d' % q.id)
-                        #return render(request, 'exam/exam_errors.html', {})
-                        continue
+                        messages.error(request,_('"ERRO NA PARTE PARAMÉTRICA!!!'))
+                        messages.error(request, 'Question: %d' % q.id)
+                        return render(request, 'exam/exam_errors.html', {})
+                        #continue
 
                 str1 += r' %s\n\n' % ''.join(quest)
                 str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\n"
@@ -598,7 +598,7 @@ def see_topic_PDF(request, pk):
         try:
             os.remove("{}.aux".format(file_name))
             os.remove("{}.log".format(file_name))
-            os.remove("{}.tex".format(file_name))
+            #os.remove("{}.tex".format(file_name))
             os.remove("{}.pdf".format(file_name))
             os.remove("{}.out".format(file_name))
             os.remove("temp.txt")
