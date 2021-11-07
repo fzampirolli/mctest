@@ -69,6 +69,7 @@ apt install texlive-pictures
 apt install texlive-font-utils
 apt install texlive-latex-extra
 apt install zbar-tools
+apt install texlive-science
 
 apt update -y
 apt install -y python3-geopandas
