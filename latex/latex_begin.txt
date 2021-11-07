@@ -34,6 +34,13 @@
 \usepackage{amsfonts}
 \usepackage{multicol}
 
+\usepackage{mathtools}
+\usepackage{siunitx}
+\makeatletter
+\def\zz\ignorespaces{\@ifnextchar-{}{\phantom{-}}}
+\newcolumntype{C}{>{\zz}{c}}
+\makeatother
+
 %\usepackage[T1]{fontenc}
 %\usepackage{times}         
 %\usepackage{multido}  % border
