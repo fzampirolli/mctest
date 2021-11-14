@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 16:11-0300\n"
+"POT-Creation-Date: 2021-11-12 14:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -369,7 +369,7 @@ msgstr "Sala"
 #: course/templates/classroom/classroom_detail.html:17
 #: course/templates/classroom/classroom_update.html:85
 #: exam/templates/exam/exam_update2.html:232 topic/forms.py:47
-#: topic/models.py:103 topic/templates/question/question_create.html:56
+#: topic/models.py:105 topic/templates/question/question_create.html:56
 #: topic/templates/question/question_detail.html:58
 #: topic/templates/question/question_list.html:23
 #: topic/templates/question/question_list_who_created_user.html:23
@@ -822,7 +822,7 @@ msgstr "Listar Tópicos"
 #: course/templates/discipline/discipline_detail.html:48
 #: course/templates/discipline/discipline_detail.html:94
 #: exam/templates/exam/exam_update2.html:230 topic/forms.py:36
-#: topic/models.py:47 topic/models.py:81
+#: topic/models.py:47 topic/models.py:83
 #: topic/templates/question/question_detail.html:42
 #: topic/templates/question/question_list.html:22
 #: topic/templates/question/question_list_who_created_user.html:22
@@ -1389,11 +1389,11 @@ msgstr "Respostas"
 msgid "Both"
 msgstr "Ambos"
 
-#: exam/models.py:113 topic/models.py:129
+#: exam/models.py:113 topic/models.py:131
 msgid "Yes"
 msgstr "Sim"
 
-#: exam/models.py:114 exam/models.py:125 topic/models.py:130
+#: exam/models.py:114 exam/models.py:125 topic/models.py:132
 msgid "No"
 msgstr "Não"
 
@@ -1437,7 +1437,7 @@ msgstr "Terceiro quadrimestre"
 msgid "\\item turning off the phone"
 msgstr "\\item desligar o celular"
 
-#: exam/models.py:209 topic/models.py:93
+#: exam/models.py:209 topic/models.py:95
 msgid ""
 "Accepts LaTeX description and parameterization using the Python language "
 "(see publications)."
@@ -1446,8 +1446,8 @@ msgstr ""
 "(consulte as publicações)."
 
 #: exam/models.py:210 exam/templates/exam/exam_update2.html:231
-#: main/templates/index.html:482 topic/forms.py:45 topic/models.py:50
-#: topic/models.py:94 topic/templates/question/question_create.html:48
+#: main/templates/index.html:492 topic/forms.py:45 topic/models.py:50
+#: topic/models.py:96 topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
 #: topic/templates/question/question_update.html:84
 #: topic/templates/topic/topic_create.html:39
@@ -2202,15 +2202,15 @@ msgstr ""
 "precisar de funções personalizadas em Python para facilitar a escrita. A "
 "esse respeito, também agradeço"
 
-#: main/templates/contributors.html:37 main/templates/users.html:24
+#: main/templates/contributors.html:40 main/templates/users.html:24
 msgid "I hope this list grows more and more"
 msgstr "Espero que esta lista cresça mais e mais"
 
-#: main/templates/contributors.html:39 main/templates/users.html:26
+#: main/templates/contributors.html:42 main/templates/users.html:26
 msgid "Please email"
 msgstr "Enviar email para"
 
-#: main/templates/contributors.html:40 main/templates/users.html:27
+#: main/templates/contributors.html:43 main/templates/users.html:27
 msgid "if I forgot anyone"
 msgstr "se eu esqueci de alguém"
 
@@ -2508,31 +2508,31 @@ msgid "Parametric"
 msgstr "Paramétrica"
 
 #: main/templates/index-mctest.html:398 main/templates/index-mctest.html:415
-#: main/templates/index.html:426 main/templates/index.html:729
+#: main/templates/index.html:426 main/templates/index.html:739
 msgid "Users"
 msgstr "Usuários"
 
-#: main/templates/index-mctest.html:403 main/templates/index.html:717
+#: main/templates/index-mctest.html:403 main/templates/index.html:727
 msgid "For verification"
 msgstr "Para verificação"
 
-#: main/templates/index-mctest.html:418 main/templates/index.html:732
+#: main/templates/index-mctest.html:418 main/templates/index.html:742
 msgid "Last Login"
 msgstr "Último Acesso"
 
-#: main/templates/index-mctest.html:445 main/templates/index.html:758
+#: main/templates/index-mctest.html:445 main/templates/index.html:768
 msgid "You have visited this page"
 msgstr "Você visitou esta página"
 
-#: main/templates/index-mctest.html:446 main/templates/index.html:759
+#: main/templates/index-mctest.html:446 main/templates/index.html:769
 msgid "time"
 msgstr "vez"
 
-#: main/templates/index-mctest.html:446 main/templates/index.html:759
+#: main/templates/index-mctest.html:446 main/templates/index.html:769
 msgid "times"
 msgstr "vezes"
 
-#: main/templates/index-mctest.html:448 main/templates/index.html:761
+#: main/templates/index-mctest.html:448 main/templates/index.html:771
 msgid "Send improvement suggestions to"
 msgstr "Enviar sugestões de melhoria para"
 
@@ -2645,46 +2645,54 @@ msgstr ""
 "para criar exames com questões de múltipla escolha e dissertativas - "
 "conclusões"
 
-#: main/templates/index.html:465
-msgid "History"
-msgstr "Histórico"
+#: main/templates/index.html:463
+msgid "Research Project"
+msgstr "Projeto de Pesquisa"
 
-#: main/templates/index.html:465
-msgid "Software registration"
-msgstr "Registro de software"
-
-#: main/templates/index.html:475
-msgid "Order"
-msgstr "Pedido"
-
-#: main/templates/index.html:480
+#: main/templates/index.html:466 main/templates/index.html:490
 msgid "Title"
 msgstr "Título"
 
-#: main/templates/index.html:490
+#: main/templates/index.html:469
+msgid "Period"
+msgstr "Período"
+
+#: main/templates/index.html:475
+msgid "History"
+msgstr "Histórico"
+
+#: main/templates/index.html:475
+msgid "Software registration"
+msgstr "Registro de software"
+
+#: main/templates/index.html:485
+msgid "Order"
+msgstr "Pedido"
+
+#: main/templates/index.html:500
 msgid ""
 "Developed in Python (Django 2.0) for automatic correction - available in"
 msgstr ""
 "Desenvolvido em Python (Django 2.0) para a correção automática - disponível "
 "em"
 
-#: main/templates/index.html:493
+#: main/templates/index.html:503
 msgid "exams generated in LaTeX using a MySQL DB"
 msgstr "exames gerados em LaTeX usando o BD MySQL"
 
-#: main/templates/index.html:506
+#: main/templates/index.html:516
 msgid "Developed in Python for LaTeX generated exams"
 msgstr "Desenvolvido em Python para exames gerados em Latex"
 
-#: main/templates/index.html:517
+#: main/templates/index.html:527
 msgid "Developed in Python for automatic correction - available in"
 msgstr "Desenvolvido em Python para a correção automática - disponível em"
 
-#: main/templates/index.html:518
+#: main/templates/index.html:528
 msgid "by ftp"
 msgstr "por ftp"
 
-#: main/templates/index.html:528
+#: main/templates/index.html:538
 msgid ""
 "Developed in Python for automatic correction - exams generated in Word / "
 "BROffic"
@@ -2692,15 +2700,15 @@ msgstr ""
 "Desenvolvido em Python para a correção automática - exames gerados em Word/"
 "BROffice"
 
-#: main/templates/index.html:536
+#: main/templates/index.html:546
 msgid "Developed in Android"
 msgstr "Desenvolvido em Android"
 
-#: main/templates/index.html:537
+#: main/templates/index.html:547
 msgid "for automatic correction - exams generated in Word / BROffice"
 msgstr "para correção automática - exames gerados em Word/BROffice"
 
-#: main/templates/index.html:549
+#: main/templates/index.html:559
 msgid ""
 "Developed in Matlab for automatic correction - exams generated in Word / "
 "BROffice"
@@ -2708,7 +2716,7 @@ msgstr ""
 "Desenvolvido em Matlab  para a correção automática - exames gerados em Word/"
 "BROffice"
 
-#: main/templates/index.html:560
+#: main/templates/index.html:570
 msgid "Publications"
 msgstr "Publicações"
 
@@ -3135,31 +3143,31 @@ msgstr ""
 "Enviamos instruções por e-mail para definir sua senha. Se não chegar em "
 "alguns minutos, verifique sua pasta de spam."
 
-#: topic/UtilsMCTest4.py:404
+#: topic/UtilsMCTest4.py:400
 msgid "ImportQuestions: ERROR question without answers: "
 msgstr ""
 
-#: topic/UtilsMCTest4.py:413
+#: topic/UtilsMCTest4.py:409
 msgid "read question(s): "
 msgstr "Questões"
 
-#: topic/UtilsMCTest4.py:415
+#: topic/UtilsMCTest4.py:411
 msgid "Total of questions without groups:"
 msgstr "Total de questões sem grupos"
 
-#: topic/UtilsMCTest4.py:416 topic/UtilsMCTest4.py:422
+#: topic/UtilsMCTest4.py:413 topic/UtilsMCTest4.py:423
 msgid "Easy questions QE: "
 msgstr "Questão com nível fácil"
 
-#: topic/UtilsMCTest4.py:417 topic/UtilsMCTest4.py:423
+#: topic/UtilsMCTest4.py:415 topic/UtilsMCTest4.py:425
 msgid "Mean questions QM: "
 msgstr "Questões com nível médio"
 
-#: topic/UtilsMCTest4.py:418 topic/UtilsMCTest4.py:424
+#: topic/UtilsMCTest4.py:417 topic/UtilsMCTest4.py:427
 msgid "Hard questions QH: "
 msgstr "Questões com nível difícil"
 
-#: topic/UtilsMCTest4.py:419 topic/UtilsMCTest4.py:425
+#: topic/UtilsMCTest4.py:419 topic/UtilsMCTest4.py:429
 msgid "Text questions QT: "
 msgstr "Questões Dissertativas"
 
@@ -3167,7 +3175,7 @@ msgstr "Questões Dissertativas"
 msgid "Total of questions with groups:"
 msgstr "Total de questões com grupos"
 
-#: topic/forms.py:39 topic/models.py:89
+#: topic/forms.py:39 topic/models.py:91
 #: topic/templates/question/question_create.html:32
 #: topic/templates/question/question_detail.html:46
 #: topic/templates/question/question_list.html:28
@@ -3185,31 +3193,31 @@ msgstr "Somente uma questão por grupo será sorteada para cada exame"
 msgid "Description (you can include latex format)"
 msgstr "Descrição (você pode incluir fomato latex)"
 
-#: topic/forms.py:49 topic/models.py:114
+#: topic/forms.py:49 topic/models.py:116
 msgid "Difficulty"
 msgstr "Dificuldade"
 
-#: topic/forms.py:51 topic/models.py:126
+#: topic/forms.py:51 topic/models.py:128
 #: topic/templates/question/question_create.html:72
 #: topic/templates/question/question_update.html:108
 msgid "Bloom Taxonomy"
 msgstr "Taxonomia de Bloom"
 
-#: topic/forms.py:53 topic/models.py:135
+#: topic/forms.py:53 topic/models.py:137
 msgid "Question with some randomly chosen values"
 msgstr "Questões com algum valores escolhidos aleatoriamente"
 
-#: topic/forms.py:54 topic/models.py:136
+#: topic/forms.py:54 topic/models.py:138
 msgid "Parametric question"
 msgstr "Questão Paramétrica"
 
-#: topic/forms.py:57 topic/models.py:142
+#: topic/forms.py:57 topic/models.py:144
 #: topic/templates/question/question_detail.html:62
 #: topic/templates/question/question_update.html:124
 msgid "Who Created"
 msgstr "Quem criou"
 
-#: topic/forms.py:59 topic/models.py:139
+#: topic/forms.py:59 topic/models.py:141
 #: topic/templates/question/question_detail.html:66
 #: topic/templates/question/question_update.html:132
 msgid "Last Update"
@@ -3223,77 +3231,77 @@ msgstr "Escolha uma disciplina para este tópico"
 msgid "Tip: Include a prefix in the topic, such as discipline code."
 msgstr "Dica: Incluir um prefixo no tópico, como um código de disciplina."
 
-#: topic/models.py:84
+#: topic/models.py:86
 msgid "Only one question per group will be sorted for each exam (student)"
 msgstr ""
 "Somente uma questão por grupo será sorteada para cada exame (e para cada "
 "estudante)"
 
-#: topic/models.py:85
+#: topic/models.py:87
 msgid "Question Group"
 msgstr "Grupo de Questões"
 
-#: topic/models.py:88
+#: topic/models.py:90
 msgid "Enter a short description"
 msgstr "Descrição curta"
 
-#: topic/models.py:98
+#: topic/models.py:100
 msgid "Multiple-Choice Question"
 msgstr "Questões de Múltipla Escolha"
 
-#: topic/models.py:99
+#: topic/models.py:101
 msgid "Text Question"
 msgstr "Questões Dissertativas"
 
-#: topic/models.py:106
+#: topic/models.py:108
 msgid "Very easy level question"
 msgstr "Questão com nível muito fácil"
 
-#: topic/models.py:107
+#: topic/models.py:109
 msgid "Easy level question"
 msgstr "Questão com nível fácil"
 
-#: topic/models.py:108
+#: topic/models.py:110
 msgid "Mid-level question"
 msgstr "Questão com nível médio"
 
-#: topic/models.py:109
+#: topic/models.py:111
 msgid "Difficult level question"
 msgstr "Questão com nível difícil"
 
-#: topic/models.py:110
+#: topic/models.py:112
 msgid "Very Difficult level question"
 msgstr "Questão com nível muito difícil"
 
-#: topic/models.py:117
+#: topic/models.py:119
 msgid "remember: recognizing, recalling"
 msgstr "lembre-se: reconhecendo, lembrando"
 
-#: topic/models.py:118
+#: topic/models.py:120
 msgid "understand: interpreting, exemplifying, classifying, comparing"
 msgstr "entender: interpretar, exemplificar, classificar, comparar"
 
-#: topic/models.py:119
+#: topic/models.py:121
 msgid "apply: executing, implementing"
 msgstr "aplicar: executando, implementando"
 
-#: topic/models.py:120
+#: topic/models.py:122
 msgid "analyze: differentiating, organizing, attibuting"
 msgstr "analisar: diferenciando, organizando, atribuindo"
 
-#: topic/models.py:121
+#: topic/models.py:123
 msgid "evaluate: checking, critiquing"
 msgstr "avaliar: checando, criticando"
 
-#: topic/models.py:122
+#: topic/models.py:124
 msgid "create: generating, planning, producing"
 msgstr "criar: gerando, planejando, produzindo"
 
-#: topic/models.py:193
+#: topic/models.py:195
 msgid "Answer Text"
 msgstr "Texto da Resposta"
 
-#: topic/models.py:197
+#: topic/models.py:199
 msgid "Answer Feedback"
 msgstr "Retorno desta alternativa"
 
@@ -3515,7 +3523,7 @@ msgstr "Atualizar Tópico"
 msgid "ImportQuestionsJson: choose a JSON following the model!"
 msgstr "ImportQuestionsJson: escolher um arquivo JSON seguindo o modelo"
 
-#: topic/views.py:249 topic/views.py:536
+#: topic/views.py:249 topic/views.py:552
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -3549,7 +3557,11 @@ msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 msgid "The professor does not have permission!"
 msgstr ""
 
-#: topic/views.py:748
+#: topic/views.py:559
+msgid "\"ERRO NA PARTE PARAMÉTRICA!!!"
+msgstr ""
+
+#: topic/views.py:766
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 

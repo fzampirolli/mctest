@@ -147,7 +147,7 @@ class UpdateExamForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(UpdateExamForm, self).__init__(*args, **kwargs)
-        try:  # ao criar um exame, é necessário definir uma classe, então....
+        if True:  # ao criar um exame, é necessário definir uma classe!!! então....
 
             # pego a classe do exame
             classroomID = kwargs['initial']['classrooms']
@@ -156,13 +156,28 @@ class UpdateExamForm(forms.Form):
             # pego todas as questoes da disciplina a qual a classe pertence
             questions = Question.objects.filter(topic__discipline__pk=classroom.discipline.pk)
 
-            # pego todas as classes da disciplina a qual o exame pertence
+            # pego todas as classes da disciplina a qual o exame pertence, se coordenador
             discipline = get_object_or_404(Discipline, pk=classroom.discipline.pk)
-            classrooms = Classroom.objects.filter(discipline__pk=discipline.pk)
+            #classrooms = Classroom.objects.filter(discipline__pk=discipline.pk)
+            usuario = kwargs['initial']['exam_who_created'] # usuário do exame
+            qs = []
+            for p in discipline.discipline_coords.all():
+                if usuario == p:
+                    qs = discipline.classrooms2.all()
+                    break
+
+            # pego todas as classes da disciplina que o professor possui
+            if not qs:
+                for c in discipline.classrooms2.all(): # Classroom.objects.filter(discipline__discipline_profs__email=p.email):
+                    for p in c.classroom_profs.all():
+                        if p == usuario:
+                            qs.append(c.pk)
+                qs = Classroom.objects.filter(pk__in=qs)
 
             self.fields[
                 'questions'].queryset = questions  # Question.objects.filter(topic__discipline__discipline_profs=user)
             self.fields[
-                'classrooms'].queryset = classrooms  # Classroom.objects.filter(discipline__discipline_profs=user)
-        except:
-            pass
+                'classrooms'].queryset = qs  # Classroom.objects.filter(discipline__discipline_profs=user)
+
+        #except:
+        #    pass

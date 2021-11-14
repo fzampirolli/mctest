@@ -505,7 +505,7 @@ def see_topic_PDF(request, pk):
                 questions_id.append(q.id)
                 questions_text.append(q.question_text)
 
-            new_order = UtilsMC.sortedBySimilarity(questions_text)
+            new_order = UtilsMC.sortedBySimilarity2(questions_text)
 
             #for q in topic.questions2.all():
             for qid in new_order:
@@ -522,7 +522,7 @@ def see_topic_PDF(request, pk):
                 str1 += "\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy
                 str1 += "\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update
                 str1 += "\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created
-                str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (os.getenv('IP_HOST'), q.id)
+                str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (os.getenv('IP_HOST2'), q.id)
                 str1 += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper()
 
                 st = q.question_text
