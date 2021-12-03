@@ -68,7 +68,7 @@ def drawMatrix(A, myfile):
     plt.close()
 
 
-def printMatrix(A, title='', left='[', right=']', align='r', dec='3.2f'):
+def printMatrix(A, title='', left='', right='', align='r', dec='3.2f'):
     """
       Draw a matrix
       :param A: matrix = 2D list

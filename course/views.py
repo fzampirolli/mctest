@@ -472,7 +472,7 @@ class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
         'classroom_profs',
         'classroom_code',
         'classroom_room',
-        # 'classroom_days',
+        'classroom_days',
         'classroom_type',
     ]
     success_url = '/course/classroomsmy'
@@ -505,9 +505,10 @@ class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
     # fields = '__all__'
     fields = [
         'discipline',
+        'classroom_profs',
         'classroom_code',
         'classroom_room',
-        # 'classroom_days',
+        'classroom_days',
         'classroom_type',
     ]
     template_name = 'classroom/classroom_create.html'
@@ -521,7 +522,27 @@ class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
         return super(ClassroomCreate, self).form_valid(form)
 
     def get_queryset(self):
-        return Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+
+        # # pego todas as classes da disciplina a qual o exame pertence, se coordenador
+        # discipline = self.discipline
+        # # classrooms = Classroom.objects.filter(discipline__pk=discipline.pk)
+        # usuario = self.request.user
+        # qs = []
+        # for p in discipline.discipline_coords.all():
+        #     if usuario == p:
+        #         qs = discipline.classrooms2.all()
+        #         break
+        #
+        # # pego todas as classes da disciplina que o professor possui
+        # if not qs:
+        #     for c in discipline.classrooms2.all():  # Classroom.objects.filter(discipline__discipline_profs__email=p.email):
+        #         for p in c.classroom_profs.all():
+        #             if p == usuario:
+        #                 qs.append(c.pk)
+        #     qs = Classroom.objects.filter(pk__in=qs)
+
+        lista = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        return lista.order_by('classroom_days')
 
 
 class ClassroomDelete(LoginRequiredMixin, generic.DeleteView):

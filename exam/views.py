@@ -51,6 +51,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
+from django.template import RequestContext
 from pdf2image import convert_from_path
 from tablib import Dataset
 
@@ -1348,6 +1349,7 @@ class ExamCreate(CreateView):
     success_url = '/exam/myexams'
 
     def get_queryset(self):
+        passou = true
         return Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)  # .distinct()
 
     def form_valid(self, form):

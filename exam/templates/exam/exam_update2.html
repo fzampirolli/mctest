@@ -34,7 +34,8 @@
                                             {% csrf_token %}
                                             <input action="" class="btn btn-primary" type="submit"
                                                    value={% trans "Create-PDF" %}>
-                                            <input type="button" value="{% trans "video" %}" class="btn btn-outline-danger"
+                                            <input type="button" value="{% trans "video" %}"
+                                                   class="btn btn-outline-danger"
                                                    onclick="window.open('https://youtu.be/WBruh6wqIDw')">
                                         </form>
 
@@ -131,7 +132,7 @@
                                     {% render_field form.exam_name class+="form-control" placeholder=form.exam_name.help_text %}
                                 </div>
 
-                                <!-- classrooms -->
+                                <!-- classrooms
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <script>
@@ -145,17 +146,17 @@
                                         </script>
                                         <table class="table">
                                             <tr bgcolor="#e6f2ff" style="width:140px; height: 20px;">
-                                                <span class="input-group-text">{% trans "Choose Classrooms" %}</span>
+                                                <span class="input-group-text">{ trans "Choose Classrooms" }</span>
                                             </tr>
-                                            {% for c in form.classrooms %}
-                                                {% if  forloop.counter0|divisibleby:10 %}
+                                            { for c in form.classrooms }
+                                                { if  forloop.counter0|divisibleby:10 %}
                                                     <tr>
-                                                {% endif %}
+                                                { endif }
                                             <td style="width:120px; height: 5px; font-size:15px" align="left"
                                                 bgcolor="#e6f2ff">
                                                 <div class="checkbox">
                                                     <label>
-                                                        {{ c }}
+                                                        { c }
                                                     </label>
                                                     <script>
                                                         document.write("<a href=\"/course/classroom/" + get_ID_classroom(countClassrrom++) + "\" ");
@@ -163,13 +164,167 @@
                                                     </script>
                                                 </div>
                                             </td>
-                                            {% if  forloop.counter|divisibleby:10 %}
+                                            { if  forloop.counter|divisibleby:10 }
                                                 </tr>
-                                            {% endif %}
-                                            {% endfor %}
+                                            { endif }
+                                            { endfor }
                                         </table>
                                     </div>
+                                </div> -->
+
+                                <p></p>
+
+                                <!-- classrroms2 -->
+                                <div class="card-body" style="background-color:#f3f3f3;">
+                                    <h5 class="card-title">{% trans "Classrooms List" %}</h5>
+
+                                    <script>
+                                        var count_Class = 0;
+
+                                        function get_ID_Class(con) {
+                                            var aux = "id_classrooms_" + con.toString();
+                                            var x = document.getElementById(aux).value;
+                                            return x.toString();
+                                        }
+
+                                        function get_Dif_Class(con, str) {
+                                            var aux = "id_classrooms_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerText;
+                                            var ini = text.indexOf(str) + 6;
+                                            var sub = text.substring(ini, text.length);
+                                            var fim = sub.indexOf(';');
+                                            console.log(x);
+                                            return sub.substring(0, fim);
+                                        }
+
+                                        function get_Element_Class(con) {
+                                            var aux = "id_classrooms_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerHTML;
+                                            var fim = text.indexOf('>');
+                                            var sub = text.substring(0, fim + 1);
+                                            var text1 = x.labels[1].innerText;
+                                            var ini = text1.indexOf('; des') + 6;
+                                            var des = text1.substring(ini, text1.length);
+                                            var res = des;// + "</input>";
+                                            console.log(res);
+                                            return res;
+                                        }
+
+                                        function selectAll_Class() {
+                                            this.emp.forEach(element => {
+                                                element.checked = true;
+                                            });
+                                        }
+                                    </script>
+
+                                    <table id="example3" class="table table-striped table-bordered"
+                                           style="width:100%">
+                                        <thead class="thead-light">
+                                        <!-- header -->
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">{% trans "Discipline" %}</th>
+                                            <th scope="col">{% trans "Code" %}</th>
+                                            <th scope="col">{% trans "Type" %}</th>
+                                            <th scope="col">{% trans "Room" %}</th>
+                                            <th scope="col">{% trans "Period" %}</th>
+                                            <th scope="col">{% trans "N. Students" %}</th>
+                                            <th scope="col">{% trans "Profs" %}</th>
+                                            <th scope="col" class="text-right">{% trans "See" %}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+
+                                        {% for c in form.classrooms %}
+                                            {% csrf_token %}
+                                            <tr>
+                                                <!-- class -->
+                                                <td class="text-center">
+                                                    <div class="btn btn-outline-primary btn-sm">
+                                                        <label>
+                                                            <div style="color:white;font-size:1px;width:12px">{{ c }}</div>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <!-- Discipline -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; dis'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Code -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; cod'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Type -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; typ'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Room -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; roo'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- Period -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; day'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- N. Students -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; stu'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+                                                <!-- profs -->
+                                                <td>
+                                                    <div class="btn btn-outline-light text-dark btn-sm">
+                                                        <script>
+                                                            document.write(get_Dif_Class(count_Class, '; pro'));
+                                                        </script>
+                                                    </div>
+                                                </td>
+
+                                                <!-- see -->
+                                                <td class="text-center">
+                                                    <script>
+                                                        document.write("<a href=\"/course/classroom/" + get_ID_Class(count_Class) + "\"");
+                                                        document.write("class=\"btn btn-outline-primary btn-sm\"");
+                                                        document.write(" target=\"_blank\">" + get_ID_Class(count_Class++) + "</a>");
+                                                    </script>
+                                                </td>
+                                            </tr>
+
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+
+                                    <hr>
                                 </div>
+
+                                <p></p>
 
                                 <!-- questions -->
                                 <div class="card-body" style="background-color:#f3f3f3;">

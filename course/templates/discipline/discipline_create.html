@@ -30,7 +30,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Name" %}</span>
                                     </div>
-                                    {% render_field form.discipline_name class+="form-control" placeholder=form.course_name.help_text %}
+                                    {% render_field form.discipline_name class+="form-control" placeholder=form.discipline_name.label %}
                                 </div>
 
                                 <!-- discipline_code -->
@@ -38,7 +38,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Code" %}</span>
                                     </div>
-                                    {% render_field form.discipline_code class+="form-control" placeholder=form.course_code.help_text %}
+                                    {% render_field form.discipline_code class+="form-control" placeholder=form.discipline_code.label %}
                                 </div>
 
                                 <!-- discipline_objective -->
@@ -46,7 +46,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Objective" %}</span>
                                     </div>
-                                    {% render_field form.discipline_objective class+="form-control" placeholder=form.course_code.help_text %}
+                                    {% render_field form.discipline_objective class+="form-control" placeholder=form.discipline_objective.label %}
                                 </div>
 
                                 <!-- discipline_profs -->

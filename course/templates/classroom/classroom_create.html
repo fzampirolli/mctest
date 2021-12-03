@@ -25,12 +25,26 @@
                                     {% render_field form.discipline class+="form-control" %}
                                 </div>
 
+                                <!-- classroom_profs -->
+                                {% load widget_tweaks %}
+                                <div class="btn-group-vertical">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Choose Profs" %}</span>
+                                    </div>
+                                    {% render_field form.classroom_profs class+="form-control" value='{{ user.email }}' %}
+                                    <p>{% trans "If you are not the course coordinator, to include students you must choose at least one teacher from the class" %}<br>
+                                        {% trans "The teacher who creates a class and does NOT mark the email above will NOT be able to add students to the class" %}<br>
+                                    {% trans "Search with CTRL+F" %} - {% trans "Hold CTRL to mark more than one teacher" %} </p>
+                                </div>
+
+                                <p></p>
+
                                 <!-- classroom_code -->
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Code" %}</span>
                                     </div>
-                                    {% render_field form.classroom_code class+="form-control" placeholder=form.course_name.help_text %}
+                                    {% render_field form.classroom_code class+="form-control" placeholder=form.classroom_code.label %}
                                 </div>
 
                                 <!-- classroom_room -->
@@ -38,7 +52,14 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Room" %}</span>
                                     </div>
-                                    {% render_field form.classroom_room class+="form-control" placeholder=form.course_code.help_text %}
+                                    {% render_field form.classroom_room class+="form-control" placeholder=form.classroom_room.label %}
+                                </div>
+                                <!-- Creation Period -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Period" %} ({% trans "Format" %}: 2022.1)</span>
+                                    </div>
+                                    {% render_field form.classroom_days class+="form-control" value='2022.1' %}
                                 </div>
 
                                 <!-- classroom_type -->

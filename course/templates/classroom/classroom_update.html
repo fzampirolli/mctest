@@ -12,21 +12,23 @@
 
                         <hr>
 
-                        {% if user.groups.all.0.name == 'professor' %}
+                        {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.classroom_profs.all %}
 
                             <!-- import students -->
-                            <form class="input-group mb-3 text-right" action="import/" method="POST" enctype="multipart/form-data">
+                            <form class="input-group mb-3 text-right" action="import/" method="POST"
+                                  enctype="multipart/form-data">
                                 {% csrf_token %}
-                                    <input type="file" name="myfile" id="inputGroupFile01">
-                                        <button class="btn btn-primary"
-                                                type="submit">{% trans "Upload-Students" %}</button>
+                                <input type="file" name="myfile" id="inputGroupFile01">
+                                <button class="btn btn-primary"
+                                        type="submit">{% trans "Upload-Students" %}</button>
                             </form>
 
                             <h6>
                                 <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-web/examples/">{% trans "see examples" %}</a>
                             </h6>
 
-                            <h6>{% trans "CSV file syntax" %} - {% trans "Only UTF-8 format" %} - {% trans "Maximum number of characters for student is 45" %}: </h6>
+                            <h6>{% trans "CSV file syntax" %} - {% trans "Only UTF-8 format" %}
+                                - {% trans "Maximum number of characters for student is 45" %}: </h6>
                             {% trans "123, joão,  joao@gmail.com" %}<br>
                             {% trans "987, maria, maria@gmail.com" %}<p></p>
 
@@ -61,6 +63,9 @@
                                         <span class="input-group-text">{% trans "Profs" %}</span>
                                     </div>
                                     {% render_field form.classroom_profs class+="form-control" %}
+                                    <p>{% trans "If you are not the course coordinator, to include students you must choose at least one teacher from the class" %}<br>
+                                    {% trans "Search with CTRL+F" %}
+                                    - {% trans "Hold CTRL to mark more than one teacher" %}</p>
                                 </div>
 
                                 <!-- classroom_code -->
@@ -79,6 +84,14 @@
                                     {% render_field form.classroom_room class+="form-control" placeholder=form.course_code.help_text %}
                                 </div>
 
+                                <!-- Creation Period -->
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Period" %} ({% trans "Format" %}: 2022.1)</span>
+                                    </div>
+                                    {% render_field form.classroom_days class+="form-control" placeholder=form.course_code.help_text %}
+                                </div>
+
                                 <!-- classroom_type -->
                                 <div class="btn-group-vertical">
                                     <div class="input-group-prepend">
@@ -86,6 +99,8 @@
                                     </div>
                                     {% render_field form.classroom_type class+="form-control" %}
                                 </div>
+                                <p></p>
+
 
                                 <hr>
 
@@ -100,7 +115,7 @@
                         {% endif %}
 
                         <hr>
-                        {% trans "Only teacher registered in a discipline" %}<br>
+                        {% trans "Only teacher registered in classroom or coordenator" %}<br>
                         {% trans "Contact your discipline coordinator" %}                    </div>
                 </div>
             </div>

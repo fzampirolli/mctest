@@ -22,7 +22,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Choose Institutes" %}</span>
                                     </div>
-                                    {% render_field form.institutes class+="form-control" %}
+                                    {% render_field form.institutes class+="form-control"  %}
                                 </div>
 
                                 <!-- course_name -->
@@ -38,7 +38,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{% trans "Code" %}</span>
                                     </div>
-                                    {% render_field form.course_code class+="form-control" placeholder=form.course_code.help_text %}
+                                    {% render_field form.course_code class+="form-control" placeholder=form.course_code.label %}
                                 </div>
 
                                 <hr>

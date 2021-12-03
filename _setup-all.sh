@@ -218,6 +218,7 @@ grant all privileges on DB_MCTest.* to 'root'@'localhost';
 grant usage on *.* to 'root'@'localhost';
 FLUSH PRIVILEGES;
 
+find . | grep -E "(__pycache__|\.pyc|\.pyo$|migrations)" | xargs rm -rf
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.pyc"  -delete
 python manage.py showmigrations

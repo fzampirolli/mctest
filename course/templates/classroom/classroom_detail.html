@@ -13,15 +13,16 @@
 
                         <hr>
 
-                        <h5><strong>{% trans "Classroom" %}:</strong> {{ classroom.classroom_code }}</h5>
-                        <h6><strong>{% trans "Type" %}:</strong>{{ classroom.classroom_type }}</h6>
-                        <h6><strong>{% trans "Profs" %}:</strong>
+                        <h5><strong>{% trans "Classroom" %}: </strong> {{ classroom.classroom_code }}</h5>
+                        <h6><strong>{% trans "Type" %}: </strong>{{ classroom.classroom_type }}</h6>
+                        <h6><strong>{% trans "Date" %}: </strong>{{ classroom.classroom_days }}</h6>
+                        <h6><strong>{% trans "Profs" %}: </strong>
                             {% for prof in classroom.classroom_profs.all %}
-                                {{ prof }};
+                                * {{ prof }}
                             {% endfor %}
                         </h6>
 
-                        {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.discipline.discipline_profs.all %}
+                        {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.classroom_profs.all %}
 
                             <div style="margin-left:20px;margin-top:20px">
                                 <hr>
@@ -118,7 +119,7 @@
                             </div>
                         {% endif %}
 
-                        {% if user.groups.all.0.name == 'professor' %}
+                        {% if user in classroom.discipline.discipline_coords.all or user.groups.all.0.name == 'professor' and user in classroom.classroom_profs.all %}
                             <hr/>
                             <script>
                                 function validateForm() {
@@ -177,7 +178,7 @@
                         {% trans "Attention, a student may be many classrooms" %}<br>
                         {% trans "One student will be removed from the class" %}<br>
                         {% trans "Import students by CSV file in Update Classroom" %}<br>
-                        {% trans "Only teacher registered in a discipline" %}<br>
+                        {% trans "Only teacher registered in Classroom or coordinator" %}<br>
                         {% trans "Contact your discipline coordinator" %}
                     </div>
                 </div>

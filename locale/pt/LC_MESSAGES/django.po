@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-12 14:15-0300\n"
+"POT-Creation-Date: 2021-11-24 04:22-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,11 +219,11 @@ msgstr "Código Turma"
 msgid "Classroom room"
 msgstr "Sala da Turma"
 
-#: course/models.py:182
-msgid "Classroom days"
-msgstr "Dias de Aula"
+#: course/models.py:181
+msgid "Classroom period"
+msgstr "Período Turma"
 
-#: course/models.py:190
+#: course/models.py:189
 msgid "Classroom type"
 msgstr "Tipo de Turma"
 
@@ -269,14 +269,14 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: course/templates/classroom/classroom_confirm_delete.html:55
-#: course/templates/classroom/classroom_detail.html:84
-#: course/templates/classroom/classroom_list_who_created_user.html:51
+#: course/templates/classroom/classroom_detail.html:85
+#: course/templates/classroom/classroom_list_who_created_user.html:65
 #: course/templates/course/course_confirm_delete.html:29
 #: course/templates/course/course_detail.html:62
 #: course/templates/course/course_list.html:57
 #: course/templates/discipline/discipline_confirm_delete.html:28
 #: course/templates/discipline/discipline_detail.html:79
-#: course/templates/discipline/discipline_detail.html:153
+#: course/templates/discipline/discipline_detail.html:164
 #: course/templates/discipline/discipline_list.html:63
 #: course/templates/institute/institute_confirm_delete.html:27
 #: course/templates/institute/institute_detail.html:68
@@ -284,39 +284,37 @@ msgstr "Cancelar"
 #: exam/templates/exam/exam_confirm_delete.html:29
 #: exam/templates/exam/exam_detail.html:29
 #: exam/templates/exam/exam_list.html:70
-#: exam/templates/exam/exam_list_who_created_user.html:69
+#: exam/templates/exam/exam_list_who_created_user.html:72
 #: student/templates/student/student_confirm_delete.html:30
 #: student/templates/student/student_list.html:57
 #: topic/templates/question/question_confirm_delete.html:31
 #: topic/templates/question/question_list.html:103
 #: topic/templates/question/question_list_who_created_user.html:103
 #: topic/templates/topic/topic_confirm_delete.html:38
-#: topic/templates/topic/topic_detail.html:139
+#: topic/templates/topic/topic_detail.html:143
 #: topic/templates/topic/topic_list.html:62
 msgid "Delete"
 msgstr "Apagar"
 
 #: course/templates/classroom/classroom_confirm_delete.html:65
-#: course/templates/classroom/classroom_create.html:64
-#: course/templates/classroom/classroom_detail.html:180
-#: course/templates/classroom/classroom_list.html:45
-#: course/templates/classroom/classroom_list_who_created_user.html:82
-#: course/templates/classroom/classroom_update.html:103
+#: course/templates/classroom/classroom_create.html:85
+#: course/templates/classroom/classroom_list.html:46
+#: course/templates/classroom/classroom_list_who_created_user.html:96
 msgid "Only teacher registered in a discipline"
 msgstr "Somente professores cadastrados em disciplinas"
 
 #: course/templates/classroom/classroom_confirm_delete.html:66
-#: course/templates/classroom/classroom_create.html:65
-#: course/templates/classroom/classroom_detail.html:181
-#: course/templates/classroom/classroom_list.html:46
-#: course/templates/classroom/classroom_list_who_created_user.html:83
-#: course/templates/classroom/classroom_update.html:104
+#: course/templates/classroom/classroom_create.html:86
+#: course/templates/classroom/classroom_detail.html:182
+#: course/templates/classroom/classroom_list.html:47
+#: course/templates/classroom/classroom_list_who_created_user.html:97
+#: course/templates/classroom/classroom_update.html:119
 #: exam/templates/exam/exam_confirm_delete.html:37
-#: exam/templates/exam/exam_create.html:50
+#: exam/templates/exam/exam_create.html:201
 #: exam/templates/exam/exam_detail.html:39
 #: exam/templates/exam/exam_list.html:109
-#: exam/templates/exam/exam_list_who_created_user.html:107
-#: exam/templates/exam/exam_update2.html:495
+#: exam/templates/exam/exam_list_who_created_user.html:110
+#: exam/templates/exam/exam_update2.html:650
 #: topic/templates/question/question_confirm_delete.html:39
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:189
@@ -331,14 +329,45 @@ msgid "Created a new Classroom"
 msgstr "Criar uma nova Turma"
 
 #: course/templates/classroom/classroom_create.html:23
-#: course/templates/classroom/classroom_update.html:45
+#: course/templates/classroom/classroom_update.html:47
 #: topic/templates/topic/topic_create.html:23
 #: topic/templates/topic/topic_update.html:28
 msgid "Choose Discipline"
 msgstr "Escolher Disciplinas"
 
-#: course/templates/classroom/classroom_create.html:31
-#: course/templates/classroom/classroom_update.html:69
+#: course/templates/classroom/classroom_create.html:32
+msgid "Choose Profs"
+msgstr "Escolher Prof(s)"
+
+#: course/templates/classroom/classroom_create.html:35
+#: course/templates/classroom/classroom_update.html:66
+msgid ""
+"If you are not the course coordinator, to include students you must choose "
+"at least one teacher from the class"
+msgstr ""
+"Se você não é o coordenador da disciplina, para incluir os alunos deve-se "
+"escolher pelo menos um professor da turma"
+
+#: course/templates/classroom/classroom_create.html:36
+msgid ""
+"The teacher who creates a class and does NOT mark the email above will NOT "
+"be able to add students to the class"
+msgstr ""
+"O professor que criar uma turma e NÃO marcar o e-mail acima NÃO poderá "
+"adicionar alunos à turma"
+
+#: course/templates/classroom/classroom_create.html:37
+#: course/templates/classroom/classroom_update.html:67
+msgid "Search with CTRL+F"
+msgstr "Buscar com CTRL+F"
+
+#: course/templates/classroom/classroom_create.html:37
+#: course/templates/classroom/classroom_update.html:68
+msgid "Hold CTRL to mark more than one teacher"
+msgstr "Segure CTRL para marcar mais de um professor"
+
+#: course/templates/classroom/classroom_create.html:45
+#: course/templates/classroom/classroom_update.html:74
 #: course/templates/course/course_create.html:39
 #: course/templates/course/course_detail.html:16
 #: course/templates/course/course_detail.html:29
@@ -354,40 +383,60 @@ msgstr "Escolher Disciplinas"
 #: course/templates/institute/institute_detail.html:38
 #: course/templates/institute/institute_list.html:19
 #: course/templates/institute/institute_update.html:30
+#: exam/templates/exam/exam_create.html:82
+#: exam/templates/exam/exam_update2.html:229
 #: student/templates/student/student_create.html:22
 #: student/templates/student/student_list.html:18
 #: student/templates/student/student_update.html:22
 msgid "Code"
 msgstr "Código"
 
-#: course/templates/classroom/classroom_create.html:39
-#: course/templates/classroom/classroom_update.html:77 exam/UtilsLatex.py:859
+#: course/templates/classroom/classroom_create.html:53
+#: course/templates/classroom/classroom_update.html:82 exam/UtilsLatex.py:859
+#: exam/templates/exam/exam_create.html:84
+#: exam/templates/exam/exam_update2.html:231
 msgid "Room"
 msgstr "Sala"
 
-#: course/templates/classroom/classroom_create.html:47
+#: course/templates/classroom/classroom_create.html:60
+#: course/templates/classroom/classroom_list_who_created_user.html:22
+#: course/templates/classroom/classroom_update.html:90
+#: course/templates/discipline/discipline_detail.html:126
+#: exam/templates/exam/exam_create.html:85
+#: exam/templates/exam/exam_update2.html:232 main/templates/index.html:470
+msgid "Period"
+msgstr "Período"
+
+#: course/templates/classroom/classroom_create.html:60
+#: course/templates/classroom/classroom_update.html:90
+msgid "Format"
+msgstr ""
+
+#: course/templates/classroom/classroom_create.html:68
 #: course/templates/classroom/classroom_detail.html:17
-#: course/templates/classroom/classroom_update.html:85
-#: exam/templates/exam/exam_update2.html:232 topic/forms.py:47
+#: course/templates/classroom/classroom_update.html:98
+#: exam/templates/exam/exam_create.html:83
+#: exam/templates/exam/exam_update2.html:230
+#: exam/templates/exam/exam_update2.html:387 topic/forms.py:47
 #: topic/models.py:105 topic/templates/question/question_create.html:56
 #: topic/templates/question/question_detail.html:58
 #: topic/templates/question/question_list.html:23
 #: topic/templates/question/question_list_who_created_user.html:23
 #: topic/templates/question/question_update.html:92
-#: topic/templates/topic/topic_detail.html:61
+#: topic/templates/topic/topic_detail.html:63
 msgid "Type"
 msgstr "Tipo"
 
-#: course/templates/classroom/classroom_create.html:55
-#: course/templates/classroom/classroom_update.html:95
+#: course/templates/classroom/classroom_create.html:76
+#: course/templates/classroom/classroom_update.html:110
 #: course/templates/course/course_create.html:48
 #: course/templates/course/course_update.html:48
 #: course/templates/discipline/discipline_create.html:72
 #: course/templates/discipline/discipline_update.html:70
 #: course/templates/institute/institute_create.html:79
 #: course/templates/institute/institute_update.html:78
-#: exam/templates/exam/exam_create.html:40
-#: exam/templates/exam/exam_update2.html:474
+#: exam/templates/exam/exam_create.html:192
+#: exam/templates/exam/exam_update2.html:629
 #: student/templates/student/student_create.old.html:47
 #: topic/templates/question/question_create.html:89
 #: topic/templates/question/question_detail.html:30
@@ -397,16 +446,16 @@ msgstr "Tipo"
 msgid "Back"
 msgstr "Voltar"
 
-#: course/templates/classroom/classroom_create.html:56
-#: course/templates/classroom/classroom_update.html:96
+#: course/templates/classroom/classroom_create.html:77
+#: course/templates/classroom/classroom_update.html:111
 #: course/templates/course/course_create.html:49
 #: course/templates/course/course_update.html:49
 #: course/templates/discipline/discipline_create.html:73
 #: course/templates/discipline/discipline_update.html:71
 #: course/templates/institute/institute_create.html:80
 #: course/templates/institute/institute_update.html:79
-#: exam/templates/exam/exam_create.html:41
-#: exam/templates/exam/exam_update2.html:475
+#: exam/templates/exam/exam_create.html:193
+#: exam/templates/exam/exam_update2.html:630
 #: student/templates/student/student_create.html:48
 #: student/templates/student/student_create.old.html:48
 #: student/templates/student/student_update.html:48
@@ -419,7 +468,7 @@ msgstr "Voltar"
 msgid "Save"
 msgstr "Salva"
 
-#: course/templates/classroom/classroom_create.html:63
+#: course/templates/classroom/classroom_create.html:84
 msgid "Import students by csv file in My Classrooms"
 msgstr "Importar estudantes por aquivo csv em Minhas Turmas"
 
@@ -428,121 +477,130 @@ msgid "Classroom Detail"
 msgstr "Detalhar Turma"
 
 #: course/templates/classroom/classroom_detail.html:16
-#: course/templates/classroom/classroom_list_who_created_user.html:64
-#: course/templates/discipline/discipline_detail.html:168 course/views.py:182
+#: course/templates/classroom/classroom_list_who_created_user.html:78
+#: course/templates/discipline/discipline_detail.html:179 course/views.py:182
 #: exam/UtilsLatex.py:858
 msgid "Classroom"
 msgstr "Turma"
 
-#: course/templates/classroom/classroom_detail.html:18
-#: course/templates/classroom/classroom_update.html:61
+#: course/templates/classroom/classroom_detail.html:18 exam/UtilsLatex.py:865
+#: exam/templates/exam/exam_update2.html:591
+msgid "Date"
+msgstr "Data"
+
+#: course/templates/classroom/classroom_detail.html:19
+#: course/templates/classroom/classroom_list_who_created_user.html:23
+#: course/templates/classroom/classroom_update.html:63
 #: course/templates/discipline/discipline_create.html:55
 #: course/templates/discipline/discipline_detail.html:24
+#: course/templates/discipline/discipline_detail.html:127
 #: course/templates/discipline/discipline_update.html:54
+#: exam/templates/exam/exam_create.html:87
+#: exam/templates/exam/exam_update2.html:234
 msgid "Profs"
 msgstr ""
 
-#: course/templates/classroom/classroom_detail.html:35
+#: course/templates/classroom/classroom_detail.html:36
 msgid "Students List"
 msgstr "Listar Estudantes"
 
-#: course/templates/classroom/classroom_detail.html:42
-#: course/templates/classroom/classroom_detail.html:141 exam/CVMCTest.py:1530
+#: course/templates/classroom/classroom_detail.html:43
+#: course/templates/classroom/classroom_detail.html:142 exam/CVMCTest.py:1530
 #: student/templates/student/student_create.old.html:23
 #: student/templates/student/student_detail.html:15
 #: topic/templates/question/question_list.html:27
 #: topic/templates/question/question_list_who_created_user.html:27
-#: topic/templates/topic/topic_detail.html:65
+#: topic/templates/topic/topic_detail.html:67
 msgid "ID"
 msgstr "ID"
 
-#: course/templates/classroom/classroom_detail.html:43
-#: course/templates/classroom/classroom_detail.html:111 exam/CVMCTest.py:1529
+#: course/templates/classroom/classroom_detail.html:44
+#: course/templates/classroom/classroom_detail.html:112 exam/CVMCTest.py:1529
 #: exam/UtilsLatex.py:868 exam/UtilsLatex.py:925 exam/models.py:222
 #: exam/models.py:256
 msgid "Student"
 msgstr "Estudante"
 
-#: course/templates/classroom/classroom_detail.html:44
-#: course/templates/classroom/classroom_detail.html:154 exam/CVMCTest.py:1531
+#: course/templates/classroom/classroom_detail.html:45
+#: course/templates/classroom/classroom_detail.html:155 exam/CVMCTest.py:1531
 #: student/templates/student/student_create.old.html:39
 #: student/templates/student/student_detail.html:17
 #: student/templates/student/student_update.html:38
 msgid "Email"
 msgstr "Email"
 
-#: course/templates/classroom/classroom_detail.html:45
-#: course/templates/classroom/classroom_list_who_created_user.html:22
+#: course/templates/classroom/classroom_detail.html:46
+#: course/templates/classroom/classroom_list_who_created_user.html:24
 #: course/templates/course/course_detail.html:31
 #: course/templates/course/course_list.html:21
 #: course/templates/discipline/discipline_detail.html:49
-#: course/templates/discipline/discipline_detail.html:126
+#: course/templates/discipline/discipline_detail.html:128
 #: course/templates/discipline/discipline_list.html:21
 #: course/templates/institute/institute_detail.html:40
 #: course/templates/institute/institute_list.html:22
 #: exam/templates/exam/exam_list.html:25
-#: exam/templates/exam/exam_list_who_created_user.html:26
+#: exam/templates/exam/exam_list_who_created_user.html:29
 #: student/templates/student/student_list.html:21
 #: topic/templates/question/question_list.html:29
 #: topic/templates/question/question_list_who_created_user.html:29
-#: topic/templates/topic/topic_detail.html:67
+#: topic/templates/topic/topic_detail.html:69
 #: topic/templates/topic/topic_list.html:24
 msgid "Actions"
 msgstr "Ações"
 
-#: course/templates/classroom/classroom_detail.html:79
-#: course/templates/classroom/classroom_list_who_created_user.html:47
+#: course/templates/classroom/classroom_detail.html:80
+#: course/templates/classroom/classroom_list_who_created_user.html:61
 #: course/templates/course/course_detail.html:56
 #: course/templates/course/course_list.html:53
 #: course/templates/discipline/discipline_detail.html:73
-#: course/templates/discipline/discipline_detail.html:148
+#: course/templates/discipline/discipline_detail.html:159
 #: course/templates/discipline/discipline_list.html:57
 #: course/templates/institute/institute_detail.html:64
 #: course/templates/institute/institute_list.html:53
 #: exam/templates/exam/exam_detail.html:24
 #: exam/templates/exam/exam_list.html:64
-#: exam/templates/exam/exam_list_who_created_user.html:63
+#: exam/templates/exam/exam_list_who_created_user.html:66
 #: student/templates/student/student_list.html:52
 #: topic/templates/question/question_detail.html:32
 #: topic/templates/question/question_list.html:97
 #: topic/templates/question/question_list_who_created_user.html:97
-#: topic/templates/topic/topic_detail.html:134
+#: topic/templates/topic/topic_detail.html:137
 #: topic/templates/topic/topic_list.html:57
 msgid "Update"
 msgstr "Atualizar "
 
-#: course/templates/classroom/classroom_detail.html:95 exam/forms.py:51
+#: course/templates/classroom/classroom_detail.html:96 exam/forms.py:51
 #: exam/models.py:47 exam/templates/exam/exam_list.html:22
-#: exam/templates/exam/exam_list_who_created_user.html:23
+#: exam/templates/exam/exam_list_who_created_user.html:26
 #: main/templates/base_generic.html:103 main/templates/index-mctest.html:376
 #: main/templates/index.html:395
 msgid "Classrooms"
 msgstr "Turmas"
 
-#: course/templates/classroom/classroom_detail.html:110
+#: course/templates/classroom/classroom_detail.html:111
 msgid "There are no"
 msgstr "Não existe"
 
-#: course/templates/classroom/classroom_detail.html:111
-#: course/templates/classroom/classroom_list_who_created_user.html:64
+#: course/templates/classroom/classroom_detail.html:112
+#: course/templates/classroom/classroom_list_who_created_user.html:78
 #: course/templates/course/course_detail.html:75
 #: course/templates/course/course_list.html:69
 #: course/templates/discipline/discipline_detail.html:94
-#: course/templates/discipline/discipline_detail.html:168
+#: course/templates/discipline/discipline_detail.html:179
 #: course/templates/discipline/discipline_list.html:75
 #: course/templates/institute/institute_detail.html:82
 #: course/templates/institute/institute_list.html:72
 #: exam/templates/exam/exam_list.html:86
-#: exam/templates/exam/exam_list_who_created_user.html:85
+#: exam/templates/exam/exam_list_who_created_user.html:88
 #: student/templates/student/student_list.html:71
 #: topic/templates/question/question_list.html:122
 #: topic/templates/question/question_list_who_created_user.html:123
-#: topic/templates/topic/topic_detail.html:156
+#: topic/templates/topic/topic_detail.html:160
 #: topic/templates/topic/topic_list.html:79
 msgid "registered yet."
 msgstr "registrada(o) ainda"
 
-#: course/templates/classroom/classroom_detail.html:148
+#: course/templates/classroom/classroom_detail.html:149
 #: course/templates/course/course_create.html:31
 #: course/templates/course/course_detail.html:30
 #: course/templates/course/course_list.html:19
@@ -555,8 +613,8 @@ msgstr "registrada(o) ainda"
 #: course/templates/institute/institute_detail.html:39
 #: course/templates/institute/institute_list.html:20
 #: course/templates/institute/institute_update.html:22
-#: exam/templates/exam/exam_create.html:32
-#: exam/templates/exam/exam_update2.html:129
+#: exam/templates/exam/exam_create.html:34
+#: exam/templates/exam/exam_update2.html:130
 #: student/templates/student/student_create.html:30
 #: student/templates/student/student_create.old.html:31
 #: student/templates/student/student_detail.html:16
@@ -565,38 +623,44 @@ msgstr "registrada(o) ainda"
 msgid "Name"
 msgstr "Nome"
 
-#: course/templates/classroom/classroom_detail.html:161
+#: course/templates/classroom/classroom_detail.html:162
 #: student/templates/student/student_create.html:11
 #: student/templates/student/student_create.old.html:11
 msgid "Create a new Student"
 msgstr "Criar um novo Estudante"
 
-#: course/templates/classroom/classroom_detail.html:170
+#: course/templates/classroom/classroom_detail.html:171
 msgid "Update Classroom by CSV"
 msgstr "Atualizar Turma com CSV"
 
-#: course/templates/classroom/classroom_detail.html:177
+#: course/templates/classroom/classroom_detail.html:178
 msgid "Attention, a student may be many classrooms"
 msgstr "Atenção, um estudante pode ter muitas turmas"
 
-#: course/templates/classroom/classroom_detail.html:178
+#: course/templates/classroom/classroom_detail.html:179
 msgid "One student will be removed from the class"
 msgstr "Um estudante será removido da turma"
 
-#: course/templates/classroom/classroom_detail.html:179
+#: course/templates/classroom/classroom_detail.html:180
 msgid "Import students by CSV file in Update Classroom"
 msgstr "Importar estudantes por aquivo CSV em Minhas Turmas"
 
+#: course/templates/classroom/classroom_detail.html:181
+msgid "Only teacher registered in Classroom or coordinator"
+msgstr "Somente professores cadastrados na turma ou coordenador"
+
 #: course/templates/classroom/classroom_list.html:11
 #: course/templates/classroom/classroom_list_who_created_user.html:11
+#: exam/templates/exam/exam_create.html:43
+#: exam/templates/exam/exam_update2.html:179
 msgid "Classrooms List"
 msgstr "Listar Turmas"
 
-#: course/templates/classroom/classroom_list.html:28
+#: course/templates/classroom/classroom_list.html:29
 msgid "Create a new Classroom"
 msgstr "Criar uma nova Turma"
 
-#: course/templates/classroom/classroom_list.html:34
+#: course/templates/classroom/classroom_list.html:35
 #: course/templates/discipline/discipline_detail.html:116
 msgid "Classroom List"
 msgstr "Listar Turmas"
@@ -609,31 +673,33 @@ msgstr "Código da Turma"
 #: course/templates/course/course_detail.html:75
 #: course/templates/discipline/discipline_detail.html:16
 #: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:857
+#: exam/templates/exam/exam_create.html:81
 #: exam/templates/exam/exam_list.html:21
-#: exam/templates/exam/exam_list_who_created_user.html:22
+#: exam/templates/exam/exam_list_who_created_user.html:25
+#: exam/templates/exam/exam_update2.html:228
 #: topic/templates/topic/topic_list.html:23
 msgid "Discipline"
 msgstr "Disciplina"
 
-#: course/templates/classroom/classroom_list_who_created_user.html:63
+#: course/templates/classroom/classroom_list_who_created_user.html:77
 #: course/templates/course/course_detail.html:74
 #: course/templates/course/course_list.html:69
-#: course/templates/discipline/discipline_detail.html:167
+#: course/templates/discipline/discipline_detail.html:178
 #: course/templates/discipline/discipline_list.html:74
 #: course/templates/institute/institute_detail.html:81
 #: course/templates/institute/institute_list.html:71
 #: exam/templates/exam/exam_list.html:85
-#: exam/templates/exam/exam_list_who_created_user.html:84
+#: exam/templates/exam/exam_list_who_created_user.html:87
 #: student/templates/student/student_list.html:70
 #: topic/templates/question/question_list.html:121
 #: topic/templates/question/question_list_who_created_user.html:122
-#: topic/templates/topic/topic_detail.html:155
+#: topic/templates/topic/topic_detail.html:159
 #: topic/templates/topic/topic_list.html:78
 msgid "There is no"
 msgstr "Não existe"
 
-#: course/templates/classroom/classroom_list_who_created_user.html:73
-#: course/templates/discipline/discipline_detail.html:179
+#: course/templates/classroom/classroom_list_who_created_user.html:87
+#: course/templates/discipline/discipline_detail.html:190
 msgid "Create a New Classroom"
 msgstr "Criar uma nova Turma"
 
@@ -641,11 +707,11 @@ msgstr "Criar uma nova Turma"
 msgid "Classroom Update"
 msgstr "Atualizar Turma"
 
-#: course/templates/classroom/classroom_update.html:22
+#: course/templates/classroom/classroom_update.html:23
 msgid "Upload-Students"
 msgstr "Importar-Estudantes"
 
-#: course/templates/classroom/classroom_update.html:26
+#: course/templates/classroom/classroom_update.html:27
 #: course/templates/discipline/discipline_update.html:87
 #: course/templates/discipline/discipline_update.html:111
 #: topic/templates/question/question_list_who_created_user.html:153
@@ -654,59 +720,61 @@ msgstr ""
 "Veja exemplos (click com botão direito do mouse e salve o arquivo em seu "
 "computador, antes de fazer upload)"
 
-#: course/templates/classroom/classroom_update.html:29
+#: course/templates/classroom/classroom_update.html:30
 #: course/templates/discipline/discipline_update.html:89
 #: course/templates/discipline/discipline_update.html:114
 msgid "CSV file syntax"
 msgstr "Sintaxe do arquivo CSV"
 
-#: course/templates/classroom/classroom_update.html:29
+#: course/templates/classroom/classroom_update.html:30
 #: course/templates/discipline/discipline_update.html:89
 #: course/templates/discipline/discipline_update.html:114
 #: topic/templates/question/question_list_who_created_user.html:145
 msgid "Only UTF-8 format"
 msgstr "Somente formato UTF-8"
 
-#: course/templates/classroom/classroom_update.html:29
+#: course/templates/classroom/classroom_update.html:31
 #: course/templates/discipline/discipline_update.html:89
 #: course/templates/discipline/discipline_update.html:114
-#, fuzzy
-#| msgid "Maximum number of blocks horizontally"
 msgid "Maximum number of characters for student is 45"
-msgstr "Número máximo de blocos na horizontal"
+msgstr "Número máximo de caracteres para estudante é 45"
 
-#: course/templates/classroom/classroom_update.html:30
+#: course/templates/classroom/classroom_update.html:32
 msgid "123, joão,  joao@gmail.com"
 msgstr "123, joão,  joao@gmail.com"
 
-#: course/templates/classroom/classroom_update.html:31
+#: course/templates/classroom/classroom_update.html:33
 msgid "987, maria, maria@gmail.com"
 msgstr "987, maria, maria@gmail.com"
 
-#: course/templates/classroom/classroom_update.html:33
+#: course/templates/classroom/classroom_update.html:35
 #: course/templates/discipline/discipline_update.html:92
 #: course/templates/discipline/discipline_update.html:119
 #: topic/templates/question/question_list_who_created_user.html:166
 msgid "If necessary, use this to convert the accents"
 msgstr "Se necessário, use este conversor de acentos"
 
-#: course/templates/classroom/classroom_update.html:34
+#: course/templates/classroom/classroom_update.html:36
 #: course/templates/discipline/discipline_update.html:93
 #: course/templates/discipline/discipline_update.html:120
 #: topic/templates/question/question_list_who_created_user.html:167
 msgid "convert"
 msgstr "conversor"
 
-#: course/templates/classroom/classroom_update.html:35
+#: course/templates/classroom/classroom_update.html:37
 msgid "After importing CSV file, check below if students are marked in gray"
 msgstr ""
 "Após importar o aquivo CSV, verificar abaixo se os estudantes estão marcados "
 "em cinza"
 
-#: course/templates/classroom/classroom_update.html:53
+#: course/templates/classroom/classroom_update.html:55
 #: main/templates/index-mctest.html:397 main/templates/index.html:425
 msgid "Students"
 msgstr "Estudantes"
+
+#: course/templates/classroom/classroom_update.html:118
+msgid "Only teacher registered in classroom or coordenator"
+msgstr "Somente professores cadastrados em disciplinas ou coordenador"
 
 #: course/templates/course/course_confirm_delete.html:9
 msgid "Delete Course"
@@ -821,14 +889,14 @@ msgstr "Listar Tópicos"
 
 #: course/templates/discipline/discipline_detail.html:48
 #: course/templates/discipline/discipline_detail.html:94
-#: exam/templates/exam/exam_update2.html:230 topic/forms.py:36
+#: exam/templates/exam/exam_update2.html:385 topic/forms.py:36
 #: topic/models.py:47 topic/models.py:83
 #: topic/templates/question/question_detail.html:42
 #: topic/templates/question/question_list.html:22
 #: topic/templates/question/question_list_who_created_user.html:22
 #: topic/templates/topic/topic_create.html:31
 #: topic/templates/topic/topic_detail.html:24
-#: topic/templates/topic/topic_detail.html:60
+#: topic/templates/topic/topic_detail.html:62
 #: topic/templates/topic/topic_list.html:22
 #: topic/templates/topic/topic_list.html:79
 #: topic/templates/topic/topic_update.html:36
@@ -848,7 +916,7 @@ msgstr "Criar um novo Tópico"
 msgid "Only coordinator can create/update/delate topic"
 msgstr "Somente coordenandor pode criar/atualizar/apagar tópicos"
 
-#: course/templates/discipline/discipline_detail.html:185
+#: course/templates/discipline/discipline_detail.html:196
 msgid "Only professor can create/update/delate classroom"
 msgstr "Somente coordenandor pode criar/atualizar/apagar tópicos"
 
@@ -1044,19 +1112,19 @@ msgstr "StudentCreate: Já existe ID"
 msgid "Created student: Created Student ID: "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:482 exam/views.py:1371
+#: course/views.py:482 exam/views.py:1373
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
-#: course/views.py:518
+#: course/views.py:519
 msgid "ClassroomCreate: The teacher is not registered in a Discipline"
 msgstr "ClassroomCreate: o professor não está registrado na disciplina"
 
-#: course/views.py:540
+#: course/views.py:561
 msgid "ClassroomDelete: The teacher is not registered in a Discipline"
 msgstr "ClassroomDelete: o professor não está registrado na disciplina"
 
-#: course/views.py:557
+#: course/views.py:578
 msgid ""
 "LoanedClassroomByUserListView: The teacher is not registered in a Discipline"
 msgstr ""
@@ -1090,12 +1158,12 @@ msgstr "Retorno"
 msgid "Invalid answer!"
 msgstr "Alternativa inválida!"
 
-#: exam/UtilsLatex.py:363 exam/views.py:1037 exam/views.py:1076
+#: exam/UtilsLatex.py:363 exam/views.py:1038 exam/views.py:1077
 msgid "ERROR in genTex"
 msgstr ""
 
 #: exam/UtilsLatex.py:818 exam/UtilsLatex.py:861 exam/forms.py:146
-#: exam/models.py:173 exam/templates/exam/exam_update2.html:464
+#: exam/models.py:173 exam/templates/exam/exam_update2.html:619
 msgid "Instructions"
 msgstr "Instruções"
 
@@ -1104,21 +1172,17 @@ msgid "Prof."
 msgstr "Prof."
 
 #: exam/UtilsLatex.py:863 exam/forms.py:130 exam/models.py:149
-#: exam/templates/exam/exam_update2.html:443
+#: exam/templates/exam/exam_update2.html:598
 msgid "Term"
 msgstr "Período"
 
 #: exam/UtilsLatex.py:864 exam/models.py:205 exam/models.py:217
 #: exam/models.py:251 exam/templates/exam/exam_detail.html:15
 #: exam/templates/exam/exam_list.html:23 exam/templates/exam/exam_list.html:86
-#: exam/templates/exam/exam_list_who_created_user.html:24
-#: exam/templates/exam/exam_list_who_created_user.html:85
+#: exam/templates/exam/exam_list_who_created_user.html:27
+#: exam/templates/exam/exam_list_who_created_user.html:88
 msgid "Exam"
 msgstr "Exame"
-
-#: exam/UtilsLatex.py:865 exam/templates/exam/exam_update2.html:436
-msgid "Date"
-msgstr "Data"
 
 #: exam/UtilsLatex.py:867 exam/UtilsLatex.py:924
 msgid "ID/RA"
@@ -1249,19 +1313,19 @@ msgid "Number of questions with difficulty level x"
 msgstr ""
 "Número de questões com nível de dificuldade X (apenas Múltipla-Escolha)"
 
-#: exam/forms.py:62 exam/models.py:56 exam/templates/exam/exam_update2.html:334
+#: exam/forms.py:62 exam/models.py:56 exam/templates/exam/exam_update2.html:489
 msgid "Difficulty 1"
 msgstr "Dificuldade 1"
 
-#: exam/forms.py:66 exam/models.py:59 exam/templates/exam/exam_update2.html:341
+#: exam/forms.py:66 exam/models.py:59 exam/templates/exam/exam_update2.html:496
 msgid "Difficulty 2"
 msgstr "Dificuldade 2"
 
-#: exam/forms.py:70 exam/models.py:62 exam/templates/exam/exam_update2.html:348
+#: exam/forms.py:70 exam/models.py:62 exam/templates/exam/exam_update2.html:503
 msgid "Difficulty 3"
 msgstr "Dificuldade 3"
 
-#: exam/forms.py:74 exam/models.py:65 exam/templates/exam/exam_update2.html:355
+#: exam/forms.py:74 exam/models.py:65 exam/templates/exam/exam_update2.html:510
 msgid "Difficulty 4"
 msgstr "Dificuldade 4"
 
@@ -1269,7 +1333,7 @@ msgstr "Dificuldade 4"
 msgid "The system first draws the questions with difficulty 1, then 2, ..."
 msgstr "O sistema inclui primeiro as questões com dificuldade 1, então 2, ..."
 
-#: exam/forms.py:79 exam/models.py:68 exam/templates/exam/exam_update2.html:362
+#: exam/forms.py:79 exam/models.py:68 exam/templates/exam/exam_update2.html:517
 msgid "Difficulty 5"
 msgstr "Dificuldade 5"
 
@@ -1277,7 +1341,7 @@ msgstr "Dificuldade 5"
 msgid "Number of answers per question"
 msgstr "Número de alternativas por questão"
 
-#: exam/forms.py:83 exam/models.py:74 exam/templates/exam/exam_update2.html:369
+#: exam/forms.py:83 exam/models.py:74 exam/templates/exam/exam_update2.html:524
 msgid "Answers per question"
 msgstr "Alternativas por questão"
 
@@ -1285,7 +1349,7 @@ msgstr "Alternativas por questão"
 msgid "Number of textual questions"
 msgstr "Número de questões dissertativas"
 
-#: exam/forms.py:88 exam/models.py:78 exam/templates/exam/exam_update2.html:376
+#: exam/forms.py:88 exam/models.py:78 exam/templates/exam/exam_update2.html:531
 msgid "Textual"
 msgstr "Dissertativa"
 
@@ -1293,7 +1357,7 @@ msgstr "Dissertativa"
 msgid "Number of exam variations"
 msgstr "Número de variações de exames"
 
-#: exam/forms.py:93 exam/models.py:82 exam/templates/exam/exam_update2.html:383
+#: exam/forms.py:93 exam/models.py:82 exam/templates/exam/exam_update2.html:538
 msgid "Variations"
 msgstr "Variações"
 
@@ -1301,7 +1365,7 @@ msgstr "Variações"
 msgid "Number of questions per block"
 msgstr "Número de questões por bloco"
 
-#: exam/forms.py:97 exam/models.py:87 exam/templates/exam/exam_update2.html:394
+#: exam/forms.py:97 exam/models.py:87 exam/templates/exam/exam_update2.html:549
 msgid "Questions by block"
 msgstr "Questões por bloco"
 
@@ -1310,7 +1374,7 @@ msgid "Maximum number of blocks horizontally"
 msgstr "Número máximo de blocos na horizontal"
 
 #: exam/forms.py:101 exam/models.py:92
-#: exam/templates/exam/exam_update2.html:401
+#: exam/templates/exam/exam_update2.html:556
 msgid "Max blocks horiz."
 msgstr "Max Blocos Horiz."
 
@@ -1321,7 +1385,7 @@ msgstr ""
 "está em desenvolvimento!)"
 
 #: exam/forms.py:105 exam/models.py:101
-#: exam/templates/exam/exam_update2.html:408
+#: exam/templates/exam/exam_update2.html:563
 msgid "Stylesheet"
 msgstr "Quadro de respostas"
 
@@ -1330,7 +1394,7 @@ msgid "Generate answersheets; questions; both"
 msgstr "Gerar folha de respostas ou folhas de questões ou ambas"
 
 #: exam/forms.py:109 exam/models.py:111
-#: exam/templates/exam/exam_update2.html:415
+#: exam/templates/exam/exam_update2.html:570
 msgid "Answersheets/Questions/Both"
 msgstr "Respostas/Questões/Ambos"
 
@@ -1339,7 +1403,7 @@ msgid "Ecological (reduce number of sheets)"
 msgstr "Ecológico (reduzir número de folhas em papel)"
 
 #: exam/forms.py:113 exam/models.py:120
-#: exam/templates/exam/exam_update2.html:422
+#: exam/templates/exam/exam_update2.html:577
 msgid "Ecological"
 msgstr "Ecológico"
 
@@ -1352,7 +1416,7 @@ msgstr ""
 "exame será enviado por e-mail para cada aluno depois de clicar em Criar-PDF."
 
 #: exam/forms.py:118 exam/models.py:132
-#: exam/templates/exam/exam_update2.html:429
+#: exam/templates/exam/exam_update2.html:584
 msgid "Student Feedback"
 msgstr "Retorno"
 
@@ -1373,7 +1437,7 @@ msgid "Who created this exam"
 msgstr "Quem criou este exame"
 
 #: exam/forms.py:138 exam/models.py:163
-#: exam/templates/exam/exam_update2.html:457
+#: exam/templates/exam/exam_update2.html:612
 msgid "Who created"
 msgstr "Quem criou"
 
@@ -1445,8 +1509,8 @@ msgstr ""
 "Aceita a descrição e parametrização do LaTeX usando a linguagem Python "
 "(consulte as publicações)."
 
-#: exam/models.py:210 exam/templates/exam/exam_update2.html:231
-#: main/templates/index.html:492 topic/forms.py:45 topic/models.py:50
+#: exam/models.py:210 exam/templates/exam/exam_update2.html:386
+#: main/templates/index.html:493 topic/forms.py:45 topic/models.py:50
 #: topic/models.py:96 topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
 #: topic/templates/question/question_update.html:84
@@ -1489,29 +1553,40 @@ msgid "Are you sure you want to delete the exam"
 msgstr "Tem certeza que deseja abagar este exame"
 
 #: exam/templates/exam/exam_confirm_delete.html:36
-#: exam/templates/exam/exam_create.html:49
 msgid "Exams of the disciplines that I am enrolled"
 msgstr "Exames das disciplinas que eu participo"
 
-#: exam/templates/exam/exam_create.html:11
+#: exam/templates/exam/exam_create.html:12
 msgid "Create a new Exam"
 msgstr "Criar um novo Exame"
 
-#: exam/templates/exam/exam_create.html:24
-#: exam/templates/exam/exam_update2.html:148
-msgid "Choose Classrooms"
-msgstr "Escolher Turmas"
+#: exam/templates/exam/exam_create.html:86
+#: exam/templates/exam/exam_update2.html:233
+msgid "N. Students"
+msgstr "N. Estudantes"
 
-#: exam/templates/exam/exam_create.html:48
-msgid "Click Exam Updatein My Exams to create the details"
-msgstr "Clique em Atualizar Exame em Meus Exames para criar detalhes"
+#: exam/templates/exam/exam_create.html:88
+#: exam/templates/exam/exam_update2.html:235
+#: exam/templates/exam/exam_update2.html:391
+msgid "See"
+msgstr "Ver"
+
+#: exam/templates/exam/exam_create.html:184
+msgid "Column sorts are still not working correctly, use Search feature"
+msgstr ""
+"As ordenações de colunas ainda não estão funcionando corretamente, use o "
+"recurso de Busca"
+
+#: exam/templates/exam/exam_create.html:200
+msgid "If you are not a coordinator, create an exam ONLY for your class"
+msgstr "Se você não é um coordenador, crie um exame SOMENTE para sua classe"
 
 #: exam/templates/exam/exam_detail.html:11
 msgid "Exame Detail"
 msgstr "Detalhar Exame"
 
 #: exam/templates/exam/exam_detail.html:38
-#: exam/templates/exam/exam_update2.html:494
+#: exam/templates/exam/exam_update2.html:649
 msgid "Exam of the disciplines that I am enrolled"
 msgstr "Exame das disciplinas que eu participo"
 
@@ -1524,16 +1599,16 @@ msgid "Exams List"
 msgstr "Listar Exames"
 
 #: exam/templates/exam/exam_list.html:99
-#: exam/templates/exam/exam_list_who_created_user.html:98
+#: exam/templates/exam/exam_list_who_created_user.html:101
 msgid "Create a New Exam"
 msgstr "Criar um novo Exame"
 
 #: exam/templates/exam/exam_list.html:108
-#: exam/templates/exam/exam_list_who_created_user.html:106
+#: exam/templates/exam/exam_list_who_created_user.html:109
 msgid "Only teacher registered in a discipline and in a classroom"
 msgstr "Somente professores cadastrados em discipinas e em turmas"
 
-#: exam/templates/exam/exam_list_who_created_user.html:11
+#: exam/templates/exam/exam_list_who_created_user.html:13
 msgid "My Exams List"
 msgstr "Minha lista de Exames"
 
@@ -1574,7 +1649,7 @@ msgstr ""
 #: exam/templates/exam/exam_update2.html:36
 #: topic/templates/question/question_detail.html:24
 #: topic/templates/question/question_update.html:23
-#: topic/templates/topic/topic_detail.html:37
+#: topic/templates/topic/topic_detail.html:41
 msgid "Create-PDF"
 msgstr "Criar-PDF"
 
@@ -1582,7 +1657,7 @@ msgstr "Criar-PDF"
 msgid "video"
 msgstr ""
 
-#: exam/templates/exam/exam_update2.html:41
+#: exam/templates/exam/exam_update2.html:42
 msgid ""
 "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, "
 "if the circles are defective, the broker may not work correctly - we "
@@ -1596,15 +1671,15 @@ msgstr ""
 "Antes de aplicar o exame, recomenda-se fortemente imprimir uma folha, "
 "preencher, digitalizar e seguir o passo ao lado direito Upload-PDF >>>"
 
-#: exam/templates/exam/exam_update2.html:51
+#: exam/templates/exam/exam_update2.html:52
 msgid "Upload-PDF"
 msgstr "Upload-PDF"
 
-#: exam/templates/exam/exam_update2.html:52
+#: exam/templates/exam/exam_update2.html:53
 msgid "Choose PDF file for correction of exams"
 msgstr "Escolher arquivo PDF para correções dos exames"
 
-#: exam/templates/exam/exam_update2.html:54
+#: exam/templates/exam/exam_update2.html:55
 msgid ""
 "Caution: (1) Before scanning, make sure all circles have been filled "
 "correctly. If you to use correction fluid and erase part of the outline of "
@@ -1632,11 +1707,11 @@ msgstr ""
 "seguir o passo ao lado direito Enviar-Retornos-Estudantes, para cada aluno "
 "receber a correção do seu exame por email >>>"
 
-#: exam/templates/exam/exam_update2.html:64
+#: exam/templates/exam/exam_update2.html:65
 msgid "Send-Feedback-Students Text"
 msgstr "Enviar-Retornos-Estudantes Questões dissertativas"
 
-#: exam/templates/exam/exam_update2.html:66
+#: exam/templates/exam/exam_update2.html:67
 msgid ""
 "Caution: If you used exams with written questions and in non-ecological "
 "format, then one question was generated per sheet, right? If you want to "
@@ -1676,11 +1751,11 @@ msgstr ""
 "o PDF com as correções e também irá retornar um arquivo CSV com os conceitos "
 "de cada estudante."
 
-#: exam/templates/exam/exam_update2.html:75
+#: exam/templates/exam/exam_update2.html:76
 msgid "Send-Feedback-Students"
 msgstr "Enviar-Retornos-Estudantes"
 
-#: exam/templates/exam/exam_update2.html:77
+#: exam/templates/exam/exam_update2.html:78
 msgid ""
 "This option is to send feedback ONLY from multiple choice exams after "
 "successfully completing the step from the previous column."
@@ -1688,7 +1763,7 @@ msgstr ""
 "Esta opção é para enviar feedback APENAS dos exames de múltipla-escolha, "
 "após ter realizado o passo da coluna anterior com sucesso."
 
-#: exam/templates/exam/exam_update2.html:83
+#: exam/templates/exam/exam_update2.html:84
 msgid ""
 "Before creating the exams in the button above, first create the variations. "
 "It is necessary to create new variations of the exam each time you change "
@@ -1698,70 +1773,66 @@ msgstr ""
 "necessário criar novas variações do exame cada vez que você muda as questões "
 "e o número de variações nos atributos abaixo."
 
-#: exam/templates/exam/exam_update2.html:84
+#: exam/templates/exam/exam_update2.html:85
 msgid "The options marked below will be sent to your email."
 msgstr "As opções marcadas abaixo serão enviadas para o seu e-mail."
 
-#: exam/templates/exam/exam_update2.html:91 main/templates/index.html:452
+#: exam/templates/exam/exam_update2.html:92 main/templates/index.html:452
 msgid "Create-Variations"
 msgstr "Criar-Variações"
 
-#: exam/templates/exam/exam_update2.html:176
-#: topic/templates/topic/topic_detail.html:53
+#: exam/templates/exam/exam_update2.html:331
+#: topic/templates/topic/topic_detail.html:55
 msgid "Questions List"
 msgstr "Listar Questões"
 
-#: exam/templates/exam/exam_update2.html:233
+#: exam/templates/exam/exam_update2.html:388
 #: topic/templates/question/question_list.html:25
 #: topic/templates/question/question_list_who_created_user.html:25
-#: topic/templates/topic/topic_detail.html:63
+#: topic/templates/topic/topic_detail.html:65
 msgid "Dif."
 msgstr ""
 
-#: exam/templates/exam/exam_update2.html:234 topic/forms.py:42
+#: exam/templates/exam/exam_update2.html:389 topic/forms.py:42
 #: topic/templates/question/question_create.html:40
 #: topic/templates/question/question_detail.html:50
 #: topic/templates/question/question_list.html:24
 #: topic/templates/question/question_list_who_created_user.html:24
 #: topic/templates/question/question_update.html:76
-#: topic/templates/topic/topic_detail.html:62
+#: topic/templates/topic/topic_detail.html:64
 msgid "Group"
 msgstr "Grupo"
 
-#: exam/templates/exam/exam_update2.html:235
+#: exam/templates/exam/exam_update2.html:390
 #: topic/templates/question/question_list.html:26
 #: topic/templates/question/question_list_who_created_user.html:26
-#: topic/templates/topic/topic_detail.html:64
+#: topic/templates/topic/topic_detail.html:66
 msgid "Par."
 msgstr ""
 
-#: exam/templates/exam/exam_update2.html:236
-msgid "See"
-msgstr "Ver"
-
-#: exam/templates/exam/exam_update2.html:323
+#: exam/templates/exam/exam_update2.html:478
 msgid "Number of questions per Exam"
 msgstr "Número de questões por Exame"
 
-#: exam/templates/exam/exam_update2.html:325
+#: exam/templates/exam/exam_update2.html:480
 #: main/templates/index-mctest.html:117 main/templates/index-mctest.html:145
 #: main/templates/index.html:117 main/templates/index.html:145
 msgid "Exam Style"
 msgstr "Estilo do Exame"
 
-#: exam/templates/exam/exam_update2.html:486
+#: exam/templates/exam/exam_update2.html:641
 msgid "Delete this Exam"
 msgstr "Apagar este Exame"
 
-#: exam/views.py:103
+#: exam/views.py:104
 msgid "variationsExam: there are no variations in the answer-only style!"
 msgstr "variationsExam: não há variações no estilo: somente resposta!"
 
-#: exam/views.py:183
+#: exam/views.py:184
 msgid "Dear,"
 msgstr "Prezada(o),"
 
-#: exam/views.py:185
+#: exam/views.py:186
 msgid ""
 "This message contains files created automatically, with all variations of "
 "this exam."
@@ -1769,7 +1840,7 @@ msgstr ""
 "Esta mensagem contém arquivos criados automaticamente, com todas as "
 "variações deste exame."
 
-#: exam/views.py:196
+#: exam/views.py:197
 msgid ""
 "# JSON: Test cases to be inserted in the Moodle for automatic correction of "
 "the codes sent by the students, following these steps:"
@@ -1777,19 +1848,19 @@ msgstr ""
 "# JSON: Casos de teste a serem inseridos no Moodle para correção automática "
 "dos códigos enviados pelos alunos, seguindo os seguintes passos:"
 
-#: exam/views.py:198
+#: exam/views.py:199
 msgid ""
 "1. Use the PDF with the exams generated with this date and time (EXACTLY): \""
 msgstr ""
 "1. Use o PDF com os resultados gerados com esta data e hora (EXATAMENTE): \""
 
-#: exam/views.py:199
+#: exam/views.py:200
 msgid ""
 "2. Save and rename \"linker.json\" and \"students_variations.csv\" files"
 msgstr ""
 "2. Salve e renomeie os arquivos \"linker.json\" e \"students_variations.csv\""
 
-#: exam/views.py:201
+#: exam/views.py:202
 msgid ""
 "3. After you create a Moodle VPL activity, in the \"runtime files\", add "
 "\"linker.json\" and \"students_variations.csv\""
@@ -1797,7 +1868,7 @@ msgstr ""
 "3. Após criar uma atividade VPL no Moodle fazer upload em \"arquivos de "
 "execução\", de \"linker.json\" e \"students_variations.csv\""
 
-#: exam/views.py:203
+#: exam/views.py:204
 msgid ""
 "4. Add too other files available at \"github.com/fzampirolli/mctest/"
 "VPL_modification\""
@@ -1805,13 +1876,13 @@ msgstr ""
 "4. Adicionar também os arquivos disponívens em \"github.com/fzampirolli/"
 "mctest/VPL_modification\""
 
-#: exam/views.py:204
+#: exam/views.py:205
 msgid "5. Also enable these files under \"Files to keep while running\""
 msgstr ""
 "Também habilite esses arquivos em \"Arquivos a serem mantidos durante a "
 "execução\""
 
-#: exam/views.py:206
+#: exam/views.py:207
 msgid ""
 "Note: \"students_variations.csv\" will be sent by email when creating PDFs "
 "of student exams."
@@ -1819,11 +1890,11 @@ msgstr ""
 "Observação: \"students_variations.csv\" será enviado por e-mail ao criar "
 "PDFs dos exames dos alunos."
 
-#: exam/views.py:209
+#: exam/views.py:210
 msgid "# JSON: There are no Test Cases!"
 msgstr "# JSON: Não existem casos de testes nas questões escolhidas!"
 
-#: exam/views.py:211
+#: exam/views.py:212
 msgid ""
 "See for details: \"https://doi.org/10.5753/cbie.sbie.2020.1573\" (version 1 "
 "of integration MCTest+Moodle+VPL)"
@@ -1831,7 +1902,7 @@ msgstr ""
 "Veja detalhes: \"https://doi.org/10.5753/cbie.sbie.2020.51\" (versão 1 da "
 "integração MCTest+Moodle+VPL)."
 
-#: exam/views.py:218
+#: exam/views.py:219
 msgid ""
 "# CSV: Template of questions. This file can be used for automatic correction "
 "using Google Forms + Sheets."
@@ -1839,31 +1910,31 @@ msgstr ""
 "# CSV: Gabaritos das questões. Este arquivo pode ser usado para correção "
 "automática utilizando Google Forms + Sheets."
 
-#: exam/views.py:219
+#: exam/views.py:220
 msgid "See for details: \"https://doi.org/10.5753/cbie.sbie.2020.51\"."
 msgstr "Veja detalhes: \"https://doi.org/10.5753/cbie.sbie.2020.51\"."
 
-#: exam/views.py:225
+#: exam/views.py:226
 msgid "# AIKEN: Database of questions for Moodle."
 msgstr "# AIKEN: Banco de questões para o Moodle."
 
-#: exam/views.py:231
+#: exam/views.py:232
 msgid "# XML: Database of questions for Moodle."
 msgstr "# XML:  Banco de questões para o Moodle."
 
-#: exam/views.py:241
+#: exam/views.py:242
 msgid "# TEX+PDF: Database of questions in LaTeX format."
 msgstr "# TEX+PDF: Banco de questões no formato LaTeX."
 
-#: exam/views.py:242
+#: exam/views.py:243
 msgid "Run with command line:"
 msgstr "Rodar com o comando linha:"
 
-#: exam/views.py:243
+#: exam/views.py:244
 msgid "pdflatex --shell -scape -interaction nonstopmode \"file.tex\"."
 msgstr ""
 
-#: exam/views.py:279
+#: exam/views.py:280
 msgid ""
 "feedbackStudentsExamText: feedback to student is NO, Change to YES and click "
 "in Upload-PDF again!"
@@ -1871,7 +1942,7 @@ msgstr ""
 "feedbackStudentsExamText: retorno do estudante é NÃO, escolher SIM e clique "
 "em Upload-PDF novamente"
 
-#: exam/views.py:291
+#: exam/views.py:292
 msgid ""
 "feedbackStudentsExamText: choose a ZIP file with scanned exams, for example "
 "_e31_769.zip!"
@@ -1879,14 +1950,14 @@ msgstr ""
 "feedbackStudentsExamText: escolher um arquivo ZIP com os exames "
 "digitalizados, por exemplo: _e31_769.zip!"
 
-#: exam/views.py:339
+#: exam/views.py:340
 msgid ""
 "feedbackStudentsExamText: name of the pdf file does not follow a pattern "
 "ID_xxx.pdf"
 msgstr ""
 "feedbackStudentsExamText: nome do arquivo PDF não segue um padrão: ID_xxx.pdf"
 
-#: exam/views.py:399
+#: exam/views.py:400
 msgid ""
 "feedbackStudentsExamText: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -1894,7 +1965,7 @@ msgstr ""
 "feedbackStudentsExamText: nenhum email foi enviado, você está em Exame e "
 "Turma corretos?"
 
-#: exam/views.py:421
+#: exam/views.py:422
 msgid ""
 "feedbackStudentsExam: feedback to student is NO, Change to YES and click in "
 "Upload-PDF again!"
@@ -1902,7 +1973,7 @@ msgstr ""
 "feedbackStudentsExam: retorno ao estudante é NÃO, escolher SIM e clique em "
 "Upload-PDF novamente!"
 
-#: exam/views.py:474
+#: exam/views.py:475
 msgid ""
 "feedbackStudentsExam: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -1910,43 +1981,43 @@ msgstr ""
 "feedbackStudentsExam: nenhum email foi enviado, você está em Exame e Turma "
 "corretos?"
 
-#: exam/views.py:497
+#: exam/views.py:498
 msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
-#: exam/views.py:518
+#: exam/views.py:519
 msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
-#: exam/views.py:834
+#: exam/views.py:835
 msgid "Create variations first"
 msgstr "Criar primeiro as variações"
 
-#: exam/views.py:862
+#: exam/views.py:863
 msgid "ERROR in generate_page, number_of_questions_text!!!!  "
 msgstr ""
 
-#: exam/views.py:866
+#: exam/views.py:867
 msgid "ERROR in generate_page, number_of_QM!!!! - no questions"
 msgstr ""
 
-#: exam/views.py:911
+#: exam/views.py:912
 msgid "ERROR in Utils.distro_table, student: "
 msgstr ""
 
-#: exam/views.py:973
+#: exam/views.py:974
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr ""
 
-#: exam/views.py:985
+#: exam/views.py:986
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:1032 exam/views.py:1052 exam/views.py:1071 exam/views.py:1135
+#: exam/views.py:1033 exam/views.py:1053 exam/views.py:1072 exam/views.py:1136
 msgid "ERROR - watch out for special characters in exam name"
 msgstr ""
 
-#: exam/views.py:1232
+#: exam/views.py:1233
 msgid ""
 "Invalid Form! Verify if date follows the format or if there is at least one "
 "room marked, for example."
@@ -1954,15 +2025,15 @@ msgstr ""
 "Formulário inválido! Verifique se a data segue o formato ou se existe ao "
 "menos uma turma marcada, por exemplo."
 
-#: exam/views.py:1289
+#: exam/views.py:1290
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:1304
+#: exam/views.py:1305
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:1318
+#: exam/views.py:1319
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -2107,68 +2178,74 @@ msgid "Sign up"
 msgstr "Inscrever"
 
 #: main/templates/base_generic.html:167 main/templates/base_generic.html:229
-#: main/templates/base_generic.html:307
+#: main/templates/base_generic.html:309 main/templates/base_generic.html:407
+#: main/templates/base_generic.html:493
 msgid "copy"
 msgstr "copiar"
 
 #: main/templates/base_generic.html:174 main/templates/base_generic.html:236
-#: main/templates/base_generic.html:314
+#: main/templates/base_generic.html:316 main/templates/base_generic.html:414
+#: main/templates/base_generic.html:500
 msgid "csv"
 msgstr ""
 
 #: main/templates/base_generic.html:181 main/templates/base_generic.html:243
-#: main/templates/base_generic.html:321
+#: main/templates/base_generic.html:323 main/templates/base_generic.html:421
+#: main/templates/base_generic.html:507
 msgid "excel"
 msgstr ""
 
 #: main/templates/base_generic.html:188 main/templates/base_generic.html:250
-#: main/templates/base_generic.html:328
+#: main/templates/base_generic.html:330 main/templates/base_generic.html:428
+#: main/templates/base_generic.html:514
 msgid "pdf"
 msgstr ""
 
 #: main/templates/base_generic.html:195 main/templates/base_generic.html:257
-#: main/templates/base_generic.html:335
+#: main/templates/base_generic.html:337 main/templates/base_generic.html:435
+#: main/templates/base_generic.html:521
 msgid "print"
 msgstr "imprimir"
 
 #: main/templates/base_generic.html:203 main/templates/base_generic.html:264
-#: main/templates/base_generic.html:343
+#: main/templates/base_generic.html:345 main/templates/base_generic.html:442
+#: main/templates/base_generic.html:528
 msgid "column visibility"
 msgstr "colunas visíveis"
 
-#: main/templates/base_generic.html:375
+#: main/templates/base_generic.html:552
 msgid "by"
 msgstr "por"
 
-#: main/templates/base_generic.html:377
+#: main/templates/base_generic.html:554
 msgid "from"
 msgstr "da"
 
-#: main/templates/base_generic.html:378 main/templates/base_generic.html:386
+#: main/templates/base_generic.html:555 main/templates/base_generic.html:563
 msgid "and"
 msgstr "e"
 
-#: main/templates/base_generic.html:379
+#: main/templates/base_generic.html:556
 msgid "individual contributors"
 msgstr "Colaboradores"
 
-#: main/templates/base_generic.html:380 main/templates/users.html:10
+#: main/templates/base_generic.html:557 main/templates/users.html:10
 msgid "Who use"
 msgstr "Quem utiliza"
 
-#: main/templates/base_generic.html:381
+#: main/templates/base_generic.html:558
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:382
+#: main/templates/base_generic.html:559
 msgid "Manual"
 msgstr ""
 
-#: main/templates/base_generic.html:383 main/templates/readme.html:10
+#: main/templates/base_generic.html:560 main/templates/readme.html:10
 msgid "README"
 msgstr "LEIA-ME"
 
-#: main/templates/base_generic.html:384
+#: main/templates/base_generic.html:561
 msgid "Grant"
 msgstr "Apoio"
 
@@ -2508,31 +2585,31 @@ msgid "Parametric"
 msgstr "Paramétrica"
 
 #: main/templates/index-mctest.html:398 main/templates/index-mctest.html:415
-#: main/templates/index.html:426 main/templates/index.html:739
+#: main/templates/index.html:426 main/templates/index.html:743
 msgid "Users"
 msgstr "Usuários"
 
-#: main/templates/index-mctest.html:403 main/templates/index.html:727
+#: main/templates/index-mctest.html:403 main/templates/index.html:730
 msgid "For verification"
 msgstr "Para verificação"
 
-#: main/templates/index-mctest.html:418 main/templates/index.html:742
+#: main/templates/index-mctest.html:418 main/templates/index.html:747
 msgid "Last Login"
 msgstr "Último Acesso"
 
-#: main/templates/index-mctest.html:445 main/templates/index.html:768
+#: main/templates/index-mctest.html:445 main/templates/index.html:775
 msgid "You have visited this page"
 msgstr "Você visitou esta página"
 
-#: main/templates/index-mctest.html:446 main/templates/index.html:769
+#: main/templates/index-mctest.html:446 main/templates/index.html:776
 msgid "time"
 msgstr "vez"
 
-#: main/templates/index-mctest.html:446 main/templates/index.html:769
+#: main/templates/index-mctest.html:446 main/templates/index.html:776
 msgid "times"
 msgstr "vezes"
 
-#: main/templates/index-mctest.html:448 main/templates/index.html:771
+#: main/templates/index-mctest.html:448 main/templates/index.html:778
 msgid "Send improvement suggestions to"
 msgstr "Enviar sugestões de melhoria para"
 
@@ -2551,11 +2628,10 @@ msgstr ""
 msgid ""
 "Attendance offered to the community to facilitate the process of automatic "
 "elaboration and correction of the exams, with generation and correction of "
-"approximately 10,000 annual exams."
+"many exams."
 msgstr ""
 "Serviço oferecido para a comunidade para facilitar o processo de elaboração "
-"e correção de exames, com geração e correção de aproximadamente 10.000 "
-"exames anuais."
+"e correção de exames, com geração e correção de muitos exames."
 
 #: main/templates/index.html:382
 msgid "see also:"
@@ -2649,50 +2725,46 @@ msgstr ""
 msgid "Research Project"
 msgstr "Projeto de Pesquisa"
 
-#: main/templates/index.html:466 main/templates/index.html:490
+#: main/templates/index.html:466 main/templates/index.html:491
 msgid "Title"
 msgstr "Título"
 
-#: main/templates/index.html:469
-msgid "Period"
-msgstr "Período"
-
-#: main/templates/index.html:475
+#: main/templates/index.html:476
 msgid "History"
 msgstr "Histórico"
 
-#: main/templates/index.html:475
+#: main/templates/index.html:476
 msgid "Software registration"
 msgstr "Registro de software"
 
-#: main/templates/index.html:485
+#: main/templates/index.html:486
 msgid "Order"
 msgstr "Pedido"
 
-#: main/templates/index.html:500
+#: main/templates/index.html:501
 msgid ""
 "Developed in Python (Django 2.0) for automatic correction - available in"
 msgstr ""
 "Desenvolvido em Python (Django 2.0) para a correção automática - disponível "
 "em"
 
-#: main/templates/index.html:503
+#: main/templates/index.html:504
 msgid "exams generated in LaTeX using a MySQL DB"
 msgstr "exames gerados em LaTeX usando o BD MySQL"
 
-#: main/templates/index.html:516
+#: main/templates/index.html:517
 msgid "Developed in Python for LaTeX generated exams"
 msgstr "Desenvolvido em Python para exames gerados em Latex"
 
-#: main/templates/index.html:527
+#: main/templates/index.html:528
 msgid "Developed in Python for automatic correction - available in"
 msgstr "Desenvolvido em Python para a correção automática - disponível em"
 
-#: main/templates/index.html:528
+#: main/templates/index.html:529
 msgid "by ftp"
 msgstr "por ftp"
 
-#: main/templates/index.html:538
+#: main/templates/index.html:539
 msgid ""
 "Developed in Python for automatic correction - exams generated in Word / "
 "BROffic"
@@ -2700,15 +2772,15 @@ msgstr ""
 "Desenvolvido em Python para a correção automática - exames gerados em Word/"
 "BROffice"
 
-#: main/templates/index.html:546
+#: main/templates/index.html:547
 msgid "Developed in Android"
 msgstr "Desenvolvido em Android"
 
-#: main/templates/index.html:547
+#: main/templates/index.html:548
 msgid "for automatic correction - exams generated in Word / BROffice"
 msgstr "para correção automática - exames gerados em Word/BROffice"
 
-#: main/templates/index.html:559
+#: main/templates/index.html:560
 msgid ""
 "Developed in Matlab for automatic correction - exams generated in Word / "
 "BROffice"
@@ -2716,7 +2788,7 @@ msgstr ""
 "Desenvolvido em Matlab  para a correção automática - exames gerados em Word/"
 "BROffice"
 
-#: main/templates/index.html:570
+#: main/templates/index.html:571
 msgid "Publications"
 msgstr "Publicações"
 
@@ -2904,85 +2976,72 @@ msgid "Security in exams using QRcode"
 msgstr "Segurança em exames utilizando QRCode"
 
 #: main/templates/readme.html:128
-msgid ""
-"Exams with multiple-choice questions and different weights in the answers"
-msgstr ""
-"Exames com questões de múltipla-escolha e diferentes pesos nas alternativas"
-
-#: main/templates/readme.html:131
 msgid "Answer sheet design comparisons"
 msgstr "Comparações com diferentes folhas de respostas"
 
-#: main/templates/readme.html:134
+#: main/templates/readme.html:131
 msgid "A case study using Item Response Theory"
 msgstr "Um estudo de casos utilizando Teoria de Resposta ao Item"
 
-#: main/templates/readme.html:137
-msgid ""
-"Individualized online activities with multiple-choice parametric questions"
-msgstr ""
-"Atividades online individualizadas com questões paramétricas de múltipla-"
-"escolha"
-
-#: main/templates/readme.html:140
+#: main/templates/readme.html:134
 msgid "MCTest: Software Requirements Specification"
 msgstr "MCTest: Especificações de Requisitos de Software"
 
-#: main/templates/readme.html:143
+#: main/templates/readme.html:137
 msgid "MCTest: graphic interface"
 msgstr "MCTest: interfaces gráficas"
 
-#: main/templates/readme.html:146
+#: main/templates/readme.html:140
 msgid "MCTest: data base"
 msgstr "MCTest: banco de dados"
 
-#: main/templates/readme.html:149
+#: main/templates/readme.html:143
 msgid "MCTest: software architecture"
 msgstr "MCTest: arquitetura de software"
 
-#: main/templates/readme.html:152
+#: main/templates/readme.html:146
 msgid "MCTest: software deployment"
 msgstr "MCTest: implantação de software"
 
-#: main/templates/readme.html:155
+#: main/templates/readme.html:149
 msgid ""
 "New question categories screen (with NLP) before opening the exam screen."
 msgstr ""
 "Nova tela de categorias de questões (com PNL) antes de abrir a tela de exame."
 
-#: main/templates/readme.html:162
+#: main/templates/readme.html:156
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:169
+#: main/templates/readme.html:163
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:170
+#: main/templates/readme.html:164
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:177
+#: main/templates/readme.html:171
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:178
+#: main/templates/readme.html:172
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:179
+#: main/templates/readme.html:173
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:186
+#: main/templates/readme.html:180
 msgid "Grant: #2018/23561-1, São Paulo Research Foundation: "
 msgstr ""
 "Processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo: "
 
-#: main/templates/readme.html:187
+#: main/templates/readme.html:181
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
@@ -3181,7 +3240,7 @@ msgstr "Total de questões com grupos"
 #: topic/templates/question/question_list.html:28
 #: topic/templates/question/question_list_who_created_user.html:28
 #: topic/templates/question/question_update.html:68
-#: topic/templates/topic/topic_detail.html:66
+#: topic/templates/topic/topic_detail.html:68
 msgid "Short Description"
 msgstr "Descrição curta"
 
@@ -3354,7 +3413,7 @@ msgstr "Listar Questões"
 
 #: topic/templates/question/question_list.html:122
 #: topic/templates/question/question_list_who_created_user.html:123
-#: topic/templates/topic/topic_detail.html:156
+#: topic/templates/topic/topic_detail.html:160
 msgid "Question"
 msgstr "Questão"
 
@@ -3363,7 +3422,7 @@ msgid "My Questions List"
 msgstr "Minha Lista de Questões"
 
 #: topic/templates/question/question_list_who_created_user.html:136
-#: topic/templates/topic/topic_detail.html:172
+#: topic/templates/topic/topic_detail.html:176
 msgid "Create a New Question"
 msgstr "Criar uma nova Questão"
 
@@ -3481,7 +3540,7 @@ msgstr "Criar um novo Tópico"
 msgid ""
 "Important: Use the abbreviated name in Topic and represent the content of "
 "the Discipline."
-msgstr "Importante: usar nome curto que represente o conteúdo da disciplina"
+msgstr "Importante: usar nome curto que represente o tópico da disciplina"
 
 #: topic/templates/topic/topic_create.html:60
 #: topic/templates/topic/topic_update.html:70
@@ -3492,18 +3551,18 @@ msgstr "Somente coordenador cadastrado em disciplinas"
 msgid "Topic Detail"
 msgstr "Detalhar Tópico"
 
-#: topic/templates/topic/topic_detail.html:41
+#: topic/templates/topic/topic_detail.html:45
 msgid "View all questions in this topic in PDF format, sorted by similarity"
 msgstr ""
 "Veja todas as questões deste tópico em formato PDF, classificadas por "
 "similaridade"
 
-#: topic/templates/topic/topic_detail.html:185
+#: topic/templates/topic/topic_detail.html:189
 msgid "Note: For each exam, only one question is taken from each group"
 msgstr ""
 "Importante: para cada exame, somente uma questão é escolhida de cada grupo"
 
-#: topic/templates/topic/topic_detail.html:186
+#: topic/templates/topic/topic_detail.html:190
 msgid "Only the teacher registered in the course can see more details"
 msgstr "Somente professores cadastrados em curso pode ver mais detalhes"
 
@@ -3564,6 +3623,32 @@ msgstr ""
 #: topic/views.py:766
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#, fuzzy
+#~| msgid "Only teacher registered in a discipline"
+#~ msgid "Only teacher registered in classroom"
+#~ msgstr "Somente professores cadastrados em disciplinas"
+
+#~ msgid "Classroom days"
+#~ msgstr "Dias de Aula"
+
+#~ msgid "Choose Classrooms"
+#~ msgstr "Escolher Turmas"
+
+#~ msgid "Click Exam Updatein My Exams to create the details"
+#~ msgstr "Clique em Atualizar Exame em Meus Exames para criar detalhes"
+
+#~ msgid ""
+#~ "Exams with multiple-choice questions and different weights in the answers"
+#~ msgstr ""
+#~ "Exames com questões de múltipla-escolha e diferentes pesos nas "
+#~ "alternativas"
+
+#~ msgid ""
+#~ "Individualized online activities with multiple-choice parametric questions"
+#~ msgstr ""
+#~ "Atividades online individualizadas com questões paramétricas de múltipla-"
+#~ "escolha"
 
 #~ msgid ""
 #~ "The teacher receives this email after creating a PDF when there is an "

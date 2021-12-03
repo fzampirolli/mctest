@@ -168,7 +168,7 @@ class Classroom(models.Model):
                                    )
     # discipline_profs = models.ManyToManyField(User)
     # classroom_who_created = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    classroom_profs = models.ManyToManyField(User, blank=True,
+    classroom_profs = models.ManyToManyField(User,
                                              verbose_name=_("Classroom professors"),
                                              )
     classroom_code = models.CharField(max_length=20,
@@ -177,9 +177,8 @@ class Classroom(models.Model):
     classroom_room = models.CharField(max_length=20,
                                       verbose_name=_("Classroom room"),
                                       )
-    classroom_days = models.CharField(max_length=20, blank=True,
-
-                                      verbose_name=_("Classroom days"),
+    classroom_days = models.CharField(max_length=20,
+                                      verbose_name=_("Classroom period"),
                                       )
     classroom_type_choice = (
         ('PClass', 'Practical Class'),
@@ -194,9 +193,25 @@ class Classroom(models.Model):
         ordering = ["discipline__courses__institutes__institute_code", "discipline__discipline_code", "classroom_code"]
 
     def __str__(self): # ok
-        return self.classroom_code#+';'
+        #return self.classroom_code#+';'
         #return ' - '.join([', '.join([d.discipline_code for d in Discipline.objects.all() if (d == self.discipline)]),
         #                   self.classroom_code])
         # return ' - '.join([', '.join([self.discipline.classrooms.all()]), self.classroom_code])
         # return self.classroom_code
         # return '[{0}]  {1}'.format(self.discipline.discipline_code, self.classroom_code)
+        s = ''
+        for p in self.classroom_profs.all():
+            n = str(p)
+            s += n[:n.find('@')] + ', '
+
+        n = str(len(self.students.all()))
+
+        di = "dis " + self.discipline.discipline_name
+        co = "cod " + self.classroom_code
+        tp = "typ " + self.classroom_type
+        ro = "roo " + self.classroom_room
+        da = "day " + self.classroom_days
+        pr = "pro " + s[:-2]
+        st = "stu " + n
+        id = "id_" + str(self.id)
+        return f'{di}; {co}; {tp}; {ro}; {da}; {pr}; {st}; {id}'

@@ -147,7 +147,7 @@ class UpdateExamForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(UpdateExamForm, self).__init__(*args, **kwargs)
-        if True:  # ao criar um exame, é necessário definir uma classe!!! então....
+        try:  # ao criar um exame, é necessário definir uma classe!!! então....
 
             # pego a classe do exame
             classroomID = kwargs['initial']['classrooms']
@@ -179,5 +179,5 @@ class UpdateExamForm(forms.Form):
             self.fields[
                 'classrooms'].queryset = qs  # Classroom.objects.filter(discipline__discipline_profs=user)
 
-        #except:
-        #    pass
+        except:
+            pass

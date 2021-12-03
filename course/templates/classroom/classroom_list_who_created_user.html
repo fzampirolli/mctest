@@ -19,6 +19,8 @@
                                         <tr>
                                             <th scope="col">{% trans "Classroom Code" %}</th>
                                             <th scope="col">{% trans "Discipline" %}</th>
+                                            <th scope="col">{% trans "Period" %}</th>
+                                            <th scope="col">{% trans "Profs" %}</th>
                                             <th scope="col" class="text-right">{% trans "Actions" %}</th>
                                         </tr>
                                         </thead>
@@ -38,10 +40,22 @@
                                                         {{ classroom.discipline }}
                                                     </a>
                                                 </td>
+                                                <!-- Period -->
+                                                <td>
+                                                    {{ classroom.classroom_days }}
+                                                </td>
+                                                <!-- Profs -->
+                                                <td>
+
+                                                        {% for p in classroom.classroom_profs.all %}
+                                                                  * {{ p.email }}
+                                                        {% endfor %}
+
+                                                </td>
 
                                                 <!-- Actions -->
                                                 <td class="text-right">
-                                                    {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.discipline.discipline_profs.all %}
+                                                    {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.classroom_profs.all %}
                                                         <a href="{% url 'course:classroom-update'  pk=classroom.pk %}"
                                                            class="btn btn-outline-primary btn-sm">
                                                             {% trans "Update" %}

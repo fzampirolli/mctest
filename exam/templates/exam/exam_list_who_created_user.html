@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load widget_tweaks %}
 {% block content %}
+    {% csrf_token %}
+
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -11,6 +13,7 @@
                         <h5 class="card-title">{% trans "My Exams List" %}</h5>
 
                         {% if user.groups.all.0.name == 'professor' %}
+                            {% csrf_token %}
 
                             {% if exam_list %}
                                 <div class="card-body" style="background-color:#f3f3f3;">
