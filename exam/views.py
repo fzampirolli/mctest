@@ -31,7 +31,6 @@ import datetime
 import glob
 import json
 import os
-import random
 import re
 
 import PyPDF2
@@ -51,7 +50,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
-from django.template import RequestContext
 from pdf2image import convert_from_path
 from tablib import Dataset
 
@@ -61,7 +59,7 @@ from mctest.settings import BASE_DIR
 from mctest.settings import webMCTest_FROM
 from mctest.settings import webMCTest_PASS
 from mctest.settings import webMCTest_SERVER
-from .forms import UpdateExamForm
+from .forms import UpdateExamForm, ExamCreateForm
 from .models import Exam
 from .models import VariationExam
 
@@ -117,7 +115,7 @@ def variationsExam(request, pk):
         formatVariations['variations'] = []
         print("variationsExam-02-" + str(datetime.datetime.now()) + ' var: ' + str(v))
         db_questions = Utils.drawQuestionsVariations(request, exam, request.user,
-                                                                             Utils.getTopics(exam))
+                                                     Utils.getTopics(exam))
         # db_questions_all.append(db_questions)
         # listao.append([qr_answers, str1, QT])
 
@@ -163,8 +161,6 @@ def variationsExam(request, pk):
                         case['output'] = [[c] for c in case['output']]
                         case['key'] = [str(question['key'])]
                         question['testcases'] = case
-
-
 
         formatVariations['variations'].append(variant)
         v = VariationExam.objects.create(variation=formatVariations)
@@ -263,6 +259,7 @@ def variationsExam(request, pk):
             os.system('chgrp -R ' + getuser + ' ' + path + ' .')
 
     return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
+
 
 @login_required
 def feedbackStudentsExamText(request, pk):
@@ -405,6 +402,7 @@ def feedbackStudentsExamText(request, pk):
 
     return HttpResponseRedirect("/")
 
+
 @login_required
 def feedbackStudentsExam(request, pk):
     if request.user.get_group_permissions():
@@ -479,6 +477,7 @@ def feedbackStudentsExam(request, pk):
                      os.path.dirname(path_to_file))
 
     return HttpResponseRedirect("/")
+
 
 @login_required
 def correctStudentsExam(request, pk):
@@ -788,6 +787,7 @@ def correctStudentsExam(request, pk):
 
     return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
 
+
 # for line in sys.stdin:
 #     nome = unidecode.unidecode(line.split()[0])
 
@@ -911,7 +911,7 @@ def generate_page(request, pk):
                     except:
                         messages.error(request, _('ERROR in Utils.distro_table, student: ') + s)
                         return render(request, 'exam/exam_errors.html', {})
-                    distribute_students_random.append([s,hash_num])
+                    distribute_students_random.append([s, hash_num])
             else:
                 # distribute students without repetition
                 vetRandomRoom = np.arange(int(exam.exam_variations))
@@ -925,13 +925,13 @@ def generate_page(request, pk):
                     # verify if exist name/surname
                     for key, list_of_values in distribute_students_by_room_random.items():
                         ss = np.array(list_of_values)
-                        sss = ss[:,0]
+                        sss = ss[:, 0]
                         if s in sss:
                             hash_num = np.where(sss == s)
-                            hash_num = int(ss[hash_num,1][0])
+                            hash_num = int(ss[hash_num, 1][0])
                             break
 
-                    distribute_students_random.append([s,hash_num])
+                    distribute_students_random.append([s, hash_num])
 
             distribute_students_by_room_random[room.id] = distribute_students_random
 
@@ -960,11 +960,11 @@ def generate_page(request, pk):
                     stname = s.student_name.split(' ')
                     stname = stname[0] + ' ' + stname[-1]
 
-                    indStudent = np.where(distribute_students_random[:,0] == stname)
+                    indStudent = np.where(distribute_students_random[:, 0] == stname)
                     hash_num = int(distribute_students_random[indStudent, 1][0])
 
-                    #indStudent = distribute_students_random[:,0].index(stname)
-                    #hash_num = distribute_students_random[indStudent,1]
+                    # indStudent = distribute_students_random[:,0].index(stname)
+                    # hash_num = distribute_students_random[indStudent,1]
 
                     listVariations.append(
                         [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
@@ -1035,7 +1035,7 @@ def generate_page(request, pk):
 
                     myPATH = "pdfExam"
                     if not Utils.genTex(fileExamNameSTUDENT, myPATH):
-                        messages.error(request, _('ERROR in genTex')+': '+fileExamNameSTUDENT)
+                        messages.error(request, _('ERROR in genTex') + ': ' + fileExamNameSTUDENT)
 
                     myFILE = BASE_DIR + "/" + myPATH + "/" + fileExamNameSTUDENT[:-4] + '.pdf'
                     email = s.student_email
@@ -1069,7 +1069,8 @@ def generate_page(request, pk):
                     fileExam.write("\\end{document}")
                     fileExam.close()
             except:
-                messages.error(request, _('ERROR - watch out for special characters in exam name')+': '+fileExamName[:-4])
+                messages.error(request,
+                               _('ERROR - watch out for special characters in exam name') + ': ' + fileExamName[:-4])
                 return render(request, 'exam/exam_errors.html', {})
 
             # start1 = time.time()
@@ -1133,7 +1134,7 @@ def generate_page(request, pk):
                 return serve(request, os.path.basename(path_to_file),
                              os.path.dirname(path_to_file))
             except:
-                messages.error(request, _('ERROR - watch out for special characters in exam name')+': '+file_name)
+                messages.error(request, _('ERROR - watch out for special characters in exam name') + ': ' + file_name)
                 return render(request, 'exam/exam_errors.html', {})
         else:
             fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
@@ -1214,7 +1215,7 @@ def UpdateExam(request, pk):
 
             classrooms = form.cleaned_data['classrooms']
 
-            if not exam_inst.classrooms.all().count(): # if there is not at least one room marked
+            if not exam_inst.classrooms.all().count():  # if there is not at least one room marked
                 return HttpResponse('ERROR')
 
             for q in exam_inst.classrooms.all():
@@ -1230,7 +1231,8 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            return HttpResponse(_("Invalid Form! Verify if date follows the format or if there is at least one room marked, for example."))
+            return HttpResponse(_(
+                "Invalid Form! Verify if date follows the format or if there is at least one room marked, for example."))
 
 
     else:
@@ -1321,35 +1323,17 @@ class ExamDetailView(generic.DetailView):
 
 
 class ExamCreate(CreateView):
-    model = Exam
-    # fields = '__all__'
-    fields = [
-        'exam_name',
-        'classrooms',
-        #        'questions',
-        #        'exam_number_of_questions_var1',
-        #        'exam_number_of_questions_var2',
-        #        'exam_number_of_questions_var3',
-        #        'exam_number_of_questions_var4',
-        #        'exam_number_of_questions_var5',
-        #        'exam_number_of_anwsers_question',
-        #        'exam_number_of_questions_text',
-        #        'exam_variations',
-        #        'exam_max_questions_square',
-        #        'exam_max_squares_horizontal',
-        #        'exam_stylesheet',
-        #        'exam_print',
-        #        'exam_print_eco',
-        #        'exam_student_feedback',
-        #        #'exam_room',
-        #        'exam_term',
-        #        'exam_instructions',
-    ]
+    form_class = ExamCreateForm
+
     template_name = 'exam/exam_create.html'
     success_url = '/exam/myexams'
 
+    def get_form_kwargs(self):
+        kwargs = super(ExamCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_queryset(self):
-        passou = true
         return Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)  # .distinct()
 
     def form_valid(self, form):
@@ -1363,7 +1347,6 @@ class ExamDelete(DeleteView):
     model = Exam
     template_name = 'exam/exam_confirm_delete.html'
     success_url = '/exam/myexams'
-
 
     def get_queryset(self):
         return Exam.objects.filter(exam_who_created=self.request.user).distinct()

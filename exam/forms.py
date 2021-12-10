@@ -39,6 +39,30 @@ class UploadFileForm(forms.Form):
     file = forms.FileField()
 
 
+class ExamCreateForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = [
+            'exam_name',
+            'classrooms',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(ExamCreateForm, self).__init__(*args, **kwargs)
+
+        classes = []
+        for d in Discipline.objects.filter(discipline_coords=user):
+            for p in d.classrooms2.all():
+                classes.append(p.pk)
+
+        # se é coord, mostra todas as turmas das disciplinas que coordena
+        if classes:
+            self.fields['classrooms'].queryset = Classroom.objects.filter(pk__in=classes).order_by()
+        else:
+            self.fields['classrooms'].queryset = Classroom.objects.filter(classroom_profs=user)
+
+
 class UpdateExamForm(forms.Form):
     exam_name = forms.CharField(
         max_length=20,
@@ -158,8 +182,8 @@ class UpdateExamForm(forms.Form):
 
             # pego todas as classes da disciplina a qual o exame pertence, se coordenador
             discipline = get_object_or_404(Discipline, pk=classroom.discipline.pk)
-            #classrooms = Classroom.objects.filter(discipline__pk=discipline.pk)
-            usuario = kwargs['initial']['exam_who_created'] # usuário do exame
+            # classrooms = Classroom.objects.filter(discipline__pk=discipline.pk)
+            usuario = kwargs['initial']['exam_who_created']  # usuário do exame
             qs = []
             for p in discipline.discipline_coords.all():
                 if usuario == p:
@@ -168,7 +192,7 @@ class UpdateExamForm(forms.Form):
 
             # pego todas as classes da disciplina que o professor possui
             if not qs:
-                for c in discipline.classrooms2.all(): # Classroom.objects.filter(discipline__discipline_profs__email=p.email):
+                for c in discipline.classrooms2.all():  # Classroom.objects.filter(discipline__discipline_profs__email=p.email):
                     for p in c.classroom_profs.all():
                         if p == usuario:
                             qs.append(c.pk)

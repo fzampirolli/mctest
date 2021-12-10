@@ -41,6 +41,7 @@ from account.models import User
 from student.models import Student
 from .models import Institute, Course, Discipline, Classroom
 from .resources import StudentResource
+from .forms import ClassroomCreateForm, ClassroomUpdateForm
 
 @login_required
 def ImportClassroomsDiscipline(request, pk):
@@ -205,7 +206,6 @@ def ImportClassroomsDiscipline(request, pk):
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/discipline/" + str(pk) + "/update")
 
-
 @login_required
 def ImportProfsDiscipline(request, pk):
     if request.user.get_group_permissions():
@@ -267,7 +267,6 @@ def ImportProfsDiscipline(request, pk):
 
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/discipline/" + str(pk) + "/update")
-
 
 @login_required
 def ImportStudentsClassroom(request, pk):
@@ -396,7 +395,6 @@ def ImportStudentsClassroom(request, pk):
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/classroom/" + str(pk) + "/update")
 
-
 @login_required
 def ClassroomStudentDelete(request, pk1, pk2):
     if request.user.get_group_permissions():
@@ -416,10 +414,8 @@ def ClassroomStudentDelete(request, pk1, pk2):
 
     return render(request, 'classroom/classroom_detail.html', {'classroom': classroom})
 
-
 # Create a new Student BUG
 from django.views.decorators.csrf import csrf_protect
-
 
 @login_required
 @csrf_protect
@@ -461,21 +457,16 @@ def ClassroomStudentCreate(request, pk):
 
     return render(request, 'exam/exam_msg.html', {})
 
-
 class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
-    model = Classroom
+    form_class = ClassroomUpdateForm
+
     template_name = 'classroom/classroom_update.html'
-    # fields = '__all__'
-    fields = [
-        'discipline',
-        'students',
-        'classroom_profs',
-        'classroom_code',
-        'classroom_room',
-        'classroom_days',
-        'classroom_type',
-    ]
     success_url = '/course/classroomsmy'
+
+    def get_form_kwargs(self):
+        kwargs = super(ClassroomUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         if not self.request.user in form.instance.discipline.discipline_profs.all():
@@ -483,36 +474,29 @@ class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
             return render(self.request, 'exam/exam_errors.html', {})
         return super(ClassroomUpdate, self).form_valid(form)
 
-    def get_form_kwargs(self):
-        kwargs = super(ClassroomUpdate, self).get_form_kwargs()
-        return kwargs
-
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
 
     def get_queryset(self):
-        return Classroom.objects.filter(discipline__discipline_profs=self.request.user)
-
+        c1 = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
+        return (c1 | c2).distinct()
 
 class ClassroomDetailView(LoginRequiredMixin, generic.DetailView):
     model = Classroom
     template_name = 'classroom/classroom_detail.html'
 
-
 class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
-    model = Classroom
-    # fields = '__all__'
-    fields = [
-        'discipline',
-        'classroom_profs',
-        'classroom_code',
-        'classroom_room',
-        'classroom_days',
-        'classroom_type',
-    ]
+    form_class = ClassroomCreateForm
+
     template_name = 'classroom/classroom_create.html'
     success_url = '/course/classroomsmy'
+
+    def get_form_kwargs(self):
+        kwargs = super(ClassroomCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         if not self.request.user in form.instance.discipline.discipline_profs.all():

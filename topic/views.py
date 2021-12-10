@@ -31,7 +31,6 @@ import json
 import os
 import random
 import subprocess
-import difflib
 
 from django.contrib import messages
 # Create your views here.
@@ -55,7 +54,7 @@ from course.models import Discipline
 from exam.UtilsLatex import Utils
 from mctest.settings import BASE_DIR
 from topic.UtilsMCTest4 import UtilsMC
-from .forms import UpdateQuestionForm
+from .forms import UpdateQuestionForm, QuestionCreateForm, TopicCreateForm, TopicUpdateForm
 # from django.contrib.auth.models import User
 from .models import Topic, Question, Answer
 from .resources import QuestionResource
@@ -307,7 +306,7 @@ def ImportQuestions(request):
     else:
         return HttpResponseRedirect("/")
 
-    #topic = get_object_or_404(Topic, pk=pk)
+    # topic = get_object_or_404(Topic, pk=pk)
 
     if request.method == 'POST':
         teste2 = config('webMCTest_PASS')
@@ -320,12 +319,11 @@ def ImportQuestions(request):
             messages.error(request, _('ImportQuestions: choose a TXT following the model!'))
             return render(request, 'exam/exam_errors.html', {})
 
-        #mystr4 = '/topic/topic/' + str(pk) + '/update'
-        #messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
-        #messages.info(request, _('Topic name') + ' >> ' + topic.topic_text, extra_tags='upper')
+        # mystr4 = '/topic/topic/' + str(pk) + '/update'
+        # messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
+        # messages.info(request, _('Topic name') + ' >> ' + topic.topic_text, extra_tags='upper')
 
-
-        listao = UtilsMC.questionsReadFiles(request,new_persons)
+        listao = UtilsMC.questionsReadFiles(request, new_persons)
         if listao == '':
             return render(request, 'exam/exam_errors.html', {})
 
@@ -368,6 +366,12 @@ def ImportQuestions(request):
                                        + qq['c'])
                         return render(request, 'exam/exam_errors.html', {})
 
+                    for d in topic.discipline.all():
+                        if not (request.user in d.discipline_profs.all() or request.user in d.discipline_coords.all()):
+                            messages.error(request, _("ImportQuestions: teacher is not associated with any discipline with this topic: ")
+                                           + qq['c'])
+                            return render(request, 'exam/exam_errors.html', {})
+
                     newQ = Question.objects.create(
                         topic=topic,
                         question_group=qq['st'],
@@ -403,9 +407,8 @@ def ImportQuestions(request):
             messages.info(request, _('Similar question(s) exist in the DB:'))
             messages.info(request, '; '.join([k for k in questions_equal]))
 
-    #return HttpResponseRedirect("../")
+    # return HttpResponseRedirect("../")
     return render(request, 'exam/exam_msg.html', {})
-
 
 
 #######################################################################
@@ -413,7 +416,7 @@ class TopicListView(LoginRequiredMixin, generic.ListView):
     model = Topic
     fields = '__all__'
 
-    #paginate_by = 10
+    # paginate_by = 10
 
     def get_queryset(self):
         if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
@@ -423,10 +426,18 @@ class TopicListView(LoginRequiredMixin, generic.ListView):
             lista = Topic.objects.filter(discipline__discipline_profs=self.request.user)
             return lista.order_by('topic_text').distinct()
 
+
 class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
-    model = Topic
+    #model = Topic
+    #fields = '__all__'
+    form_class = TopicUpdateForm
+
     template_name = 'topic/topic_update.html'
-    fields = '__all__'
+
+    def get_form_kwargs(self):
+        kwargs = super(TopicUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_queryset(self):
         return Topic.objects.all().distinct()
@@ -441,10 +452,17 @@ class TopicDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 class TopicCreate(LoginRequiredMixin, generic.CreateView):
-    model = Topic
-    fields = '__all__'
+    form_class = TopicCreateForm
+    #model = Topic
+    #fields = '__all__'
+
     template_name = 'topic/topic_create.html'
     success_url = '/topic/topics'
+
+    def get_form_kwargs(self):
+        kwargs = super(TopicCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         d = form.cleaned_data['discipline']
@@ -472,6 +490,7 @@ class TopicDelete(LoginRequiredMixin, generic.DeleteView):
             return Topic.objects.filter(discipline__discipline_coords=self.request.user).distinct()
         if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
             return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
+
 
 @login_required
 def see_topic_PDF(request, pk):
@@ -507,10 +526,10 @@ def see_topic_PDF(request, pk):
 
             new_order = UtilsMC.sortedBySimilarity2(questions_text)
 
-            #for q in topic.questions2.all():
+            # for q in topic.questions2.all():
             for qid in new_order:
                 q = get_object_or_404(Question, pk=questions_id[qid])
-                print('#######################',q.id,q.question_short_description)
+                print('#######################', q.id, q.question_short_description)
 
                 countQuestions += 1
                 str1 = "\\noindent\\rule{\\textwidth}{0.8pt}\\\\\n"
@@ -522,7 +541,8 @@ def see_topic_PDF(request, pk):
                 str1 += "\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy
                 str1 += "\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update
                 str1 += "\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created
-                str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (os.getenv('IP_HOST2'), q.id)
+                str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (
+                    os.getenv('IP_HOST2'), q.id)
                 str1 += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper()
 
                 st = q.question_text
@@ -556,10 +576,10 @@ def see_topic_PDF(request, pk):
                             return render(request, 'exam/exam_errors.html', {})
                     except:
                         str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
-                        messages.error(request,_('"ERRO NA PARTE PARAMÉTRICA!!!'))
+                        messages.error(request, _('"ERRO NA PARTE PARAMÉTRICA!!!'))
                         messages.error(request, 'Question: %d' % q.id)
                         return render(request, 'exam/exam_errors.html', {})
-                        #continue
+                        # continue
 
                 str1 += r' %s\n\n' % ''.join(quest)
                 str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\n"
@@ -598,14 +618,13 @@ def see_topic_PDF(request, pk):
         try:
             os.remove("{}.aux".format(file_name))
             os.remove("{}.log".format(file_name))
-            #os.remove("{}.tex".format(file_name))
+            # os.remove("{}.tex".format(file_name))
             os.remove("{}.pdf".format(file_name))
             os.remove("{}.out".format(file_name))
             os.remove("temp.txt")
             pass
         except Exception as e:
             pass
-
 
         path_to_file = BASE_DIR + "/pdfTopic/" + file_name + ".pdf"
         return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
@@ -618,9 +637,10 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 100
 
     def get_queryset(self):
-        #return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        # return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         return lista.order_by('question_text').distinct()
+
 
 class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     model = Question
@@ -629,9 +649,10 @@ class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 100
 
     def get_queryset(self):
-        #return Question.objects.filter(question_who_created=self.request.user)
+        # return Question.objects.filter(question_who_created=self.request.user)
         lista = Question.objects.filter(question_who_created=self.request.user)
         return lista.order_by('question_text').distinct()
+
 
 class QuestionDetailView(generic.DetailView):
     model = Question
@@ -642,6 +663,7 @@ class QuestionDetailView(generic.DetailView):
     def get_queryset(self):
         lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         return lista.order_by('question_text').distinct()
+
 
 ####################################################################
 # answers = Answer.objects.filter(question=question_inst)
@@ -735,24 +757,18 @@ def UpdateQuestion(request, pk):
         'questioninst': question_inst,
     })
 
-
 #########################################################
 
 class QuestionCreate(LoginRequiredMixin, generic.CreateView):
-    model = Question
-    # fields = '__all__'
-    fields = [
-        'topic',
-        'question_short_description',
-        'question_group',
-        'question_text',
-        'question_type',
-        'question_difficulty',
-        'question_bloom_taxonomy',
-        'question_parametric',
-    ]
+    form_class = QuestionCreateForm
+
     template_name = 'question/question_create.html'
     success_url = reverse_lazy('topic:question-create')
+
+    def get_form_kwargs(self):
+        kwargs = super(QuestionCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         flag_ok = True
@@ -769,11 +785,13 @@ class QuestionCreate(LoginRequiredMixin, generic.CreateView):
         form.instance.question_who_created = self.request.user
         t = datetime.date.today()
         form.instance.question_last_update = str(t.year) + "-" + str(t.month) + "-" + str(t.day)
+
         return super(QuestionCreate, self).form_valid(form)
 
     def get_queryset(self):
         lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         return lista.order_by('question_text').distinct()
+
 
 class QuestionUpdate(UpdateView):
     model = Question
@@ -784,6 +802,7 @@ class QuestionUpdate(UpdateView):
     def get_queryset(self):
         lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         return lista.order_by('question_text').distinct()
+
 
 class QuestionDelete(DeleteView):
     model = Question

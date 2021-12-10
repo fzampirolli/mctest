@@ -37,7 +37,7 @@ from django.shortcuts import get_object_or_404
 
 # Create your models here.
 class Topic(models.Model):
-    discipline = models.ManyToManyField(Discipline,  # errado deveria ser discipline e não course
+    discipline = models.ManyToManyField(Discipline,
                                         related_name='topics2',  # relacionamento reverso
                                         help_text=_("Choose a discipline for this topic."),
                                         verbose_name=_("Disciplines"),

@@ -1376,6 +1376,8 @@ _inst1_
         if len(exam.classrooms.all()):
             for p in exam.classrooms.all()[0].discipline.discipline_profs.all():
                 profs.append(p)
+            for p in exam.classrooms.all()[0].discipline.discipline_coords.all():
+                profs.append(p)
 
         if not user in profs:
             return HttpResponse("ERROR: The teacher is not registered in a Discipline (or in a classroom)")

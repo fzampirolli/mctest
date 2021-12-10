@@ -28,7 +28,64 @@ GNU General Public License for more details.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Question, Topic, User
+from .models import Question, Topic, User, Discipline
+
+
+class TopicCreateForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(TopicCreateForm, self).__init__(*args, **kwargs)
+        try:
+            d1 = Discipline.objects.filter(discipline_profs=user)
+            d2 = Discipline.objects.filter(discipline_coords=user)
+            self.fields['discipline'].queryset = (d1 | d2).distinct()
+        except:
+            pass
+
+class TopicUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(TopicUpdateForm, self).__init__(*args, **kwargs)
+        try:
+            d1 = Discipline.objects.filter(discipline_profs=user)
+            d2 = Discipline.objects.filter(discipline_coords=user)
+            self.fields['discipline'].queryset = (d1 | d2).distinct()
+        except:
+            pass
+
+class QuestionCreateForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = [
+            'topic',
+            'question_short_description',
+            'question_group',
+            'question_text',
+            'question_type',
+            'question_difficulty',
+            'question_bloom_taxonomy',
+            'question_parametric',
+        ]
+        # template_name = 'question/question_create.html'
+        # success_url = reverse_lazy('topic:question-create')
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(QuestionCreateForm, self).__init__(*args, **kwargs)
+        try:
+            t1 = Topic.objects.filter(discipline__discipline_profs=user)
+            t2 = Topic.objects.filter(discipline__discipline_coords=user)
+            self.fields['topic'].queryset = (t1 | t2).distinct()
+        except:
+            pass
 
 
 class UpdateQuestionForm(forms.Form):
@@ -58,11 +115,14 @@ class UpdateQuestionForm(forms.Form):
     question_last_update = forms.DateField(
         label=_("Last Update"))
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,  *args, **kwargs):
         super(UpdateQuestionForm, self).__init__(*args, **kwargs)
         try:
-            #user = kwargs['initial']['question_who_created']
-            #self.fields['topic'].queryset = Topic.objects.filter(discipline__discipline_profs=user)
+            user = kwargs['initial']['question_who_created']
+            t1 = Topic.objects.filter(discipline__discipline_profs=user)
+            t2 = Topic.objects.filter(discipline__discipline_coords=user)
+            self.fields['topic'].queryset = (t1 | t2).distinct()
+
             c = Discipline.objects.filter()
             self.fields['question_who_created'].queryset = c.objects.filter(discipline__discipline_profs=user)
         except:
