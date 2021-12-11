@@ -15,7 +15,7 @@
 
                         <h5><strong>{% trans "Classroom" %}: </strong> {{ classroom.classroom_code }}</h5>
                         <h6><strong>{% trans "Type" %}: </strong>{{ classroom.classroom_type }}</h6>
-                        <h6><strong>{% trans "Date" %}: </strong>{{ classroom.classroom_days }}</h6>
+                        <h6><strong>{% trans "Period" %}: </strong>{{ classroom.classroom_days }}</h6>
                         <h6><strong>{% trans "Profs" %}: </strong>
                             {% for prof in classroom.classroom_profs.all %}
                                 * {{ prof }}
@@ -117,6 +117,8 @@
                                 <!-- End Shows students -->
 
                             </div>
+                        {% else %}
+                            <h4>{% trans "No permission to access this content!" %}</h4>
                         {% endif %}
 
                         {% if user in classroom.discipline.discipline_coords.all or user.groups.all.0.name == 'professor' and user in classroom.classroom_profs.all %}

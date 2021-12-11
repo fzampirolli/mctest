@@ -39,9 +39,10 @@ from tablib import Dataset
 
 from account.models import User
 from student.models import Student
+from .forms import ClassroomCreateForm, ClassroomUpdateForm
 from .models import Institute, Course, Discipline, Classroom
 from .resources import StudentResource
-from .forms import ClassroomCreateForm, ClassroomUpdateForm
+
 
 @login_required
 def ImportClassroomsDiscipline(request, pk):
@@ -63,7 +64,7 @@ def ImportClassroomsDiscipline(request, pk):
             messages.error(request, _('ImportClassroomsDiscipline: choose a CSV following the model'))
             return render(request, 'exam/exam_errors.html', {})
 
-        f = new_persons.read()#.decode('utf-8')
+        f = new_persons.read()  # .decode('utf-8')
         f = f.decode('latin-1')
 
         for c in discipline.classrooms2.all():  # para cada classe da disciplina
@@ -89,7 +90,7 @@ def ImportClassroomsDiscipline(request, pk):
                     if [i for u in discipline.courses.all() for i in u.institutes.all() if
                         i.institute_url[4:] == emailProf[emailProf.find('@') + 1:]]:
                         messages.error(request,
-                                       _('ImportClassroomsDiscipline: The teacher is not registered in MCTest')+
+                                       _('ImportClassroomsDiscipline: The teacher is not registered in MCTest') +
                                        '  ' + emailProf)
                         return render(request, 'exam/exam_errors.html', {})
 
@@ -206,6 +207,7 @@ def ImportClassroomsDiscipline(request, pk):
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/discipline/" + str(pk) + "/update")
 
+
 @login_required
 def ImportProfsDiscipline(request, pk):
     if request.user.get_group_permissions():
@@ -267,6 +269,7 @@ def ImportProfsDiscipline(request, pk):
 
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/discipline/" + str(pk) + "/update")
+
 
 @login_required
 def ImportStudentsClassroom(request, pk):
@@ -395,6 +398,7 @@ def ImportStudentsClassroom(request, pk):
     return render(request, 'exam/exam_msg.html', {})
     # return HttpResponseRedirect("/course/classroom/" + str(pk) + "/update")
 
+
 @login_required
 def ClassroomStudentDelete(request, pk1, pk2):
     if request.user.get_group_permissions():
@@ -414,8 +418,10 @@ def ClassroomStudentDelete(request, pk1, pk2):
 
     return render(request, 'classroom/classroom_detail.html', {'classroom': classroom})
 
+
 # Create a new Student BUG
 from django.views.decorators.csrf import csrf_protect
+
 
 @login_required
 @csrf_protect
@@ -457,6 +463,7 @@ def ClassroomStudentCreate(request, pk):
 
     return render(request, 'exam/exam_msg.html', {})
 
+
 class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
     form_class = ClassroomUpdateForm
 
@@ -483,9 +490,28 @@ class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
         c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
         return (c1 | c2).distinct()
 
+
 class ClassroomDetailView(LoginRequiredMixin, generic.DetailView):
     model = Classroom
     template_name = 'classroom/classroom_detail.html'
+
+    # def get_queryset(self):
+    #     c1 = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+    #     c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
+    #     if len(c1 | c2):
+    #         return (c1 | c2).distinct()
+    #     else:
+    #         messages.error(self.request, _('ClassroomCreate: The teacher is not registered in a Discipline'))
+    #         return render(self.request, 'exam/exam_errors.html', {})
+    #
+    # def form_valid(self, form):
+    #     if not (
+    #             self.request.user in form.instance.discipline.discipline_profs.all() or self.request.user in form.instance.discipline.discipline_coords.all()):
+    #         messages.error(self.request, _('ClassroomCreate: The teacher is not registered in a Discipline'))
+    #         return render(self.request, 'exam/exam_errors.html', {})
+    #
+    #     return super(ClassroomCreate, self).form_valid(form)
+
 
 class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
     form_class = ClassroomCreateForm
@@ -499,14 +525,13 @@ class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
         return kwargs
 
     def form_valid(self, form):
-        if not self.request.user in form.instance.discipline.discipline_profs.all():
+        if not (self.request.user in form.instance.discipline.discipline_profs.all() or self.request.user in form.instance.discipline.discipline_coords.all()):
             messages.error(self.request, _('ClassroomCreate: The teacher is not registered in a Discipline'))
             return render(self.request, 'exam/exam_errors.html', {})
 
         return super(ClassroomCreate, self).form_valid(form)
 
     def get_queryset(self):
-
         # # pego todas as classes da disciplina a qual o exame pertence, se coordenador
         # discipline = self.discipline
         # # classrooms = Classroom.objects.filter(discipline__pk=discipline.pk)
@@ -525,8 +550,12 @@ class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
         #                 qs.append(c.pk)
         #     qs = Classroom.objects.filter(pk__in=qs)
 
-        lista = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
-        return lista.order_by('classroom_days')
+        # lista = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        # return lista.order_by('classroom_days')
+
+        c1 = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
+        return (c1 | c2).order_by('classroom_days').distinct()
 
 
 class ClassroomDelete(LoginRequiredMixin, generic.DeleteView):
@@ -547,7 +576,9 @@ class ClassroomDelete(LoginRequiredMixin, generic.DeleteView):
         return super(ClassroomDelete, self).form_valid(form)
 
     def get_queryset(self):
-        return Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        c1 = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
+        return (c1 | c2).order_by('classroom_days').distinct()
 
 
 class LoanedClassroomByUserListView(LoginRequiredMixin, generic.ListView):
@@ -565,7 +596,9 @@ class LoanedClassroomByUserListView(LoginRequiredMixin, generic.ListView):
         return super(LoanedClassroomByUserListView, self).form_valid(form)
 
     def get_queryset(self):
-        return Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        c1 = Classroom.objects.filter(discipline__discipline_profs=self.request.user)
+        c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
+        return (c1 | c2).order_by('classroom_code').distinct()
 
 
 #########################################################################

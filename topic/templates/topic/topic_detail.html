@@ -181,8 +181,10 @@
                                         {% endfor %}
                                     {% endfor %}
                                 </div>
-
+                            {% else %}
+                                <h4>{% trans "No permission to access this content!" %}</h4>
                             {% endif %}
+
                         {% endfor %}
 
                         <hr>

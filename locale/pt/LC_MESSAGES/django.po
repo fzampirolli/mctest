@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-10 09:11-0300\n"
+"POT-Creation-Date: 2021-12-11 19:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgstr "Coordenadores do Curso"
 msgid "Discipline course"
 msgstr "Disciplinas do Curso"
 
-#: course/models.py:123 course/views.py:75
+#: course/models.py:123 course/views.py:76
 msgid "Discipline name"
 msgstr "Nome Disciplina"
 
@@ -199,7 +199,7 @@ msgstr "Professores da Disciplina"
 msgid "Discipline coordinators"
 msgstr "Coordenadores da Disciplina"
 
-#: course/models.py:162 course/views.py:331
+#: course/models.py:162 course/views.py:334
 msgid "Classroom students"
 msgstr "Estudantes da Turma"
 
@@ -305,7 +305,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 
 #: course/templates/classroom/classroom_confirm_delete.html:66
 #: course/templates/classroom/classroom_create.html:86
-#: course/templates/classroom/classroom_detail.html:182
+#: course/templates/classroom/classroom_detail.html:184
 #: course/templates/classroom/classroom_list.html:47
 #: course/templates/classroom/classroom_list_who_created_user.html:97
 #: course/templates/classroom/classroom_update.html:119
@@ -399,6 +399,7 @@ msgid "Room"
 msgstr "Sala"
 
 #: course/templates/classroom/classroom_create.html:60
+#: course/templates/classroom/classroom_detail.html:18
 #: course/templates/classroom/classroom_list_who_created_user.html:22
 #: course/templates/classroom/classroom_update.html:90
 #: course/templates/discipline/discipline_detail.html:126
@@ -478,15 +479,10 @@ msgstr "Detalhar Turma"
 
 #: course/templates/classroom/classroom_detail.html:16
 #: course/templates/classroom/classroom_list_who_created_user.html:78
-#: course/templates/discipline/discipline_detail.html:179 course/views.py:183
+#: course/templates/discipline/discipline_detail.html:179 course/views.py:184
 #: exam/UtilsLatex.py:858
 msgid "Classroom"
 msgstr "Turma"
-
-#: course/templates/classroom/classroom_detail.html:18 exam/UtilsLatex.py:865
-#: exam/templates/exam/exam_update2.html:591
-msgid "Date"
-msgstr "Data"
 
 #: course/templates/classroom/classroom_detail.html:19
 #: course/templates/classroom/classroom_list_who_created_user.html:23
@@ -505,7 +501,7 @@ msgid "Students List"
 msgstr "Listar Estudantes"
 
 #: course/templates/classroom/classroom_detail.html:43
-#: course/templates/classroom/classroom_detail.html:142 exam/CVMCTest.py:1530
+#: course/templates/classroom/classroom_detail.html:144 exam/CVMCTest.py:1530
 #: student/templates/student/student_create.old.html:23
 #: student/templates/student/student_detail.html:15
 #: topic/templates/question/question_list.html:27
@@ -522,7 +518,7 @@ msgid "Student"
 msgstr "Estudante"
 
 #: course/templates/classroom/classroom_detail.html:45
-#: course/templates/classroom/classroom_detail.html:155 exam/CVMCTest.py:1531
+#: course/templates/classroom/classroom_detail.html:157 exam/CVMCTest.py:1531
 #: student/templates/student/student_create.old.html:39
 #: student/templates/student/student_detail.html:17
 #: student/templates/student/student_update.html:38
@@ -600,7 +596,12 @@ msgstr "Não existe"
 msgid "registered yet."
 msgstr "registrada(o) ainda"
 
-#: course/templates/classroom/classroom_detail.html:149
+#: course/templates/classroom/classroom_detail.html:121
+#: topic/templates/topic/topic_detail.html:185
+msgid "No permission to access this content!"
+msgstr "Sem permissão para acessar esse conteúdo!"
+
+#: course/templates/classroom/classroom_detail.html:151
 #: course/templates/course/course_create.html:31
 #: course/templates/course/course_detail.html:30
 #: course/templates/course/course_list.html:19
@@ -623,29 +624,29 @@ msgstr "registrada(o) ainda"
 msgid "Name"
 msgstr "Nome"
 
-#: course/templates/classroom/classroom_detail.html:162
+#: course/templates/classroom/classroom_detail.html:164
 #: student/templates/student/student_create.html:11
 #: student/templates/student/student_create.old.html:11
 msgid "Create a new Student"
 msgstr "Criar um novo Estudante"
 
-#: course/templates/classroom/classroom_detail.html:171
+#: course/templates/classroom/classroom_detail.html:173
 msgid "Update Classroom by CSV"
 msgstr "Atualizar Turma com CSV"
 
-#: course/templates/classroom/classroom_detail.html:178
+#: course/templates/classroom/classroom_detail.html:180
 msgid "Attention, a student may be many classrooms"
 msgstr "Atenção, um estudante pode ter muitas turmas"
 
-#: course/templates/classroom/classroom_detail.html:179
+#: course/templates/classroom/classroom_detail.html:181
 msgid "One student will be removed from the class"
 msgstr "Um estudante será removido da turma"
 
-#: course/templates/classroom/classroom_detail.html:180
+#: course/templates/classroom/classroom_detail.html:182
 msgid "Import students by CSV file in Update Classroom"
 msgstr "Importar estudantes por aquivo CSV em Minhas Turmas"
 
-#: course/templates/classroom/classroom_detail.html:181
+#: course/templates/classroom/classroom_detail.html:183
 msgid "Only teacher registered in Classroom or coordinator"
 msgstr "Somente professores cadastrados na turma ou coordenador"
 
@@ -717,7 +718,7 @@ msgstr "Importar-Estudantes"
 #: topic/templates/question/question_list_who_created_user.html:153
 msgid "see examples"
 msgstr ""
-"Veja exemplos (click com botão direito do mouse e salve o arquivo em seu "
+"Ver exemplos (click com botão direito do mouse e salve o arquivo em seu "
 "computador, antes de fazer upload)"
 
 #: course/templates/classroom/classroom_update.html:30
@@ -1047,84 +1048,84 @@ msgstr "Atualizar Instituto"
 msgid "Create a new Institute"
 msgstr "Criar um novo Instituto"
 
-#: course/views.py:63
+#: course/views.py:64
 msgid "ImportClassroomsDiscipline: choose a CSV following the model"
 msgstr "ImportClassroomsDiscipline: escolher um arquivo CSV seguindo o modelo"
 
-#: course/views.py:74 course/views.py:230
+#: course/views.py:75 course/views.py:232
 msgid "Return to: "
 msgstr "Retorno para: "
 
-#: course/views.py:92
+#: course/views.py:93
 msgid "ImportClassroomsDiscipline: The teacher is not registered in MCTest"
 msgstr "ImportClassroomsDiscipline: o professor não está registrado em MCTest"
 
-#: course/views.py:104
+#: course/views.py:105
 msgid "ImportClassroomsDiscipline: ID must be digits only: "
 msgstr "ImportClassroomsDiscipline: ID tem que ter somente dígitos: "
 
-#: course/views.py:155
+#: course/views.py:156
 msgid "ImportClassroomsDiscipline: exists more that one student with same ID:"
 msgstr ""
 "ImportClassroomsDiscipline: existe mais que um estudantes com o mesmo ID: "
 
-#: course/views.py:194 course/views.py:231
+#: course/views.py:195 course/views.py:233
 msgid "Discipline profs"
 msgstr "Professores da Disciplina"
 
-#: course/views.py:201
+#: course/views.py:202
 msgid "TOTAL"
 msgstr ""
 
-#: course/views.py:202
+#: course/views.py:203
 msgid "Registered;"
 msgstr "Registrado;"
 
-#: course/views.py:203
+#: course/views.py:204
 msgid "Not registered;"
 msgstr "Não registrado;"
 
-#: course/views.py:224
+#: course/views.py:226
 msgid "ImportProfsDiscipline: choose a CSV following the model!"
 msgstr "ImportProfsDiscipline; escolher um arquivo CVS seguindo o modelo"
 
-#: course/views.py:291
+#: course/views.py:294
 msgid "ImportStudentsClassroom: choose a CSV following the model"
 msgstr "ImportStudentsClassroom: escolher um arquivo CSV seguindo o modelo"
 
-#: course/views.py:353
+#: course/views.py:356
 msgid "ImportStudentsClassroom: ID must be digits only: "
 msgstr "ImportStudentsClassroom: ID tem que ter somente dígitos: "
 
-#: course/views.py:367
+#: course/views.py:370
 msgid "ImportStudentsClassroom: exists more that one student with same ID:"
 msgstr "ImportStudentsClassroom: existe mais que um estudante com o mesmo ID "
 
-#: course/views.py:393
+#: course/views.py:396
 msgid "Back to Classroom Detail"
 msgstr "Voltar para detalhes da turma"
 
-#: course/views.py:443
+#: course/views.py:449
 msgid "Added student - there is ID: "
 msgstr "StudentCreate: Já existe ID"
 
-#: course/views.py:454
+#: course/views.py:460
 msgid "Created student: Created Student ID: "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:473 exam/views.py:1356
+#: course/views.py:480 exam/views.py:1365
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
-#: course/views.py:503
+#: course/views.py:529
 msgid "ClassroomCreate: The teacher is not registered in a Discipline"
 msgstr "ClassroomCreate: o professor não está registrado na disciplina"
 
-#: course/views.py:545
+#: course/views.py:574
 msgid "ClassroomDelete: The teacher is not registered in a Discipline"
 msgstr "ClassroomDelete: o professor não está registrado na disciplina"
 
-#: course/views.py:562
+#: course/views.py:593
 msgid ""
 "LoanedClassroomByUserListView: The teacher is not registered in a Discipline"
 msgstr ""
@@ -1158,7 +1159,7 @@ msgstr "Retorno"
 msgid "Invalid answer!"
 msgstr "Alternativa inválida!"
 
-#: exam/UtilsLatex.py:363 exam/views.py:1038 exam/views.py:1078
+#: exam/UtilsLatex.py:363 exam/views.py:1047 exam/views.py:1087
 msgid "ERROR in genTex"
 msgstr ""
 
@@ -1183,6 +1184,10 @@ msgstr "Período"
 #: exam/templates/exam/exam_list_who_created_user.html:88
 msgid "Exam"
 msgstr "Exame"
+
+#: exam/UtilsLatex.py:865 exam/templates/exam/exam_update2.html:591
+msgid "Date"
+msgstr "Data"
 
 #: exam/UtilsLatex.py:867 exam/UtilsLatex.py:924
 msgid "ID/RA"
@@ -1268,7 +1273,7 @@ msgstr ""
 "drawQuestionsMCDifficulty: número de alternativas são diferentes: Exame; "
 "Questão"
 
-#: exam/UtilsLatex.py:1272 exam/UtilsLatex.py:1445
+#: exam/UtilsLatex.py:1272 exam/UtilsLatex.py:1447
 msgid "Text Questions"
 msgstr "Questões Dissertativas"
 
@@ -1875,19 +1880,19 @@ msgstr ""
 
 #: exam/views.py:200
 msgid ""
-"4. Add too other files available at \"github.com/fzampirolli/mctest/"
-"VPL_modification\""
+"4. Add too other files available at github.com/fzampirolli/mctest/"
+"VPL_modification"
 msgstr ""
-"4. Adicionar também os arquivos disponívens em \"github.com/fzampirolli/"
-"mctest/VPL_modification\""
+"4. Adicionar também os arquivos disponívens em github.com/fzampirolli/mctest/"
+"VPL_modification"
 
-#: exam/views.py:201
+#: exam/views.py:202
 msgid "5. Also enable these files under \"Files to keep while running\""
 msgstr ""
-"Também habilite esses arquivos em \"Arquivos a serem mantidos durante a "
+"5. Também habilite esses arquivos em \"Arquivos a serem mantidos durante a "
 "execução\""
 
-#: exam/views.py:203
+#: exam/views.py:204
 msgid ""
 "Note: \"students_variations.csv\" will be sent by email when creating PDFs "
 "of student exams."
@@ -1895,51 +1900,55 @@ msgstr ""
 "Observação: \"students_variations.csv\" será enviado por e-mail ao criar "
 "PDFs dos exames dos alunos."
 
-#: exam/views.py:206
+#: exam/views.py:207
 msgid "# JSON: There are no Test Cases!"
 msgstr "# JSON: Não existem casos de testes nas questões escolhidas!"
 
-#: exam/views.py:208
+#: exam/views.py:208 exam/views.py:218
+msgid "See for details"
+msgstr "Ver detalhes"
+
+#: exam/views.py:217
+msgid "# CSV: Template of questions."
+msgstr "# CSV:  Gabaritos das questões."
+
+#: exam/views.py:220
 msgid ""
-"See for details: \"https://doi.org/10.5753/cbie.sbie.2020.1573\" (version 1 "
-"of integration MCTest+Moodle+VPL)"
+"This CSV file can be used for automatic correction using Google Forms + "
+"Sheets."
 msgstr ""
-"Veja detalhes: \"https://doi.org/10.5753/cbie.sbie.2020.51\" (versão 1 da "
-"integração MCTest+Moodle+VPL)."
+"Este arquivo CSV pode ser usado para correção automática utilizando Google "
+"Forms + Sheets."
 
-#: exam/views.py:215
-msgid ""
-"# CSV: Template of questions. This file can be used for automatic correction "
-"using Google Forms + Sheets."
-msgstr ""
-"# CSV: Gabaritos das questões. Este arquivo pode ser usado para correção "
-"automática utilizando Google Forms + Sheets."
-
-#: exam/views.py:216
-msgid "See for details: \"https://doi.org/10.5753/cbie.sbie.2020.51\"."
-msgstr "Veja detalhes: \"https://doi.org/10.5753/cbie.sbie.2020.51\"."
-
-#: exam/views.py:222
+#: exam/views.py:227
 msgid "# AIKEN: Database of questions for Moodle."
 msgstr "# AIKEN: Banco de questões para o Moodle."
 
-#: exam/views.py:228
+#: exam/views.py:229 exam/views.py:237
+msgid ""
+"See for details: \"Facilitating the Generation of Parametric Questions and "
+"their export to Moodle\" (FIE21)"
+msgstr ""
+"Ver detalhes: \"Facilitating the Generation of Parametric Questions and "
+"their export to Moodle\" (FIE21)"
+
+#: exam/views.py:235
 msgid "# XML: Database of questions for Moodle."
 msgstr "# XML:  Banco de questões para o Moodle."
 
-#: exam/views.py:238
+#: exam/views.py:247
 msgid "# TEX+PDF: Database of questions in LaTeX format."
 msgstr "# TEX+PDF: Banco de questões no formato LaTeX."
 
-#: exam/views.py:239
+#: exam/views.py:248
 msgid "Run with command line:"
 msgstr "Rodar com o comando linha:"
 
-#: exam/views.py:240
+#: exam/views.py:249
 msgid "pdflatex --shell -scape -interaction nonstopmode \"file.tex\"."
 msgstr ""
 
-#: exam/views.py:277
+#: exam/views.py:286
 msgid ""
 "feedbackStudentsExamText: feedback to student is NO, Change to YES and click "
 "in Upload-PDF again!"
@@ -1947,7 +1956,7 @@ msgstr ""
 "feedbackStudentsExamText: retorno do estudante é NÃO, escolher SIM e clique "
 "em Upload-PDF novamente"
 
-#: exam/views.py:289
+#: exam/views.py:298
 msgid ""
 "feedbackStudentsExamText: choose a ZIP file with scanned exams, for example "
 "_e31_769.zip!"
@@ -1955,14 +1964,14 @@ msgstr ""
 "feedbackStudentsExamText: escolher um arquivo ZIP com os exames "
 "digitalizados, por exemplo: _e31_769.zip!"
 
-#: exam/views.py:337
+#: exam/views.py:346
 msgid ""
 "feedbackStudentsExamText: name of the pdf file does not follow a pattern "
 "ID_xxx.pdf"
 msgstr ""
 "feedbackStudentsExamText: nome do arquivo PDF não segue um padrão: ID_xxx.pdf"
 
-#: exam/views.py:397
+#: exam/views.py:406
 msgid ""
 "feedbackStudentsExamText: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -1970,7 +1979,7 @@ msgstr ""
 "feedbackStudentsExamText: nenhum email foi enviado, você está em Exame e "
 "Turma corretos?"
 
-#: exam/views.py:420
+#: exam/views.py:429
 msgid ""
 "feedbackStudentsExam: feedback to student is NO, Change to YES and click in "
 "Upload-PDF again!"
@@ -1978,7 +1987,7 @@ msgstr ""
 "feedbackStudentsExam: retorno ao estudante é NÃO, escolher SIM e clique em "
 "Upload-PDF novamente!"
 
-#: exam/views.py:473
+#: exam/views.py:482
 msgid ""
 "feedbackStudentsExam: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -1986,43 +1995,43 @@ msgstr ""
 "feedbackStudentsExam: nenhum email foi enviado, você está em Exame e Turma "
 "corretos?"
 
-#: exam/views.py:497
+#: exam/views.py:506
 msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
-#: exam/views.py:518
+#: exam/views.py:527
 msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
-#: exam/views.py:835
+#: exam/views.py:844
 msgid "Create variations first"
 msgstr "Criar primeiro as variações"
 
-#: exam/views.py:863
+#: exam/views.py:872
 msgid "ERROR in generate_page, number_of_questions_text!!!!  "
 msgstr ""
 
-#: exam/views.py:867
+#: exam/views.py:876
 msgid "ERROR in generate_page, number_of_QM!!!! - no questions"
 msgstr ""
 
-#: exam/views.py:912
+#: exam/views.py:921
 msgid "ERROR in Utils.distro_table, student: "
 msgstr ""
 
-#: exam/views.py:974
+#: exam/views.py:983
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr ""
 
-#: exam/views.py:986
+#: exam/views.py:995
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:1033 exam/views.py:1053 exam/views.py:1073 exam/views.py:1137
+#: exam/views.py:1042 exam/views.py:1062 exam/views.py:1082 exam/views.py:1146
 msgid "ERROR - watch out for special characters in exam name"
-msgstr ""
+msgstr "ERRO - cuidado com os caracteres especiais no nome do exame"
 
-#: exam/views.py:1235
+#: exam/views.py:1244
 msgid ""
 "Invalid Form! Verify if date follows the format or if there is at least one "
 "room marked, for example."
@@ -2030,15 +2039,15 @@ msgstr ""
 "Formulário inválido! Verifique se a data segue o formato ou se existe ao "
 "menos uma turma marcada, por exemplo."
 
-#: exam/views.py:1292
+#: exam/views.py:1301
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:1307
+#: exam/views.py:1316
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:1321
+#: exam/views.py:1330
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -2324,7 +2333,7 @@ msgstr "Uma simples questão com comando LaTeX"
 
 #: main/templates/index-mctest.html:61 main/templates/index.html:61
 msgid "After clicking Create-PDF, see the next slide"
-msgstr "Após clicar em Criar-PDF, veja próximo slide"
+msgstr "Após clicar em Criar-PDF, ver próximo slide"
 
 #: main/templates/index-mctest.html:76 main/templates/index.html:76
 msgid ""
@@ -2462,7 +2471,7 @@ msgid ""
 "the answer in light colors, see next slide"
 msgstr ""
 "Com valores aleatórios para a, b, c e d. Nesse caso, você pode desenhar a "
-"resposta em cores claras, veja o próximo slide"
+"resposta em cores claras, ver o próximo slide"
 
 #: main/templates/index-mctest.html:290 main/templates/index.html:291
 msgid ""
@@ -2640,7 +2649,7 @@ msgstr ""
 
 #: main/templates/index.html:382
 msgid "see also:"
-msgstr "veja também"
+msgstr "ver também"
 
 #: main/templates/index.html:399
 msgid "motivations"
@@ -2893,7 +2902,7 @@ msgstr "Em seguida, faça as seguintes alterações em "
 
 #: main/templates/readme.html:73
 msgid "Please see 'locale' folder for other languages"
-msgstr "Veja pasta 'locale' para outros idiomas"
+msgstr "Ver pasta 'locale' para outros idiomas"
 
 #: main/templates/readme.html:77
 msgid ""
@@ -3559,15 +3568,15 @@ msgstr "Detalhar Tópico"
 #: topic/templates/topic/topic_detail.html:45
 msgid "View all questions in this topic in PDF format, sorted by similarity"
 msgstr ""
-"Veja todas as questões deste tópico em formato PDF, classificadas por "
+"Ver todas as questões deste tópico em formato PDF, classificadas por "
 "similaridade"
 
-#: topic/templates/topic/topic_detail.html:189
+#: topic/templates/topic/topic_detail.html:191
 msgid "Note: For each exam, only one question is taken from each group"
 msgstr ""
 "Importante: para cada exame, somente uma questão é escolhida de cada grupo"
 
-#: topic/templates/topic/topic_detail.html:190
+#: topic/templates/topic/topic_detail.html:192
 msgid "Only the teacher registered in the course can see more details"
 msgstr "Somente professores cadastrados em curso pode ver mais detalhes"
 
@@ -3587,7 +3596,7 @@ msgstr "Atualizar Tópico"
 msgid "ImportQuestionsJson: choose a JSON following the model!"
 msgstr "ImportQuestionsJson: escolher um arquivo JSON seguindo o modelo"
 
-#: topic/views.py:248 topic/views.py:572
+#: topic/views.py:248 topic/views.py:575
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -3621,21 +3630,47 @@ msgstr "Questões Criadas"
 msgid "Similar question(s) exist in the DB:"
 msgstr "Questões similares no BD:"
 
-#: topic/views.py:471
+#: topic/views.py:474
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:508
+#: topic/views.py:511
 msgid "The professor does not have permission!"
 msgstr ""
 
-#: topic/views.py:579
+#: topic/views.py:582
 msgid "\"ERRO NA PARTE PARAMÉTRICA!!!"
 msgstr ""
 
-#: topic/views.py:782
+#: topic/views.py:785
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid "See for details: https://doi.org/10.5753/cbie.sbie.2020.51"
+#~ msgstr "Ver detalhes: https://doi.org/10.5753/cbie.sbie.2020.51"
+
+#~ msgid ""
+#~ "See for details: https://doi.org/10.5753/cbie.sbie.2020.1573. Version: 1"
+#~ msgstr "Ver detalhes: https://doi.org/10.5753/cbie.sbie.2020.51. Versão: 1"
+
+#~ msgid ""
+#~ "See for details: \"Automated assessment of parametric programming in a "
+#~ "large-scale course\" (LACLO21). Version: 10"
+#~ msgstr ""
+#~ "Ver detalhes: \"Automated assessment of parametric programming in a large-"
+#~ "scale course\" (LACLO21). Versão: 10"
+
+#, fuzzy
+#~| msgid "version"
+#~ msgid "version:"
+#~ msgstr "versão"
+
+#~ msgid ""
+#~ "See for details: \"https://doi.org/10.5753/cbie.sbie.2020.1573\" (version "
+#~ "1 of integration MCTest+Moodle+VPL)"
+#~ msgstr ""
+#~ "Veja detalhes: \"https://doi.org/10.5753/cbie.sbie.2020.51\" (versão 1 da "
+#~ "integração MCTest+Moodle+VPL)."
 
 #, fuzzy
 #~| msgid "Only teacher registered in a discipline"

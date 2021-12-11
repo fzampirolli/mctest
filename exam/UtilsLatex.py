@@ -1388,6 +1388,8 @@ _inst1_
         for d in question.topic.discipline.all():
             for p in d.discipline_profs.all():
                 profs.append(p)
+            for p in d.discipline_coords.all():
+                profs.append(p)
         if not user in profs:
             return HttpResponse("ERROR: The teacher is not registered in the Discipline (of the topic)")
 

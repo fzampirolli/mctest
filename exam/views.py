@@ -197,35 +197,44 @@ def variationsExam(request, pk):
                 message_cases += _(
                     '3. After you create a Moodle VPL activity, in the "runtime files", add "linker.json" and "students_variations.csv"') + '\n'
                 message_cases += _(
-                    '4. Add too other files available at "github.com/fzampirolli/mctest/VPL_modification"') + '\n'
-                message_cases += _('5. Also enable these files under "Files to keep while running"') + '\n'
+                    '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification') + '\n'
+                message_cases += _(
+                    '5. Also enable these files under "Files to keep while running"') + '\n'
                 message_cases += _(
                     'Note: "students_variations.csv" will be sent by email when creating PDFs of student exams.') + '\n'
             else:
                 message_cases += _(
                     '# JSON: There are no Test Cases!') + '\n'
-            message_cases += _(
-                'See for details: "https://doi.org/10.5753/cbie.sbie.2020.1573" (version 1 of integration MCTest+Moodle+VPL)') + '\n\n'
+            message_cases += _('See for details') + ':\n'
+            message_cases += '  A. https://doi.org/10.5753/cbie.sbie.2020.1573' + ' - v.01\n'
+            message_cases += '  B. "Automated assessment of parametric programming in a large-scale course" (LACLO21)' + ' - v.10\n'
+            message_cases += '  C. https://sol.sbc.org.br/index.php/sbie/article/view/18135/17969' + '\n\n'
 
         if 'TemplateCSV' in choices:
             path_to_file_TEMPLATES = path_aux + "_templates.csv"
             Utils.createFileTemplates(exam, path_to_file_TEMPLATES)
             anexos.append([path_to_file_TEMPLATES])
-            message_cases += _(
-                '# CSV: Template of questions. This file can be used for automatic correction using Google Forms + Sheets.') + '\n'
-            message_cases += _('See for details: "https://doi.org/10.5753/cbie.sbie.2020.51".') + '\n\n'
+            message_cases += _('# CSV: Template of questions.') + '\n'
+            message_cases += _('See for details') + ':\n'
+            message_cases += '  A. https://doi.org/10.5753/cbie.sbie.2020.51. '
+            message_cases += _('This CSV file can be used for automatic correction using Google Forms + Sheets.') + '\n'
+            message_cases += '  B. "Automated assessment with multiple-choice questions using weighted answers" (CSEDU21)' + '\n\n'
 
         if 'Aiken' in choices:
             path_to_file_VARIATIONS_DB_aiken = path_aux + "_variations_DB_aiken.txt"
             Utils.createFileDB_aiken(exam, path_to_file_VARIATIONS_DB_aiken)
             anexos.append([path_to_file_VARIATIONS_DB_aiken])
-            message_cases += _('# AIKEN: Database of questions for Moodle.') + '\n\n'
+            message_cases += _('# AIKEN: Database of questions for Moodle.') + '\n'
+            message_cases += _(
+                'See for details: "Facilitating the Generation of Parametric Questions and their export to Moodle" (FIE21)') + '\n\n'
 
         if 'XML' in choices:
             path_to_file_VARIATIONS_DB_xml = path_aux + "_variations_DB.xml"
             Utils.createFileDB_xml(exam, path_to_file_VARIATIONS_DB_xml)
             anexos.append([path_to_file_VARIATIONS_DB_xml])
-            message_cases += _('# XML: Database of questions for Moodle.') + '\n\n'
+            message_cases += _('# XML: Database of questions for Moodle.') + '\n'
+            message_cases += _(
+                'See for details: "Facilitating the Generation of Parametric Questions and their export to Moodle" (FIE21)') + '\n\n'
 
         if 'Latex' in choices:
             path_aux = BASE_DIR + "/report_Exam_" + str(pk)

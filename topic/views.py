@@ -419,13 +419,16 @@ class TopicListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 10
 
     def get_queryset(self):
-        if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
-            lista = Topic.objects.filter(discipline__discipline_coords=self.request.user)
-            return lista.order_by('topic_text').distinct()
-        if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
-            lista = Topic.objects.filter(discipline__discipline_profs=self.request.user)
-            return lista.order_by('topic_text').distinct()
+        # if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
+        #     lista = Topic.objects.filter(discipline__discipline_coords=self.request.user)
+        #     return lista.order_by('topic_text').distinct()
+        # if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
+        #     lista = Topic.objects.filter(discipline__discipline_profs=self.request.user)
+        #     return lista.order_by('topic_text').distinct()
 
+        t1 = Topic.objects.filter(discipline__discipline_profs=self.request.user)
+        t2 = Topic.objects.filter(discipline__discipline_coords=self.request.user)
+        return (t1 | t2).order_by('topic_text').distinct()
 
 class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
     #model = Topic
@@ -637,10 +640,9 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 100
 
     def get_queryset(self):
-        # return Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        return lista.order_by('question_text').distinct()
-
+        q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
+        return (q1 | q2).order_by('question_short_description').distinct()
 
 class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     model = Question
@@ -658,11 +660,10 @@ class QuestionDetailView(generic.DetailView):
     model = Question
     template_name = 'question/question_detail.html'
 
-    # paginate_by = 100
-
     def get_queryset(self):
-        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        return lista.order_by('question_text').distinct()
+        q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
+        return (q1 | q2).order_by('question_short_description').distinct()
 
 
 ####################################################################
@@ -732,6 +733,8 @@ def UpdateQuestion(request, pk):
         for d in question_inst.topic.discipline.all():
             for p in d.discipline_profs.all():
                 profs.append(p)
+            for p in d.discipline_coords.all():
+                profs.append(p)
         if not request.user in profs:
             return HttpResponse("ERROR: The teacher is not registered in the Discipline (of the topic)")
 
@@ -789,8 +792,9 @@ class QuestionCreate(LoginRequiredMixin, generic.CreateView):
         return super(QuestionCreate, self).form_valid(form)
 
     def get_queryset(self):
-        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        return lista.order_by('question_text').distinct()
+        q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
+        return (q1 | q2).order_by('question_short_description').distinct()
 
 
 class QuestionUpdate(UpdateView):
@@ -800,8 +804,9 @@ class QuestionUpdate(UpdateView):
     success_url = reverse_lazy('topic:question-detail')
 
     def get_queryset(self):
-        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        return lista.order_by('question_text').distinct()
+        q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
+        return (q1 | q2).order_by('question_short_description').distinct()
 
 
 class QuestionDelete(DeleteView):
@@ -810,5 +815,6 @@ class QuestionDelete(DeleteView):
     success_url = reverse_lazy('topic:myquestions-list')
 
     def get_queryset(self):
-        lista = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        return lista.order_by('question_text').distinct()
+        q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+        q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
+        return (q1 | q2).order_by('question_short_description').distinct()
