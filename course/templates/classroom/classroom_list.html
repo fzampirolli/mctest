@@ -13,33 +13,83 @@
                         {% if user.groups.all.0.name == 'professor' %}
 
                             {% if classroom_list %}
-                                <ul>
-                                    {% for classroom in classroom_list %}
-                                        <li class="{% if classroom.is_overdue %}text-danger{% endif %}">
-                                            <a href="/classroom/classroom/{{ classroom.pk }}/update"> {{ classroom }}</a>
-                                        </li>
-                                    {% endfor %}
+                                <div class="card-body" style="background-color:#f3f3f3;">
+                                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">{% trans "Classroom Code" %}</th>
+                                            <th scope="col">{% trans "Discipline" %}</th>
+                                            <th scope="col">{% trans "Period" %}</th>
+                                            <th scope="col">{% trans "Profs" %}</th>
+                                            <th scope="col" class="text-right">{% trans "Actions" %}</th>
+                                        </tr>
+                                        </thead>
 
-                                </ul>
+                                        <tbody>
+                                        {% for classroom in classroom_list %}
+                                            <tr>
+                                                <td>
+                                                    <a href="{% url 'course:classroom-detail' pk=classroom.pk %}"
+                                                       class="btn btn-outline-info text-dark btn-sm">
+                                                        {{ classroom.classroom_code }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'course:discipline-detail' pk=classroom.discipline.pk %}"
+                                                       class="btn btn-outline-warning text-dark btn-sm">
+                                                        {{ classroom.discipline }}
+                                                    </a>
+                                                </td>
+                                                <!-- Period -->
+                                                <td>
+                                                    {{ classroom.classroom_days }}
+                                                </td>
+                                                <!-- Profs -->
+                                                <td>
 
+                                                        {% for p in classroom.classroom_profs.all %}
+                                                                  * {{ p.email }}
+                                                        {% endfor %}
+
+                                                </td>
+
+                                                <!-- Actions -->
+                                                <td class="text-right">
+                                                    {% if user.is_superuser or user in classroom.discipline.discipline_coords.all or user in classroom.classroom_profs.all %}
+                                                        <a href="{% url 'course:classroom-update'  pk=classroom.pk %}"
+                                                           class="btn btn-outline-primary btn-sm">
+                                                            {% trans "Update" %}
+                                                        </a>
+                                                        <a href="{% url 'course:classroom-delete'  pk=classroom.pk %}"
+                                                           class="btn btn-outline-danger btn-sm">
+                                                            {% trans "Delete" %}
+                                                        </a>
+                                                    {% endif %}
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="text-center mt-5 mb-5 jumbotron">
+                                    <h5>{% trans "There is no" %}
+                                        <code> {% trans "Classroom" %} </code> {% trans "registered yet." %}
+                                    </h5>
+                                </div>
                             {% endif %}
 
-                            <form action="../classroom/create/" method="">
-                                {% csrf_token %}
-                                <input type="submit" action="" value={% trans "Create a new Classroom" %}/>
-                            </form>
+                            <hr/>
+                            <!-- Create a New Classroom -->
+                            <div class="text-right">
+                                <a href="{% url 'course:classroom-create' %}" class="btn btn-primary">
+                                    {% trans "Create a New Classroom" %}
+                                </a>
+                            </div>
 
-                        {% endif %}
+                            <hr/>
 
-                        {% if classroom_list %}
-                            <h1>{% trans "Classroom List" %}</h1>
-                            <ul>
-                                {% for classroom in classroom_list %}
-                                    <li class="{% if classroom.is_overdue %}text-danger{% endif %}">
-                                        <a href="/classroom/classroom/{{ classroom.pk }}"> {{ classroom }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
                         {% endif %}
 
                         <hr>

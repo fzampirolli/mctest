@@ -59,7 +59,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    # path('classrooms/',               views.ClassroomListView.as_view(), name=''),
+    path('classrooms/',               views.ClassroomListView.as_view(), name=''),
     path('classroomsmy/', views.LoanedClassroomByUserListView.as_view(), name='classroom-mylist'),
     path('classroom/create/', views.ClassroomCreate.as_view(), name='classroom-create'),
     path('classroom/<int:pk1>/student/<int:pk2>/delete', views.ClassroomStudentDelete, name='classroom-student-delete'),

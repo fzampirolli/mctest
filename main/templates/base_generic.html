@@ -71,6 +71,12 @@
             </li>
 
             {% if user.is_authenticated and user.groups.all.0.name == 'professor' %}
+                {% if user.groups.all.0.name == 'professor' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/course/classrooms/">{% trans "Classrooms" %}</a>
+                    </li>
+                {% endif %}
+
                 <li class="nav-item">
                     <a class="nav-link" href="/topic/topics">{% trans "All topics" %}</a>
                 </li>
@@ -396,7 +402,7 @@
                 null,
                 {"sType": "numeric"},
             ],
-            order: [[0, "asc"],[5, "desc"],[7, "asc"]],
+            order: [[0, "asc"], [5, "desc"], [7, "asc"]],
             dom: "Bfrtip",
             scrollY: "550px",
             scrollX: true,
@@ -481,7 +487,7 @@
                     "orderable": false
                 },
             ],
-            order: [[1 , "asc" ]],
+            order: [[1, "asc"]],
             lengthChange: false,
             dom: "Bfrtip",
             scrollY: "550px",
