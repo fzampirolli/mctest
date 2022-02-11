@@ -50,7 +50,7 @@ sqlparse==0.3.0
 ssh-import-id==5.7
 -e git://github.com/sympy/sympy.git@cf43f87f5d145f2589cee8a79d0f20bbdf9eb075#egg=sympy
 systemd-python==234
-Twisted==17.9.0
+Twisted==22.1.0
 ufw==0.36
 unattended-upgrades==0.1
 urllib3==1.22
