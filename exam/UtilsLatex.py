@@ -122,6 +122,17 @@ class Utils(object):
 
         return mysort
 
+    # moodle does not accept words like: echo, python, etc.
+    # solution: e$$ $$cho, p$$ $$ython, etc.
+
+    @staticmethod
+    def convertWordsMoodle(str1):
+        str1 = str1.replace('echo','e$$ $$cho')
+        str1 = str1.replace('val','v$$ $$al')
+        str1 = str1.replace('exec','e$$ $$xec')
+        str1 = str1.replace('python','p$$ $$ython')
+        return str1
+
     # create file DB with all variations in aiken format
     @staticmethod
     def createFileDB_xml(exam, path_to_file_VARIATIONS_DB):
@@ -200,7 +211,7 @@ class Utils(object):
             q_type = q[4]
             q_diff = q[5]
             q_short = q[6]
-            q_text = q[7]
+            q_text = Utils.convertWordsMoodle(q[7])
             answers = q[8]
 
             # remove all occurance singleline comments (%%COMMENT\n ) from string
@@ -229,7 +240,7 @@ class Utils(object):
                         a_str = a_str.replace('___answer_value___', '100')
                     else:
                         a_str = a_str.replace('___answer_value___', '0')
-                    q_str += a_str
+                    q_str += Utils.convertWordsMoodle(a_str)
 
             else:  # QT
                 if len(answers) == 1:
@@ -289,10 +300,10 @@ class Utils(object):
                     correct = 0
                     questions_DB.append("#c:" + str(q['number']) + " #id:" + str(q['key']) + " #topic:" + str(
                         q['topic']) + " #type:" + str(str(q['type'])) + " #diff:" + str(q['weight']) + "\n")
-                    questions_DB.append(q['text'])
+                    questions_DB.append(Utils.convertWordsMoodle(q['text']))
                     if q['type'] == 'QM':  # QM
                         for k, a in enumerate(q['answers']):
-                            questions_DB.append(letras_1[int(a['answer'])] + ") " + a['text'])
+                            questions_DB.append(letras_1[int(a['answer'])] + ") " + Utils.convertWordsMoodle(a['text']))
                             if not int(a['sort']):
                                 correct = k
                         questions_DB.append('ANSWER: ' + letras_1[correct] + '\n')
@@ -909,8 +920,8 @@ _inst1_
         str1 += "\\footnote[2]{\\vspace{10mm}\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
             instURL)
 
-        str1 += '\n\n \\vspace{-6mm}\\hfill {\\tiny {\\color{red}\#' + str(
-            exam.id) + ' - ' + data_hora + '\\hspace{48mm}}}\n\n'
+        str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#' + str(
+            exam.id) + ' - ' + data_hora + '\\hspace{52mm}}}\n\n'
         str1 += '\\vspace{0.4mm}'
         if exam.exam_print == 'both':
             str1 += "\\vspace{%smm}\n\n" % (int(Utils.getNumMCQuestions(exam)) / 2)

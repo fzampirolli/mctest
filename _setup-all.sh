@@ -354,4 +354,23 @@ database default.
 mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
 mysql -u root -p -e "flush tables;" mysql
 
+
+=== para renovar
+1) Fazer backup da pasta do servidor VPL: /etc/vpl/
+2) sudo service vpl-jail-system stop
+3) sudo certbot --apache certonly
+>> servidor nubisys.ufabc.edu.br
+>> 2 (2: Renew & replace the cert (limit ~5 per 7 days))
+4) Trocar arquivos (ISSO NÃO PRECISA MAIS, POIS É LINK SIMBÓLICO)
+ln -s /etc/letsencrypt/live/vcad.ufabc.edu.br/fullchain.pem cert.pem
+ln -s /etc/letsencrypt/live/vcad.ufabc.edu.br/privkey.pem key.pem
+5) sudo service vpl-jail-system start
+
+=== para testar
+https://vision.ufabc.edu.br:8001/OK
+http://vision.ufabc.edu.br:8002/OK
+https://nubisys.ufabc.edu.br:8001/OK
+http://nubisys.ufabc.edu.br:8002/OK
+https://vcad.ufabc.edu.br:8003/OK
+http://vcad.ufabc.edu.br:8004/OK
 '
