@@ -88,8 +88,9 @@
                                     <tr>
                                         <td style="width: 140px; height: 10px; font-size: 20px;" align="left"
                                             bgcolor="#e6f2ff">
-                                            <input action="" class="btn btn-danger" type="submit"
+                                            <div style="font-size: 11px"><input action="" class="btn btn-danger" type="submit"
                                                    value={% trans "Create-Variations" %}>
+                                            ID: {{ variation_ID }}</div>
                                         </td>
                                         <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
                                             bgcolor="#e6f2ff">
@@ -116,6 +117,7 @@
                                         </td>
                                     </tr>
                                 </table>
+
                             </form>
 
                             <hr>
@@ -538,6 +540,7 @@
                                                         <span class="input-group-text">{% trans "Variations" %}</span>
                                                     </div>
                                                     {% render_field form.exam_variations class+="form-control" placeholder=form.exam_variations.help_text %}
+
                                                 </div>
                                             </div>
                                         </th>

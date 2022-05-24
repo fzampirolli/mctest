@@ -1190,6 +1190,8 @@ def UpdateExam(request, pk):
     questions = exam_inst.questions
     classrooms = exam_inst.classrooms
 
+    variation_ID = exam_inst.variationsExams2.all()[0].id
+
     st = Utils.validateProf(exam_inst, request.user)
     if st is not None:
         return HttpResponse(st)
@@ -1276,8 +1278,8 @@ def UpdateExam(request, pk):
     return render(request, 'exam/exam_update2.html', {
         'form': form,
         'examinst': exam_inst,
+        'variation_ID': variation_ID,
     })
-
 
 ##########################################################
 class ExamListView(generic.ListView):
