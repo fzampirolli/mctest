@@ -1189,8 +1189,10 @@ def UpdateExam(request, pk):
     exam_inst = get_object_or_404(Exam, pk=pk)
     questions = exam_inst.questions
     classrooms = exam_inst.classrooms
-
-    variation_ID = exam_inst.variationsExams2.all()[0].id
+    try:
+        variation_ID = exam_inst.variationsExams2.all()[0].id
+    except:
+        variation_ID = 0
 
     st = Utils.validateProf(exam_inst, request.user)
     if st is not None:
