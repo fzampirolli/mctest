@@ -368,7 +368,8 @@ def ImportQuestions(request):
 
                     for d in topic.discipline.all():
                         if not (request.user in d.discipline_profs.all() or request.user in d.discipline_coords.all()):
-                            messages.error(request, _("ImportQuestions: teacher is not associated with any discipline with this topic: ")
+                            messages.error(request, _(
+                                "ImportQuestions: teacher is not associated with any discipline with this topic: ")
                                            + qq['c'])
                             return render(request, 'exam/exam_errors.html', {})
 
@@ -430,9 +431,10 @@ class TopicListView(LoginRequiredMixin, generic.ListView):
         t2 = Topic.objects.filter(discipline__discipline_coords=self.request.user)
         return (t1 | t2).order_by('topic_text').distinct()
 
+
 class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
-    #model = Topic
-    #fields = '__all__'
+    # model = Topic
+    # fields = '__all__'
     form_class = TopicUpdateForm
 
     template_name = 'topic/topic_update.html'
@@ -456,8 +458,8 @@ class TopicDetailView(LoginRequiredMixin, generic.DetailView):
 
 class TopicCreate(LoginRequiredMixin, generic.CreateView):
     form_class = TopicCreateForm
-    #model = Topic
-    #fields = '__all__'
+    # model = Topic
+    # fields = '__all__'
 
     template_name = 'topic/topic_create.html'
     success_url = '/topic/topics'
@@ -579,7 +581,7 @@ def see_topic_PDF(request, pk):
                             return render(request, 'exam/exam_errors.html', {})
                     except:
                         str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
-                        messages.error(request, _('"ERRO NA PARTE PARAMÉTRICA!!!'))
+                        messages.error(request, _('ERROR IN THE PARAMETRIC PART!!!'))
                         messages.error(request, 'Question: %d' % q.id)
                         return render(request, 'exam/exam_errors.html', {})
                         # continue
@@ -632,6 +634,7 @@ def see_topic_PDF(request, pk):
         path_to_file = BASE_DIR + "/pdfTopic/" + file_name + ".pdf"
         return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
 
+
 ###################################################################
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     model = Question
@@ -643,6 +646,7 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
         q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
         q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
         return (q1 | q2).order_by('question_short_description').distinct()
+
 
 class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     model = Question
@@ -700,10 +704,21 @@ def UpdateQuestion(request, pk):
         json_serializer.serialize(all_objects, stream=out)
     #print (serializers.serialize("json",Question.objects.filter(id=pk)))
     '''
+
     if request.method == 'POST':
 
         form = UpdateQuestionForm(request.POST)
         if form.is_valid():  # Check if the forms are valid:
+
+            profs = []  # pega todos os profs da disciplina
+            for d in question_inst.topic.discipline.all():
+                for p in d.discipline_coords.all():
+                    profs.append(p)
+            if not (request.user == question_inst.question_who_created or request.user in profs):
+                messages.error(request, _(
+                    'ERROR: You did not create this question or you are not the course coordinator. Please get in touch with them.'));
+                return render(request, 'exam/exam_errors.html', {})
+
             question_inst.topic = form.cleaned_data['topic']
             question_inst.question_short_description = form.cleaned_data['question_short_description']
             question_inst.question_group = form.cleaned_data['question_group']
@@ -736,7 +751,9 @@ def UpdateQuestion(request, pk):
             for p in d.discipline_coords.all():
                 profs.append(p)
         if not request.user in profs:
-            return HttpResponse("ERROR: The teacher is not registered in the Discipline (of the topic)")
+            messages.error(request, _(
+                'ERROR: The teacher is not registered in the Discipline (of the topic)'));
+            return render(request, 'exam/exam_errors.html', {})
 
         # raise Http404(profs)
 
@@ -759,6 +776,7 @@ def UpdateQuestion(request, pk):
         'formset': formset,
         'questioninst': question_inst,
     })
+
 
 #########################################################
 
