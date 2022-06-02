@@ -297,9 +297,9 @@ pip3 install django-widget-tweaks
 pip3 install django-extensions
 pip3 install python-decouple
 
-tar -xvf mysql-2020-12-19.tar
+tar -xvf mysql-2022-06-02.tar
 cat /etc/mysql/mysql.cnf
-mysql -u root -p DB_MCTest < "mysql-2020-12-19.sql"
+mysql -u root -p DB_MCTest < "mysql-2022-06-02.sql"
 
 # write code documentation
 pip3 install Sphinx

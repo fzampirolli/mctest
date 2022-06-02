@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-25 18:42-0300\n"
+"POT-Creation-Date: 2022-06-02 08:44-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -263,7 +263,7 @@ msgstr "TEM APENAS UMA TURMA:"
 #: course/templates/institute/institute_confirm_delete.html:23
 #: exam/templates/exam/exam_confirm_delete.html:25
 #: student/templates/student/student_confirm_delete.html:26
-#: topic/templates/question/question_confirm_delete.html:25
+#: topic/templates/question/question_confirm_delete.html:24
 #: topic/templates/topic/topic_confirm_delete.html:34
 msgid "Cancel"
 msgstr "Cancelar"
@@ -288,7 +288,7 @@ msgstr "Cancelar"
 #: exam/templates/exam/exam_list_who_created_user.html:72
 #: student/templates/student/student_confirm_delete.html:30
 #: student/templates/student/student_list.html:57
-#: topic/templates/question/question_confirm_delete.html:31
+#: topic/templates/question/question_confirm_delete.html:33
 #: topic/templates/question/question_list.html:103
 #: topic/templates/question/question_list_who_created_user.html:103
 #: topic/templates/topic/topic_confirm_delete.html:38
@@ -316,7 +316,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 #: exam/templates/exam/exam_list.html:109
 #: exam/templates/exam/exam_list_who_created_user.html:110
 #: exam/templates/exam/exam_update2.html:653
-#: topic/templates/question/question_confirm_delete.html:39
+#: topic/templates/question/question_confirm_delete.html:52
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:189
 #: topic/templates/question/question_update.html:171
@@ -1119,7 +1119,7 @@ msgstr "StudentCreate: Já existe ID"
 msgid "Created student: Created Student ID: "
 msgstr "StudentCreate: Estudante cadastrado"
 
-#: course/views.py:479 exam/views.py:1369
+#: course/views.py:479 exam/views.py:1374
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1174,7 +1174,7 @@ msgstr "Retorno"
 msgid "Invalid answer!"
 msgstr "Alternativa inválida!"
 
-#: exam/UtilsLatex.py:374 exam/views.py:1047 exam/views.py:1087
+#: exam/UtilsLatex.py:374 exam/views.py:1053 exam/views.py:1093
 msgid "ERROR in genTex"
 msgstr ""
 
@@ -2030,23 +2030,27 @@ msgstr ""
 msgid "ERROR in generate_page, number_of_QM!!!! - no questions"
 msgstr ""
 
-#: exam/views.py:921
+#: exam/views.py:906
+msgid "ERROR in generate_page, class with zero students: "
+msgstr "ERRO: classe com zero estudantes: "
+
+#: exam/views.py:927
 msgid "ERROR in Utils.distro_table, student: "
 msgstr ""
 
-#: exam/views.py:983
+#: exam/views.py:989
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr ""
 
-#: exam/views.py:995
+#: exam/views.py:1001
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:1042 exam/views.py:1062 exam/views.py:1082 exam/views.py:1146
+#: exam/views.py:1048 exam/views.py:1068 exam/views.py:1088 exam/views.py:1152
 msgid "ERROR - watch out for special characters in exam name"
 msgstr "ERRO - cuidado com os caracteres especiais no nome do exame"
 
-#: exam/views.py:1248
+#: exam/views.py:1251
 msgid ""
 "Invalid Form! Verify if date follows the format or if there is at least one "
 "room marked, for example."
@@ -2054,20 +2058,24 @@ msgstr ""
 "Formulário inválido! Verifique se a data segue o formato ou se existe ao "
 "menos uma turma marcada, por exemplo."
 
-#: exam/views.py:1305
+#: exam/views.py:1252
+msgid "Please refresh Exam page before new changes."
+msgstr "Atualizar página do Exame antes de novas mudanças."
+
+#: exam/views.py:1310
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:1320
+#: exam/views.py:1325
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:1334
+#: exam/views.py:1339
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
 #: main/templates/According.html:10 main/templates/signup.html:33
-#: topic/templates/question/question_confirm_delete.html:30
+#: topic/templates/question/question_confirm_delete.html:32
 #: topic/templates/question/question_create.html:91
 #: topic/templates/question/question_update.html:151
 msgid "According"
@@ -3403,7 +3411,15 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:38
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:719
+msgid ""
+"ERROR: You did not create this question or you are not the course "
+"coordinator. Please get in touch with them."
+msgstr ""
+"ERRO: Você não criou esta questão ou não é o coordenador do curso. Por "
+"favor, entre em contato com eles para alterar algo nesta questão."
+
+#: topic/templates/question/question_confirm_delete.html:51
 #: topic/templates/question/question_create.html:100
 #: topic/templates/question/question_list.html:131
 #: topic/templates/question/question_list_who_created_user.html:188
@@ -3658,14 +3674,6 @@ msgstr "O professor não tem permissão"
 #: topic/views.py:584
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
-
-#: topic/views.py:719
-msgid ""
-"ERROR: You did not create this question or you are not the course "
-"coordinator. Please get in touch with them."
-msgstr ""
-"ERRO: Você não criou esta questão ou não é o coordenador do curso. Por "
-"favor, entre em contato com eles para alterar algo nesta questão."
 
 #: topic/views.py:755
 #, fuzzy

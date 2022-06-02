@@ -902,10 +902,16 @@ def generate_page(request, pk):
             if maxStudentsClass < len(room.students.all()):
                 maxStudentsClass = len(room.students.all())
 
+            if len(room.students.all()) == 0:
+                messages.error(request, _('ERROR in generate_page, class with zero students: ') +
+                               str(room.classroom_code))
+                return render(request, 'exam/exam_errors.html', {})
+
         # create directory with key is room
         distribute_students_by_room_random = {}
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             distribute_students = []
+
             for s in room.students.all():
                 stname = s.student_name.split(' ')
                 stname = stname[0] + ' ' + stname[-1]
@@ -1189,6 +1195,7 @@ def UpdateExam(request, pk):
     exam_inst = get_object_or_404(Exam, pk=pk)
     questions = exam_inst.questions
     classrooms = exam_inst.classrooms
+
     try:
         variation_ID = exam_inst.variationsExams2.all()[0].id
     except:
@@ -1228,9 +1235,6 @@ def UpdateExam(request, pk):
 
             classrooms = form.cleaned_data['classrooms']
 
-            if not exam_inst.classrooms.all().count():  # if there is not at least one room marked
-                return HttpResponse('ERROR')
-
             for q in exam_inst.classrooms.all():
                 exam_inst.classrooms.remove(q)
             exam_inst.classrooms.add(*classrooms)
@@ -1244,9 +1248,9 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            return HttpResponse(_(
-                "Invalid Form! Verify if date follows the format or if there is at least one room marked, for example."))
-
+            messages.error(request, _('Invalid Form! Verify if date follows the format or if there is at least one room marked, for example.'))
+            messages.error(request, _('Please refresh Exam page before new changes.'))
+            return render(request, 'exam/exam_errors.html', {})
 
     else:
         form = UpdateExamForm(initial={
@@ -1282,6 +1286,7 @@ def UpdateExam(request, pk):
         'examinst': exam_inst,
         'variation_ID': variation_ID,
     })
+
 
 ##########################################################
 class ExamListView(generic.ListView):
