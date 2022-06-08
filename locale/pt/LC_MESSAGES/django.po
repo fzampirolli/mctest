@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-02 08:44-0300\n"
+"POT-Creation-Date: 2022-06-08 17:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,33 +231,48 @@ msgstr "Tipo de Turma"
 msgid "Delete Classroom"
 msgstr "Apagar Turma"
 
-#: course/templates/classroom/classroom_confirm_delete.html:16
-msgid "Are you sure you want to delete the classroom"
-msgstr "Tem certeza que deseja abagar esta turma"
+#: course/templates/classroom/classroom_confirm_delete.html:12
+#: course/templates/classroom/classroom_detail.html:16
+#: course/templates/classroom/classroom_list.html:78
+#: course/templates/classroom/classroom_list_who_created_user.html:78
+#: course/templates/discipline/discipline_detail.html:179 course/views.py:184
+#: exam/UtilsLatex.py:869
+msgid "Classroom"
+msgstr "Turma"
 
-#: course/templates/classroom/classroom_confirm_delete.html:28
+#: course/templates/classroom/classroom_confirm_delete.html:16
 msgid "An exam cannot exist without a marked classroom!!!"
 msgstr "Um exame não pode existir sem PELO MENOS uma turma marcada !!!"
 
-#: course/templates/classroom/classroom_confirm_delete.html:29
+#: course/templates/classroom/classroom_confirm_delete.html:17
 msgid ""
-"Before you delete, MAKE SURE you have another classroom marked in all exams."
+"Before deleting, MAKE SURE you do not have any other exams associated with "
+"this class."
 msgstr ""
-"Antes de excluir, verifique se há outra turma marcada em todos os exames."
+"Antes de excluir, CERTIFIQUE-SE de que você não tenha nenhum outro exame "
+"associado a esta turma."
 
-#: course/templates/classroom/classroom_confirm_delete.html:32
+#: course/templates/classroom/classroom_confirm_delete.html:18
+msgid "Exams associated with this class"
+msgstr "Exames associados com esta turma"
+
+#: course/templates/classroom/classroom_confirm_delete.html:29
+msgid "Remove this exam first or add another class to this exam"
+msgstr "Remover este Exame primeiro ou incluir outra turma neste Exame"
+
+#: course/templates/classroom/classroom_confirm_delete.html:33
 msgid "Classrooms from discipline"
 msgstr "Disciplina desta turma"
 
-#: course/templates/classroom/classroom_confirm_delete.html:35
+#: course/templates/classroom/classroom_confirm_delete.html:36
 msgid "Exam "
 msgstr "Exame"
 
-#: course/templates/classroom/classroom_confirm_delete.html:36
+#: course/templates/classroom/classroom_confirm_delete.html:37
 msgid "has ONLY ONE classroom: "
 msgstr "TEM APENAS UMA TURMA:"
 
-#: course/templates/classroom/classroom_confirm_delete.html:47
+#: course/templates/classroom/classroom_confirm_delete.html:50
 #: course/templates/course/course_confirm_delete.html:25
 #: course/templates/discipline/discipline_confirm_delete.html:24
 #: course/templates/institute/institute_confirm_delete.html:23
@@ -268,7 +283,7 @@ msgstr "TEM APENAS UMA TURMA:"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: course/templates/classroom/classroom_confirm_delete.html:55
+#: course/templates/classroom/classroom_confirm_delete.html:59
 #: course/templates/classroom/classroom_detail.html:85
 #: course/templates/classroom/classroom_list.html:65
 #: course/templates/classroom/classroom_list_who_created_user.html:65
@@ -297,14 +312,14 @@ msgstr "Cancelar"
 msgid "Delete"
 msgstr "Apagar"
 
-#: course/templates/classroom/classroom_confirm_delete.html:65
+#: course/templates/classroom/classroom_confirm_delete.html:69
 #: course/templates/classroom/classroom_create.html:85
 #: course/templates/classroom/classroom_list.html:96
 #: course/templates/classroom/classroom_list_who_created_user.html:96
 msgid "Only teacher registered in a discipline"
 msgstr "Somente professores cadastrados em disciplinas"
 
-#: course/templates/classroom/classroom_confirm_delete.html:66
+#: course/templates/classroom/classroom_confirm_delete.html:70
 #: course/templates/classroom/classroom_create.html:86
 #: course/templates/classroom/classroom_detail.html:184
 #: course/templates/classroom/classroom_list.html:97
@@ -478,14 +493,6 @@ msgstr "Importar estudantes por aquivo csv em Minhas Turmas"
 #: course/templates/classroom/classroom_detail.html:12
 msgid "Classroom Detail"
 msgstr "Detalhar Turma"
-
-#: course/templates/classroom/classroom_detail.html:16
-#: course/templates/classroom/classroom_list.html:78
-#: course/templates/classroom/classroom_list_who_created_user.html:78
-#: course/templates/discipline/discipline_detail.html:179 course/views.py:184
-#: exam/UtilsLatex.py:869
-msgid "Classroom"
-msgstr "Turma"
 
 #: course/templates/classroom/classroom_detail.html:19
 #: course/templates/classroom/classroom_list.html:23
@@ -3684,6 +3691,9 @@ msgstr "ExamUpdate: o professor não está registrado na disciplina"
 #: topic/views.py:803
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid "Are you sure you want to delete the classroom"
+#~ msgstr "Tem certeza que deseja abagar esta turma"
 
 #~ msgid ""
 #~ "Improvements will be included all the time. USE ONLY service in production"
