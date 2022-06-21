@@ -15,7 +15,7 @@
     {% block title %}<title>MCTest</title>{% endblock %}
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static 'webMCTest.png' %}" type="image/png">
+    <link rel="shortcut icon" href="{% static 'icon.png' %}" type="image/x-icon">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -96,8 +96,55 @@
             {% endif %}
 
         </ul>
+        {% if user.is_authenticated %}
+            <ul class="navbar-nav mr-auto">
+                <script>
+                    if (localStorage.getItem("count_timer")) {
+                        //localStorage.clear("count_timer");
+                        var count_timer = localStorage.getItem("count_timer");
+                    } else {
+                        var count_timer = 10;//2*3600; // 2 horas
+                    }
+                    var hors = parseInt(count_timer / 3600);
+                    var minutes = parseInt((count_timer % 3600) / 60);
+                    var seconds = parseInt(count_timer % 60);
+
+                    function countDownTimer() {
+                        if (hors < 10) {
+                            hors = "0" + hors;
+                        }
+                        if (seconds < 10) {
+                            seconds = "0" + seconds;
+                        }
+                        if (minutes < 10) {
+                            minutes = "0" + minutes;
+                        }
+
+                        document.getElementById("total-time-left").innerHTML = "[" + hors + ":" + minutes + ":" + seconds + "]";
+                        if (count_timer <= 0) {
+                            localStorage.clear("count_timer");
+                            document.location.reload(true);
+                        } else {
+                            count_timer = count_timer - 1;
+                            hors = parseInt(count_timer / 3600);
+                            minutes = parseInt((count_timer % 3600) / 60);
+                            seconds = parseInt(count_timer % 60);
+                            localStorage.setItem("count_timer", count_timer);
+                            setTimeout("countDownTimer()", 1000);
+                        }
+                    }
+
+                    setTimeout("countDownTimer()", 1000);
+                </script>
+                <!--
+                <div class="nav-link" id="total-time-left" align="center"></div>
+                -->
+            </ul>
+        {% endif %}
+
         <ul class="navbar-nav float-right">
             {% if user.is_authenticated %}
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">{{ user.username }}:</a>
                 </li>

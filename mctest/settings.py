@@ -99,6 +99,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django_session_timeout.middleware.SessionTimeoutMiddleware',
     # Custom Middlewares
     # 'mctest.middlewares.FiltraIPMiddleware',
 ]
@@ -221,3 +222,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# pip install django-session-timeout
+# Configurar expirar seção por usuário
+# Após logout, zerar contator
+# SESSION_EXPIRE_SECONDS = 10 #5*3600 # 5 horas
+# SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+# SESSION_EXPIRE_AFTER_LAST_ACTIVITY_GRACE_PERIOD = 60 # group by minute
+# SESSION_TIMEOUT_REDIRECT = '/'
+#
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_AGE = 5*3600 # set just 10 seconds to test
+# SESSION_SAVE_EVERY_REQUEST = True

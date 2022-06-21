@@ -5,6 +5,9 @@ source _settings.env
 source AmbientePython3/bin/activate
 cd mctest
 
+killall - kill python3
+source ../runDjango.sh &
+
 #################### SCRIPT PARA BACKUP MYSQL ####################
 # mysqldump --no-defaults -u root -p DB_MCTest > mctest.sql
 
