@@ -418,7 +418,7 @@
 
 <!-- table example3 - show classrooms in update exam -->
 <script>
-    $('body').on('change', '#mass_select_all', function () {
+    $('body').on('change', '#mass_select_all_Class', function () {
         var rows, checked;
         rows = $('#example3').find('tbody tr');
         checked = $(this).prop('checked');
@@ -438,22 +438,11 @@
                 "targets": [0],
                 "orderDataType": 'dom-checkbox',
             }],
-            columns: [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                {"sType": "numeric"},
-                null,
-                {"sType": "numeric"},
-            ],
-            order: [[0, "asc"], [5, "desc"], [7, "asc"]],
             dom: "Bfrtip",
             scrollY: "550px",
             scrollX: true,
             paging: false,
+            bInfo: true,
             buttons: [
                 {
                     extend: 'copy',
@@ -490,20 +479,27 @@
                         columns: ':visible'
                     }
                 },
-                //{
-                //    extend: 'colvis',
-                //    text: '{% trans 'column visibility' %}',
-                //    exportOptions: {
-                //        columns: ':visible'
-                //    }
-                //},
+
+                {
+                    extend: 'colvis',
+                    text: '{% trans 'column visibility' %}',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
             ]
         });
 
         table.buttons().container()
             .appendTo('#example_wrapper .col-md-6:eq(0)');
 
-
+        $(':checkbox').on('change', function (e) {
+            var row = $(this).closest('tr');
+            var hmc = row.find(':checkbox:checked').length;
+            var kluj = parseInt(hmc);
+            row.find('td.counter').text(kluj);
+            table.row(row).invalidate('dom');
+        });
     });
 </script>
 

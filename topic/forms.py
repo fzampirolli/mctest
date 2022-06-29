@@ -118,7 +118,7 @@ class UpdateQuestionForm(forms.Form):
     def __init__(self,  *args, **kwargs):
         super(UpdateQuestionForm, self).__init__(*args, **kwargs)
         try:
-            user = kwargs['initial']['question_who_created']
+            user = kwargs.pop('user')#kwargs['initial']['question_who_created']
             t1 = Topic.objects.filter(discipline__discipline_profs=user)
             t2 = Topic.objects.filter(discipline__discipline_coords=user)
             self.fields['topic'].queryset = (t1 | t2).distinct()

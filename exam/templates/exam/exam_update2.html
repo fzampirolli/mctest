@@ -217,7 +217,7 @@
 
                                         function selectAll_Class() {
                                             this.emp.forEach(element => {
-                                                element.checked = true;
+                                                element.checkedClass = true;
                                             });
                                         }
                                     </script>
@@ -227,7 +227,11 @@
                                         <thead class="thead-light">
                                         <!-- header -->
                                         <tr>
-                                            <th scope="col"></th>
+                                            <th scope="col">
+                                                >
+                                                <input type="checkbox" id="mass_select_all_Class"
+                                                       data-to-table="tasks">
+                                            </th>
                                             <th scope="col">{% trans "Discipline" %}</th>
                                             <th scope="col">{% trans "Code" %}</th>
                                             <th scope="col">{% trans "Type" %}</th>
@@ -494,7 +498,7 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                            
+
                                 <hr>
                             </div>
                             <p></p>

@@ -915,6 +915,7 @@ def generate_page(request, pk):
             for s in room.students.all():
                 stname = s.student_name.split(' ')
                 stname = stname[0] + ' ' + stname[-1]
+                stname = stname.upper() # MUDEI: 29/06
                 if not stname in distribute_students:
                     distribute_students.append(stname)
 
@@ -974,6 +975,7 @@ def generate_page(request, pk):
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     stname = s.student_name.split(' ')
                     stname = stname[0] + ' ' + stname[-1]
+                    stname = stname.upper() # MUDEI: 29/06
 
                     indStudent = np.where(distribute_students_random[:, 0] == stname)
                     hash_num = int(distribute_students_random[indStudent, 1][0])

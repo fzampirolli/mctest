@@ -51,9 +51,17 @@ DEFAULT_EMAIL = os.getenv('DEFAULT_EMAIL')
 DEFAULT_PASS = os.getenv('DEFAULT_PASS')
 
 # To specifically recover the password in user Django
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+#EMAIL_HOST = os.getenv('EMAIL_HOST')
+#EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+#EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.getenv('webMCTest_SERVER')
+EMAIL_HOST_USER = os.getenv('webMCTest_FROM')
+DEFAULT_FROM_EMAIL = os.getenv('webMCTest_FROM')
+SERVER_EMAIL = os.getenv('webMCTest_SERVER')
+EMAIL_HOST_PASSWORD = os.getenv('webMCTest_PASS')
+
 
 # To MCTest send emails to students and professors
 webMCTest_SERVER = os.getenv('webMCTest_SERVER')

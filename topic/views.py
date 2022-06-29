@@ -227,6 +227,12 @@ def see_question_PDF(request, pk):
             fileQuestion.write("\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy)
             fileQuestion.write("\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update)
             fileQuestion.write("\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created)
+            fileQuestion.write("\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper())
+
+            st = q.question_text
+            a, b = st.find('begin{comment}'), st.find('end{comment}')
+            if a < b:
+                fileQuestion.write("\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL')
 
             ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
             ss = ss1 % str(q.id).zfill(3)
