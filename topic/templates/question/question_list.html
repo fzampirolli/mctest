@@ -47,6 +47,9 @@
                                                     <a href="{% url 'topic:question-detail' pk=question.topic_id %}"
                                                        class="btn btn-outline-light text-dark btn-sm">
                                                         {{ question.question_type }}
+                                                        {% if question.question_type == 'QM' %}
+                                                            {{ question.answers2.all|length }}
+                                                        {% endif %}
                                                     </a>
                                                 </td>
                                                 <!-- question_group -->
@@ -87,7 +90,7 @@
 
                                                 <td class="text-right">
 
-                                                    {% for d in question.topic.discipline.all|slice:":1"%}
+                                                    {% for d in question.topic.discipline.all|slice:":1" %}
 
                                                         {% if user.is_superuser or user in d.discipline_coords.all  or user in d.discipline_profs.all %}
 

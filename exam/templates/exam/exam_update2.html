@@ -27,8 +27,8 @@
                             <!-- Create-PDF; Upload-PDF; Send-Feedback-Students Text; Send-Feedback-Students Buttons -->
                             <table frame="hsides" rules="cols" style="width:100%">
                                 <tr>
+                                    <!-- Create-PDF -->
                                     <td>
-                                        <!-- Create-PDF -->
                                         <form action="../generate/" class="input-group mb-3" method="post"
                                               target="_blank">
                                             {% csrf_token %}
@@ -41,8 +41,8 @@
 
                                         <h6>{% trans "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, if the circles are defective, the broker may not work correctly - we recommend that you change the printer and print again. (3) Before applying the exam, it is strongly recommended to print a sheet, fill in, scan and follow the step on the right side. Upload-PDF >>>" %}</h6>
                                     </td>
+                                    <!-- Upload-PDF -->
                                     <td>
-                                        <!-- Upload-PDF -->
                                         <form action="../correct/" class="input-group mb-3"
                                               enctype="multipart/form-data"
                                               method="POST" target="_blank">
@@ -55,8 +55,9 @@
                                         <h6>{% trans "Caution: (1) Before scanning, make sure all circles have been filled correctly. If you to use correction fluid and erase part of the outline of the circle, the correction may not work. (2) Scan with a resolution of 150dpi (if you can not decode QRCode, use 200dpi), <code>gray levels</code>, just the front of the sheet and one PDF per class. (3) The 4 black disks can not be defective. (4) If you chose only answers on the screen of this exam, the first page of the PDF should contain the template and all questions will be disregarded. (5) If in this Exam screen the option to Return to Students was chosen, when enrolling the students in the class, you must also include the student's e-mail. If this has been done, you can follow the step to the right side Send-Return-Students, for each student receive the correction of your examination by email >>>" %}</h6>
 
                                     </td>
+                                    <!-- Send-Feedback-Students Text -->
                                     <td>
-                                        <!-- Send-Feedback-Students Text -->
+
                                         <form action="../sendFeedbackStudentsText/" method="post"
                                               enctype="multipart/form-data" target="_blank">
                                             {% csrf_token %}
@@ -80,7 +81,7 @@
                                 </tr>
                             </table>
 
-                            <form action="../variation/" class="input-group mb-3" method="POST">
+                            <form action="../variation/" class="input-group mb-3" method="post" target="_blank">
                                 {% trans "Before creating the exams in the button above, first create the variations. It is necessary to create new variations of the exam each time you change the questions and the number of variations in the attributes below." %}
                                 {% trans "The options marked below will be sent to your email." %}
                                 {% csrf_token %}
@@ -88,9 +89,10 @@
                                     <tr>
                                         <td style="width: 140px; height: 10px; font-size: 20px;" align="left"
                                             bgcolor="#e6f2ff">
-                                            <div style="font-size: 11px"><input action="" class="btn btn-danger"
-                                                                                type="submit"
-                                                                                value={% trans "Create-Variations" %}>
+                                            <div style="font-size: 11px">
+                                                <input action="" class="btn btn-danger"
+                                                       type="submit" target="_blank"
+                                                       value={% trans "Create-Variations" %}>
                                                 ID: {{ variation_ID }}</div>
                                         </td>
                                         <td style="width: 140px; height: 20px; font-size: 15px;" align="left"
@@ -458,7 +460,11 @@
                                                 <div class="btn btn-outline-light text-dark btn-sm">
                                                     <script>
                                                         document.write(get_Dif(count, '; typ'));
+                                                        if (get_Dif(count, '; typ')=='QM') {
+                                                            document.write(' '+get_Dif(count, '; ans'));
+                                                        }
                                                     </script>
+
                                                 </div>
                                             </td>
                                             <!-- Difficulty -->

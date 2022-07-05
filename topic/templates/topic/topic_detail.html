@@ -88,6 +88,9 @@
                                                         <a href="{% url 'topic:question-detail' pk=question.pk %}"
                                                            class="btn btn-outline-light text-dark btn-sm">
                                                             {{ question.question_type }}
+                                                            {% if question.question_type == 'QM' %}
+                                                                {{ question.answers2.all|length }}
+                                                            {% endif %}
                                                         </a>
                                                     </td>
                                                     <!-- question_group -->

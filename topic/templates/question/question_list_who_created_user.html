@@ -47,6 +47,9 @@
                                                     <a href="{% url 'topic:question-detail' pk=question.topic_id %}"
                                                        class="btn btn-outline-light text-dark btn-sm">
                                                         {{ question.question_type }}
+                                                        {% if question.question_type == 'QM' %}
+                                                            {{ question.answers2.all|length }}
+                                                        {% endif %}
                                                     </a>
                                                 </td>
                                                 <!-- question_group -->
@@ -87,7 +90,7 @@
 
                                                 <td class="text-right">
 
-                                                    {% for d in question.topic.discipline.all|slice:":1"%}
+                                                    {% for d in question.topic.discipline.all|slice:":1" %}
 
                                                         {% if user.is_superuser or user in d.discipline_coords.all  or user in d.discipline_profs.all %}
 
@@ -130,13 +133,13 @@
                             <script> var count = 0; </script>
                             <hr/>
                             <div class="text-right">
-                                             <script>
-                                                if (count == 0) {
-                                                    document.write("<a href=\"{% url 'topic:question-create' %}\" class=\"btn btn-primary\">");
-                                                    document.write("{%  trans 'Create a New Question' %}</a>")
-                                                }
-                                                count++;
-                                            </script>
+                                <script>
+                                    if (count == 0) {
+                                        document.write("<a href=\"{% url 'topic:question-create' %}\" class=\"btn btn-primary\">");
+                                        document.write("{%  trans 'Create a New Question' %}</a>")
+                                    }
+                                    count++;
+                                </script>
                             </div>
                             <hr>
 
@@ -177,7 +180,8 @@
                                   enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <input type="file" name="myfile">
-                                <button class="btn btn-primary" type="submit">{% trans "Upload-Questions-Json" %}</button>
+                                <button class="btn btn-primary"
+                                        type="submit">{% trans "Upload-Questions-Json" %}</button>
                                 {% trans "Download a question to view the Json format" %}<br>
 
                             </form>

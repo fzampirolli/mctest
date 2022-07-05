@@ -61,7 +61,7 @@
 \newcommand{\qid}[1]{\textcolor{white}{{\tiny #1}\hspace{0mm}}} %question identification (invisible text #1)
 \usepackage[table,xcdraw]{xcolor}
 
-#\renewcommand{\thefootnote}{\color{white}{\faGears}}
+%\renewcommand{\thefootnote}{\color{white}{\faGears}}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 \definecolor{bubbles}{rgb}{0.71, 1.0, 1.0}

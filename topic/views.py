@@ -256,7 +256,7 @@ def see_question_PDF(request, pk):
                                      'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
                     return render(request, 'exam/exam_errors.html', {})
 
-            str1 += r' %s\n\n' % ''.join(quest)
+            str1 += r' %s' % ''.join(quest)
             str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\n"
             for a in random.sample(ans, len(ans)):
                 if ans.index(a) == 0:

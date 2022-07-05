@@ -267,7 +267,17 @@ def variationsExam(request, pk):
             os.system('chown -R ' + getuser + ' ' + path + ' .')
             os.system('chgrp -R ' + getuser + ' ' + path + ' .')
 
-    return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
+    messages.error(request,
+                   _('Exam variations were stored in the database.'))
+    messages.error(request,
+                   _('Return and refresh the exam page. Notice the ID change next to the Create-Variations button.'))
+    messages.error(request,
+                   _('Whenever you click this button, new exam variations will be stored in the database!'))
+    messages.error(request,
+                   _('If you checked some options, check the attachments sent to your email.'))
+    return render(request, 'exam/exam_msg.html', {})
+
+    #return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
 
 
 @login_required
@@ -873,7 +883,7 @@ def generate_page(request, pk):
                                str(numQT) + '<>' + str(exam.exam_number_of_questions_text))
                 return render(request, 'exam/exam_errors.html', {})
             if int(Utils.getNumMCQuestions(exam)) and str(numQM) != str(Utils.getNumMCQuestions(exam)):
-                messages.error(request, _('ERROR in generate_page, number_of_QM!!!! - no questions') +
+                messages.error(request, _('ERROR in generate_page, number_of_QM!!!! - no questions: ') +
                                str(numQM) + '<>' + str(Utils.getNumMCQuestions(exam)))
                 return render(request, 'exam/exam_errors.html', {})
 

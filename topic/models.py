@@ -183,7 +183,8 @@ class Question(models.Model):
         tp = "typ " + self.question_type
         id = "#" + str(self.id).zfill(4)
         des = "des " + self.question_short_description
-        return '{0}; top {1}; {2}; {3}; {4}; {5}; {6}; {7}'.format(d, t, tp, df, g, p, id, des)
+        ans = "ans " + str(self.answers2.all().count())
+        return '{0}; top {1}; {2}; {3}; {4}; {5}; {6}; {7}; {8}'.format(d, t, tp, df, g, p, id, ans, des)
 
 
 class Answer(models.Model):

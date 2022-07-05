@@ -29,6 +29,8 @@ GNU General Public License for more details.
 
 import datetime
 import random
+import subprocess
+import os
 
 import matplotlib
 
@@ -136,9 +138,9 @@ class UtilsMC(object):
         reg = re.compile(start + '(\S+|\w+|.*)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
         for groups in reg.findall(s):
 
-            for i in ['exec', 'cmd', 'import os', 'mkdir',
-                      'cmd', 'sys', 'gnureadline', 'subprocess', 'getopt',
-                      'shlex', 'commands', 'system', 'eval']:
+            for i in ['exec', 'cmd', 'mkdir',
+                      'cmd', 'gnureadline', 'getopt',
+                      'shlex', 'commands', 'eval']:
                 if i in groups:
                     return None  # HttpResponse('ERROR: do not use that word in the code: '+i)
 
