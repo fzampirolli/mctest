@@ -108,3 +108,10 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 * grant #2018/23561-1, São Paulo Research Foundation (FAPESP)
 * 01/09/2019 - 31/08/2021
 * Title: A universal system for generation and correction automatic of parametrized questions
+
+
+##### MCTest 5.3
+* Questions with skills in linker.json by FT, Irineu, Paulo, Wagner
+* Table test skill by FT 
+* Hash with full name 
+* MUDAR PARA INCIAR COM A VARIAÇÃO 0

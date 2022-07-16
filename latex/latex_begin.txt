@@ -6,6 +6,9 @@
 
 \usepackage[hidelinks]{hyperref}
 
+\usepackage[outputdir=tmp]{minted}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
 
 %sudo apt install linuxbrew-wrapper
 %sudo apt install texlive-extra-utils
@@ -71,3 +74,135 @@
 
 \pagenumbering{gobble}
 %\newgeometry{bottom=0.1cm}
+
+
+%%%%%%%%%%%% algorithms by py2tex https://github.com/zhafen/py2tex
+
+%\NeedsTeXFormat{LaTeX2e}
+%\ProvidesPackage{py2tex}[09/05/2019 v0.0 Macros for py2tex]
+
+                           %~~~~~New commands~~~~~%
+
+%For bold sans serif
+\newcommand \textbs[1]{\textsf{\textbf{#1}}}
+
+\algrenewcommand\algorithmicprocedure{{\textbs{Função}}}
+\algrenewcommand\algorithmicfunction{{\textbs{function}}}
+\algrenewcommand\algorithmicif{{\textbs{Se}}}
+\algrenewcommand\algorithmicthen{{\textbs{Então}}}
+\algrenewcommand\algorithmicelse{{\textbs{Senão}}}
+\algrenewcommand\algorithmicwhile{{\textbs{Enquanto}}}
+\algrenewcommand\algorithmicdo{{\textbs{Faça}}}
+\algrenewcommand\algorithmicend{{\textbs{Fim}}}
+\algrenewcommand\algorithmicrepeat{{\textbs{Faça}}}
+\algrenewcommand\algorithmicuntil{{\textbs{Enquanto}}}
+\algrenewcommand\algorithmicreturn{\State{{\textbs{Retorna}}}}
+
+\algblock[Name]{Start}{End}
+\algblockdefx[NAME]{START}{END}%
+[2][Unknown]{Start #1(#2)}%
+{Ending}
+\algblockdefx[NAME]{}{OTHEREND}%
+[1]{Until (#1)}
+
+                           %~~~~~Operators~~~~~%
+\newcommand{\PyAdd}[0]{+}
+\newcommand{\PyAnd}[0]{\textbf{ and }}
+\newcommand{\PyAnnotation}[2]{\ensuremath{\textbs{variable }#1\colon \texttt{#2}}}
+\newcommand{\PyArg}[1]{\texttt{#1}}
+\newcommand{\PyArgAnnotation}[2]{\ensuremath{\texttt{#1} \colon \texttt{#2}}}
+\newcommand{\PyArgSep}[0]{,~}
+\newcommand{\PyAssign}[2]{\ensuremath{#1 \gets #2}}
+\newcommand{\PyAssignSep}[0]{,~}
+
+\newcommand{\PyCall}[2]{
+	\ifnum\pdfstrcmp{#1}{print}=0
+  	\textbs{output~} { \tt#2}
+	\else
+		\textsc{#1}( {\tt#2} )
+	\fi
+}
+\newcommand{\PyCallSep}[0]{,~}
+
+\newcommand{\PyDiv}[0]{\mathop{\texttt{/}}}
+
+\newcommand{\PyEq}[0]{=}
+\newcommand{\PyExpr}[1]{\ensuremath{#1}}
+
+\newcommand{\PyFalse}[0]{\texttt{false}}
+
+\newcommand{\PyGt}[0]{>}
+\newcommand{\PyGtE}[0]{\ge}
+
+%\newcommand{\PyIn}[0]{}
+%\newcommand{\PyIs}[0]{}
+%\newcommand{\PyIsNot}[0]{}
+
+\newcommand{\PyList}[1]{[#1]}
+\newcommand{\PyListSep}[0]{, }
+\newcommand{\PyLt}[0]{<}
+\newcommand{\PyLtE}[0]{\le}
+
+\newcommand{\PyMod}[0]{\mathop{\textsc{ mod }}}
+\newcommand{\PyMult}[0]{\times}
+
+\newcommand{\PyOr}[0]{\textbf{ or }}
+
+\newcommand{\PyName}[1]{\texttt{#1}}
+%\newcommand{\PyNone}[0]{\textt{}}
+\newcommand{\PyNot}[1]{\textbf{ not }#1}
+\newcommand{\PyNotEq}[0]{\neq}
+%\newcommand{\PyNotIn}[0]{}
+\newcommand{\PyNum}[1]{\texttt{#1}}
+
+\newcommand{\PyPar}[1]{\left ( #1 \right )}
+\newcommand{\PyPow}[0]{\texttt{^}}
+
+\newcommand{\PyStr}[1]{\texttt{``#1''}}
+\newcommand{\PySub}[0]{-}
+\newcommand{\PySubscript}[2]{#1[#2]}
+
+\newcommand{\PyTrue}[0]{\texttt{true}}
+
+\newcommand{\PyUAdd}[1]{+ #1}
+\newcommand{\PyUSub}[1]{- #1}
+
+
+% Linhas verticais
+
+%\PassOptionsToPackage{noend}{algpseudocode}% comment out if want end's to show
+%\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+
+\errorcontextlines\maxdimen
+
+% begin vertical rule patch for algorithmicx (http://tex.stackexchange.com/questions/144840/vertical-loop-block-lines-in-algorithmicx-with-noend-option)
+\makeatletter
+% start with some helper code
+% This is the vertical rule that is inserted
+\newcommand*{\algrule}[1][\algorithmicindent]{\makebox[#1][l]{\hspace*{.5em}\vrule height .75\baselineskip depth .25\baselineskip}}%
+
+\newcount\ALG@printindent@tempcnta
+\def\ALG@printindent{%
+    \ifnum \theALG@nested>0% is there anything to print
+        \ifx\ALG@text\ALG@x@notext% is this an end group without any text?
+            % do nothing
+            \addvspace{-3pt}% FUDGE for cases where no text is shown, to make the rules line up
+        \else
+            \unskip
+            % draw a rule for each indent level
+            \ALG@printindent@tempcnta=1
+            \loop
+                \algrule[\csname ALG@ind@\the\ALG@printindent@tempcnta\endcsname]%
+                \advance \ALG@printindent@tempcnta 1
+            \ifnum \ALG@printindent@tempcnta<\numexpr\theALG@nested+1\relax% can't do <=, so add one to RHS and use < instead
+            \repeat
+        \fi
+    \fi
+    }%
+
+%\usepackage{etoolbox}
+% the following line injects our new indent handling code in place of the default spacing
+\patchcmd{\ALG@doentity}{\noindent\hskip\ALG@tlm}{\ALG@printindent}{}{\errmessage{failed to patch}}
+\makeatother
+% end vertical rule patch for algorithmicx
+

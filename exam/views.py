@@ -120,7 +120,7 @@ def variationsExam(request, pk):
         # listao.append([qr_answers, str1, QT])
 
         variant = {}
-        variant['variant'] = str(v + 1)
+        variant['variant'] = str(v + 1)  ##### MUDAR para iniciar com a variação 0 !!!!
         variant['questions'] = []
         for q in db_questions[0]:  # for each question QM
             question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
@@ -277,7 +277,7 @@ def variationsExam(request, pk):
                    _('If you checked some options, check the attachments sent to your email.'))
     return render(request, 'exam/exam_msg.html', {})
 
-    #return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
+    # return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
 
 
 @login_required
@@ -855,20 +855,6 @@ def generate_page(request, pk):
 
         print("generate_page-02-" + str(datetime.datetime.now()))
 
-        '''
-        listao = []  ############ gera X variacoes de exames
-        db_questions_all = []
-        for v in exam.variationsExams2.all():
-            arr = eval(v.variation)
-            db_questions_all.append(arr[3])
-            listao.append(arr[:-1])
-
-        for i in range(int(exam.exam_variations)):
-            print("generate_page-02-" + str(datetime.datetime.now()) + ' var: ' + str(i))
-            [qr_answers, str1, QT, db_questions] = Utils.drawQuestionsVariations(request, exam, request.user, Utils.getTopics(exam))
-            db_questions_all.append(db_questions)
-            listao.append([qr_answers, str1, QT])
-        '''
         numVariations = exam.variationsExams2.all().count()
         qr_answers = Utils.getQRanswers(exam)
 
@@ -924,8 +910,8 @@ def generate_page(request, pk):
 
             for s in room.students.all():
                 stname = s.student_name.split(' ')
-                stname = stname[0] + ' ' + stname[-1]
-                stname = stname.upper() # MUDEI: 29/06
+                stname = stname[0] + ' ' + stname[-1] # USE FULL NAME
+                stname = stname.upper()  # CHANGED: 29/06/22
                 if not stname in distribute_students:
                     distribute_students.append(stname)
 
@@ -984,8 +970,8 @@ def generate_page(request, pk):
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     stname = s.student_name.split(' ')
-                    stname = stname[0] + ' ' + stname[-1]
-                    stname = stname.upper() # MUDEI: 29/06
+                    stname = stname[0] + ' ' + stname[-1] # USE FULL NAME
+                    stname = stname.upper()  # CHANGED: 29/06/22
 
                     indStudent = np.where(distribute_students_random[:, 0] == stname)
                     hash_num = int(distribute_students_random[indStudent, 1][0])
@@ -1116,17 +1102,38 @@ def generate_page(request, pk):
                 i.save()
                 break
 
-        try:
-            message_cases = 'Following all variations of each student\n\n'
-            anexos = []
+        # problem with permission ...
+        path = os.getcwd()
+        getuser = path.split('/')
+        getuser = getuser[1]
+        getuser = getuser + ':' + getuser
+        os.system('chown -R ' + getuser + ' ' + path + ' .')
+        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
 
-            if int(
-                    exam.exam_variations) > 0 and exam.exam_print != 'answ':  # send file by email with variation of each student
+        anexos = []
+        message_cases = 'Following all variations of each student and pdf/tex\n\n'
+        if exam.classrooms.all().count() == 1:
+            path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
+            anexos.append(path_to_file)
+            anexos.append(path_to_file[:-3]+"tex")
+        else:
+            fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
+            # zipar todos os exames das turmas
+            os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
+
+            os.system('rm -rf ' + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*.tex")
+            path_to_zip = os.path.dirname(fzip) + "/" + os.path.basename(fzip)
+            anexos.append(path_to_zip)
+
+        try:
+
+            # send file by email with variation of each student
+            if int(exam.exam_variations) > 0 and exam.exam_print != 'answ':
                 with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
                     writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
                                         lineterminator='\n')
                     writer.writerows(listVariations)
-                anexos.append(path_to_file_VARIATIONS)
+                #anexos.append(path_to_file_VARIATIONS) # util para quando tem várias turmas
 
                 aux = np.array(listVariations)
                 with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
@@ -1147,30 +1154,16 @@ def generate_page(request, pk):
         except:
             pass
 
-        # problem with permission ...
-        path = os.getcwd()
-        getuser = path.split('/')
-        getuser = getuser[1]
-        getuser = getuser + ':' + getuser
-        os.system('chown -R ' + getuser + ' ' + path + ' .')
-        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
-
+        # mostra em uma nova aba o pdf ou faz download do zip
         if exam.classrooms.all().count() == 1:
             try:
                 path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
-                return serve(request, os.path.basename(path_to_file),
-                             os.path.dirname(path_to_file))
+                return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
             except:
                 messages.error(request, _('ERROR - watch out for special characters in exam name') + ': ' + file_name)
                 return render(request, 'exam/exam_errors.html', {})
         else:
-            fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
-            # zipar todos os exames das turmas
-            os.system('rm -rf ' + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*.tex")
-
-            os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
-            return serve(request, os.path.basename(fzip),
-                         os.path.dirname(fzip))
+            return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
 
         # print(">>>>>>>>>>>>>>>>>>>>>>>>> TIME <<<<<<<<<<<<<<<<<<<<<<<<<")
         # print ("s - tex/s", countStudents, (start1-start)/countStudents)
@@ -1260,7 +1253,8 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            messages.error(request, _('Invalid Form! Verify if date follows the format or if there is at least one room marked, for example.'))
+            messages.error(request, _(
+                'Invalid Form! Verify if date follows the format or if there is at least one room marked, for example.'))
             messages.error(request, _('Please refresh Exam page before new changes.'))
             return render(request, 'exam/exam_errors.html', {})
 

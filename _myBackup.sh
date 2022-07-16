@@ -39,13 +39,14 @@ tar -cjf $BACKUP_DIR/$BACKUP_TAR -C $BACKUP_DIR $BACKUP_NAME --remove-files
 echo "  -- Excluindo arquivos desnecessarios ..."
 rm -rf $BACKUP_DIR/$BACKUP_NAME
 
-# Excluindo arquivos antigos > 180 dias
-find /backup/*/* -type f -ctime +180 -exec rm -rf {} \;
-find $PATH_MCTest/mctest/tmp*/* -type f -ctime +180 -exec rm -rf {} \;
-find $PATH_MCTest/mctest/pdf*/* -type f -ctime +180 -exec rm -rf {} \;
-find $PATH_MCTest/mctest/*.pdf -type f -ctime +180 -exec rm -rf {} \;
-find $PATH_MCTest/mctest/*.tex -type f -ctime +180 -exec rm -rf {} \;
-find $PATH_MCTest/mctest/*.csv -type f -ctime +180 -exec rm -rf {} \;
+# Excluindo arquivos antigos > 90 dias
+find /backup/*/* -type f -mtime +90 | xargs rm
+find $PATH_MCTest/mctest/tmp*/* -type f -mtime +90 | xargs rm
+find $PATH_MCTest/mctest/tmp/imgs180days/* -type f -mtime +90 | xargs rm
+find $PATH_MCTest/mctest/pdf*/* -type f -mtime +90 | xargs rm
+find $PATH_MCTest/mctest/*.pdf -type f -mtime +90 | xargs rm
+find $PATH_MCTest/mctest/*.tex -type f -mtime +90 | xargs rm
+find $PATH_MCTest/mctest/*.csv -type f -mtime +90 | xargs rm
 
 # renomeando log grande
 find $PATH_MCTest/mctest/ -iname "*.log" -size +1M -exec mv {} "correct-$DATA.log.backup" \;

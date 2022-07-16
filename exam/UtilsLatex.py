@@ -31,12 +31,12 @@ import datetime
 import json
 import os
 import random
+import re
 import string
 import subprocess
 import time
 import unicodedata
 import zlib
-import re
 
 import bcrypt
 import numpy as np
@@ -49,7 +49,6 @@ from django.utils.translation import gettext_lazy as _
 
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
-
 
 class Utils(object):
 
@@ -127,10 +126,10 @@ class Utils(object):
 
     @staticmethod
     def convertWordsMoodle(str1):
-        str1 = str1.replace('echo','e$$ $$cho')
-        str1 = str1.replace('val','v$$ $$al')
-        str1 = str1.replace('exec','e$$ $$xec')
-        str1 = str1.replace('python','p$$ $$ython')
+        str1 = str1.replace('echo', 'e$$ $$cho')
+        str1 = str1.replace('val', 'v$$ $$al')
+        str1 = str1.replace('exec', 'e$$ $$xec')
+        str1 = str1.replace('python', 'p$$ $$ython')
         return str1
 
     # create file DB with all variations in aiken format
@@ -215,7 +214,7 @@ class Utils(object):
             answers = q[8]
 
             # remove all occurance singleline comments (%%COMMENT\n ) from string
-            q_text = re.sub(re.compile("%%.*?\n" ) ,"" ,q_text)
+            q_text = re.sub(re.compile("%%.*?\n"), "", q_text)
 
             myflag = False  # criar nova categoria ao mudar de questao
             if question_ID_before != int(q_id):
@@ -343,7 +342,7 @@ class Utils(object):
                 strQuestions += Utils.drawInstructions(exam)
                 try:
                     hash_num = Utils.distro_table(str(s_student_ID))
-                    var_hash = int(var)# hash_num % int(exam.exam_variations)
+                    var_hash = int(var)  # hash_num % int(exam.exam_variations)
                     myqr.append(qr_answers[var_hash])  # inclui as respostas
                 except:
                     hash_num = int(s_student_ID)
@@ -403,7 +402,7 @@ class Utils(object):
                         else:
                             varia_gab.append('')
             if varia_gab:
-                varia_gab_all.append([str(contVaria-1)] + varia_gab + varia_id_questions)
+                varia_gab_all.append([str(contVaria - 1)] + varia_gab + varia_id_questions)
 
         if varia_gab_all:
             with open(path_to_file_TEMPLATES, 'w') as data:
@@ -421,11 +420,11 @@ class Utils(object):
     def get_cases(exam):
         print("get_cases-00-" + str(datetime.datetime.now()))
         cases = {}
-        cases['key'], cases['input'], cases['output'] = [], [], []
+        cases['key'], cases['input'], cases['output'], cases['skills'], cases['language'] = [], [], [], [], []
         for v in exam.variationsExams2.all():
             d = eval(v.variation)
             for var in d['variations']:
-                id_list, in_list, ou_list = [], [], []
+                id_list, in_list, ou_list, sk_list, lang_list = [], [], [], [], []
                 for q in var['questions']:
                     if q['type'] == 'QT':
                         print("get_cases-01-" + str(datetime.datetime.now()))
@@ -435,9 +434,20 @@ class Utils(object):
                             id_list.append(case['key'])
                             in_list.append(case['input'])
                             ou_list.append(case['output'])
+                            try:
+                                sk_list.append(case['skills'])
+                            except:
+                                sk_list.append([])
+                            try:
+                                lang_list.append(case['language'])
+                            except:
+                                lang_list.append(['all'])
+
                 cases['key'].append(id_list)
                 cases['input'].append(in_list)
                 cases['output'].append(ou_list)
+                cases['skills'].append(sk_list)
+                cases['language'].append(lang_list)
         return cases
 
     # cases = {}   #                      quest1          quest2               quest1       quest2
@@ -470,22 +480,24 @@ class Utils(object):
                     question['weight'] = questionObject.question_difficulty
                 except:
                     question['weight'] = '1'
-                question['language'] = ['all']
+                question['language'] = cases['language'][v][q]
+                question['skills'] = cases['skills'][v][q]
                 question['cases'] = []
                 if isinstance(cases['input'][v][q], list):
                     numCases = len(cases['input'][v][q])
                     for c in range(numCases):  # for each case
                         cases_q = {}
                         cases_q['case'] = "test_" + str(c + 1)
-                        if  isinstance(cases['input'][v][q][c][0], list):
+                        if isinstance(cases['input'][v][q][c][0], list):
                             cases_q['input'] = cases['input'][v][q][c][0]
                         else:
                             cases_q['input'] = cases['input'][v][q][c]
 
-                        if  isinstance(cases['output'][v][q][c][0], list):
+                        if isinstance(cases['output'][v][q][c][0], list):
                             cases_q['output'] = cases['output'][v][q][c][0]
                         else:
                             cases_q['output'] = cases['output'][v][q][c]
+
                         question['cases'].append(cases_q)
 
                 variant['questions'].append(question)

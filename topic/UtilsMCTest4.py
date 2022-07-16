@@ -138,9 +138,9 @@ class UtilsMC(object):
         reg = re.compile(start + '(\S+|\w+|.*)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
         for groups in reg.findall(s):
 
-            for i in ['exec', 'cmd', 'mkdir',
-                      'cmd', 'gnureadline', 'getopt',
-                      'shlex', 'commands', 'eval']:
+            for i in ['cmd', 'mkdir',
+                      'gnureadline', 'getopt',
+                      'shlex', 'commands']:
                 if i in groups:
                     return None  # HttpResponse('ERROR: do not use that word in the code: '+i)
 
