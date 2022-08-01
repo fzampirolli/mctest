@@ -120,7 +120,7 @@ def variationsExam(request, pk):
         # listao.append([qr_answers, str1, QT])
 
         variant = {}
-        variant['variant'] = str(v + 1)  ##### MUDAR para iniciar com a variação 0 !!!!
+        variant['variant'] = str(v+1)  ##### MUDAR para iniciar com a variação 0 !!!!
         variant['questions'] = []
         for q in db_questions[0]:  # for each question QM
             question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
@@ -1061,6 +1061,7 @@ def generate_page(request, pk):
                     # apos enviar, remove do disco
                     try:
                         os.remove(myFILE)
+                        os.remove(myFILE[:-3]+'tex') # fz add in 2022/8/1
                     except:
                         messages.error(request,
                                        _('ERROR - watch out for special characters in exam name') + ': ' + file_name)

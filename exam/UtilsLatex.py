@@ -420,11 +420,11 @@ class Utils(object):
     def get_cases(exam):
         print("get_cases-00-" + str(datetime.datetime.now()))
         cases = {}
-        cases['key'], cases['input'], cases['output'], cases['skills'], cases['language'] = [], [], [], [], []
+        cases['key'], cases['input'], cases['output'], cases['skills'], cases['language'], cases['description'] = [], [], [], [], [], []
         for v in exam.variationsExams2.all():
             d = eval(v.variation)
             for var in d['variations']:
-                id_list, in_list, ou_list, sk_list, lang_list = [], [], [], [], []
+                id_list, in_list, ou_list, sk_list, lang_list, description_list = [], [], [], [], [], []
                 for q in var['questions']:
                     if q['type'] == 'QT':
                         print("get_cases-01-" + str(datetime.datetime.now()))
@@ -442,12 +442,17 @@ class Utils(object):
                                 lang_list.append(case['language'])
                             except:
                                 lang_list.append(['all'])
+                            try:
+                                description_list.append(case['description'])
+                            except:
+                                description_list.append([])
 
                 cases['key'].append(id_list)
                 cases['input'].append(in_list)
                 cases['output'].append(ou_list)
                 cases['skills'].append(sk_list)
                 cases['language'].append(lang_list)
+                cases['description'].append(description_list)
         return cases
 
     # cases = {}   #                      quest1          quest2               quest1       quest2
@@ -482,6 +487,7 @@ class Utils(object):
                     question['weight'] = '1'
                 question['language'] = cases['language'][v][q]
                 question['skills'] = cases['skills'][v][q]
+                question['description'] = cases['description'][v][q]
                 question['cases'] = []
                 if isinstance(cases['input'][v][q], list):
                     numCases = len(cases['input'][v][q])

@@ -270,7 +270,8 @@ def see_question_PDF(request, pk):
             fileQuestion.write("\\end{document}")
             fileQuestion.close()
 
-        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode', fileQuestionName]
+        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode',
+               fileQuestionName]
         proc = subprocess.Popen(cmd)
         proc.communicate()
         proc = subprocess.Popen(cmd)
@@ -611,7 +612,8 @@ def see_topic_PDF(request, pk):
             fileQuestion.write("\\end{document}")
             fileQuestion.close()
 
-        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode', fileQuestionName]
+        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode',
+               fileQuestionName]
         proc = subprocess.Popen(cmd)
         proc.communicate()
         proc = subprocess.Popen(cmd)
@@ -724,6 +726,29 @@ def UpdateQuestion(request, pk):
                 messages.error(request, _(
                     'ERROR: You did not create this question or you are not the course coordinator. Please get in touch with them.'));
                 return render(request, 'exam/exam_errors.html', {})
+
+            '''
+            # para aceitar símbolos na descrição, codificiar antes de salvar no BD
+            # > echo 'símbolos especiais' | xxd -ps
+            user = '_'+str(request.user) + '.txt'
+            filetxt = open('.description' + user, 'w')
+            filetxt.write(form.cleaned_data["question_text"])
+            filetxt.close()
+            #os.system('cat .description' + user + ' | xxd -ps >> .description_encode' + user)
+            os.system('xxd -ps .description' + user + ' > .description_encode' + user)
+            filetxt = open('.description_encode' + user, 'r')
+            s = filetxt.read()
+
+            # para decodificar:
+            # > echo 'símbolos especiais' | xxd -ps | xxd -ps -r
+            user = '_' + str(request.user) + '.txt'
+            os.system('cat .description_encode' + user + ' | xxd -ps | xxd -ps -r >> .description_decode' + user)
+            filetxt = open('.description_decode' + user, 'r')
+            ss = filetxt.read()
+            
+            não funciona, pois ao visualizar o form mostra o codificado...
+            '''
+
 
             question_inst.topic = form.cleaned_data['topic']
             question_inst.question_short_description = form.cleaned_data['question_short_description']

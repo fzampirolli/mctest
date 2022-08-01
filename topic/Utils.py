@@ -3,12 +3,13 @@
 import numpy as np
 
 
-def getCasesMoodle(inp=[], out=[], language=[], skills=[]):
+def getCasesMoodle(inp=[], out=[], language=[], skills=[], description=[]):
     cases = {}
     cases['input'] = np.array(inp).tolist()
     cases['output'] = np.array(out).tolist()
     cases['language'] = np.array(language).tolist()
     cases['skills'] = np.array(skills).tolist()
+    cases['description'] = np.array(description).tolist()
     return cases
 
 

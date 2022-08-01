@@ -6,7 +6,13 @@
 
 \usepackage[hidelinks]{hyperref}
 
-\usepackage[outputdir=tmp]{minted}
+%cachedir=./tmp/
+%outputdir=./tmp/
+%\usepackage[outputdir=tmp]{minted}
+%\newcommand{\mintedoptions}{cachedir=./,outputdir=./tmp/_minted/}
+%\usepackage[\mintedoptions]{minted}
+\usepackage[cache=false]{minted}
+
 \usepackage{algorithmicx}
 \usepackage[noend]{algpseudocode}
 
