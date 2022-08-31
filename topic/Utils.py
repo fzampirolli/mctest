@@ -143,6 +143,52 @@ def printCode(codeLines):
 ##
 # UTILS
 
+# Main class to read and run an Algorithm
+class Algorithm:
+    algorithm = None
+    last_error = None
+
+    def __init__(self, mod_name, func_name, func_args,
+                 forbidden_words=r"import|from|print|input|sort|open|read|write|stdout|stdin"):
+        firstline = f"""def {func_name}({", ".join(func_args)}):"""
+
+        # Check code ...
+        with open(mod_name + '.py', mode='r') as file:
+            self.last_error = None
+            code = file.read()
+            code_lines = code.splitlines()
+            code_inner = "\r\n".join(code_lines[1:])
+
+            if re.search(forbidden_words, code, re.MULTILINE):
+                self.last_error = f"""Não é permitido utilizar as seguintes palavras (ou parte de): {", ".join(forbidden_words.split("|")[:-1]) + " e " + forbidden_words.split("|")[:-1][-1]}."""
+
+            elif len(code_lines) == 0 or code_lines[0] != firstline:
+                self.last_error = f"""A primeira linha do código deve ser "{firstline}". """
+
+            elif re.search(r"^[^ \t].+$", code_inner, re.MULTILINE):
+                self.last_error = """Só é permitido códigos dentro da função Algoritmo()"""
+
+            # Load code ...
+            else:
+                import importlib
+                try:
+                    mod = importlib.import_module(mod_name)
+                    self.algorithm = eval(f'mod.{func_name}')
+                except SyntaxError as e:
+                    self.last_error = f"""Erro de sintaxe na linha {e.lineno}."""
+
+    def run(self, *args):
+        ret = None
+        if callable(self.algorithm):
+            try:
+                ret = self.algorithm(*args)
+            except NameError as e:
+                return ret, str(e)
+        else:
+            None, "Invalid algorithm"
+        return ret, None
+
+
 # Main class to generate the exercise
 class TesteDeMesa:
     code = None
@@ -195,18 +241,23 @@ class TesteDeMesa:
             # Functions
             line = re.sub(r'print *\(.*"(.+)".*\)', r'Imprimir "\1"', line)  # print with "
             line = re.sub(r'print *\(.*(.+).*\)', r'Imprimir \1', line)  # print without "
+            line = re.sub(r'len *\( *([^ ]+) *\)', r'\1.tamanho', line)  # len
 
             # Return
             line = re.sub(r'^( +)return', r'\1Retorna', line)
 
             # Operators
-            line = re.sub(r'([a-z0-9]+) *=[^=] *(.*)', r'\1 ← \2', line)
-            line = re.sub(r'<=', r'≤', line)
-            line = re.sub(r'>=', r'≥', line)
+            # line = re.sub(r'([a-z0-9]+) *=[^=] *(.*)', r'\1 ← \2', line)
+            # line = re.sub(r'<=', r'≤', line)
+            # line = re.sub(r'>=', r'≥', line)
             line = re.sub(r'==', r'=', line)
-            line = re.sub(r'!=', r'≠', line)
-            line = re.sub(r'([a-z0-9]+) *\* *([a-z0-9]+)', r'\1 × \2', line)  # /
-            line = re.sub(r'([a-z0-9]+) */ *([a-z0-9]+)', r'\1 ÷ \2', line)  # *
+            # line = re.sub(r'!=', r'≠', line)
+            line = re.sub(r'([a-z0-9\[\]]+) *\+= *([a-z0-9\[\]]+)', r'\1 = \1 + \2', line)  # +=
+            line = re.sub(r'([a-z0-9\[\]]+) *-= *([a-z0-9\[\]]+)', r'\1 = \1 - \2', line)  # -=
+            line = re.sub(r'([a-z0-9\[\]]+) *\*= *([a-z0-9\[\]]+)', r'\1 = \1 * \2', line)  # *=
+            line = re.sub(r'([a-z0-9\[\]]+) */= *([a-z0-9\[\]]+)', r'\1 = \1 / \2', line)  # /=
+            # line = re.sub(r'([a-z0-9]+) *\* *([a-z0-9]+)', r'\1 × \2', line)  # /
+            # line = re.sub(r'([a-z0-9]+) */ *([a-z0-9]+)', r'\1 ÷ \2', line)  # *
             line = re.sub(r'([a-z0-9]+) *% *([a-z0-9]+)', r'\1 mod \2', line)  # mod
 
             # Logic
@@ -218,30 +269,31 @@ class TesteDeMesa:
             line = re.sub(r'(float|str) *\((.*)\)', r'\2', line)  # removing other cast
 
             # Identation
-            line = re.sub('    ', '▐ ', line)  # Always the last!
+            #line = re.sub('    ', '▐ ', line)  # Always the last!
             msg = msg + f"{count:02n}: {line}\n"
 
         return msg
 
-    # Print source code
+        # Print source code
+
     def sourceFlowChart(self, fileName):
         from pyflowchart import Flowchart
         strCode = '\n'.join([i for i in self.codeLines])
         fc = Flowchart.from_code(strCode)
         flowchart = '''<!DOCTYPE html><html><head><meta charset="UTF-8">
-        <title>MCTest - Flowchart.js</title>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.14.1/flowchart.js"></script>
-        </head><body><div id="diagram"></div><script>
-  var diagram = flowchart.parse(`__code__`);
-  diagram.drawSVG('diagram');</script></body></html>'''
+          <title>MCTest - Flowchart.js</title>
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.14.1/flowchart.js"></script>
+          </head><body><div id="diagram"></div><script>
+    var diagram = flowchart.parse(`__code__`);
+    diagram.drawSVG('diagram');</script></body></html>'''
         flowchart = flowchart.replace('__code__', fc.flowchart())
         with open(fileName, 'w') as f:
-           f.write(flowchart)
+            f.write(flowchart)
         return True
 
     # Exec code and create the matrix
-    def make(self, args):
+    def make(self, args, ignoreVars=[]):
 
         # Init
         lines = []
@@ -299,7 +351,7 @@ class TesteDeMesa:
         allVars = []
         for vars in lines[:-1]:
             for var in vars['vars']:
-                if var not in allVars:
+                if var not in allVars and var not in ignoreVars:
                     allVars.append(var)
 
         # First line
@@ -318,7 +370,8 @@ class TesteDeMesa:
 
         return func_ret, func_out
 
-    # Print Table
+        # Print Table
+
     def show(self, clean=True):
         str = ""
         from copy import deepcopy
@@ -344,9 +397,29 @@ class TesteDeMesa:
         tbl = []
         for row in str.splitlines():
             cols = []
-            for col in row.strip().split(' '):
-                if col.strip() != '':
-                    cols.append(col.strip())
+            v = None
+            for col in row.strip().replace(',', ' ').replace('\t', ' ').split(' '):
+                c = col.strip()
+                if c != '':
+                    if c[0] == '[':
+                        if v != None:
+                            raise Exception(f"Matriz não suportado na linha {line}")
+                        elif len(c) > 1:
+                            v = [c[1:]]
+                        else:
+                            v = []
+                    elif c[-1] == ']':
+                        if v == None:
+                            raise Exception(f"Vetor ainda não inicializado na linha {line}")
+                        elif len(c) > 1:
+                            v.append(c[:-1])
+                        print(v)
+                        cols.append('[' + ', '.join(v) + ']')
+                        v = None
+                    elif v != None:
+                        v.append(c)
+                    else:
+                        cols.append(c)
             if len(cols) == 0:
                 raise Exception(f"A linha {line} está vazia. Favor, remova!")
             tbl.append(cols)
@@ -361,7 +434,7 @@ class TesteDeMesa:
             self.table = table
 
     # Correct a question
-    def correct(self, answers):
+    def correct(self, answers, maxRows=0):
         if isinstance(answers, str):
             try:
                 answers = TesteDeMesa.str2table(answers)
@@ -382,7 +455,8 @@ class TesteDeMesa:
 
         corrects = 0;
         if feedback == None:
-            for i in range(self.minRows, len(self.table)):
+            for i in range(self.minRows,
+                           (maxRows if maxRows > self.minRows and maxRows < len(self.table) else len(self.table))):
                 isCorrect = True
                 if len(answers) <= i:
                     break
@@ -398,8 +472,9 @@ class TesteDeMesa:
                     if not answers[i][0].isnumeric():
                         feedback = f"A primeira coluna da linha {i + 1}, que representa o número da linha, precisa ser inteiro."
                     for j in range(1, len(answers[i])):
-                        if not answers[i][j].isnumeric() and answers[i][j] != '?':
-                            feedback = f"A coluna {j + 1} da linha {i + 1} precisa ter um valor inteiro ou '?' caso for indefinido."
+                        if not answers[i][j].isnumeric() and answers[i][j] != '?' and (
+                                answers[i][j][0] != '[' and answers[i][j][-1] != ']'):
+                            feedback = f"A coluna {j + 1} da linha {i + 1} precisa ter um valor inteiro, um vetor '[]' ou '?' caso for indefinido."
                             isCorrect = False
 
                 if self.table[i] != answers[i]:
@@ -415,13 +490,15 @@ class TesteDeMesa:
             corrects = int(corrects * 0.8)
 
         if feedback == None:
-            if len(self.table) == len(answers):
+            if len(answers) >= (maxRows if maxRows > self.minRows and maxRows < len(self.table) else len(self.table)):
                 feedback = "Perfeito."
             else:
                 feedback = "O teste de mesa contém um ou mais erros..."
 
-        return corrects / (len(self.table) - self.minRows), feedback
+        return corrects / ((maxRows if maxRows > self.minRows and maxRows < len(self.table) else len(
+            self.table)) - self.minRows), feedback
 
+#######################
 
 ##### Py2Tex from https://github.com/cairomassimo/py2tex
 
