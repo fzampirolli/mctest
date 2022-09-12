@@ -123,7 +123,7 @@ tqdm==4.32.2
 ubuntu-drivers-common==0.0.0
 ufw==0.36
 unattended-upgrades==0.1
-urllib3==1.22
+urllib3==1.26.5
 urwid==2.0.1
 usb-creator==0.3.3
 validate-email==1.3
