@@ -235,7 +235,7 @@ def see_question_PDF(request, pk):
                 fileQuestion.write("\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL')
 
             ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
-            ss = ss1 % str(q.id).zfill(3)
+            ss = ss1 % str(q.id).zfill(4)
             str1 = "%s %s." % (ss, 1)
 
             if q.question_parametric == 'no':

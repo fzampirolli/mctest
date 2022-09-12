@@ -80,7 +80,7 @@ pip3 install descartes
 /usr/local/bin/python3.8 -m pip install geopandas
 python -c "from geopandas import __version__; print(__version__)"
 
-apt install python3.7-dev
+apt install python3.8-dev
 # deploy
 # pip freeze > requirements.txt
 pip install -r requirements.txt

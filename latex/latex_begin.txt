@@ -89,7 +89,7 @@
 
                            %~~~~~New commands~~~~~%
 
-%For bold sans serif
+%For bold sans serifminted
 \newcommand \textbs[1]{\textsf{\textbf{#1}}}
 
 \algrenewcommand\algorithmicprocedure{{\textbs{Função}}}
