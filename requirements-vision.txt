@@ -14,7 +14,7 @@ click==8.0.3
 click-plugins==1.1.1
 cligj==0.7.2
 Counter==1.0.0
-cryptography==2.8
+cryptography==3.3.2
 cycler==0.10.0
 decorator==4.4.1
 defusedxml==0.6.0
