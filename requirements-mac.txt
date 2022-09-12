@@ -8,7 +8,7 @@ backports.csv==1.0.7
 bcrypt==3.1.7
 billiard==3.6.0.0
 Brlapi==0.6.6
-celery==4.3.0
+celery==5.2.2
 certbot==0.31.0
 certbot-apache==0.31.0
 certifi==2018.1.18
