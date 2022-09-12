@@ -70,7 +70,7 @@ pandas==1.2.2
 parsedatetime==2.4
 pbr==3.1.1
 pexpect==4.2.1
-Pillow==6.1.0
+Pillow==9.0.1
 protobuf==3.0.0
 pudb==2017.1.4
 pyasn1==0.4.2
