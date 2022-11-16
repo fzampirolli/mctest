@@ -30,9 +30,7 @@ import csv
 import datetime
 import json
 import os
-import random
 import re
-import string
 import subprocess
 import time
 import unicodedata
@@ -41,6 +39,8 @@ import zlib
 import bcrypt
 import numpy as np
 import pyqrcode
+import random
+import string
 from django.contrib import messages
 from django.http import HttpResponse
 # coding=UTF-8
@@ -49,6 +49,7 @@ from django.utils.translation import gettext_lazy as _
 
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
+
 
 class Utils(object):
 
@@ -420,7 +421,8 @@ class Utils(object):
     def get_cases(exam):
         print("get_cases-00-" + str(datetime.datetime.now()))
         cases = {}
-        cases['key'], cases['input'], cases['output'], cases['skills'], cases['language'], cases['description'] = [], [], [], [], [], []
+        cases['key'], cases['input'], cases['output'], cases['skills'], cases['language'], cases[
+            'description'] = [], [], [], [], [], []
         for v in exam.variationsExams2.all():
             d = eval(v.variation)
             for var in d['variations']:
@@ -938,8 +940,8 @@ _inst1_
         str1 += "\\footnote[2]{\\vspace{10mm}\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
             instURL)
 
-        str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#' + str(
-            exam.id) + ' - ' + data_hora + '\\hspace{52mm}}}\n\n'
+        str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#E' + str(
+            exam.id) + '\#V' + str(exam.variationsExams2.all()[0].id) + ' - ' + data_hora + '\\hspace{55mm}}}\n\n'
         str1 += '\\vspace{0.4mm}'
         if exam.exam_print == 'both':
             str1 += "\\vspace{%smm}\n\n" % (int(Utils.getNumMCQuestions(exam)) / 2)
