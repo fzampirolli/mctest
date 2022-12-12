@@ -106,8 +106,16 @@ def ImportClassroomsDiscipline(request, pk):
                     return render(request, 'exam/exam_errors.html', {})
 
                 nome = r[1].lstrip().rstrip()
-                if len(nome) > 50:
-                    nome = nome[:50]
+                if len(nome) > 38: # BIG name!!!
+                    ss = nome.split(" ")
+                    ss = [i for i in ss if i]  # remove spaces
+                    nome = ' '.join([i for i in ss])
+                    c = 1
+                    while len(nome) > 38:  # remove middle names
+                        nome = ' '.join([i for i in ss[0:-c]]) + ' ' + ss[-1]
+                        c += 1
+                    messages.info(request, f"BIG: {r[1].lstrip().rstrip()} ==> {nome}")
+
                 emailSt = r[2].lstrip().rstrip()
                 codigo = r[3].lstrip().rstrip()
                 sala = r[4].lstrip().rstrip()
@@ -343,8 +351,16 @@ def ImportStudentsClassroom(request, pk):
                 ID = r[0].lstrip().rstrip()
 
                 nome = r[1].lstrip().rstrip()
-                if len(nome) > 50:
-                    nome = nome[:50]
+                if len(nome) > 38:  # BIG name!!!
+                    ss = nome.split(" ")
+                    ss = [i for i in ss if i]  # remove spaces
+                    nome = ' '.join([i for i in ss])
+                    c = 1
+                    while len(nome) > 38:  # remove middle names
+                        nome = ' '.join([i for i in ss[0:-c]]) + ' ' + ss[-1]
+                        c += 1
+                    messages.info(request, f"BIG: {r[1].lstrip().rstrip()} ==> {nome}")
+
                 if len(r) == 3:
                     email = r[2].lstrip().rstrip()
                 else:
@@ -463,6 +479,7 @@ def ClassroomStudentCreate(request, pk):
 
     return render(request, 'exam/exam_msg.html', {})
 
+
 class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
     form_class = ClassroomUpdateForm
 
@@ -475,7 +492,8 @@ class ClassroomUpdate(LoginRequiredMixin, generic.UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        if not (self.request.user in form.instance.discipline.discipline_profs.all() or self.request.user in form.instance.discipline.discipline_coords.all()):
+        if not (
+                self.request.user in form.instance.discipline.discipline_profs.all() or self.request.user in form.instance.discipline.discipline_coords.all()):
             messages.error(self.request, _('ClassroomUpdate: The teacher is not registered in a Discipline'))
             return render(self.request, 'exam/exam_errors.html', {})
         return super(ClassroomUpdate, self).form_valid(form)
@@ -507,7 +525,8 @@ class ClassroomCreate(LoginRequiredMixin, generic.CreateView):
         return kwargs
 
     def form_valid(self, form):
-        if not (self.request.user in form.instance.discipline.discipline_profs.all() or self.request.user in form.instance.discipline.discipline_coords.all()):
+        if not (
+                self.request.user in form.instance.discipline.discipline_profs.all() or self.request.user in form.instance.discipline.discipline_coords.all()):
             messages.error(self.request, _('ClassroomCreate: The teacher is not registered in a Discipline'))
             return render(self.request, 'exam/exam_errors.html', {})
 
@@ -540,6 +559,7 @@ class ClassroomDelete(LoginRequiredMixin, generic.DeleteView):
         c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
         return (c1 | c2).order_by('classroom_days').distinct()
 
+
 class ClassroomListView(generic.ListView):
     model = Classroom
     template_name = 'classroom/classroom_list.html'
@@ -557,6 +577,7 @@ class ClassroomListView(generic.ListView):
         c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
         return (c1 | c2).order_by('classroom_code').distinct()
 
+
 class LoanedClassroomByUserListView(LoginRequiredMixin, generic.ListView):
     model = Classroom
     template_name = 'classroom/classroom_list_who_created_user.html'
@@ -573,7 +594,7 @@ class LoanedClassroomByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         c1 = Classroom.objects.filter(classroom_profs=self.request.user)
-        #c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
+        # c2 = Classroom.objects.filter(discipline__discipline_coords=self.request.user)
         return (c1).order_by('classroom_code').distinct()
 
 
