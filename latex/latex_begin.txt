@@ -29,7 +29,7 @@
 
 \usepackage{listings} % para códigos
 
-\usepackage[top=8mm, bottom=5mm, left=12mm, right=10mm]{geometry}
+\usepackage[top=5mm, bottom=0mm, left=10mm, right=10mm]{geometry}
 %\textheight=6in
 \usepackage{tikz}
 \usepackage{enumitem}
@@ -89,7 +89,7 @@
 
                            %~~~~~New commands~~~~~%
 
-%For bold sans serifminted
+%For bold sans serif
 \newcommand \textbs[1]{\textsf{\textbf{#1}}}
 
 \algrenewcommand\algorithmicprocedure{{\textbs{Função}}}

@@ -940,8 +940,13 @@ _inst1_
         str1 += "\\footnote[2]{\\vspace{10mm}\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
             instURL)
 
-        str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#E' + str(
-            exam.id) + '\#V' + str(exam.variationsExams2.all()[0].id) + ' - ' + data_hora + '\\hspace{55mm}}}\n\n'
+        try:
+            str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#E' + str(
+                exam.id) + '\#V' + str(exam.variationsExams2.all()[0].id) + ' - ' + data_hora + '\\hspace{55mm}}}\n\n'
+        except:
+            str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#E' + str(
+                exam.id) + ' - ' + data_hora + '\\hspace{55mm}}}\n\n'
+
         str1 += '\\vspace{0.4mm}'
         if exam.exam_print == 'both':
             str1 += "\\vspace{%smm}\n\n" % (int(Utils.getNumMCQuestions(exam)) / 2)

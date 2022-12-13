@@ -1288,11 +1288,15 @@ class cvMCTest(object):
     def studentGrade(qr, qr0):
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
 
-        if qr['idStudent'] == 'ERROR' or (qr == qr0 and int(qr['page'])):
+        if qr['idStudent'] == 'ERROR' or (qr['exam_print'] == 'answ' and int(qr['page'])):
             if not 'correct' in qr:
                 qr['correct'] = ''  # qr['answers']
             # return qr
             pass
+
+        if qr['idStudent'] == 'ERROR' and qr['exam_print'] == 'both':
+            qr['correct'] = qr['answers']
+            return qr
 
         if qr['correct'][0:5] == 'ERROR':
             qr['correct'] = qr['answers'] + ',' + qr['correct']
@@ -1353,7 +1357,7 @@ class cvMCTest(object):
 
         qr['respgrade'] = coresp
 
-        if not count:
+        if not count and qr['exam_print'] == 'answ':
             if not qr['correct'] and int(qr['page']):  # comparar com o gabarito da primeira pagina
 
                 str2 = ''
@@ -1501,7 +1505,7 @@ class cvMCTest(object):
                 t.append(',')
 
                 try:
-                    if len(qr['respgrade']) > 0:
+                    if len(qr['respgrade']) > 1:
                         t.append(','.join(x for x in qr['respgrade']))
                         t.append(',')
                 except:

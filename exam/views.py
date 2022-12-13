@@ -602,8 +602,9 @@ def correctStudentsExam(request, pk):
             qr['page'] = countPage
             qr['max_questions_square'] = exam.exam_max_questions_square
             qr['user'] = request.user.email
+            qr['exam_print'] = exam.exam_print
 
-            if not countPage:  # para correcoes sem questoes, com apenas quadro de reposta,
+            if not countPage and qr['exam_print'] == 'answ':  # para correcoes sem questoes, com apenas quadro de reposta,
                 qr0 = qr  # guarda a primeira pagina como gabarito
 
             if qr['onlyT']:  # questoes dissertativas e uma questao por pagina - frente-verso: salva a página em tmp/
