@@ -106,15 +106,13 @@ def ImportClassroomsDiscipline(request, pk):
                     return render(request, 'exam/exam_errors.html', {})
 
                 nome = r[1].lstrip().rstrip()
-                if len(nome) > 38: # BIG name!!!
+                if len(nome) > 39: # BIG name!!!
                     ss = nome.split(" ")
                     ss = [i for i in ss if i]  # remove spaces
                     nome = ' '.join([i for i in ss])
-                    c = 1
-                    while len(nome) > 38:  # remove middle names
-                        nome = ' '.join([i for i in ss[0:-c]]) + ' ' + ss[-1]
-                        c += 1
-                    messages.info(request, f"BIG: {r[1].lstrip().rstrip()} ==> {nome}")
+                    nome = nome[0:39 - len(ss[-1]) - len(ID)] + ' ' + ss[-1]
+                    nome = nome.replace("  ", " ")
+                    messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==>")
 
                 emailSt = r[2].lstrip().rstrip()
                 codigo = r[3].lstrip().rstrip()
@@ -351,15 +349,13 @@ def ImportStudentsClassroom(request, pk):
                 ID = r[0].lstrip().rstrip()
 
                 nome = r[1].lstrip().rstrip()
-                if len(nome) > 38:  # BIG name!!!
+                if len(nome) > 39:  # BIG name!!!
                     ss = nome.split(" ")
                     ss = [i for i in ss if i]  # remove spaces
                     nome = ' '.join([i for i in ss])
-                    c = 1
-                    while len(nome) > 38:  # remove middle names
-                        nome = ' '.join([i for i in ss[0:-c]]) + ' ' + ss[-1]
-                        c += 1
-                    messages.info(request, f"BIG: {r[1].lstrip().rstrip()} ==> {nome}")
+                    nome = nome[0:39 - len(ss[-1]) - len(ID)] + ' ' + ss[-1]
+                    nome = nome.replace("  ", " ")
+                    messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==>")
 
                 if len(r) == 3:
                     email = r[2].lstrip().rstrip()
