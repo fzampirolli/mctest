@@ -120,7 +120,7 @@ def variationsExam(request, pk):
         # listao.append([qr_answers, str1, QT])
 
         variant = {}
-        variant['variant'] = str(v+1)  ##### MUDAR para iniciar com a variação 0 !!!!
+        variant['variant'] = str(v + 1)  ##### MUDAR para iniciar com a variação 0 !!!!
         variant['questions'] = []
         for q in db_questions[0]:  # for each question QM
             question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
@@ -524,6 +524,8 @@ def correctStudentsExam(request, pk):
 
         filename = fs.save(file0, file)
 
+        # darken = request.POST.getlist('choicesDarken')
+
         file = file0
         f = file0[:-4] + '.csv'
         if os.path.exists(f):
@@ -604,7 +606,8 @@ def correctStudentsExam(request, pk):
             qr['user'] = request.user.email
             qr['exam_print'] = exam.exam_print
 
-            if not countPage and qr['exam_print'] == 'answ':  # para correcoes sem questoes, com apenas quadro de reposta,
+            if not countPage and qr[
+                'exam_print'] == 'answ':  # para correcoes sem questoes, com apenas quadro de reposta,
                 qr0 = qr  # guarda a primeira pagina como gabarito
 
             if qr['onlyT']:  # questoes dissertativas e uma questao por pagina - frente-verso: salva a página em tmp/
@@ -911,7 +914,7 @@ def generate_page(request, pk):
 
             for s in room.students.all():
                 stname = s.student_name.split(' ')
-                stname = stname[0] + ' ' + stname[-1] # USE FULL NAME
+                stname = stname[0] + ' ' + stname[-1]  # USE FULL NAME
                 stname = stname.upper()  # CHANGED: 29/06/22
                 if not stname in distribute_students:
                     distribute_students.append(stname)
@@ -971,7 +974,7 @@ def generate_page(request, pk):
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
                     stname = s.student_name.split(' ')
-                    stname = stname[0] + ' ' + stname[-1] # USE FULL NAME
+                    stname = stname[0] + ' ' + stname[-1]  # USE FULL NAME
                     stname = stname.upper()  # CHANGED: 29/06/22
 
                     indStudent = np.where(distribute_students_random[:, 0] == stname)
@@ -1062,7 +1065,7 @@ def generate_page(request, pk):
                     # apos enviar, remove do disco
                     try:
                         os.remove(myFILE)
-                        os.remove(myFILE[:-3]+'tex') # fz add in 2022/8/1
+                        os.remove(myFILE[:-3] + 'tex')  # fz add in 2022/8/1
                     except:
                         messages.error(request,
                                        _('ERROR - watch out for special characters in exam name') + ': ' + file_name)
@@ -1117,7 +1120,7 @@ def generate_page(request, pk):
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
             anexos.append(path_to_file)
-            anexos.append(path_to_file[:-3]+"tex")
+            anexos.append(path_to_file[:-3] + "tex")
         else:
             fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
             # zipar todos os exames das turmas
@@ -1135,7 +1138,7 @@ def generate_page(request, pk):
                     writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
                                         lineterminator='\n')
                     writer.writerows(listVariations)
-                #anexos.append(path_to_file_VARIATIONS) # util para quando tem várias turmas
+                # anexos.append(path_to_file_VARIATIONS) # util para quando tem várias turmas
 
                 aux = np.array(listVariations)
                 with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
