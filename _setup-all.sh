@@ -5,35 +5,35 @@
 # rodar em um ambiente virtual com sudo:
 # para instalar:
 
-cd ..
-sudo su
-
-# Download and Install the Latest Updates for the OS
-apt update && apt upgrade -y
-
-apt install python3 python3-dev idle-python3.7
-apt install python3-pip
-
-apt install virtualenv
-virtualenv -p python3.7 AmbientePython3
-source AmbientePython3/bin/activate
-
-git clone git://github.com/sympy/sympy.git
-cd sympy
-python setupegg.py develop
-cd ..
-
-git clone git://github.com/django/django.git
-pip install Django==2.2.4
-
-cd mctest
+#cd ..
+#sudo su
+#
+## Download and Install the Latest Updates for the OS
+#apt update && apt upgrade -y
+#
+#apt install python3 python3-dev idle-python3.7
+#apt install python3-pip
+#
+#apt install virtualenv
+#virtualenv -p python3.7 AmbientePython3
+#source AmbientePython3/bin/activate
+#
+#git clone git://github.com/sympy/sympy.git
+#cd sympy
+#python setupegg.py develop
+#cd ..
+#
+#git clone git://github.com/django/django.git
+#pip install Django==2.2.4
+#
+#cd mctest
 
 # for debug
 # bash -x setup-all.sh
 # bash setup-all.sh
 
-cp __settings.env ../
-source ../_settings.env
+#cp __settings.env ../
+#source ../_settings.env
 
 echo "  -- Define MySQL ..."
 echo "  -- Check file mctest/settings.py before to continue ..."
@@ -63,27 +63,27 @@ echo "America/Sao_Paulo" >/etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
 ###### latex - INSTALL LINE BY LINE
-apt install linuxbrew-wrapper
-apt install texlive-extra-utils
-apt install texlive-pictures
-apt install texlive-font-utils
-apt install texlive-latex-extra
-apt install zbar-tools
-apt install texlive-science
-
-apt update -y
-apt install -y python3-geopandas
-pip3 install --force geopandas
-pip3 install git+git://github.com/geopandas/geopandas.git
-pip3 install descartes
+#apt install linuxbrew-wrapper
+#apt install texlive-extra-utils
+#apt install texlive-pictures
+#apt install texlive-font-utils
+#apt install texlive-latex-extra
+#apt install zbar-tools
+#apt install texlive-science
+#
+#apt update -y
+#apt install -y python3-geopandas
+#pip3 install --force geopandas
+#pip3 install git+git://github.com/geopandas/geopandas.git
+#pip3 install descartes
 # mac
-/usr/local/bin/python3.8 -m pip install geopandas
-python -c "from geopandas import __version__; print(__version__)"
-
-apt install python3.8-dev
-# deploy
-# pip freeze > requirements.txt
-pip install -r requirements.txt
+#/usr/local/bin/python3.8 -m pip install geopandas
+#python -c "from geopandas import __version__; print(__version__)"
+#
+#apt install python3.8-dev
+## deploy
+## pip freeze > requirements.txt
+#pip install -r requirements.txt
 
 apt -y install mysql-server mysql-client
 #mysql_secure_installation
@@ -129,19 +129,24 @@ echo $SECURE_MYSQL
 
 ##### END - Run the MySQL Secure Installation wizard
 
-MYSQL_ROOT_PASSWORD=$DB_PASS
+#MYSQL_ROOT_PASSWORD=$DB_PASS
+#
+#mkdir tmp
+#mkdir tmp/imgs180days
+#mkdir tmpGAB
+#mkdir pdfExam
+#mkdir pdfQuestion
+#mkdir pdfTopic
+#mkdir pdfStudentEmail
+#mkdir /backup
+#mkdir /backup/json
+#mkdir /backup/mysql
+#mkdir /backup/tmpGAB
 
-mkdir tmp
-mkdir tmp/imgs180days
-mkdir tmpGAB
-mkdir pdfExam
-mkdir pdfQuestion
-mkdir pdfTopic
-mkdir pdfStudentEmail
-mkdir /backup
-mkdir /backup/json
-mkdir /backup/mysql
-mkdir /backup/tmpGAB
+echo $DB_HOST
+echo $DB_NAME
+echo $DB_USER
+echo $DB_PASS
 
 mysql -u root -p -e -h $DB_HOST 'create database '"$DB_NAME"'; create user '"$DB_USER"'@'"$DB_HOST"' identified by '"$DB_PASS"'; GRANT ALL ON *.* TO '"$DB_USER"'@'"$DB_HOST"' IDENTIFIED BY '"$DB_PASS"'; grant all privileges on '"$DB_NAME"'.* to '"$DB_USER"'@'"$DB_HOST"'; FLUSH PRIVILEGES;'
 
@@ -152,14 +157,14 @@ user = '"$DB_USER"'
 password = '"$DB_PASS"'
 default-character-set = utf8' >>/etc/mysql/my.cnf
 
-apt install python-mysqldb
-apt install libmysqlclient-dev
-pip install mysqlclient
-pip install django-import-export
-pip install django-widget-tweaks
-pip install django-extensions
-pip install python-decouple
-pip install scikit-image
+#apt install python-mysqldb
+#apt install libmysqlclient-dev
+#pip install mysqlclient
+#pip install django-import-export
+#pip install django-widget-tweaks
+#pip install django-extensions
+#pip install python-decouple
+#pip install scikit-image
 
 #service mysql restart
 systemctl daemon-reload

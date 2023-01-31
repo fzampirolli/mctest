@@ -46,8 +46,12 @@ msg += "==================================================\n\n"
 msg += "File: %s\n\n" % "_".join([i for i in s[3:-1]])
 
 X = np.genfromtxt(file_name, delimiter=',', dtype=int)
-N = len(X)
-M = len(X[0])
+try:
+    N = len(X)
+    M = len(X[0])
+except:
+    print("Erro ao calcular IRT")
+    exit(0)
 
 NStg = 5  # Number of stages: A=4, B=3, C=0, D=1, F=0
 
