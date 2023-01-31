@@ -953,7 +953,7 @@ class cvMCTest(object):
 
     @staticmethod
     def segmentAnswersHor(img, countPage, countSquare, NUM_QUESTOES, qr):
-        DEBUG = False
+        DEBUG = True
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
         imgNC = img[1]
         img = img[0]

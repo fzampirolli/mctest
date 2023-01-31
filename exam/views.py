@@ -524,8 +524,6 @@ def correctStudentsExam(request, pk):
 
         filename = fs.save(file0, file)
 
-        # darken = request.POST.getlist('choicesDarken')
-
         file = file0
         f = file0[:-4] + '.csv'
         if os.path.exists(f):
@@ -542,12 +540,17 @@ def correctStudentsExam(request, pk):
         passou = False
 
         try:
-            imgs = cvMCTest.get_images_from_pdf(file)
+            # imgs = cvMCTest.get_images_from_pdf(file)
             passou = True
         except:
             pass
             # messages.error(request, _("correctStudentsExam: Error in read PDF: ") + str(file))
             # return render(request, 'exam/exam_errors.html', {})
+
+        #darken = request.POST.getlist('choicesDarken')
+        #if darken and darken[0] == 'DARKEN':
+            #print(f'convert -density 300x300 {file} -monochrome -quality 100 {file[:-4]+"darken.pdf"}')
+            #os.system(f'convert -density 300x300 .\{file} -monochrome -quality 100 .\{file}')
 
         # try reading the pdf file using another way
         pages = convert_from_path(file, 200)  # dpi 100=min 500=max
@@ -558,6 +561,7 @@ def correctStudentsExam(request, pk):
             numPAGES += 1
         pages.clear()
 
+
         countCorrectExams = 0
         countCorrectQuestions = 0
         qr0 = dict()
@@ -566,12 +570,13 @@ def correctStudentsExam(request, pk):
             print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
             myfile0 = MYFILES + '_p' + str(countPage) + '.png'
             img = cv2.imread(myfile0)
+
+            DEBUG = False
+
             img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             cvMCTest.centroidsMarked = []
             countCorrectExams += 1
-
-            DEBUG = False
 
             # img = 255 - imgs[countPage]
             if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)

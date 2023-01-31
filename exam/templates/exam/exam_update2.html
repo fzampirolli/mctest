@@ -43,13 +43,13 @@
                                     </td>
                                     <!-- Upload-PDF -->
                                     <td>
-                                        <br action="../correct/" class="input-group mb-3"
+                                        <form action="../correct/" class="input-group mb-3"
                                               enctype="multipart/form-data"
                                               method="POST" target="_blank">
                                             {% csrf_token %}
-                                            <input type="file" name="myfilePDF"></br>
-                                            <input type="checkbox" value="DARKEN" name="choicesDarken">
-                                            {% trans "Increase the contrast? Useful if the PDF is too white!" %} </br>
+                                             <!--<input type="checkbox" value="DARKEN" name="choicesDarken">
+                                            { % trans "Increase the contrast? Useful if the PDF is too white!" % }-->
+                                            <input type="file" name="myfilePDF">
                                             <button class="btn btn-primary"
                                                     type="submit">{% trans "Upload-PDF" %}</button>
                                             {% trans "Choose PDF file for correction of exams" %}
