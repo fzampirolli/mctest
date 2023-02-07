@@ -98,7 +98,7 @@ python-dotenv==0.10.3
 pytz==2019.2
 PyWavelets==1.0.3
 pyxdg==0.25
-PyYAML==5.1.2
+PyYAML==5.4
 pyzbar==0.1.8
 qrcode==6.1
 reportlab==3.4.0

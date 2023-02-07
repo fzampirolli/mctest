@@ -65,7 +65,7 @@ python-decouple==3.7
 python-dotenv==0.21.0
 pytz==2022.7
 PyWavelets==1.4.1
-PyYAML==6.0
+PyYAML==5.4
 pyzbar==0.1.9
 scikit-image==0.19.3
 scipy==1.10.0
