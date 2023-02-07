@@ -43,7 +43,7 @@ munch==2.5.0
 mysqlclient==2.1.1
 netCDF4==1.6.2
 networkx==3.0
-numpy==1.21.4
+numpy==1.22.0
 odfpy==1.4.1
 opencv-python==3.4.18.65
 openpyxl==3.0.10
