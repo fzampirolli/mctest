@@ -37,6 +37,9 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from tablib import Dataset
 
+#from unicodedata import normalize
+#from unidecode import unidecode
+
 from account.models import User
 from student.models import Student
 from .forms import ClassroomCreateForm, ClassroomUpdateForm
@@ -83,7 +86,7 @@ def ImportClassroomsDiscipline(request, pk):
 
             if len(r) < 2:
                 r = row.split(';')
-
+            print(*r)
             if len(r) == 7:
                 emailProf = r[6] = r[6].lstrip().rstrip()
                 if not User.objects.filter(email=emailProf):  # verificar se professor não existe
@@ -112,7 +115,11 @@ def ImportClassroomsDiscipline(request, pk):
                     nome = ' '.join([i for i in ss])
                     nome = nome[0:39 - len(ss[-1]) - len(ID)] + ' ' + ss[-1]
                     nome = nome.replace("  ", " ")
-                    messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==>")
+                    messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==> {nome}")
+
+                #nome = normalize('NFKD', nome).encode('ASCII', 'ignore').decode('ASCII')
+                #nome = normalize('NFKD', nome.decode('UTF-8')).encode('ASCII', 'ignore')
+                #nome = unidecode(nome)
 
                 emailSt = r[2].lstrip().rstrip()
                 codigo = r[3].lstrip().rstrip()
@@ -355,7 +362,7 @@ def ImportStudentsClassroom(request, pk):
                     nome = ' '.join([i for i in ss])
                     nome = nome[0:39 - len(ss[-1]) - len(ID)] + ' ' + ss[-1]
                     nome = nome.replace("  ", " ")
-                    messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==>")
+                    messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==> {nome}")
 
                 if len(r) == 3:
                     email = r[2].lstrip().rstrip()
