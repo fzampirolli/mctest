@@ -86,7 +86,7 @@ PyMySQL==0.9.3
 PyNaCl==1.1.2
 pyOpenSSL==17.5.0
 pyparsing==2.4.2
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 PyQRCode==1.2.1
 pyRFC3339==1.0
 python-apt==1.6.4
