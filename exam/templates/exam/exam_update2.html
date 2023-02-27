@@ -47,13 +47,15 @@
                                               enctype="multipart/form-data"
                                               method="POST" target="_blank">
                                             {% csrf_token %}
-                                             <!--<input type="checkbox" value="DARKEN" name="choicesDarken">
-                                            { % trans "Increase the contrast? Useful if the PDF is too white!" % }-->
+                                            <!--
+                                            <input type="checkbox" value="DARKEN" name="choicesDarken">
+                                            {% trans "Increase the contrast? Useful if the PDF is too white!" %}
+                                            </br>-->
                                             <input type="file" name="myfilePDF">
                                             <button class="btn btn-primary"
                                                     type="submit">{% trans "Upload-PDF" %}</button>
                                             {% trans "Choose PDF file for correction of exams" %}
-                                        </form>
+                                            </form>
                                         <h6>{% trans "Caution: (1) Before scanning, make sure all circles have been filled correctly. If you to use correction fluid and erase part of the outline of the circle, the correction may not work. (2) Scan with a resolution of 150dpi (if you can not decode QRCode, use 200dpi), <code>gray levels</code>, just the front of the sheet and one PDF per class. (3) The 4 black disks can not be defective. (4) If you chose only answers on the screen of this exam, the first page of the PDF should contain the template and all questions will be disregarded. (5) If in this Exam screen the option to Return to Students was chosen, when enrolling the students in the class, you must also include the student's e-mail. If this has been done, you can follow the step to the right side Send-Return-Students, for each student receive the correction of your examination by email >>>" %}</h6>
 
                                     </td>
