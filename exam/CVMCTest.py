@@ -1487,7 +1487,7 @@ class cvMCTest(object):
                     L1.extend(['Q' + str(i) for i in range(1, 1 + len(qr['correct']))])
                     L1.extend(['K' + str(i) for i in range(1, 1 + len(qr['correct']))])
                 except:
-                    L1.extend(range(1, 1 + len(qr['correct'].split(','))))  # questoes
+                    L1.extend(['Q' + str(i) for i in range(1, 1 + len(qr['correct']))])
                     pass
 
                 spamWriter.writerow([','.join([str(x) for x in L1])])

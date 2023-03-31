@@ -785,8 +785,8 @@ def correctStudentsExam(request, pk):
                     K.replace(' ', np.nan, inplace=True)
                     K.dropna(inplace=True)
                     K = K.to_numpy() // 10 ** ANS
-                    acertos, erros = {}, {}
 
+                    acertos, erros = {}, {}
                     for q in X:  # for each question
                         i = int(q[1:]) - 1
                         for n, s in enumerate(X[q]):  # for each student
@@ -843,6 +843,17 @@ def correctStudentsExam(request, pk):
                         for n, s in enumerate(X[q]):  # for each student
                             if len(str(s).split()[0]) == 1:
                                 dados[n][int(q[1:]) - 1] = 1
+
+                    with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                        f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
+                        media_colunas = np.mean(dados, axis=0)
+                        desvio_padrao_colunas = np.std(dados, axis=0)
+                        acertos = np.sum(dados, axis=0)
+                        erros = len(dados[0]) - np.sum(dados, axis=0) -1
+                        for i in range(len(dados[0])):
+                            a,e,m,s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
+                            f.write(f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                        f.close()
 
                     with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
                         spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
