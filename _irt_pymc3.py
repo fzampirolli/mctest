@@ -35,10 +35,22 @@ destinatario = s[2]
 
 print("Destination: " + destinatario)
 
-msg = "\n"
-msg += "Prezado(a), \n\n"
-msg += "Seguem algumas estatísticas das correções. \n\n"
-msg += "Att, \nFrancisco de Assis Zampirolli\n\n"
+msg = """
+Prezado(a),
+
+Gostaria de compartilhar algumas informações e estatísticas referentes às correções realizadas recentemente. Abaixo estão os detalhes para acessar e compreender os dados:
+
+1. Gabarito: Para verificar o gabarito, consulte a primeira página do arquivo PDF. Note que isso se aplica apenas se o quadro de respostas foi utilizado exclusivamente (as questões foram fornecidas à parte).
+
+2. Arquivo CSV: Anexado a este e-mail, você encontrará um arquivo CSV utilizado para calcular a Teoria de Resposta ao Item (TRI) da avaliação. Neste arquivo, as linhas representam os alunos, na mesma ordem apresentada no PDF mencionado.
+
+3. Ordem das colunas: Caso a avaliação tenha incluído tanto o quadro de respostas quanto as questões do MCTest, as colunas do arquivo CSV estarão ordenadas de acordo com as chaves das questões no banco de dados.
+
+Caso tenha dúvidas ou precise de esclarecimentos adicionais, por favor, não hesite em entrar em contato. Estou à disposição para ajudá-lo(a).
+
+Atenciosamente,
+Francisco de Assis Zampirolli\n\n
+"""
 msg += "REF.: http://y-okamoto-psy1949.la.coocan.jp/Python/en1/IRTLClassPyMC3/ \n\n"
 
 msg += "==================================================\n\n"
