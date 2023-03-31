@@ -769,39 +769,81 @@ def correctStudentsExam(request, pk):
             os.system("cat >> correct.log " + path_to_file)
             ### log end
 
+
             ### IRT begin
-            try:
+            if True:
                 M = int(Utils.getNumMCQuestions(exam))  # Number of questions
-                X = pandas.read_csv(path_to_file, delimiter=',', usecols=[str(i) for i in range(1, M + 1)])
-                N = len(X['1'])  # Number of students
+                X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                X.replace('', np.nan, inplace=True)
+                X.replace(' ', np.nan, inplace=True)
+                X.dropna(inplace=True)
+                N = len(X['Q1'])  # Number of students
                 dados = np.zeros((N, M), dtype=int)
                 for q in X:  # for each question
                     for n, s in enumerate(X[q]):  # for each student
                         if len(str(s).split()[0]) == 1:
-                            dados[n][int(q) - 1] = 1
+                            dados[n][int(q[1:]) - 1] = 1
 
                 with open(MYFILES + '_irt.csv', 'w') as csvfile:
                     spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                     for n in range(N):
                         spamWriter.writerow(dados[n])
+                    csvfile.close()
 
                 os.system("python3 _irt_pymc3.py " + MYFILES + "_irt.csv &")
-            except:
-                pass
-            ### IRT end
+
+                ANS = int(exam.exam_number_of_anwsers_question)
+                K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
+                K.replace('', np.nan, inplace=True)
+                K.replace(' ', np.nan, inplace=True)
+                K.dropna(inplace=True)
+                K = K.to_numpy() // 10 ** ANS
+                acertos, erros = {}, {}
+
+                for q in X:  # for each question
+                    i = int(q[1:]) - 1
+                    for n, s in enumerate(X[q]):  # for each student
+                        ki = K[n][i]
+                        if len(str(s).split()[0]) == 1:
+                            if ki in acertos.keys():
+                                acertos[ki] += 1
+                            else:
+                                acertos[ki] = 1
+                        else:
+                            if ki in erros.keys():
+                                erros[ki] += 1
+                            else:
+                                erros[ki] = 1
+
+                # incluir chaves se nao existir
+                for k in erros.keys():
+                    if not k in acertos.keys():
+                        acertos[k] = 0
+                for k in acertos.keys():
+                    if not k in erros.keys():
+                        erros[k] = 0
+
+                with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                    f.write(f' id,  key, corr, fail, %corr, %fail\n')
+                    for i, k in enumerate(sorted(acertos.keys())):
+                        a, e = acertos[k], erros[k]
+                        f.write(f'{i + 1:3d},{k:5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                    f.close()
+            # IRT - end
 
             myfiles = []
             for f in np.sort(glob.glob(MYFILES + "_RETURN_*.png")):
                 myfiles.append(f)
 
-            if len(myfiles):
+            if True:#len(myfiles):
                 try:
                     os.remove(MYFILES + "*.zip")
                 except Exception as e:
                     pass
                 os.system("zip -j " + MYFILES + ".zip " + MYFILES + "_RETURN_*")
-            else:
-                fzip = MYFILES + "_RETURN__.csv"
+            # else:
+            #     fzip = MYFILES + "_RETURN__.csv"
+
 
         try:
             # os.remove("{}.pdf".format(BASE_DIR + "/" + file[:-4]))

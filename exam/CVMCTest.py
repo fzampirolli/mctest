@@ -1482,8 +1482,10 @@ class cvMCTest(object):
 
                 try:
                     i = int(qr['correct'][0])  # se for inteiro entao tem questoes no BD
-                    L1.extend(range(1, 1 + len(qr['correct'])))  # questoes
-                    L1.extend(range(1, 1 + len(qr['correct'])))  # id das questoes no BD
+                    # L1.extend(range(1, 1 + len(qr['correct'])))  # questoes
+                    # L1.extend(range(1, 1 + len(qr['correct'])))  # id das questoes no BD
+                    L1.extend(['Q' + str(i) for i in range(1, 1 + len(qr['correct']))])
+                    L1.extend(['K' + str(i) for i in range(1, 1 + len(qr['correct']))])
                 except:
                     L1.extend(range(1, 1 + len(qr['correct'].split(','))))  # questoes
                     pass
