@@ -771,7 +771,7 @@ def correctStudentsExam(request, pk):
 
 
             ### IRT begin
-            if True:
+            try:
                 M = int(Utils.getNumMCQuestions(exam))  # Number of questions
                 X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
                 X.replace('', np.nan, inplace=True)
@@ -829,6 +829,9 @@ def correctStudentsExam(request, pk):
                         a, e = acertos[k], erros[k]
                         f.write(f'{i + 1:3d},{k:5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
                     f.close()
+            except:
+                messages.error(request, _("correctStudentsExam: Error in IRT or more Statists: "))
+                pass
             # IRT - end
 
             myfiles = []

@@ -1480,7 +1480,7 @@ class cvMCTest(object):
                 print(f + ' criado no HD')
                 L1 = ['Pag', 'ID', 'Resp', 'Quest', 'Inv', 'Nota']
 
-                try:
+                try: # add in 31/3/2023
                     i = int(qr['correct'][0])  # se for inteiro entao tem questoes no BD
                     # L1.extend(range(1, 1 + len(qr['correct'])))  # questoes
                     # L1.extend(range(1, 1 + len(qr['correct'])))  # id das questoes no BD
