@@ -547,10 +547,10 @@ def correctStudentsExam(request, pk):
             # messages.error(request, _("correctStudentsExam: Error in read PDF: ") + str(file))
             # return render(request, 'exam/exam_errors.html', {})
 
-        #darken = request.POST.getlist('choicesDarken')
-        #if darken and darken[0] == 'DARKEN':
-            #print(f'convert -density 300x300 {file} -monochrome -quality 100 {file[:-4]+"darken.pdf"}')
-            #os.system(f'convert -density 300x300 .\{file} -monochrome -quality 100 .\{file}')
+        # darken = request.POST.getlist('choicesDarken')
+        # if darken and darken[0] == 'DARKEN':
+        # print(f'convert -density 300x300 {file} -monochrome -quality 100 {file[:-4]+"darken.pdf"}')
+        # os.system(f'convert -density 300x300 .\{file} -monochrome -quality 100 .\{file}')
 
         # try reading the pdf file using another way
         pages = convert_from_path(file, 200)  # dpi 100=min 500=max
@@ -560,7 +560,6 @@ def correctStudentsExam(request, pk):
             page.save(myfile0)
             numPAGES += 1
         pages.clear()
-
 
         countCorrectExams = 0
         countCorrectQuestions = 0
@@ -769,78 +768,100 @@ def correctStudentsExam(request, pk):
             os.system("cat >> correct.log " + path_to_file)
             ### log end
 
-
             ### IRT begin
-            try:
-                M = int(Utils.getNumMCQuestions(exam))  # Number of questions
-                X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
-                X.replace('', np.nan, inplace=True)
-                X.replace(' ', np.nan, inplace=True)
-                X.dropna(inplace=True)
-                N = len(X['Q1'])  # Number of students
-                dados = np.zeros((N, M), dtype=int)
-                for q in X:  # for each question
-                    for n, s in enumerate(X[q]):  # for each student
-                        if len(str(s).split()[0]) == 1:
-                            dados[n][int(q[1:]) - 1] = 1
+            if exam.exam_print in ['both']: # não é somente quadro de respostas
+                try:
+                    M = int(Utils.getNumMCQuestions(exam))  # Number of questions
+                    X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                    X.replace('', np.nan, inplace=True)
+                    X.replace(' ', np.nan, inplace=True)
+                    X.dropna(inplace=True)
 
-                with open(MYFILES + '_irt.csv', 'w') as csvfile:
-                    spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-                    for n in range(N):
-                        spamWriter.writerow(dados[n])
-                    csvfile.close()
+                    # more statistis adapted of Profa. Dra. Denise Goya, from UFABC
+                    # 31/03/2023
+                    ANS = int(exam.exam_number_of_anwsers_question)
+                    K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
+                    K.replace('', np.nan, inplace=True)
+                    K.replace(' ', np.nan, inplace=True)
+                    K.dropna(inplace=True)
+                    K = K.to_numpy() // 10 ** ANS
+                    acertos, erros = {}, {}
 
-                os.system("python3 _irt_pymc3.py " + MYFILES + "_irt.csv &")
-
-                # more statistis adapted of Profa. Dra. Denise Goya, from UFABC
-                # 31/03/2023
-                ANS = int(exam.exam_number_of_anwsers_question)
-                K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
-                K.replace('', np.nan, inplace=True)
-                K.replace(' ', np.nan, inplace=True)
-                K.dropna(inplace=True)
-                K = K.to_numpy() // 10 ** ANS
-                acertos, erros = {}, {}
-
-                for q in X:  # for each question
-                    i = int(q[1:]) - 1
-                    for n, s in enumerate(X[q]):  # for each student
-                        ki = K[n][i]
-                        if len(str(s).split()[0]) == 1:
-                            if ki in acertos.keys():
-                                acertos[ki] += 1
+                    for q in X:  # for each question
+                        i = int(q[1:]) - 1
+                        for n, s in enumerate(X[q]):  # for each student
+                            ki = K[n][i]
+                            if len(str(s).split()[0]) == 1:
+                                acertos[ki] = acertos.get(ki, 0) + 1
                             else:
-                                acertos[ki] = 1
-                        else:
-                            if ki in erros.keys():
-                                erros[ki] += 1
-                            else:
-                                erros[ki] = 1
+                                erros[ki] = erros.get(ki, 0) + 1
 
-                # incluir chaves se nao existir
-                for k in erros.keys():
-                    if not k in acertos.keys():
-                        acertos[k] = 0
-                for k in acertos.keys():
-                    if not k in erros.keys():
-                        erros[k] = 0
+                    # incluir chaves se nao existir
+                    for k in set(acertos.keys()) | set(erros.keys()):
+                        acertos[k] = acertos.get(k, 0)
+                        erros[k] = erros.get(k, 0)
 
-                with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
-                    f.write(f' id,  key, corr, fail, %corr, %fail\n')
-                    for i, k in enumerate(sorted(acertos.keys())):
-                        a, e = acertos[k], erros[k]
-                        f.write(f'{i + 1:3d},{k:5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
-                    f.close()
-            except:
-                messages.error(request, _("correctStudentsExam: Error in IRT or more Statists: "))
-                pass
+                    with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                        f.write(f' id,  key, corr, fail, %corr, %fail\n')
+                        for i, k in enumerate(sorted(acertos.keys())):
+                            a, e = acertos[k], erros[k]
+                            f.write(f'{i + 1:3d},{k:5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                        f.close()
+
+                    # irt - questoes ordenadas pelas chaves
+                    chaves = sorted(acertos.keys())
+                    dados = np.zeros((len(X), len(chaves)), dtype=int)
+                    X0 = X.to_numpy()
+                    for i, a in enumerate(X0):
+                        for j, b in enumerate(a):
+                            if len(X0[i, j].split()[0]) == 1:
+                                dados[i, chaves.index(K[i, j])] = 1
+
+                    N = len(X['Q1'])  # Number of students
+                    with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+                        spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                        for n in range(N):
+                            spamWriter.writerow(dados[n])
+                        csvfile.close()
+
+                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv &")
+
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
+
+            else: # exames sem chaves - primeira página é o gabarito
+                try:
+                    M = int(Utils.getNumMCQuestions(exam))  # Number of questions
+                    X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                    X.replace('', np.nan, inplace=True)
+                    X.replace(' ', np.nan, inplace=True)
+                    X.dropna(inplace=True)
+
+                    N = len(X['Q1'])  # Number of students
+                    dados = np.zeros((N, M), dtype=int)
+                    for q in X:  # for each question
+                        for n, s in enumerate(X[q]):  # for each student
+                            if len(str(s).split()[0]) == 1:
+                                dados[n][int(q[1:]) - 1] = 1
+
+                    with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+                        spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                        for n in range(N):
+                            spamWriter.writerow(dados[n])
+                        csvfile.close()
+
+                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv &")
+
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in IRT"))
+
             # IRT - end
 
             myfiles = []
             for f in np.sort(glob.glob(MYFILES + "_RETURN_*.png")):
                 myfiles.append(f)
 
-            if True:#len(myfiles):
+            if True:  # len(myfiles):
                 try:
                     os.remove(MYFILES + "*.zip")
                 except Exception as e:
@@ -848,7 +869,6 @@ def correctStudentsExam(request, pk):
                 os.system("zip -j " + MYFILES + ".zip " + MYFILES + "_RETURN_*")
             # else:
             #     fzip = MYFILES + "_RETURN__.csv"
-
 
         try:
             # os.remove("{}.pdf".format(BASE_DIR + "/" + file[:-4]))
