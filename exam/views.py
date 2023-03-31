@@ -792,6 +792,8 @@ def correctStudentsExam(request, pk):
 
                 os.system("python3 _irt_pymc3.py " + MYFILES + "_irt.csv &")
 
+                # more statistis adapted of Profa. Dra. Denise Goya, from UFABC
+                # 31/03/2023
                 ANS = int(exam.exam_number_of_anwsers_question)
                 K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
                 K.replace('', np.nan, inplace=True)
