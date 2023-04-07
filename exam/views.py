@@ -843,13 +843,15 @@ def correctStudentsExam(request, pk):
                         for n, s in enumerate(X[q]):  # for each student
                             if len(str(s).split()[0]) == 1:
                                 dados[n][int(q[1:]) - 1] = 1
-
+                    N -= 1
+                    dados = np.delete(dados, 0, 0) # remove primeira linha com o gabarito
+                                
                     with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
                         f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
                         media_colunas = np.mean(dados, axis=0)
                         desvio_padrao_colunas = np.std(dados, axis=0)
                         acertos = np.sum(dados, axis=0)
-                        erros = len(dados[0]) - np.sum(dados, axis=0) -1
+                        erros = N - np.sum(dados, axis=0)
                         for i in range(len(dados[0])):
                             a,e,m,s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
                             f.write(f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
@@ -883,7 +885,15 @@ def correctStudentsExam(request, pk):
 
         try:
             # os.remove("{}.pdf".format(BASE_DIR + "/" + file[:-4]))
-            os.remove("{}.csv".format(BASE_DIR + "/" + file[:-4]))
+
+            #from datetime import datetime
+            #data = datetime.today().strftime('%Y-%m-%d')
+            #hora = datetime.now().time().strftime('%H-%M%s')
+            data_hora = datetime.datetime.now()
+            data_hora = str(data_hora).split('.')[0].replace(' ', '-')
+            os.system(f"mv {filename[:-4]}.pdf tmp/{filename[:-4]}-{data_hora}.pdf")
+            os.system(f"mv {filename[:-4]}.csv tmp/{filename[:-4]}-{data_hora}.csv")
+            #os.remove("{}.csv".format(BASE_DIR + "/" + file[:-4]))
             os.system("rm " + MYFILES + "/*.png")
             if fzip[-3:] == 'zip':
                 os.system("rm " + MYFILES + "_RETURN__.csv")
