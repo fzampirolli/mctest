@@ -1,12 +1,12 @@
 """
 =====================================================================
-Copyright (C) 2021 Francisco de Assis Zampirolli
+Copyright (C) 2018-2023 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
 This file is part of MCTest 5.2.
 
-Languages: Python 3.8.5, Django 3.1.4 and many libraries described at
+Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -932,7 +932,7 @@ def generate_page(request, pk):
 
     print("generate_page-01-" + str(datetime.datetime.now()))
 
-    path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk)
+    path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk) + "_varID_" + str(exam.variationsExams2.all()[0].id)
     path_to_file_REPORT = path_aux + "_sendMails.csv"
     path_to_file_VARIATIONS = path_aux + "_variations.csv"
     path_to_file_VARIATIONS_VPL = path_aux + "_students_variations.csv"
@@ -1046,7 +1046,7 @@ def generate_page(request, pk):
 
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             file_name = "_e" + str(
-                exam.id) + "_" + room.classroom_code + "_" + room.classroom_type + "_" + exam.exam_name.replace(" ", "")
+                exam.id) + "_class_" + str(room.id) + "_varID_" + str(exam.variationsExams2.all()[0].id)
             file_name = file_name.replace(" ", "")
 
             fileExamName = file_name + ".tex"

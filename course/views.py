@@ -1,6 +1,6 @@
 '''
 =====================================================================
-Copyright (C) 2021 Francisco de Assis Zampirolli
+Copyright (C) 2018-2023 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
@@ -674,6 +674,8 @@ class CourseListView(generic.ListView):
     template_name = 'course/course_list.html'
     success_url = '/course/courses'
 
+    def get_queryset(self):
+        return Course.objects.all().order_by('course_name').distinct()
 
 class CourseDetailView(generic.DetailView):
     model = Course
@@ -723,6 +725,8 @@ class DisciplineListView(generic.ListView):
     template_name = 'discipline/discipline_list.html'
     success_url = '/course/disciplines'
 
+    def get_queryset(self):
+        return Discipline.objects.all().order_by('discipline_name').distinct()
 
 class DisciplineDetailView(generic.DetailView):
     model = Discipline
