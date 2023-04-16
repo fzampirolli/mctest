@@ -14,7 +14,7 @@ apt install python3.8 python3-dev idle-python3
 apt install python3-pip
 
 apt install virtualenv
-virtualenv -p python3.8 AmbientePython3.8
+virtualenv -p python3.8 AmbientePython3
 source AmbientePython3/bin/activate
 
 #git clone git://github.com/sympy/sympy.git
