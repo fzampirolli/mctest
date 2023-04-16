@@ -5,35 +5,34 @@
 # rodar em um ambiente virtual com sudo:
 # para instalar:
 
-#cd ..
-#sudo su
+cd ..
+sudo su
 #
 ## Download and Install the Latest Updates for the OS
-#apt update && apt upgrade -y
-#
-#apt install python3 python3-dev idle-python3.7
-#apt install python3-pip
-#
-#apt install virtualenv
-#virtualenv -p python3.7 AmbientePython3
-#source AmbientePython3/bin/activate
-#
+apt update && apt upgrade -y
+apt install python3.8 python3-dev idle-python3
+apt install python3-pip
+
+apt install virtualenv
+virtualenv -p python3.8 AmbientePython3.8
+source AmbientePython3/bin/activate
+
 #git clone git://github.com/sympy/sympy.git
 #cd sympy
 #python setupegg.py develop
 #cd ..
-#
+
 #git clone git://github.com/django/django.git
-#pip install Django==2.2.4
-#
-#cd mctest
+pip install Django==2.2.4
+
+cd mctest
 
 # for debug
 # bash -x setup-all.sh
 # bash setup-all.sh
 
-#cp __settings.env ../
-#source ../_settings.env
+cp __settings.env ../
+source ../_settings.env
 
 echo "  -- Define MySQL ..."
 echo "  -- Check file mctest/settings.py before to continue ..."
@@ -48,7 +47,7 @@ echo "  continue ... "
 
 echo "  -- Define parametry in django ..."
 ### BEGIN createsuperuser
-#python manage.py createsuperuser spawn
+python manage.py createsuperuser spawn
 
 echo "  -- Check values before to continue ..."
 echo "  Name of USER:       $DEFAULT_USER"
