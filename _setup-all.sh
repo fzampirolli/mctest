@@ -17,6 +17,36 @@ apt install virtualenv
 virtualenv -p python3.8 AmbientePython3
 source AmbientePython3/bin/activate
 
+
+/etc/init.d/network-manager  restart
+ifconfig
+more interfaces
+init 6
+
+reboot
+
+## ssh #############################
+sudo apt-get install openssh-server
+sudo service ssh status
+sudo apt-get install emacs25
+sudo emacs -nw /etc/ssh/sshd_config
+###
+Port 22
+PermitRootLogin yes
+###
+
+sudo systemctl enable ssh
+
+sudo apt-get autoremove
+sudo apt-get autoclean
+
+# killall - kill python3
+
+# sudo lsof -t -i tcp:8000 | xargs kill -9
+
+git init
+git clone https://github.com/fzampirolli/mctest.git
+
 #git clone git://github.com/sympy/sympy.git
 #cd sympy
 #python setupegg.py develop
@@ -27,11 +57,13 @@ pip install Django==2.2.4
 
 cd mctest
 
+python3 manage.py check --deploy
+
 # for debug
 # bash -x setup-all.sh
 # bash setup-all.sh
 
-cp __settings.env ../
+cp _settings.env ../
 source ../_settings.env
 
 echo "  -- Define MySQL ..."
@@ -69,7 +101,60 @@ dpkg-reconfigure -f noninteractive tzdata
 #apt install texlive-latex-extra
 #apt install zbar-tools
 #apt install texlive-science
+
+#pip3 install django-widget-tweaks
+#pip3 install django-extensions
+#pip3 install sympy
+#pip3 install python-decouple
+#pip3 install pdf2image
+#pip3 install img2pdf
+#pip3 install pandas
 #
+#python3 manage.py makemigrations
+#python3 manage.py migrate
+#python3 manage.py createsuperuser
+#
+#python3 manage.py runserver --noreload # ou . ../django.sh
+#
+######check----- TABELAS do django
+#sudo mysql -u root -p
+#use DB_MCTest;
+#show tables;
+#describe student_student;
+#SELECT * FROM DB_MCTest.topic_question WHERE id = 333;
+
+#describe exam_classroomexam;
+
+#MySQL – ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+#mysql>SHOW VARIABLES LIKE 'validate_password%';
+
+
+## para remover mysql
+#sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+#sudo find . -path "*/migrations/*.pyc"  -delete
+#
+#sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
+#sudo rm -rf /etc/mysql /var/lib/mysql
+#sudo apt-get autoremove
+#sudo apt-get autoclean
+
+# backup
+#mysqldump --no-defaults -u root -p DB_MCTest -h 177.104.60.18 > mctest.sql
+#mysql -u root -p -h localhost -D DB_MCTest --binary-mode -o < mysql-2019-08-29.sql
+#mysql -u root -p DB_MCTest < "mctest.sql"
+#mysql -u root < "mysql-2019-09-02-nubisys.sql"
+
+#services restart mysql
+#mysql -h localhost -P 3306 -u root -p DB_MCTest < "mysql-2019-09-02-nubisys.sql"
+
+#######
+#pip install djangorestframework
+#pip install markdown       # Markdown support for the browsable API.
+#pip install django-filter  # Filtering support
+#
+#pip freeze > requirements.txt
+#pip install -r requirements.txt
+
 #apt update -y
 #apt install -y python3-geopandas
 #pip3 install --force geopandas
@@ -84,8 +169,65 @@ dpkg-reconfigure -f noninteractive tzdata
 ## pip freeze > requirements.txt
 #pip install -r requirements.txt
 
+# instalar mysql >= v8
 apt -y install mysql-server mysql-client
 #mysql_secure_installation
+
+#create database DB_MCTest;
+#
+#create user 'fz'@'localhost' identified by 'ufabc12345';
+#GRANT ALL ON DB_MCTest.* TO 'fz'@'localhost' IDENTIFIED BY 'ufabc12345';
+#grant all privileges on DB_MCTest.* to 'fz'@'localhost';
+#grant usage on *.* to 'fz'@'localhost';
+#
+#create user 'admin'@'localhost' identified by 'ufabc12345';
+#GRANT ALL ON DB_MCTest.* TO 'admin'@'localhost' IDENTIFIED BY 'ufabc12345';
+#grant all privileges on DB_MCTest.* to 'admin'@'localhost';
+#grant usage on *.* to 'admin'@'localhost';
+#
+#FLUSH PRIVILEGES;
+#show databases;
+#show global variables like 'port%';
+#quit
+
+#sudo emacs -nw /etc/mysql/my.cnf
+#[client]
+#database = DB_MCTest
+#user = admin
+#password = ufabc12345  # MUDAR SENHA!!!
+#default-character-set = utf8
+
+#sudo emacs -nw /etc/mysql/mysql.conf.d/mysqld.cnf
+##bind-address            = 127.0.0.1
+#bind-address            = 0.0.0.0
+
+#sudo apt-get install python3-pymysql
+#sudo apt-get install python3.8-dev
+#sudo apt-get install libssl-dev
+#pip3 install mysqlclient
+#sudo systemctl daemon-reload
+#sudo systemctl restart mysql
+#sudo apt reinstall libffi
+
+
+## mac
+#brew tap homebrew/services
+#brew services restart mysql
+#brew services list
+#mysql -V
+#sudo mysql -u root -p
+#ifconfig
+#sudo mysql -u root -p -h 192.168.100.106  # muda sempre
+#
+#mysql -u root -p
+#use DB_MCTest;
+#ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '2008ufabc2018';
+#ALTER USER 'fz'@'localhost' IDENTIFIED WITH mysql_native_password BY '2008ufabc2018';
+#FLUSH PRIVILEGES;
+#
+##recuperar senha
+#mysql_upgrade -u root -p
+
 
 # Install MySQL Server in a Non-Interactive mode. Default root password will be "root"
 echo "  -- mysql-server mysql-server/root_password password root" | sudo debconf-set-selections
