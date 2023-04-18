@@ -6,18 +6,19 @@
 # cv2 3.4.18.65 (precisa alterar código para usar 4.7)
 # e vários outros de requirements-titan256GB.txt
 # rodar esse script como sudo: sudo su
-# depois rodar: source ./_setup-all.sh
-# quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settins.env
+
+# rodar: source ./_setup-all.sh
+# quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
 
 # ou usando pip:
 # python setup.py sdist bdist_wheel
 # pip install dist/mctest-5.2.tar.gz # isso está com BUG ainda
 
-# se ainda nao fez, baixar o mctest da pasta, mudando fz pelo seu login
+# sugestão: baixar o mctest para a pasta abaixo, mudando fz pelo seu login
 mkdir /home/fz/PycharmProjects/
 cd /home/fz/PycharmProjects/
 
-## assim
+# se ainda nao fez download:
 #sudo apt install -y git
 #git clone https://github.com/fzampirolli/mctest.git
 
