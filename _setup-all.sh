@@ -6,7 +6,9 @@
 # python 3.8
 # cv2 3.4.18.65 (precisa alterar código para usar 4.7)
 # e vários outros de requirements-titan256GB.txt
-# rodei esse script como sudo: sudo su
+# rodar esse script como sudo: sudo su
+# depois rodar: source ./_setup-all.sh
+# quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settins.env
 
 # ou usando pip:
 # python setup.py sdist bdist_wheel
