@@ -85,8 +85,7 @@ sudo systemctl restart mysql
 # fzcoord@ufabc.edu.br
 # fzprof@ufabc.edu.br
 # fzstudent@ufabc.edu.br
-
-#mysqldump --no-defaults -u root -p DB_MCTest -h localhost > mctest.sql
+# mysqldump --no-defaults -u root -p DB_MCTest -h localhost > mctest.sql
 sudo mysql -u root -p $DB_NAME < mctest.sql
 
 pip install -r requirements-titan256GB.txt
