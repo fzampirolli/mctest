@@ -19,9 +19,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 #### read ../_settings.env
 from dotenv import load_dotenv
