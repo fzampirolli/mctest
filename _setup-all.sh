@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # SCRIPT CRIADO EM 2023-04-18 UTILIZANDO
 # UBUNTU 20.04
 # Django 4.2
