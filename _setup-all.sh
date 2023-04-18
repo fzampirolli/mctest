@@ -8,29 +8,29 @@
 # e vários outros de requirements-titan256GB.txt
 # rodei esse script como sudo: sudo su
 
+# ou usando pip:
+# python setup.py sdist bdist_wheel
+# pip install dist/mctest-1.0.0.tar.gz
+
 # se ainda nao fez, baixar o mctest da pasta, mudando fz pelo seu login
 mkdir /home/fz/PycharmProjects/
 cd /home/fz/PycharmProjects/
 
 ## assim
-#wget https://github.com/fzampirolli/mctest/archive/refs/heads/master.zip
-#unzip master.zip
-#mv mctest-master mctest
-## ou assim
-#sudo apt install git
+#sudo apt install -y git
 #git clone https://github.com/fzampirolli/mctest.git
 
 cd mctest
 
 # instala alguns pacotes com apt
 #sudo snap install emacs --classic
-sudo apt install texlive-extra-utils
-sudo apt install texlive-pictures
-sudo apt install texlive-font-utils
-sudo apt install texlive-latex-extra
-sudo apt install zbar-tools
-sudo apt install texlive-science
-sudo apt install libzbar-dev
+sudo apt install -y texlive-extra-utils
+sudo apt install -y texlive-pictures
+sudo apt install -y texlive-font-utils
+sudo apt install -y texlive-latex-extra
+sudo apt install -y zbar-tools
+sudo apt install -y texlive-science
+sudo apt install -y libzbar-dev
 
 # NÃO MUDAR O USER DO BD
 cp _settings.env ../
@@ -38,16 +38,26 @@ source ../_settings.env
 
 # Instala o python3.8
 sudo apt update && sudo apt upgrade -y
-sudo apt install python3.8 python3-dev idle3 python3-pip default-libmysqlclient-dev build-essential
+sudo apt install -y python3.8 python3-dev idle3 python3-pip default-libmysqlclient-dev build-essential
 
 # Instala virtualenv
-sudo apt install virtualenv
+sudo apt install -y virtualenv
 virtualenv -p python3.8 ../AmbientePython3
 source ../AmbientePython3/bin/activate
 
 # Instala o MySQL
-sudo apt install mysql-server
-sudo apt install mysql-client-core-8.0
+sudo apt install -y mysql-server
+
+sudo apt install -y debconf-utils
+# Define a senha do MySQL para o pacote mysql-server-8.0
+sudo debconf-set-selections <<< 'mysql-server-8.0 mysql-server/root_password password ' $DB_PASS
+sudo debconf-set-selections <<< 'mysql-server-8.0 mysql-server/root_password_again password ' $DB_PASS
+
+# Atualiza a lista de pacotes
+sudo apt-get update
+
+# Instala o pacote mysql-client-core-8.0
+sudo apt install -y mysql-client-core-8.0
 
 # Inicia o serviço do MySQL
 sudo systemctl start mysql
