@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# SCRIPT CRIADO UTILIZANDO UBUNTU 20.04 EM 2023-04-18
+# SCRIPT CRIADO EM 2023-04-18 UTILIZANDO
+# UBUNTU 20.04
+# Django 4.2
+# python 3.8
+# cv2 3.4.18.65 (precisa alterar código para usar 4.7)
+# e vários outros de requirements-titan256GB.txt
 # rodei esse script como sudo: sudo su
 
 # se ainda nao fez, baixar o mctest da pasta, mudando fz pelo seu login
