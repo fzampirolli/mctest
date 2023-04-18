@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: DB_MCTest
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ufabc12345
+      MYSQL_ROOT_PASSWORD: ufabc12345
+      TZ: 'America/Sao_Paulo'
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: DB_MCTest
+      DB_USER: root
+      DB_PASSWORD: ufabc12345
+      DB_PORT: 3306
+
+volumes:
+  db_data:

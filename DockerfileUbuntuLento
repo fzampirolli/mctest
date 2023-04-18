@@ -1,0 +1,29 @@
+# Defina a imagem base
+FROM ubuntu:20.04
+
+# Atualiza os pacotes do Ubuntu
+RUN apt-get update && apt-get upgrade -y
+
+# Instala o Python e as ferramentas de desenvolvimento
+RUN apt-get install -y python3.8 python3-pip python3-dev build-essential
+
+# Instala o MySQL
+RUN apt-get install -y mysql-server mysql-client
+
+# Cria um banco de dados e concede privilégios ao usuário
+RUN service mysql start && mysql -u root -e "CREATE DATABASE DB_MCTest;" && mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'ufabc12345 WITH GRANT OPTION;"
+
+# Copia os arquivos do projeto Django para a imagem
+COPY . /app
+WORKDIR /app
+
+# Instala as dependências do projeto Django
+RUN pip3 install -r requirements-titan256GB.txt
+
+# Expõe a porta do serviço
+EXPOSE 8001
+
+# Inicia o serviço
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8001"]
+
+
