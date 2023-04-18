@@ -34,7 +34,7 @@ sudo apt install -y zbar-tools
 sudo apt install -y texlive-science
 sudo apt install -y libzbar-dev
 
-# NÃO MUDAR O USER DO BD
+# NÃO MUDAR O USER 'root' DO BD
 cp _settings.env ../
 source ../_settings.env
 
@@ -60,9 +60,6 @@ sudo apt install -y mysql-client-core-8.0
 # Inicia o serviço do MySQL
 sudo systemctl start mysql
 
-cp _settings.env ../
-source ../_settings.env
-
 # Cria banco de dados e concede privilégios ao root
 sudo mysql -u root << EOF
 GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost' WITH GRANT OPTION;
@@ -83,7 +80,12 @@ default-character-set = utf8' >>/etc/mysql/my.cnf
 sudo systemctl daemon-reload
 sudo systemctl restart mysql
 
-# Executa o script SQL no um banco de dados de exemplo
+# Executa o script SQL de um banco de dados exemplo com a senha 'ufabc12345' para '
+# fzampirolli@ufabc.edu.br
+# fzcoord@ufabc.edu.br
+# fzprof@ufabc.edu.br
+# fzstudent@ufabc.edu.br
+
 #mysqldump --no-defaults -u root -p DB_MCTest -h localhost > mctest.sql
 sudo mysql -u root -p $DB_NAME < mctest.sql
 
