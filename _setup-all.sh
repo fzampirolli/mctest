@@ -10,7 +10,7 @@
 
 # ou usando pip:
 # python setup.py sdist bdist_wheel
-# pip install dist/mctest-1.0.0.tar.gz
+# pip install dist/mctest-5.2.tar.gz # isso está com BUG ainda
 
 # se ainda nao fez, baixar o mctest da pasta, mudando fz pelo seu login
 mkdir /home/fz/PycharmProjects/
@@ -47,11 +47,7 @@ source ../AmbientePython3/bin/activate
 
 # Instala o MySQL
 sudo apt install -y mysql-server
-
-sudo apt install -y debconf-utils
-# Define a senha do MySQL para o pacote mysql-server-8.0
-sudo debconf-set-selections <<< 'mysql-server-8.0 mysql-server/root_password password ' $DB_PASS
-sudo debconf-set-selections <<< 'mysql-server-8.0 mysql-server/root_password_again password ' $DB_PASS
+sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$DB_PASS';"
 
 # Atualiza a lista de pacotes
 sudo apt-get update

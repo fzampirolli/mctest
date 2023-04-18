@@ -3,7 +3,7 @@ import subprocess
 from setuptools import setup
 
 # Executa o script shell
-subprocess.call(['./_setup-all.sh'])
+subprocess.call(['/bin/bash', './_setup-all.sh'])
 
 setup(
     name='mctest',
