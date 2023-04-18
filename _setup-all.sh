@@ -80,7 +80,7 @@ default-character-set = utf8' >>/etc/mysql/my.cnf
 sudo systemctl daemon-reload
 sudo systemctl restart mysql
 
-# Executa o script SQL de um banco de dados exemplo com a senha 'ufabc12345' para '
+# Executa o script SQL de um banco de dados exemplo com a senha 'ufabc12345' para:
 # fzampirolli@ufabc.edu.br
 # fzcoord@ufabc.edu.br
 # fzprof@ufabc.edu.br
