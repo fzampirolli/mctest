@@ -7,7 +7,12 @@
 # e vários outros de requirements-titan256GB.txt
 # rodar esse script como sudo: sudo su
 
-# rodar: source ./_setup-all.sh
+# fazer download do arquivo de configuração
+wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
+
+# rodar:
+source ./_setup-all.sh
+
 # quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
 
 # ou usando pip:
@@ -19,8 +24,8 @@ mkdir /home/fz/PycharmProjects/
 cd /home/fz/PycharmProjects/
 
 # se ainda nao fez download:
-#sudo apt install -y git
-#git clone https://github.com/fzampirolli/mctest.git
+sudo apt install -y git
+git clone https://github.com/fzampirolli/mctest.git
 
 cd mctest
 
@@ -42,7 +47,7 @@ source ../_settings.env
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y python3.8 python3-dev idle3 python3-pip default-libmysqlclient-dev build-essential
 
-# Instala virtualenv
+# Instala e entra em virtualenv
 sudo apt install -y virtualenv
 virtualenv -p python3.8 ../AmbientePython3
 source ../AmbientePython3/bin/activate
@@ -86,7 +91,7 @@ sudo systemctl restart mysql
 # fzprof@ufabc.edu.br
 # fzstudent@ufabc.edu.br
 # mysqldump --no-defaults -u root -p DB_MCTest -h localhost > mctest.sql
-sudo mysql -u root -p $DB_NAME < mctest.sql
+sudo mysql -u root $DB_NAME < mctest.sql
 
 pip install -r requirements-titan256GB.txt
 
