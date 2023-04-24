@@ -11,7 +11,7 @@
 wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
 
 # rodar:
-source ./_setup-all.sh
+source _setup-all.sh
 
 # quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
 
