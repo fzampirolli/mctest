@@ -2,16 +2,16 @@
 # SCRIPT CRIADO EM 2023-04-18 UTILIZANDO
 # UBUNTU 20.04
 # Django 4.2
-# python 3.8
+# python 3
 # cv2 3.4.18.65 (precisa alterar código para usar 4.7)
 # e vários outros de requirements-titan256GB.txt
 # rodar esse script como sudo: sudo su
 
 # fazer download do arquivo de configuração
-wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
+# wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
 
 # rodar:
-source _setup-all.sh
+# source _setup-all.sh
 
 # quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
 
@@ -41,20 +41,20 @@ sudo apt install -y libzbar-dev
 
 # NÃO MUDAR O USER 'root' DO BD
 cp _settings.env ../
-source ../_settings.env
+source _settings.env
 
-# Instala o python3.8
+# Instala o python3
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y python3.8 python3-dev idle3 python3-pip default-libmysqlclient-dev build-essential
+sudo apt install -y python3 python3-dev idle3 python3-pip default-libmysqlclient-dev build-essential
 
 # Instala e entra em virtualenv
 sudo apt install -y virtualenv
-virtualenv -p python3.8 ../AmbientePython3
+virtualenv -p python3 ../AmbientePython3
 source ../AmbientePython3/bin/activate
 
 # Instala o MySQL
 sudo apt install -y mysql-server
-sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$DB_PASS';"
+#sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$DB_PASS';"
 
 # Atualiza a lista de pacotes
 sudo apt-get update
