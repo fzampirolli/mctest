@@ -29,6 +29,18 @@ git clone https://github.com/fzampirolli/mctest.git
 
 cd mctest
 
+mkdir tmp
+mkdir tmp/imgs180days
+mkdir tmpGAB
+mkdir pdfExam
+mkdir pdfQuestion
+mkdir pdfTopic
+mkdir pdfStudentEmail
+mkdir /backup
+mkdir /backup/json
+mkdir /backup/mysql
+mkdir /backup/tmpGAB
+
 # instala alguns pacotes com apt
 #sudo snap install emacs --classic
 sudo apt install -y texlive-extra-utils
