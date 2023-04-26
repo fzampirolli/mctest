@@ -1,6 +1,6 @@
 #!/bin/bash
 # SCRIPT CRIADO EM 2023-04-18 UTILIZANDO
-# UBUNTU 20.04
+# UBUNTU >= 20.04
 # Django 4.2
 # python 3
 # cv2 3.4.18.65 (precisa alterar código para usar 4.7)
@@ -51,9 +51,11 @@ sudo apt install -y texlive-extra-utils
 sudo apt install -y texlive-pictures
 sudo apt install -y texlive-font-utils
 sudo apt install -y texlive-latex-extra
+sudo apt install -y texlive-lang-portuguese
 sudo apt install -y zbar-tools
 sudo apt install -y texlive-science
 sudo apt install -y libzbar-dev
+sudo texhash
 
 # NÃO MUDAR O USER 'root' DO BD
 cp _settings.env ../
@@ -114,6 +116,9 @@ sudo systemctl restart mysql
 # mysqldump --no-defaults -u root -p DB_MCTest -h localhost > mctest.sql
 sudo mysql -u root $DB_NAME < mctest.sql
 
+pip install -r requirements-titan256GB.txt
+
+# se ocorreu algum erro no comando anterior, no ubuntu 23.04:
 pip install --upgrade pip setuptools
 pip install scikit-image
 pip install django==4.2
@@ -132,7 +137,6 @@ pip install img2pdf
 pip install pandas
 pip install pdf2image
 pip install pyzbar
-pip install -r requirements-titan256GB.txt
 
 cp crontabDjango.sh ../
 cp runDjango.sh ../
