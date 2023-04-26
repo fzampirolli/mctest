@@ -44,19 +44,6 @@ mkdir /backup/json
 mkdir /backup/mysql
 mkdir /backup/tmpGAB
 
-# instala alguns pacotes com apt
-#sudo snap install emacs --classic
-sudo apt install -y textlive-full
-sudo apt install -y texlive-extra-utils
-sudo apt install -y texlive-pictures
-sudo apt install -y texlive-font-utils
-sudo apt install -y texlive-latex-extra
-sudo apt install -y texlive-lang-portuguese
-sudo apt install -y zbar-tools
-sudo apt install -y texlive-science
-sudo apt install -y libzbar-dev
-sudo texhash
-
 # NÃO MUDAR O USER 'root' DO BD
 cp _settings.env ../
 source _settings.env
@@ -118,7 +105,7 @@ sudo mysql -u root $DB_NAME < mctest.sql
 
 pip install -r requirements-titan256GB.txt
 
-# se ocorreu algum erro no comando anterior, no ubuntu 23.04:
+# se ocorreu algum erro no comando anterior (no ubuntu 23.04):
 pip install --upgrade pip setuptools
 pip install scikit-image
 pip install django==4.2
@@ -137,6 +124,19 @@ pip install img2pdf
 pip install pandas
 pip install pdf2image
 pip install pyzbar
+
+# instala mais alguns pacotes com apt
+#sudo snap install emacs --classic
+sudo apt install -y textlive-full
+sudo apt install -y texlive-extra-utils
+sudo apt install -y texlive-pictures
+sudo apt install -y texlive-font-utils
+sudo apt install -y texlive-latex-extra
+sudo apt install -y texlive-lang-portuguese
+sudo apt install -y zbar-tools
+sudo apt install -y texlive-science
+sudo apt install -y libzbar-dev
+sudo texhash
 
 cp crontabDjango.sh ../
 cp runDjango.sh ../
