@@ -46,6 +46,7 @@ mkdir /backup/tmpGAB
 
 # instala alguns pacotes com apt
 #sudo snap install emacs --classic
+sudo apt install -y textlive-full
 sudo apt install -y texlive-extra-utils
 sudo apt install -y texlive-pictures
 sudo apt install -y texlive-font-utils
@@ -60,7 +61,12 @@ source _settings.env
 
 # Instala o python3
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y python3 python3-dev idle3 python3-pip default-libmysqlclient-dev build-essential
+sudo apt install -y python3
+sudo apt install -y python3-dev
+sudo apt install -y python3-pip
+sudo apt install -y idle3
+sudo apt install -y default-libmysqlclient-dev
+sudo apt install -y build-essential
 
 # Instala e entra em virtualenv
 sudo apt install -y virtualenv
@@ -108,6 +114,24 @@ sudo systemctl restart mysql
 # mysqldump --no-defaults -u root -p DB_MCTest -h localhost > mctest.sql
 sudo mysql -u root $DB_NAME < mctest.sql
 
+pip install --upgrade pip setuptools
+pip install scikit-image
+pip install django==4.2
+pip install python-dotenv
+pip install django-widget-tweaks
+pip install django-extensions
+pip install django-import-export
+pip install mysqlclient
+pip install bcrypt
+pip install pyqrcode
+pip install matplotlib
+pip install python-decouple
+pip install pypdf2
+pip install opencv-python==3.4.18.65
+pip install img2pdf
+pip install pandas
+pip install pdf2image
+pip install pyzbar
 pip install -r requirements-titan256GB.txt
 
 cp crontabDjango.sh ../
