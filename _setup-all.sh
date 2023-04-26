@@ -10,6 +10,9 @@
 # fazer download do arquivo de configuração
 # wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
 
+# configurar teclado:
+# setxkbmap -model abnt -layout us -variant intl
+
 # rodar:
 # source _setup-all.sh
 
