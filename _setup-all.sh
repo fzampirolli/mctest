@@ -1,22 +1,26 @@
 #!/bin/bash
-# SCRIPT CRIADO EM 2023-04-18 UTILIZANDO
+
+# SCRIPT CRIADO EM 2023-04-26 UTILIZANDO
+
 # UBUNTU >= 20.04
+# Mint >= 21 Mate
 # Django 4.2
 # python 3
 # cv2 3.4.18.65 (precisa alterar código para usar 4.7)
 # e vários outros de requirements-titan256GB.txt
+
 # rodar esse script como sudo: sudo su
 
 # fazer download do arquivo de configuração
 # wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
 
-# configurar teclado:
+# configurar teclado sem "ç":
 # setxkbmap -model abnt -layout us -variant intl
 
 # rodar:
 # source _setup-all.sh
 
-# quando pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
+# se pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
 
 # ou usando pip:
 # python setup.py sdist bdist_wheel
@@ -105,7 +109,7 @@ sudo mysql -u root $DB_NAME < mctest.sql
 
 pip install -r requirements-titan256GB.txt
 
-# se ocorreu algum erro no comando anterior (no ubuntu 23.04):
+# se ocorrer algum erro no comando anterior (no ubuntu 23.04):
 pip install --upgrade pip setuptools
 pip install scikit-image
 pip install django==4.2
@@ -124,6 +128,7 @@ pip install img2pdf
 pip install pandas
 pip install pdf2image
 pip install pyzbar
+pip install --upgrade pip setuptools
 
 # instala mais alguns pacotes com apt
 #sudo snap install emacs --classic
@@ -142,4 +147,3 @@ cp crontabDjango.sh ../
 cp runDjango.sh ../
 
 source ../runDjango.sh
-
