@@ -12,7 +12,7 @@ for some [examples](http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/).
 
 #### Help us spread MCTest. If more people use it, the faster the improvements.
 
-MCTest must be installed on an Ubuntu 18.04 server through ports 3306 and 8000.
+MCTest must be installed on an Ubuntu 20.04 server through ports 3306 and 8000.
 
 Define specific data in the file [_settings.env](_settings.env).
 
