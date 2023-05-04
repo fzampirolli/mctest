@@ -111,7 +111,7 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 
 
 ##### MCTest 5.3
-* Questions with skills in linker.json by FT, Irineu, Paulo, Wagner
-* Table test skill by FT 
+* Questions with skills in linker.json by Teubl, Irineu, Paulo, Wagner
+* Table test skill by Teubl 
 * Hash with full name 
 * MUDAR PARA INCIAR COM A VARIAÇÃO 0
