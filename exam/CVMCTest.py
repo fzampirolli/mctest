@@ -553,7 +553,7 @@ class cvMCTest(object):
             y2, x2 = aux[3]
             [p1, p2] = [[min(x1, x2), min(y1, y2)], [max(x1, x2), max(y1, y2)]]
             ptSort.append([p1, p2])
-            pc = int(p1[1] / 30) + W * np.int(p1[0] / 30)  # raster order
+            pc = int(p1[1] / 30) + W * int(p1[0] / 30)  # raster order
             pt.append(pc)
 
         pto = np.argsort(pt)
