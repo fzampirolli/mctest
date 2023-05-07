@@ -6,7 +6,14 @@
 # Mint >= 21 Mate
 # Django 4.2
 # python 3
-# cv2 3.4.18.65 (precisa alterar código para usar 4.7)
+
+# cv2 3.4.18.65 - precisa alterar código para usar 4.7:
+# pip uninstall opencv-python
+# pip install opencv-python
+# repassar todos as ocorrencias de findContours:
+#(_, contours, _) = cv2.findContours(
+#(contours, _) = cv2.findContours(
+
 # e vários outros de requirements-titan256GB.txt
 
 # rodar esse script como sudo: sudo su
@@ -128,6 +135,8 @@ pip install img2pdf
 pip install pandas
 pip install pdf2image
 pip install pyzbar
+pip install arviz
+pip install pymc3
 pip install --upgrade pip setuptools
 
 # instala mais alguns pacotes com apt
