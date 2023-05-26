@@ -870,6 +870,8 @@ def correctStudentsExam(request, pk):
 
             # IRT - end
 
+            #
+
             myfiles = []
             for f in np.sort(glob.glob(MYFILES + "_RETURN_*.png")):
                 myfiles.append(f)
@@ -900,6 +902,8 @@ def correctStudentsExam(request, pk):
             pass
         except Exception as e:
             pass
+
+
 
     return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
 
