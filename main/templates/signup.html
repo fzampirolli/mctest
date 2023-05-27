@@ -12,6 +12,8 @@
 
                         <hr>
                         <h2>{% trans "Sign up" %}</h2>
+                        <br>{% trans "It is necessary to use the institutional email, as stated in the institution's registration." %}<br>
+                        {% trans "For example, user@ufabc.edu.br is valid, while user@aluno.ufabc.edu.br is invalid." %}</p>
                         <form method="post">
                             {% csrf_token %}
                             {% for field in form %}
