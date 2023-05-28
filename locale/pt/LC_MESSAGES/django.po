@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-27 16:49-0300\n"
+"POT-Creation-Date: 2023-05-28 07:48-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2126,7 +2126,7 @@ msgstr "ExamUpdate: o professor não está registrado na disciplina"
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
-#: main/templates/According.html:10 main/templates/signup.html:35
+#: main/templates/According.html:10 main/templates/signup.html:36
 #: topic/templates/question/question_confirm_delete.html:32
 #: topic/templates/question/question_create.html:91
 #: topic/templates/question/question_update.html:151
@@ -2262,7 +2262,7 @@ msgid "Login"
 msgstr "Entrar"
 
 #: main/templates/base_generic.html:176 main/templates/signup.html:11
-#: main/templates/signup.html:14 main/templates/signup.html:36
+#: main/templates/signup.html:14 main/templates/signup.html:37
 msgid "Sign up"
 msgstr "Inscrever"
 
@@ -3142,6 +3142,10 @@ msgstr ""
 "Parametrizadas"
 
 #: main/templates/signup.html:15
+msgid "Only teachers can register for this service."
+msgstr "Somente professores podem se inscrever neste serviço."
+
+#: main/templates/signup.html:16
 msgid ""
 "It is necessary to use the institutional email, as stated in the "
 "institution's registration."
@@ -3149,7 +3153,7 @@ msgstr ""
 "É necessário utilizar o e-mail institucional, conforme informado no cadastro "
 "da instituição."
 
-#: main/templates/signup.html:16
+#: main/templates/signup.html:17
 msgid ""
 "For example, user@ufabc.edu.br is valid, while user@aluno.ufabc.edu.br is "
 "invalid."
