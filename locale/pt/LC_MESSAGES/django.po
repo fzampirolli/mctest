@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-28 07:48-0300\n"
+"POT-Creation-Date: 2023-06-16 19:20-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2337,6 +2337,30 @@ msgstr "LEIA-ME"
 #: main/templates/base_generic.html:610
 msgid "Grant"
 msgstr "Apoio"
+
+#: main/templates/compareTexts.html:9 main/templates/compareTexts0.html:9
+msgid "Text comparison"
+msgstr "Comparação de Textos"
+
+#: main/templates/compareTexts.html:128
+msgid "Enter two texts to compare, with the same number of lines:"
+msgstr "Entre com dois textos, com o mesmo número de linhas:"
+
+#: main/templates/compareTexts.html:133 main/templates/compareTexts0.html:106
+msgid "Text compare"
+msgstr "Comparar textos"
+
+#: main/templates/compareTexts.html:134 main/templates/compareTexts0.html:107
+msgid "Text inverter"
+msgstr "Inverter textos"
+
+#: main/templates/compareTexts.html:136 main/templates/compareTexts0.html:109
+msgid "Number of differences = "
+msgstr "Número de diferenças = "
+
+#: main/templates/compareTexts.html:137 main/templates/compareTexts0.html:110
+msgid "Compared Text:"
+msgstr "Textos Comparados"
 
 #: main/templates/contributors.html:10
 msgid "Contributors"
