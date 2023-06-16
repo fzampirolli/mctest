@@ -1,0 +1,117 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Text comparison" %}</h5>
+
+                <hr>
+
+                <style>
+                    /* Definir o tamanho e a posição das caixas de texto */
+                    textarea {
+                        display: inline-block; /* exibir as caixas lado a lado */
+                        width: 45%;
+                        height: 200px; /* 10 linhas de altura */
+                    }
+
+                    /* Centralizar o botão */
+                    button {
+                        margin: 0 auto;
+                    }
+
+                    /* Definir um estilo para a saída */
+                    #saida {
+                        white-space: pre-wrap; /* permitir quebras de linha na saída */
+                        font-family: monospace; /* usar uma fonte de largura fixa para preservar o espaçamento */
+                    }
+                </style>
+
+
+                <script>
+                    function showDifference(word1, word2) {
+                        var diff = "";
+
+                        for (var i = 0; i < word1.length; i++) {
+                            if (word1[i] === word2[i]) {
+                                diff += word1[i];
+                            } else {
+                                diff += "<span style='color: red;'>" + word1[i] + "</span>";
+                                diff += "<span style='color: green;'>" + word2[i] + "</span>";
+                            }
+                        }
+
+                        return diff;
+                    }
+
+                    function compararTextos() {
+                        // Obter os elementos de texto de entrada
+                        var texto1 = document.getElementById("texto1").value;
+                        var texto2 = document.getElementById("texto2").value;
+
+                        // Dividir o texto em linhas
+                        var linhas1 = texto1.split("\n");
+                        var linhas2 = texto2.split("\n");
+                        var erros = 0;
+
+                        // Inicializar a string de saída
+                        var saida = "";
+
+                        if (linhas1.length !== linhas2.length) {
+                            saida += "<span style='background-color: yellow;'>Número de linhas são diferentes!!!</span>";
+                        } else {
+                            for (var l = 0; l < linhas1.length; l++) {
+                                if (linhas1[l] === linhas2[l]) {
+                                    saida += linhas1[l];
+                                } else {
+                                    var palavras1 = linhas1[l].split(" ");
+                                    var palavras2 = linhas2[l].split(" ");
+                                    for (var i = 0; i < palavras1.length; i++) {
+                                        if (palavras1[i] === palavras2[i]) {
+                                            saida += palavras1[i] + " ";
+                                        } else {
+                                            saida += showDifference(palavras1[i], palavras2[i]);
+                                            erros++;
+                                        }
+                                    }
+                                }
+                                saida += "<br>";
+                            }
+                        }
+                        // Definir a saída no elemento de exibição
+                        document.getElementById("erros").innerHTML = "<span style='background-color: red;'>" + erros + "</span> ";
+                        document.getElementById("saida").innerHTML = saida;
+                    }
+
+                    function inverterTextos() {
+                        // Obter os elementos de texto de entrada
+                        var texto1 = document.getElementById("texto1").value;
+                        var texto2 = document.getElementById("texto2").value;
+
+                        // Trocar o conteúdo das caixas de texto
+                        document.getElementById("texto1").value = texto2;
+                        document.getElementById("texto2").value = texto1;
+                    }
+
+                </script>
+
+                <p>Enter two texts to compare, with the same number of lines:</p>
+                <textarea id="texto1"></textarea>
+                <textarea id="texto2"></textarea>
+
+                <p>
+                    <button onclick="compararTextos()">{% trans "Text compare" %}</button>
+                    <button onclick="inverterTextos()">{% trans "Text inverter" %}</button>
+                </p>
+                <p>{% trans "Number of differences = " %}<span id="erros"></span></p>
+                <p><strong>{% trans "Compared Text:" %}</strong></p>
+
+                <div id="saida"></div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
