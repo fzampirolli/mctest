@@ -50,6 +50,7 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('compare', views.compare, name='compareTexts'),
     path('readme', views.readme, name='readme'),
     path('license', views.license, name='license'),
     path('contributors', views.contributors, name='contributors'),

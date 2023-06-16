@@ -35,6 +35,9 @@ def users(request):
 def readme(request):
     return render(request, 'readme.html', {})
 
+def compare(request):
+    return render(request, 'compareTexts.html', {})
+
 
 def license(request):
     return render(request, 'license.html', {})
