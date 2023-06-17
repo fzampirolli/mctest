@@ -19,8 +19,13 @@
                         background-color: #fac;
                     }
 
+                    .erros {
+                        background-color: #fac;
+                        font-size: 22px;
+                    }
+
                     .removed {
-                        background-color: #cfc;
+                        background-color: #8f8;
                     }
 
                     .added-space {
@@ -34,14 +39,10 @@
                     /* Definir o tamanho e a posição das caixas de texto */
                     textarea {
                         display: inline-block; /* exibir as caixas lado a lado */
-                        width: 45%;
-                        height: 300px; /* 10 linhas de altura */
+                        width: 49.5%;
+                        height: 330px; /* 10 linhas de altura */
                     }
 
-                    /* Centralizar o botão */
-                    button {
-                        margin: 0 auto;
-                    }
 
                     /* Definir um estilo para a saída */
                     #saida {
@@ -77,17 +78,6 @@
                         document.getElementById("texto2").value = texto1;
                     }
 
-                    function getSpaces(text) {
-                        // encontra os índices de espaços em branco em um texto
-                        var spaces = [];
-                        var match;
-                        var re = /\s/g;
-                        while ((match = re.exec(text))) {
-                            spaces.push(match.index);
-                        }
-                        return spaces;
-                    }
-
                     function compararTextos() {
                         // Obter os elementos de texto de entrada
                         var texto1 = document.getElementById("texto1").value;
@@ -120,7 +110,7 @@
                             output += "<span class='" + color + "'>" + partValue + "</span>";
                         });
 
-                        document.getElementById("erros").innerHTML = "<span class='added'>" + erros + "</span> ";
+                        document.getElementById("erros").innerHTML = "<span class='erros'>" + erros + "</span> ";
                         document.getElementById("saida").innerHTML = output;
                     }
                 </script>
@@ -132,9 +122,8 @@
                 <p>
                     <button onclick="compararTextos()">{% trans "Text compare" %}</button>
                     <button onclick="inverterTextos()">{% trans "Text inverter" %}</button>
+                    {% trans "Number of differences = " %}<span id="erros"></span>
                 </p>
-                <p>{% trans "Number of differences = " %}<span id="erros"></span></p>
-                <p><strong>{% trans "Compared Text:" %}</strong></p>
 
                 <pre id="saida"></pre>
 
