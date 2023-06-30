@@ -166,7 +166,11 @@ class UtilsMC(object):
         myDef = UtilsMC.get_code(mystr, 'def')
 
         if myDef is not None:  # spend more time
-            exec('\n'.join(myDef))  # run the algorithm and variables
+            try:
+                exec('\n'.join(myDef))  # run the algorithm and variables
+            except Exception as e:
+                e = str(e).replace('<','$<$').replace('>','$>$')
+                return [f"ERROR in [[def: ... ]]: {e}", ""]
         else:
             return ["", AllLines]
 
@@ -176,7 +180,11 @@ class UtilsMC(object):
         tam = len(AllLines)
         while i < tam:
             for j in arg:
-                AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
+                try:
+                    AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
+                except Exception as e:
+                    e = str(e).replace('<', '$<$').replace('>', '$>$')
+                    return [f"ERROR in [[code: ... ]]: {e} {j}", ""]
             if i >= len(AllLines) or AllLines[i].find("[[def:") > -1:
                 tam = i
                 break
