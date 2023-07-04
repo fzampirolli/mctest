@@ -172,7 +172,7 @@ class UtilsMC(object):
                 e = str(e).replace('<','$<$').replace('>','$>$')
                 return [f"ERROR in [[def: ... ]]: {e}", ""]
         else:
-            return ["", AllLines]
+            return ["ERROR", "ERROR"]
 
         arg = UtilsMC.get_code(question, 'code')  # get the args in text
 
