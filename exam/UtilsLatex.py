@@ -46,6 +46,8 @@ from django.http import HttpResponse
 # coding=UTF-8
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import get_object_or_404, render
+
 
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
@@ -338,7 +340,7 @@ class Utils(object):
                 strQuestions = Utils.drawCircles()
                 strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
                                                 data_hora)
-                strQuestions += Utils.drawAnswerSheet(exam)
+                strQuestions += Utils.drawAnswerSheet(request, exam)
                 strQuestions += Utils.drawCircles()
                 strQuestions += Utils.drawInstructions(exam)
                 try:
@@ -1045,7 +1047,7 @@ _inst1_
         return int(numQuestoes)
 
     @staticmethod
-    def drawAnswerSheet(exam):
+    def drawAnswerSheet(request, exam):
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
         numQT = int(exam.exam_number_of_questions_text)
         numQuestoes = 0
@@ -1067,7 +1069,8 @@ _inst1_
                 numQuadros += 1
 
                 if numResto < 3:
-                    return HttpResponse("ERROR: Each block must have at least 3 questions/answers")
+                    messages.error(request, _("ERROR: Each block must have at least 3 questions/answers"))
+                    return render(request, 'exam/exam_errors.html', {})
 
             if numQuadros == 0:
                 numQuadros += 1

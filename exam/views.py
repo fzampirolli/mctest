@@ -769,7 +769,7 @@ def correctStudentsExam(request, pk):
             ### log end
 
             ### IRT begin
-            if exam.exam_print in ['both']: # não é somente quadro de respostas
+            if exam.exam_print in ['both']:  # não é somente quadro de respostas
                 try:
                     M = int(Utils.getNumMCQuestions(exam))  # Number of questions
                     X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
@@ -829,7 +829,7 @@ def correctStudentsExam(request, pk):
                 except:
                     messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
 
-            else: # exames sem chaves - primeira página é o gabarito
+            else:  # exames sem chaves - primeira página é o gabarito
                 try:
                     M = int(Utils.getNumMCQuestions(exam))  # Number of questions
                     X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
@@ -844,8 +844,8 @@ def correctStudentsExam(request, pk):
                             if len(str(s).split()[0]) == 1:
                                 dados[n][int(q[1:]) - 1] = 1
                     N -= 1
-                    dados = np.delete(dados, 0, 0) # remove primeira linha com o gabarito
-                                
+                    dados = np.delete(dados, 0, 0)  # remove primeira linha com o gabarito
+
                     with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
                         f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
                         media_colunas = np.mean(dados, axis=0)
@@ -853,8 +853,9 @@ def correctStudentsExam(request, pk):
                         acertos = np.sum(dados, axis=0)
                         erros = N - np.sum(dados, axis=0)
                         for i in range(len(dados[0])):
-                            a,e,m,s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
-                            f.write(f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                            a, e, m, s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
+                            f.write(
+                                f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
                         f.close()
 
                     with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
@@ -888,22 +889,20 @@ def correctStudentsExam(request, pk):
         try:
             # os.remove("{}.pdf".format(BASE_DIR + "/" + file[:-4]))
 
-            #from datetime import datetime
-            #data = datetime.today().strftime('%Y-%m-%d')
-            #hora = datetime.now().time().strftime('%H-%M%s')
+            # from datetime import datetime
+            # data = datetime.today().strftime('%Y-%m-%d')
+            # hora = datetime.now().time().strftime('%H-%M%s')
             data_hora = datetime.datetime.now()
             data_hora = str(data_hora).split('.')[0].replace(' ', '-')
             os.system(f"mv {filename[:-4]}.pdf tmp/{filename[:-4]}-{data_hora}.pdf")
             os.system(f"mv {filename[:-4]}.csv tmp/{filename[:-4]}-{data_hora}.csv")
-            #os.remove("{}.csv".format(BASE_DIR + "/" + file[:-4]))
+            # os.remove("{}.csv".format(BASE_DIR + "/" + file[:-4]))
             os.system("rm " + MYFILES + "/*.png")
             if fzip[-3:] == 'zip':
                 os.system("rm " + MYFILES + "_RETURN__.csv")
             pass
         except Exception as e:
             pass
-
-
 
     return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
 
@@ -986,7 +985,8 @@ def generate_page(request, pk):
         for message in storage:
             return render(request, 'exam/exam_errors.html', {})
 
-        strAnswerSheet = Utils.drawAnswerSheet(exam)
+        strAnswerSheet = Utils.drawAnswerSheet(request, exam)
+
         strCircles = Utils.drawCircles()
         strInstructions = Utils.drawInstructions(exam)
 

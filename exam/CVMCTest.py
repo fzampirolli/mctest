@@ -1308,7 +1308,7 @@ class cvMCTest(object):
         coresp = []
 
         try:
-            student = Student.objects.filter(student_ID=int(qr['idStudent']))
+            student = Student.objects.filter(student_ID=qr['idStudent'])
             for s in StudentExam.objects.filter(exam=qr['idExam']).filter(student=student[0]): s.delete()
             # print(qr)
             studentExam = StudentExam.objects.create(
@@ -1451,7 +1451,7 @@ class cvMCTest(object):
                             if len(respostas[countQuestions]) == 3:
                                 lin = int(p1[0] - 13 + 28.6 * (notas.index(respostas[countQuestions][2]) + 1))
                                 if lin < p2[0]:
-                                    cv2.circle(img, (col, lin), 11, (255, 0, 255), 2)
+                                    cv2.circle(img, (col, lin+5), 11, (255, 0, 255), 2)
                         except:
                             pass
                     countQuestions += 1
@@ -1478,7 +1478,7 @@ class cvMCTest(object):
             with open(f, 'w') as csvfile:
                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                 print(f + ' criado no HD')
-                L1 = ['Pag', 'ID', 'Resp', 'Quest', 'Inv', 'Nota']
+                L1 = ['Pag', 'ID', 'Resp', 'Quest', 'Inv', 'Grade']
 
                 try: # add in 31/3/2023
                     i = int(qr['correct'][0])  # se for inteiro entao tem questoes no BD
@@ -1527,7 +1527,7 @@ class cvMCTest(object):
     def studentSendEmail(qr):  # gera pdf de feedback p/c/ aluno
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
         try:
-            s = Student.objects.filter(student_ID=int(qr['idStudent']))[0]
+            s = Student.objects.filter(student_ID=qr['idStudent'])[0]
         except:
             return ""
 
@@ -1536,7 +1536,12 @@ class cvMCTest(object):
         str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("ID"), s.student_ID)
         str1 += "\\noindent\\textbf{%s:} %s \n\n \\vspace{0mm} \n" % (_("Email"), s.student_email)
 
-        sex = StudentExam.objects.filter(exam=qr['idExam']).filter(student=s)[0]
+        try:
+            sex0 = StudentExam.objects.filter(exam=qr['idExam'])
+            sex = sex0.filter(student=s)
+            sex = sex[0]
+        except:
+            return ""
 
         if sex:
             str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("Grade"), str(sex.grade))
