@@ -38,37 +38,40 @@ def PT_BR(my_value):
 
 def drawMatrix(A, myfile):
     """
-    :param A: matrix
-    :param myfile: name of the file defined in [[def: ... ]]
-    :return: file in server
-    Author: Francisco Zampirolli
-    Date: november 2021
+    Desenha uma representação visual de uma matriz e salva a imagem em um arquivo.
+    Exemplo de uso:
+    No enunciado da questão, desenhe a seguinte figura
+    (copie o código abaixo para uma nova questão):
+    \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.55]{[[code:f"./tmp/imgs180days/{pathGraficoA}"]]}
+    \end{figure}
 
-      ex:
-        In the description of the question, draw this picture with (copy below for a new question):
-        \begin{figure}[h!]
-        \centering{
-          \includegraphics[scale=0.55]{[[code:fig0]]} 
-        }
-        \end{figure}
-        
-        [[def:
-        Lin,Col = 4,5
-        A = np.random.randint(10, size=(Lin,Col))
-        fig0 = 'fzfigExample01(row'+str(Lin)+')(col'+str(Col)+')'
-        drawMatrix(A,fig0)
-        ]]
-    """
+    [[def:
+    import numpy as np
+    Lin, Col = 4, 5
+    A = np.random.randint(10, size=(Lin, Col))
+    # Plotagem da função
+    import hashlib
+    s =str([Lin, Col])
+    h = hashlib.md5(s.encode()) # create hash - arquivo único
+    h = str(h.hexdigest())
+    fig0 = f'fz_figExample01{Lin}_{Col}_{h}.png'
+    drawMatrix(A, fig0)
+    ]] """
     import matplotlib.pyplot as plt
+
     fig, ax = plt.subplots()
     mat = ax.imshow(A, cmap='Pastel1', interpolation='nearest')
+
     for x in range(A.shape[0]):
         for y in range(A.shape[1]):
-            ax.annotate(str(A[x, y])[0], xy=(y, x), horizontalalignment='center', verticalalignment='center')
-    plt.show()
-    fig.savefig('./tmp/' + myfile + '.png', dpi=300)
-    plt.close()
+            ax.annotate(str(A[x, y])[0], xy=(y, x), horizontalalignment='center',
+                        verticalalignment='center')
 
+    plt.show()
+    fig.savefig(f'./tmp/imgs180days/{myfile}.png', dpi=300)
+    plt.close()
 
 def printMatrix(A, title='', left='', right='', align='r', dec='3.2f'):
     """
@@ -269,7 +272,7 @@ class TesteDeMesa:
             line = re.sub(r'(float|str) *\((.*)\)', r'\2', line)  # removing other cast
 
             # Identation
-            #line = re.sub('    ', '▐ ', line)  # Always the last!
+            # line = re.sub('    ', '▐ ', line)  # Always the last!
             msg = msg + f"{count:02n}: {line}\n"
 
         return msg
@@ -497,6 +500,7 @@ class TesteDeMesa:
 
         return corrects / ((maxRows if maxRows > self.minRows and maxRows < len(self.table) else len(
             self.table)) - self.minRows), feedback
+
 
 #######################
 
