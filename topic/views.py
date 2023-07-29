@@ -257,7 +257,7 @@ def see_question_PDF(request, pk):
                     return render(request, 'exam/exam_errors.html', {})
 
             str1 += r' %s' % ''.join(quest)
-            str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\n"
+            str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\\hspace{-3mm}\n"
             for a in random.sample(ans, len(ans)):
                 if ans.index(a) == 0:
                     str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
@@ -594,7 +594,7 @@ def see_topic_PDF(request, pk):
                         # continue
 
                 str1 += r' %s\n\n' % ''.join(quest)
-                str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\n"
+                str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\\hspace{-3mm}\n"
                 for a in random.sample(ans, len(ans)):
                     if ans.index(a) == 0:
                         str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
