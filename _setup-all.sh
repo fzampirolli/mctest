@@ -23,6 +23,8 @@
 
 # configurar teclado sem "ç":
 # setxkbmap -model abnt -layout us -variant intl
+# sudo emacs -nw /etc/environment
+# incluir no final: GTK_IM_MODULE=cedilla
 
 # rodar:
 # source _setup-all.sh
