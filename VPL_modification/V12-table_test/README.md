@@ -1,11 +1,13 @@
 # MCTest + VPL Integration
-Authors:
+Autores:
 * Fernando Teubl
 * Francisco Zampirolli
 
+Teubl, F.; Zampirolli, F. A. Automated Correction for Trace Tables in a CS1 Course. In: Simpósio Brasileiro de Informática na Educação (SBIE), 2023, Passo Fundo. CBIE, 2023.
+
 1. Não usa mais o makefile para descompactar o zip. Os arquivos deste zip já estão nesta pasta.
 
-2. Criar uma atividade VPL "modelo" com todos os arquivo desta pasta. 
+2. Criar uma atividade VPL "modelo" com todos os arquivos desta pasta. 
 
 3. Ao criar uma nova atividade VPL, utilizar a opção "baseado em" para essa atividade "modelo", em "opções de execução" da atividade VPL do Moodle.
 
