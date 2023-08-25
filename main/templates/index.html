@@ -1,3 +1,4 @@
+{# base_generic.html it's the skeleton model #}
 {% extends "base_generic.html" %}
 {% load i18n %}
 {% load widget_tweaks %}
@@ -14,7 +15,7 @@
                         <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
                             <h1>{% trans "MCTest" %} v.5.2 - {% trans "development" %}</h1>
                             Versão estável, sem previsões de novas melhorias. Use somente a versão em produção: <a
-                                href="http://mctest.ufabc.edu.br">mctest</a> (BACKUP 10/09/2022).
+                                href="http://mctest.ufabc.edu.br">mctest</a> (BACKUP 08/02/2023).
                         </div>
                     </div>
                 </div>
@@ -58,10 +59,8 @@
                                 <h5>{% trans "LaTeX Command" %}</h5>
                                 <p>{% trans "A simple question with latex command" %}.
                                     {% trans "After clicking Create-PDF, see the next slide" %}
-                                    [<a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37"
-                                        style="color:#faf609">ref19a</a>;
-                                    <a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                       style="color:#faf609">ref19b</a>]
+                                    [<a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37" style="color:#faf609">ref19a</a>;
+                                    <a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -78,10 +77,8 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "LaTeX Command" %}</h5>
                                 <p>{% trans "The formulas between $ from the previous slide are presented differently" %}
-                                    [<a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37"
-                                        style="color:#faf609">ref19a</a>;
-                                    <a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                       style="color:#faf609">ref19b</a>]
+                                [<a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37" style="color:#faf609">ref19a</a>;
+                                    <a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -97,8 +94,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "LaTeX Command" %}</h5>
                                 <p>{% trans "Adding an image that is on the web" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -114,8 +110,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "LaTeX Command" %}</h5>
                                 <p>{% trans "Question with image to display on exam" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -131,8 +126,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Exam Style" %}</h5>
                                 <p>{% trans "Exam only with answers (in the correction, the template is the first page of the PDF)" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -148,8 +142,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Exam Style - Vertical" %}</h5>
                                 <p>{% trans "Exam only with answers (in the correction, the template is the first page of the PDF)" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -165,8 +158,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Exam Style" %}</h5>
                                 <p>{% trans "Q&A (the correct answer can be found with '#0' in the PDF, details in yellow)" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -182,8 +174,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Part I" %}</h5>
                                 <p>{% trans "In the description, we have python code between '[[code:' and ']]' - to '[[def:" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -199,8 +190,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Part II" %}</h5>
                                 <p>{% trans "Attributes and answers to a question. When creating a question, the first alternative is always the correct one" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>]
                                 </p>
                             </div>
                         </div>
@@ -217,10 +207,8 @@
                                 <h5>{% trans "Parametric Question - Part III" %}</h5>
                                 <p>{% trans "Question to be displayed. Note the order in which answers were drawn after '#'" %}
                                     {% trans "You can assign different weights for each anwers, on the exam grade" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>;
-                                    <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1"
-                                       style="color:#faf609">ref21h</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>;
+                                    <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1" style="color:#faf609">ref21h</a>]
                                 </p>
                             </div>
                         </div>
@@ -236,10 +224,8 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Example I" %}</h5>
                                 <p>{% trans "Example with equation and figure" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>;
-                                    <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615"
-                                       style="color:#faf609">ref20a</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>;
+                                    <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615" style="color:#faf609">ref20a</a>]
                                 </p>
                             </div>
                         </div>
@@ -255,10 +241,8 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Example II" %}</h5>
                                 <p>{% trans "Example with graph" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>;
-                                    <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615"
-                                       style="color:#faf609">ref20a</a>]</p>
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>;
+                                    <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615" style="color:#faf609">ref20a</a>]</p>
                             </div>
                         </div>
                         <!-- slide 12 parametric - Example III -->
@@ -273,10 +257,8 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Parametric Question - Example III" %}</h5>
                                 <p>{% trans "Example with matrix" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>;
-                                    <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615"
-                                       style="color:#faf609">ref20a</a>]</p>
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>;
+                                    <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12761/12615" style="color:#faf609">ref20a</a>]</p>
                             </div>
                         </div>
                         <!-- slide 13 - CSV File with Exam Correction -->
@@ -293,10 +275,8 @@
                                 <p>{% trans "In yellow, answer marked '/' correct answer" %}.
                                     {% trans "In green, Question ID in the DB and answers order (0=A, 1=B, ...)" %}.
                                     {% trans "ID here means exam variations" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>;
-                                    <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1"
-                                       style="color:#faf609">ref21h</a>]</p>
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>;
+                                    <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1" style="color:#faf609">ref21h</a>]</p>
                             </div>
                         </div>
                         <!-- slide 14 - Grade with weight -->
@@ -313,10 +293,8 @@
                                                                          style="color:#faf609">template</a></h5>
                                 <p>{% trans "In yellow, answer marked '/' correct answer" %}.
                                     {% trans "In green, answers with weight" %}. {% trans "ID here means exam variations" %}
-                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf"
-                                        style="color:#faf609">ref19b</a>;
-                                    <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1"
-                                       style="color:#faf609">ref21h</a>]
+                                    [<a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf" style="color:#faf609">ref19b</a>;
+                                    <a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1" style="color:#faf609">ref21h</a>]
                                 </p>
                             </div>
                         </div>
@@ -332,8 +310,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
                                 <p>{% trans "With random values ​​for a, b, c and d. In this case, it is possible to draw the answer in light colors, see next slide" %}
-                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029"
-                                                                style="color:#faf609">ref18a</a>]
+                                [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029" style="color:#faf609">ref18a</a>]
                                 </p>
                             </div>
                         </div>
@@ -349,8 +326,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Text parametric question, no multiple-choice" %}</h5>
                                 <p>{% trans "The answer in light colors, not to appear printed. You can program the answer to have a similar number of lines (same difficulty)" %}
-                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029"
-                                                                style="color:#faf609">ref18a</a>]
+                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029" style="color:#faf609">ref18a</a>]
                                 </p>
                             </div>
                         </div>
@@ -366,8 +342,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email corrections to each student" %}</h5>
                                 <p>{% trans "It is also possible to include in the email a PDF file with the text of the questions, the alternative the student has marked, the feedback and the correct alternative (if incorrect)" %}
-                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029"
-                                                                style="color:#faf609">ref18a</a>]
+                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029" style="color:#faf609">ref18a</a>]
                                 </p>
                             </div>
                         </div>
@@ -383,10 +358,8 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email with some correction statistics" %}</h5>
                                 <p>{% trans "The teacher receives this email after sending a PDF of the scanned exams" %}
-                                    [<a href="https://ieeexplore.ieee.org/document/9725157"
-                                        style="color:#faf609">ref21d</a>;
-                                    <a href="https://ieeexplore.ieee.org/document/9725135"
-                                       style="color:#faf609">ref21e</a>]
+                                    [<a href="https://ieeexplore.ieee.org/document/9725157" style="color:#faf609">ref21d</a>;
+                                    <a href="https://ieeexplore.ieee.org/document/9725135" style="color:#faf609">ref21e</a>]
                                 </p>
                             </div>
                         </div>
@@ -402,8 +375,7 @@
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email with test cases of moodle + VPL" %}</h5>
                                 <p>{% trans "The teacher receives this email after creating the variations when there is an exam that contains program exercises" %}
-                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029"
-                                                                style="color:#faf609">ref18a</a>]
+                                    [{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029" style="color:#faf609">ref18a</a>]
                                 </p>
                             </div>
                         </div>
@@ -418,8 +390,7 @@
                             </div>
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>{% trans "Email with templates, DBs (for import into moodle) and variation per student" %}</h5>
-                                <p>{% trans "The teacher receives this email after creating the variations when there is an exam containing multiple-choice questions or questions with answers" %}[{% trans "all until" %}
-                                    <a href="https://doi.org/10.1002/cae.22029" style="color:#faf609">ref18a</a>]
+                                <p>{% trans "The teacher receives this email after creating the variations when there is an exam containing multiple-choice questions or questions with answers" %}[{% trans "all until" %} <a href="https://doi.org/10.1002/cae.22029" style="color:#faf609">ref18a</a>]
                                 </p>
                             </div>
                         </div>
@@ -647,10 +618,22 @@
 
                 <ol>
 
+                    <li><a href="#">ref23a</a> -
+                        Teubl, F., Zampirolli, F.A.
+                        "Automated Correction for Trace Tables in a CS1 Course".
+                        Simpósio Brasileiro de Informática na Educação, 2023. (aceito)
+                    </li>
+
+                    <li><a href="#">ref23b</a> -
+                        Josko, J.M.B., Zampirolli, F.A.
+                        "Introducing programming logic consistently through gamification".
+                        Simpósio Brasileiro de Informática na Educação, 2023. (aceito)
+                    </li>
+
                     <li><a href="https://link.springer.com/chapter/10.1007/978-3-031-14756-2_15">ref22</a> -
                         Teubl, F., Batista, V.R., Zampirolli, F.A.
                         "MakeTests: A Flexible Generator and Corrector for Hardcopy Exams".
-                        In: Springer International Publishing. (Org.).
+                        Springer International Publishing. (Org.).
                         Computer Supported Education. 1ed.: , 2022, v. , p. 293-315.
                     </li>
 
@@ -663,16 +646,14 @@
                                 href="https://youtu.be/ihnKj7jNTp8">Sessão</a>)
                     </li>
 
-                    <li><a href="https://ieeexplore.ieee.org/abstract/document/9637055">ref21b</a> - Zampirolli, F.A.,
-                        Batista,
+                    <li><a href="https://ieeexplore.ieee.org/abstract/document/9637055">ref21b</a> - Zampirolli, F.A., Batista,
                         V.R., Pimentel, E.P., Braga, J. "Facilitating the Generation of Parametric Questions and
                         their export to Moodle." Frontiers in Education Conference (FIE), 2021 IEEE.
                         (<a href="{% static '__FIE21_MCTestQB.pdf' %}">SLIDES</a>;
                         <a href="https://youtu.be/s1N_9403RG4">Video</a>)
                     </li>
 
-                    <li><a href="https://ieeexplore.ieee.org/document/9725205">ref21c</a> - Zampirolli, F.A., Sato, C.,
-                        Savegnago,
+                    <li><a href="https://ieeexplore.ieee.org/document/9725205">ref21c</a> - Zampirolli, F.A., Sato, C., Savegnago,
                         H.R.,
                         Batista, V.R., Kobayashi, G.
                         "Automated assessment of parametric programming in a large-scale course."
@@ -680,22 +661,19 @@
                         (<a href="{% static '__LACLO21_MCTest.pdf' %}">SLIDES</a>;
                         <a href="https://youtu.be/ErAWJOej0CY">Video</a>)
                     </li>
-                    <li><a href="https://ieeexplore.ieee.org/document/9725157">ref21d</a> - Zampirolli, F.A., Batista,
-                        V.R., Josko,
+                    <li><a href="https://ieeexplore.ieee.org/document/9725157">ref21d</a> - Zampirolli, F.A., Batista, V.R., Josko,
                         J.M.B., Steil, L., Trevisan, S.
                         "Experiments in selection processes of students for a crammer."
                         Latin American Conference on Learning Technologies (LACLO), 2021.
                         (<a href="{% static '__LACLO21_irt.pdf' %}">SLIDES</a>)
                     </li>
-                    <li><a href="https://ieeexplore.ieee.org/document/9725135">ref21e</a> - Zampirolli, F.A., Antunes
-                        Jr, I.,
+                    <li><a href="https://ieeexplore.ieee.org/document/9725135">ref21e</a> - Zampirolli, F.A., Antunes Jr, I.,
                         Steil, L., Teodoro Jr, L.
                         "Interactive ENEM: exams with statistics and free access."
                         Latin American Conference on Learning Technologies (LACLO), 2021.
                         (<a href="{% static '__LACLO21_enem.pdf' %}">SLIDES</a>)
                     </li>
-                    <li><a href="https://ieeexplore.ieee.org/document/9725159">ref21f</a> - Silva, D.G., Zampirolli,
-                        F.A.,
+                    <li><a href="https://ieeexplore.ieee.org/document/9725159">ref21f</a> - Silva, D.G., Zampirolli, F.A.,
                         "Face Verification Experiments on Moodle Quiz."
                         Latin American Conference on Learning Technologies (LACLO), 2021.
                     </li>
@@ -706,14 +684,12 @@
                         programming course".
                         Computer Applications in Engineering Education, 2021.
                     </li>
-                    <li><a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1">ref21h</a> -
-                        Zampirolli, F.A., Batista, V.R., Rodriguez, C.L., Goya,
+                    <li><a href="https://www.scitepress.org/PublicationsDetail.aspx?ID=zeqi9KvpAbc=&t=1">ref21h</a> - Zampirolli, F.A., Batista, V.R., Rodriguez, C.L., Goya,
                         D., Rocha. R.
                         "Automated assessment with multiple-choice questions using weighted answers". International
                         Conference on Computer Supported Education. 2021.
                     </li>
-                    <li><a href="https://www.scitepress.org/Link.aspx?doi=10.5220/0010337902450253">ref21i</a> - Teubl,
-                        F., Batista, V.R., Zampirolli, F.A.
+                    <li><a href="https://www.scitepress.org/Link.aspx?doi=10.5220/0010337902450253">ref21i</a> - Teubl, F., Batista, V.R., Zampirolli, F.A.
                         "MakeTests: Generate and Correct Individualized Questions with Many Styles". International
                         Conference on Computer Supported Education. 2021.
                     </li>
@@ -743,23 +719,20 @@
                         (<a href="https://www.youtube.com/watch?v=BL-Uscgc4tc">Video</a>;
                         <a href="https://www.youtube.com/watch?v=cLCE8idn6ws">Sessão</a>; menção honrosa)
                     </li>
-                    <li><a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37">ref19a</a> -
-                        Zampirolli, F.A., Teubl, F., Batista, V.R., "A
+                    <li><a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37">ref19a</a> - Zampirolli, F.A., Teubl, F., Batista, V.R., "A
                         Generator
                         and Corrector of Parametric Questions in Hard Copy". International Conference on Information
                         Technology: New
                         Generations. Las Vegas, USA, 2019.
                     </li>
-                    <li><a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf">ref19b</a> - Zampirolli, F.A.,
-                        Teubl, F., Batista, V.R., "Online
+                    <li><a href="https://www.scitepress.org/Papers/2019/76726/76726.pdf">ref19b</a> - Zampirolli, F.A., Teubl, F., Batista, V.R., "Online
                         Generator
                         and Corrector of Parametric Questions in Hard Copy Useful for the Elaboration of Thousands of
                         Individualized
                         Exams". International Conference on Computer Supported Education. Crete, Grécia, 2019.
                         (<a href="{% static '__CSEDU19_webMCTest.pdf' %}">SLIDES</a>)
                     </li>
-                    <li><a href="https://www.scitepress.org/Papers/2019/77110/77110.pdf">ref19c</a> - Rezende, F.,
-                        Zampirolli, F.A., Kobayashi, G.,
+                    <li><a href="https://www.scitepress.org/Papers/2019/77110/77110.pdf">ref19c</a> - Rezende, F., Zampirolli, F.A., Kobayashi, G.,
                         "Convolutional
                         Neural Network applied to Code Assignment Grading". International Conference on Computer
                         Supported
@@ -802,21 +775,17 @@
                         automatic
                         multiple-choice test grading on android. Revista Brasileira de Iniciação Científica, 3(2).
                     </li>
-                    <li>
-                        <a href="https://www.researchgate.net/publication/360223017_Automatic_Correction_of_Multiple-Choice_Tests_on_Android_Devices">ref15</a>
-                        - Zampirolli, F.A.,
+                    <li><a href="https://www.researchgate.net/publication/360223017_Automatic_Correction_of_Multiple-Choice_Tests_on_Android_Devices">ref15</a> - Zampirolli, F.A.,
                         China, R.T.,
                         Neves, R.P.O., Quilici-Gonzalez, J.A. "Automatic Correction of Multiple-Choice Tests on
                         Android
-                        Devices". In: Workshop de Visão Computacional, 2015.
+                        Devices". Workshop de Visão Computacional, 2015.
                     </li>
-                    <li>
-                        <a href="https://www.researchgate.net/publication/360222832_Automatic_Correction_of_Multiple-Choice_Tests_using_Digital_Cameras_and_Image_Processing">ref13</a>
-                        - Zampirolli,
+                    <li><a href="https://www.researchgate.net/publication/360222832_Automatic_Correction_of_Multiple-Choice_Tests_using_Digital_Cameras_and_Image_Processing">ref13</a> - Zampirolli,
                         F.A.,
                         Quilici-Gonzalez, J.A., Neves, R.P.O. "Automatic Correction of Multiple-Choice Tests using
                         Digital
-                        Cameras and Image Processing". In: Workshop de Visão Computacional, 2013.
+                        Cameras and Image Processing". Workshop de Visão Computacional, 2013.
                     </li>
 
                 </ol>
