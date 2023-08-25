@@ -1,4 +1,11 @@
-Para imprimir usando a gráfica abaixo
+# Formatos do livro
+
+O formato epub altera muito o estilo do livro.
+
+Ainda não achei um conversor adequado para o estilo utilizado no livro.
+
+
+# Para imprimir usando a gráfica Fábrica do Livro
 
 https://www.fabricadolivro.com.br/
 
