@@ -22,7 +22,7 @@ https://www.fabricadolivro.com.br/
 * lados da impressão frente e verso
 * lados da impressão da capa impressão frente
 * pael miolo offset 75g
-* páginas 248
+* páginas 244
 
 ## Valores (sem frete)
 * R$ 134 - níveis de cinza (R$33,5 cada)
