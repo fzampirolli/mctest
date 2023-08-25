@@ -23,5 +23,5 @@ https://www.fabricadolivro.com.br/
 * R$ 280 - colorido
 
 ### Enviar os arquivos:
-* livro-capa.pdf
-* livro-impressao.pdf
+* [livro-capa.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa.pdf)
+* [livro-impressao.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao.pdf)
