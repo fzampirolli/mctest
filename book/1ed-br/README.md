@@ -5,10 +5,10 @@ Fazer *download* para visulizar melhor.
 ## Versão digital:
 
 * PDF: [livro.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.pdf)
-* PDF: [livro.html](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.html)
-* PDF: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.epub)
+* HTML: [livro.html](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.html)
+* EPUB: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.epub)
 
-O formato epub altera muito o estilo do livro.
+O formato EPUB altera muito o estilo do livro.
 
 Ainda não achei um conversor adequado para o estilo utilizado no livro.
 
