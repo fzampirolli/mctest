@@ -12,10 +12,6 @@ O formato EPUB altera muito o estilo do livro.
 
 Ainda não achei um conversor adequado para o estilo utilizado no livro.
 
-## Versão para impressão:
-* [livro-capa.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa.pdf)
-* [livro-impressao.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao.pdf)
-
 # Caso queira imprimir, seguem sugestões
 
 ## 1) Fábrica do Livro
@@ -23,21 +19,20 @@ Ainda não achei um conversor adequado para o estilo utilizado no livro.
 
 ### Fornecer as Seguintes Especificações
 
-* papel capa Duo Design (papel cartão 250g)
-* acabamento laminação brilho
-* tamanho 23x16cm
-* impressão digital
-* acabamento incluso livro com capa padrão
-* **quantidade 4 (é a mínima)**
-* tamanho com sangra 16x23cm
-* acabamento capa sem orelha (restrição da gráfica)
-* lados da impressão frente e verso
-* lados da impressão da capa impressão frente
-* pael miolo offset 75g
-* páginas 244
+* Livro sem Orelha Capa 
+* Lam. Fosca no Duo Design 250g 4x0 
+* miolo impressão Frente e Verso - 21x29,7cm - 21x29,7 cm 
+* Duo Design (Papel Cartão) 250g 
+* Laminação Fosca
+* páginas 244 - níveis de cinza
 
 ### Valores (sem frete)
-* R$ 134 - níveis de cinza (R$33,5 cada)
-* R$ 280 - colorido (R$ 70 cada)
+* R$ 209 - níveis de cinza (R$52,25 cada)
+* R$ 452,40 - (91 pags cor e 153 pags níveis de cinza (R$ 113,10 cada)
+* Frete R$ 9 - motoboy São Paulo
+
+### Versão para impressão:
+* [livro-capa21x29.7.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa21x29.7.pdf)
+* [livro-impressao.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao.pdf)
 
 ## 2) ?
