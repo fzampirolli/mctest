@@ -4,11 +4,9 @@ O formato epub altera muito o estilo do livro.
 
 Ainda não achei um conversor adequado para o estilo utilizado no livro.
 
-# Caso queira imprimir
+# Caso queira imprimir, seguem sugestões
 
-Sugetões:
-
-## Fábrica do Livro
+## 1) Fábrica do Livro
 * https://www.fabricadolivro.com.br/
 
 ### Fornecer as Seguintes Especificações
@@ -29,6 +27,8 @@ Sugetões:
 ### Valores (sem frete)
 * R$ 134 - níveis de cinza (R$33,5 cada)
 * R$ 280 - colorido (R$ 70 cada)
+
+## 2) ?
 
 ### Enviar os arquivos:
 * [livro-capa.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa.pdf)
