@@ -1,8 +1,20 @@
 # Formatos do livro
 
+Fazer *download* para visulizar melhor.
+
+## Versão digital:
+
+* PDF: [livro.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.pdf)
+* PDF: [livro.html](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.html)
+* PDF: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.epub)
+
 O formato epub altera muito o estilo do livro.
 
 Ainda não achei um conversor adequado para o estilo utilizado no livro.
+
+## Versão para impressão:
+* [livro-capa.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa.pdf)
+* [livro-impressao.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao.pdf)
 
 # Caso queira imprimir, seguem sugestões
 
@@ -29,7 +41,3 @@ Ainda não achei um conversor adequado para o estilo utilizado no livro.
 * R$ 280 - colorido (R$ 70 cada)
 
 ## 2) ?
-
-### Enviar os arquivos:
-* [livro-capa.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa.pdf)
-* [livro-impressao.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao.pdf)
