@@ -4,11 +4,14 @@ O formato epub altera muito o estilo do livro.
 
 Ainda não achei um conversor adequado para o estilo utilizado no livro.
 
-# Caso queira imprimir usando a gráfica Fábrica do Livro
+# Caso queira imprimir
 
-https://www.fabricadolivro.com.br/
+Sugetões:
 
-## Fornecer as Seguintes Especificações
+## Fábrica do Livro
+* https://www.fabricadolivro.com.br/
+
+### Fornecer as Seguintes Especificações
 
 * papel capa Duo Design (papel cartão 250g)
 * acabamento laminação brilho
@@ -23,7 +26,7 @@ https://www.fabricadolivro.com.br/
 * pael miolo offset 75g
 * páginas 244
 
-## Valores (sem frete)
+### Valores (sem frete)
 * R$ 134 - níveis de cinza (R$33,5 cada)
 * R$ 280 - colorido (R$ 70 cada)
 
