@@ -4,12 +4,11 @@ O formato epub altera muito o estilo do livro.
 
 Ainda não achei um conversor adequado para o estilo utilizado no livro.
 
-
-# Para imprimir usando a gráfica Fábrica do Livro
+# Caso queira imprimir usando a gráfica Fábrica do Livro
 
 https://www.fabricadolivro.com.br/
 
-## Especificações
+## Fornecer as Seguintes Especificações
 
 * papel capa Duo Design (papel cartão 250g)
 * acabamento laminação brilho
