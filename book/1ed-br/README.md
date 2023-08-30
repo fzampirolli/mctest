@@ -5,9 +5,8 @@
 * Ano: 2023
 
 Este livro reúne e consolida as publicações disponibilizadas 
-no [vision.ufabc.edu.br](http://vision.ufabc.edu.br), 
-especialmente aquelas em que o mesmo autor principal, 
-Francisco de Assis Zampirolli, esteve envolvido. 
+no endereço [vision.ufabc.edu.br](http://vision.ufabc.edu.br), 
+especialmente aquelas em que o mesmo autor principal esteve envolvido. 
 Para obter mais informações, consulte o Prefácio do livro.
 
 ## Formatos do livro
