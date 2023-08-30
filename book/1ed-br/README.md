@@ -13,7 +13,7 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 
 # Caso queira imprimir, seguem sugestões
 
-## 1) Fábrica do Livro
+## 1) Fábrica do Livro 
 * https://www.fabricadolivro.com.br/
 
 ### Fornecer as Seguintes Especificações
