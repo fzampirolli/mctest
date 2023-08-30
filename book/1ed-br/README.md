@@ -8,9 +8,8 @@ Fazer *download* para visulizar melhor.
 * HTML: [livro.html](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.html)
 * EPUB: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.epub)
 
-O formato EPUB altera muito o estilo do livro.
-
-Ainda não achei um conversor adequado para o estilo utilizado no livro.
+O formato EPUB altera muito o estilo do livro. 
+Ainda não achei um conversor adequado para o estilo utilizado.
 
 # Caso queira imprimir, seguem sugestões
 
@@ -26,9 +25,9 @@ Ainda não achei um conversor adequado para o estilo utilizado no livro.
 * Laminação Fosca
 * páginas 244 - níveis de cinza
 
-### Valores (sem frete)
+### Valores
 * R$ 209 - níveis de cinza (R$52,25 cada)
-* R$ 452,40 - (91 pags cor e 153 pags níveis de cinza (R$ 113,10 cada)
+* R$ 452,40 - (91 pags cor e 153 pags níveis de cinza - R$ 113,10 cada)
 * Frete R$ 9 - motoboy São Paulo
 
 ### Versão para impressão:
