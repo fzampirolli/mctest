@@ -1,4 +1,4 @@
-# MCTest: Como Criar e Corrigir Exames Parametrizados Automaticamente}
+# MCTest: Como Criar e Corrigir Exames Parametrizados Automaticamente
 
 * Autor: Francisco de Assis Zampirolli
 * ISBN: 978-65-00-79086-3 
