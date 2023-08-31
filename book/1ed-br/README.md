@@ -7,7 +7,7 @@
 Este livro reúne e consolida as publicações disponibilizadas 
 no endereço [vision.ufabc.edu.br](http://vision.ufabc.edu.br), 
 especialmente aquelas em que o mesmo autor principal esteve envolvido. 
-Para obter mais informações, consulte o Prefácio do livro.
+Para obter mais informações, consulte o prefácio do livro.
 
 ## Formatos do livro
 
