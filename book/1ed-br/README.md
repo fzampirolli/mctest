@@ -20,7 +20,10 @@ Fazer *download* para visulizar melhor.
 * EPUB: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro.epub)
 
 O formato EPUB altera muito o estilo do livro. 
-Ainda não achei um conversor adequado para o estilo utilizado.
+Ainda não achei um conversor adequado para o estilo utilizado. 
+
+[eBoox](https://play.google.com/store/apps/details?id=com.reader.books&hl=pt_BR&gl=US) 
+ é o melhor visualizador de EPUB para Android que encontrei para este livro.
 
 ## Caso queira imprimir, seguem sugestões
 
