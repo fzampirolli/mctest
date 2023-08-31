@@ -27,7 +27,7 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 ### 1) Fábrica do Livro 
 * https://www.fabricadolivro.com.br/
 
-#### Fornecer as Seguintes Especificações
+#### Fornecer as seguintes especificações
 
 * Livro sem Orelha Capa 
 * Lam. Fosca no Duo Design 250g 4x0 
