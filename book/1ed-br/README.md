@@ -37,8 +37,8 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 * páginas 244 - níveis de cinza
 
 #### Valores
-* R$ 209 - níveis de cinza (R$52,25 cada)
-* R$ 452,40 - (91 pags cor e 153 pags níveis de cinza - R$ 113,10 cada)
+* R$ 209 - níveis de cinza (R$52,25 cada - mínimo de 4 cópias)
+* R$ 452,40 - (91 pags coloridas e 153 pags em níveis de cinza - R$ 113,10 cada)
 * Frete R$ 9 - motoboy São Paulo
 
 #### Versão para impressão:
