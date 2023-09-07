@@ -46,6 +46,9 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 
 #### Versão para impressão:
 * [livro-capa21x29.7.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-capa21x29.7.pdf)
-* [livro-impressao.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao.pdf)
+* [livro-impressao11pt.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao11pt.pdf)
+* [livro-impressao12pt.pdf](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br/livro-impressao12pt.pdf)
+
+O arquivo *12pt.pdf tem letras grandes, mas com pouca margem (superior, inferior e laterais).
 
 ### 2) ?
