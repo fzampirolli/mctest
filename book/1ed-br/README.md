@@ -55,6 +55,4 @@ O arquivo *12pt.pdf tem letras grandes, mas com pouca margem (superior, inferior
 
 Disponível usando o arquivo *11pt.pdf e miolo colorido: https://www.amazon.com/dp/B0CHL7DLKC?ref_=pe_3052080_397514860
 
-Porém, infelizmente, não entrega no Brasil.
-
 ### 3) ?
