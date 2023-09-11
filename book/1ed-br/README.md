@@ -51,4 +51,6 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 
 O arquivo *12pt.pdf tem letras grandes, mas com pouca margem (superior, inferior e laterais).
 
-### 2) ?
+### 2) https://www.amazon.com/dp/B0CHL7DLKC?ref_=pe_3052080_397514860
+
+Infelizmente, não entrega no Brasil.
