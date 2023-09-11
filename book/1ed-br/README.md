@@ -51,6 +51,10 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 
 O arquivo *12pt.pdf tem letras grandes, mas com pouca margem (superior, inferior e laterais).
 
-### 2) https://www.amazon.com/dp/B0CHL7DLKC?ref_=pe_3052080_397514860
+### 2) Amazon.com
 
-Infelizmente, não entrega no Brasil.
+Disponível para fonte *11pt.pdf, colorido, em https://www.amazon.com/dp/B0CHL7DLKC?ref_=pe_3052080_397514860
+
+Porém, infelizmente, não entrega no Brasil.
+
+### 3) ?
