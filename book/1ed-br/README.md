@@ -53,6 +53,10 @@ O arquivo *12pt.pdf tem letras grandes, mas com pouca margem (superior, inferior
 
 ### 2) Amazon.com
 
-Disponível usando o arquivo *11pt.pdf e miolo colorido: https://www.amazon.com/dp/B0CHL7DLKC?ref_=pe_3052080_397514860
+Disponível através do arquivo *11pt.pdf e miolo colorido na [Amazon](https://www.amazon.com/dp/B0CHL7DLKC?ref_=pe_3052080_397514860).
+
+**Curiosidade:** O autor ganha 60% do valor - custo de impressão ($20,52). Ou seja, optei por não lucrar com a venda!
+- Lucro: $0,60 * $34,20 - $20,52 = $0,00
+- Frete: $21,85
 
 ### 3) ?
