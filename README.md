@@ -1,26 +1,15 @@
 # MCTest v. 5.2
 
-Welcome to MCTest, a website devoted to assist in preparing and correcting exams.
+Welcome to MCTest, a website dedicated to assisting in exam preparation and grading.
 
-MCTest is a free open-source software (see [License](License.txt)), and its best 
-advantage is the handling to parametric questions through 
-![equation](http://latex.codecogs.com/gif.latex?\LaTeX) and Python, 
-**allowing for infinite variations of each same question**.
+MCTest is free and open-source software (see [License](License.txt)),
+with its most notable feature being the ability to handle parametric questions 
+using LaTeX and Python. This allows for numerous variations of the same question.
 
 Please access [vision.ufabc.edu.br](http://vision.ufabc.edu.br)
 for some [examples](http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/).
 
-#### Help us spread MCTest. If more people use it, the faster the improvements.
-
-MCTest must be installed on an Ubuntu 20.04 server through ports 3306 and 8000.
-
-Define specific data in the file [_settings.env](_settings.env).
-
-### After downloading in [github.com/fzampirolli/mctest](https://github.com/fzampirolli/mctest), install MCTest with:
-```
-sudo su
-source _setup_all.sh 
-```
+#### Help us spread MCTest. The more people use it, the faster we can make improvements.
 
 ### Future Improvements
 1) Error messages and graphical interfaces;
