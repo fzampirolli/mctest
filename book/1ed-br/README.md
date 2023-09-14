@@ -82,7 +82,9 @@ Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos 
    sed -i 's/\/home\/fz\//\/home\/seuLogin\//g' _setup-all.sh
    source _setup-all.sh
 
-Altere "seuLogin" acima antes de executar o *script*.
+Altere "seuLogin" acima antes de executar o *script*. 
+
+Se aparecer a mensagem `Did you install mysqlclient` no final, instalar novamente `pip install mysqlclient`.
 
 Isso fará o download do *script* de instalação e executará as configurações necessárias.
 
