@@ -90,9 +90,17 @@ Isso fará o *download* do *script* de instalação e executará as configuraç�
 
 Aguarde a conclusão: Após alguns minutos, o processo estará concluído, e o MCTest será configurado.
 
-Execute o MCTest com o seguinte comando, alterando `seuLogin`:
+No mesmo terminal, execute o MCTest com o seguinte comando, alterando `seuLogin`:
 
 ~~~bash
+source /home/seuLogin/PycharmProjects/runDjango.sh
+~~~
+
+Para novos terminais, execute o MCTest com os seguintes comandos, alterando `seuLogin`:
+
+~~~bash
+source /home/seuLogin/PycharmProjects/AmbientePython3/bin/activate
+source /home/seuLogin/PycharmProjects/_settings.env
 source /home/seuLogin/PycharmProjects/runDjango.sh
 ~~~
 
