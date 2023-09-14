@@ -120,7 +120,8 @@ pip install -r requirements-titan256GB.txt
 
 # se ocorrer algum erro no comando anterior (no ubuntu 23.04):
 pip install --upgrade pip setuptools
-pip install scikit-image
+pip install --upgrade scipy
+pip install scikit-image==0.20.0
 pip install django==4.2
 pip install python-dotenv
 pip install django-widget-tweaks

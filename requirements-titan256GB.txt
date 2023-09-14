@@ -44,8 +44,8 @@ pytz==2023.3
 PyWavelets==1.4.1
 PyYAML==6.0
 pyzbar==0.1.9
+scipy==1.11.2
 scikit-image==0.20.0
-scipy==1.9.1
 six==1.16.0
 sqlparse==0.4.3
 sympy==1.11.1
