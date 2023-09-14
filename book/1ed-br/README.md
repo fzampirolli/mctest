@@ -72,7 +72,7 @@ Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos 
 
 1. **Instale o [VirtualBox](https://www.virtualbox.org/)**
 
-2. **Instale o Ubuntu 22.04 no VirtulBox**
+2. **Instale o Ubuntu 22.04 no VirtualBox**
 
 3. **No Ubuntu, execute os comandos no terminal**:
 
