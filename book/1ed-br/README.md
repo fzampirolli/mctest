@@ -84,7 +84,7 @@ Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos 
    pip install mysqlclient
    ```
 
-Altere "seuLogin" acima antes de executar o *script*. 
+Altere `seuLogin` acima antes de executar o *script*. 
 
 Isso fará o *download* do *script* de instalação e executará as configurações necessárias.
 
