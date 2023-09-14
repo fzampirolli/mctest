@@ -140,6 +140,7 @@ pip install pdf2image
 pip install pyzbar
 pip install arviz
 pip install pymc3
+pip install mysqlclient
 pip install --upgrade pip setuptools
 
 # instala mais alguns pacotes com apt
