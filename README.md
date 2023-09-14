@@ -99,10 +99,10 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 * Title: A universal system for generation and correction automatic of parametrized questions
 
 
-##### MCTest 5.3 - in working
+##### MCTest 5.3 - Currently in progress
 * Questions with skills in linker.json by Teubl, Irineu, Paulo, Wagner
 * Table test skill by Teubl 
-* Hash with full name 
+* Hash with email 
 
 ---
 ## Install MCTest
