@@ -110,8 +110,51 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 * Title: A universal system for generation and correction automatic of parametrized questions
 
 
-##### MCTest 5.3
+##### MCTest 5.3 - in working
 * Questions with skills in linker.json by Teubl, Irineu, Paulo, Wagner
 * Table test skill by Teubl 
 * Hash with full name 
-* MUDAR PARA INCIAR COM A VARIAÇÃO 0
+
+---
+## Install MCTest
+
+To install [MCTest](https://github.com/fzampirolli/mctest), follow the steps below:
+
+1. **Install [VirtualBox](https://www.virtualbox.org/)**
+
+2. **Install Ubuntu 22.04 on VirtualBox**
+
+3. **In Ubuntu, run the following commands in the terminal**:
+
+   ```bash
+   sudo su
+   wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
+   sed -i 's/\/home\/fz\//\/home\/yourUsername\//g' _setup-all.sh
+   source _setup-all.sh
+   pip install mysqlclient
+   ```
+
+Change `yourUsername` above before running the script.
+
+This will download the installation script and perform the necessary configurations.
+
+Please wait for completion: After a few minutes, the process will be finished, and MCTest will be set up.
+
+In the same terminal, run MCTest with the following command, changing `yourUsername`:
+
+~~~bash
+source /home/yourUsername/PycharmProjects/runDjango.sh
+~~~
+
+Access MCTest: After completion, open a web browser with the URL http://127.0.0.1:8000.
+
+For new terminals, run MCTest with the following commands, changing `yourUsername`:
+
+```bash
+sudo su
+source /home/yourUsername/PycharmProjects/AmbientePython3/bin/activate
+source /home/yourUsername/PycharmProjects/_settings.env
+source /home/yourUsername/PycharmProjects/runDjango.sh
+```
+
+For more details and configuration options, refer to the [_setup-all.sh](https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh) file.
