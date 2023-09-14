@@ -61,7 +61,7 @@ Disponível através do arquivo *11pt.pdf e miolo colorido na [Amazon](https://w
 
 **Curiosidade:** O autor ganha 60% do valor - custo de impressão ($20,52). Optei por não lucrar com a venda:
 - Lucro: 0,60 * $34,20 - $20,52 = $0,00
-- Frete: $21,85
+- Frete: $21,85 (aproximadamente)
 
 ### 3) ?
 
