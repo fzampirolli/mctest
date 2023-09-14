@@ -85,16 +85,16 @@ Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos 
 
 Altere "seuLogin" acima antes de executar o *script*. 
 
+Isso fará o download do *script* de instalação e executará as configurações necessárias.
+
+Aguarde a conclusão: Após alguns minutos, o processo estará concluído, e o MCTest será configurado.
+
 Se aparecer a mensagem `Did you install mysqlclient` no final, executar:
 
    ```bash
    pip install mysqlclient
    source ../runDjango.sh
    ```
-   
-Isso fará o download do *script* de instalação e executará as configurações necessárias.
-
-Aguarde a conclusão: Após alguns minutos, o processo estará concluído, e o MCTest será configurado.
 
 Acesse o MCTest: Após a conclusão, abrir um navegador com URL http://127.0.0.1:8000.
 
