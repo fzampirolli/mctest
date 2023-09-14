@@ -64,3 +64,27 @@ Disponível através do arquivo *11pt.pdf e miolo colorido na [Amazon](https://w
 - Frete: $21,85
 
 ### 3) ?
+
+---
+## Como instalar o MCTest
+
+Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos abaixo:
+
+1. **Instale o [VirtualBox](https://www.virtualbox.org/)**
+
+2. **Instale o Ubuntu 22.04 no VirtulBox**
+
+3. **No Ubuntu, execute os comandos no terminal**:
+
+   ```bash
+   sudo su
+   wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
+   source _setup-all.sh
+
+Isso fará o download do script de instalação e executará as configurações necessárias.
+
+Aguarde a conclusão: Após alguns minutos, o processo estará concluído, e o MCTest será configurado.
+
+Acesse o MCTest: Após a conclusão, o navegador será aberto automaticamente, exibindo o MCTest.
+
+Para mais detalhes e opções de configuração, consulte o arquivo [_setup-all.sh](https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh).
