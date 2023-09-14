@@ -101,6 +101,7 @@ Acesse o MCTest: Após a conclusão, abrir um navegador com URL http://127.0.0.1
 Para novos terminais, execute o MCTest com os seguintes comandos, alterando `seuLogin`:
 
 ~~~bash
+sudo su
 source /home/seuLogin/PycharmProjects/AmbientePython3/bin/activate
 source /home/seuLogin/PycharmProjects/_settings.env
 source /home/seuLogin/PycharmProjects/runDjango.sh
