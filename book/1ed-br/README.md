@@ -81,10 +81,10 @@ Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos 
    wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
    source _setup-all.sh
 
-Isso fará o download do script de instalação e executará as configurações necessárias.
+Isso fará o download do *script* de instalação e executará as configurações necessárias.
 
 Aguarde a conclusão: Após alguns minutos, o processo estará concluído, e o MCTest será configurado.
 
-Acesse o MCTest: Após a conclusão, o navegador será aberto automaticamente, exibindo o MCTest.
+Acesse o MCTest: Após a conclusão, abri o navegador com URL http://127.0.0.1:8000.
 
 Para mais detalhes e opções de configuração, consulte o arquivo [_setup-all.sh](https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh).

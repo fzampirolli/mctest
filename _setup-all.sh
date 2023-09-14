@@ -159,4 +159,5 @@ sudo texhash
 cp crontabDjango.sh ../
 cp runDjango.sh ../
 
-source ../runDjango.sh
+source ../runDjango.sh &
+
