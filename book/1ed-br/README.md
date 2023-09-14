@@ -85,6 +85,6 @@ Isso fará o download do *script* de instalação e executará as configuraçõe
 
 Aguarde a conclusão: Após alguns minutos, o processo estará concluído, e o MCTest será configurado.
 
-Acesse o MCTest: Após a conclusão, abri o navegador com URL http://127.0.0.1:8000.
+Acesse o MCTest: Após a conclusão, abrir um navegador com URL http://127.0.0.1:8000.
 
 Para mais detalhes e opções de configuração, consulte o arquivo [_setup-all.sh](https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh).
