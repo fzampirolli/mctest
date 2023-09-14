@@ -81,6 +81,7 @@ Para instalar o [MCTest](https://github.com/fzampirolli/mctest), siga os passos 
    wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
    sed -i 's/\/home\/fz\//\/home\/seuLogin\//g' _setup-all.sh
    source _setup-all.sh
+   ```
 
 Altere "seuLogin" acima antes de executar o *script*. 
 
@@ -89,6 +90,7 @@ Se aparecer a mensagem `Did you install mysqlclient` no final, executar:
    ```bash
    pip install mysqlclient
    source ../runDjango.sh
+   ```
    
 Isso fará o download do *script* de instalação e executará as configurações necessárias.
 
