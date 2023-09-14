@@ -1,14 +1,17 @@
 # MCTest: Como Criar e Corrigir Exames Parametrizados Automaticamente
 
-* Autor: Francisco de Assis Zampirolli
-* ISBN: 978-65-00-79086-3 
-* Ano: 2023
+---
+> Autor: Francisco de Assis Zampirolli </br>
+> ISBN: 978-65-00-79086-3 ([CBL](https://www.cblservicos.org.br/isbn/)) </br>
+> Ano: 2023
+---
 
 Este livro reúne e consolida as publicações disponibilizadas 
 no endereço [vision.ufabc.edu.br](http://vision.ufabc.edu.br), 
 especialmente aquelas em que o mesmo autor principal esteve envolvido. 
 Para obter mais informações, consulte o prefácio do livro.
 
+---
 ## Formatos do livro
 
 Fazer *download* para visulizar melhor.
@@ -25,6 +28,7 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 [eBoox](https://play.google.com/store/apps/details?id=com.reader.books&hl=pt_BR&gl=US) 
  é o melhor visualizador de EPUB para Android que encontrei para este livro.
 
+---
 ## Caso queira imprimir, seguem sugestões
 
 ### 1) Fábrica do Livro 
