@@ -14,7 +14,7 @@ Para obter mais informações, consulte o prefácio do livro.
 ---
 ## Formatos do livro
 
-Fazer *download* para visulizar melhor.
+Fazer *download* para visualizar melhor.
 
 ### Versão digital:
 
@@ -38,10 +38,10 @@ Ainda não achei um conversor adequado para o estilo utilizado.
 
 * Livro sem Orelha Capa 
 * Lam. Fosca no Duo Design 250g 4x0 
-* miolo impressão Frente e Verso - 21x29,7cm - 21x29,7 cm 
+* Miolo impressão Frente e Verso - 21x29,7cm - 21x29,7 cm 
 * Duo Design (Papel Cartão) 250g 
 * Laminação Fosca
-* páginas 244 - níveis de cinza
+* Páginas 244 - níveis de cinza
 
 #### Valores
 * R$ 209 - níveis de cinza (R$52,25 cada - mínimo de 4 cópias)
