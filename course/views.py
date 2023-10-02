@@ -37,8 +37,8 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from tablib import Dataset
 
-#from unicodedata import normalize
-#from unidecode import unidecode
+# from unicodedata import normalize
+# from unidecode import unidecode
 
 from account.models import User
 from student.models import Student
@@ -109,7 +109,7 @@ def ImportClassroomsDiscipline(request, pk):
                     return render(request, 'exam/exam_errors.html', {})
 
                 nome = r[1].lstrip().rstrip()
-                if len(nome) > 39: # BIG name!!!
+                if len(nome) > 39:  # BIG name!!!
                     ss = nome.split(" ")
                     ss = [i for i in ss if i]  # remove spaces
                     nome = ' '.join([i for i in ss])
@@ -117,9 +117,9 @@ def ImportClassroomsDiscipline(request, pk):
                     nome = nome.replace("  ", " ")
                     messages.info(request, f"### BIG ###: {r[1].lstrip().rstrip()} ==> {nome}")
 
-                #nome = normalize('NFKD', nome).encode('ASCII', 'ignore').decode('ASCII')
-                #nome = normalize('NFKD', nome.decode('UTF-8')).encode('ASCII', 'ignore')
-                #nome = unidecode(nome)
+                # nome = normalize('NFKD', nome).encode('ASCII', 'ignore').decode('ASCII')
+                # nome = normalize('NFKD', nome.decode('UTF-8')).encode('ASCII', 'ignore')
+                # nome = unidecode(nome)
 
                 emailSt = r[2].lstrip().rstrip()
                 codigo = r[3].lstrip().rstrip()
@@ -301,7 +301,7 @@ def ImportStudentsClassroom(request, pk):
 
         try:
             new_persons = request.FILES['myfile']
-            f = new_persons.read().decode('utf-8')
+            f = new_persons.read().decode('utf-8-sig')  # para remover caracter especial "\ufeff"
             pass
         except:
             messages.error(request, _('ImportStudentsClassroom: choose a CSV following the model'))
@@ -677,6 +677,7 @@ class CourseListView(generic.ListView):
     def get_queryset(self):
         return Course.objects.all().order_by('course_name').distinct()
 
+
 class CourseDetailView(generic.DetailView):
     model = Course
     fields = [
@@ -727,6 +728,7 @@ class DisciplineListView(generic.ListView):
 
     def get_queryset(self):
         return Discipline.objects.all().order_by('discipline_name').distinct()
+
 
 class DisciplineDetailView(generic.DetailView):
     model = Discipline
