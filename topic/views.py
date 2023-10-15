@@ -28,7 +28,7 @@ GNU General Public License for more details.
 import datetime
 ###################################################################
 import json
-import os
+import os, re
 import random
 import subprocess
 
@@ -37,6 +37,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.serializers import serialize
+from django.core.files.storage import FileSystemStorage
 from django.forms import Textarea
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -418,6 +419,44 @@ def ImportQuestions(request):
     # return HttpResponseRedirect("../")
     return render(request, 'exam/exam_msg.html', {})
 
+@login_required
+def ImportQuestionsImage(request):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    if request.method == 'POST':
+
+        try:
+            file = request.FILES['myfile']
+        except:
+            messages.error(request, _('ImportQuestionsImage: choose a PNG following the model!'))
+            return render(request, 'exam/exam_errors.html', {})
+
+        fs = FileSystemStorage()
+        file0 = str(file.name)
+        file0 = file0.replace(' ', '')
+
+        file0 = re.sub('[^A-Za-z0-9._-]+', '', file0)  # remove special characters
+
+        filename = fs.save(file0, file)
+
+        # problem with permission ...
+        path = os.getcwd()
+        getuser = path.split('/')
+        getuser = getuser[2]
+        getuser = getuser + ':' + getuser
+        os.system('mv ' + filename + ' ' + path + '/tmp/')
+        os.system('chown -R ' + getuser + ' ' + path + ' .')
+        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
+
+        messages.error(request, _('Image imported successfully! ') + filename)
+
+    # return HttpResponseRedirect("../")
+    return render(request, 'exam/exam_msg.html', {})
 
 #######################################################################
 class TopicListView(LoginRequiredMixin, generic.ListView):

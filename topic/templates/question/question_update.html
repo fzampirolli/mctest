@@ -154,6 +154,30 @@
                                 </div>
                             </form>
 
+                            <!-- Actions buttons to upload images -->
+                            <form action="/topic/myquestions/importImage/"  method="POST" enctype="multipart/form-data" target="_blank">
+                                {% csrf_token %}
+                                <input type="file" name="myfile">
+                                <button class="btn btn-primary" type="submit">{% trans "Upload-Image" %}</button>
+
+                                <p>{% trans "Choose a PNG file for import." %}
+                                {% trans "Be cautious with the file name to avoid overwriting another file with the same name." %}
+                                {% trans "One suggestion is to include a prefix in the file name like " %} <bf>fz_PDI_image01.png</bf>.
+                                {% trans "Do not include special characters and spaces in the file name." %}
+                                {% trans "This file will be retained for 180 days in server." %}
+                                {% trans "Remember that images in LaTeX make PDF generation extremely slow!" %}
+                                {% trans "See below how to include this image in a question." %}
+                                </p>
+                                <pre>
+\begin{figure}[h!]\centering
+    \includegraphics[scale=0.99]{fz_PDI_image01}
+    \caption{Example figure}
+\end{figure}
+                                </pre>
+                            </form>
+
+                            <hr>
+
                             <!-- Delete button -->
                             <form action="../delete/" method="">
                                 {% csrf_token %}

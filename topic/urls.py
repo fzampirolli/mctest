@@ -47,6 +47,7 @@ urlpatterns += [
     path('questions/', views.QuestionListView.as_view(), name='question-list'),
     path('myquestions/', views.LoanedQuestionByUserListView.as_view(), name='myquestions-list'),
     path('myquestions/import/', views.ImportQuestions, name='myquestions-import'),
+    path('myquestions/importImage/', views.ImportQuestionsImage, name='myquestions-import-image'),
     path('myquestions/importJson/', views.ImportQuestionsJson, name='myquestions-import-Json'),
     path('question/<int:pk>/createPDF/', views.see_question_PDF, name='question-create-question-PDF'),
     path('question/<int:pk>/saveJson/', views.save_question_Json, name='question-save-Json'),

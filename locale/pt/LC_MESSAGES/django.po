@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-12 14:40-0300\n"
+"POT-Creation-Date: 2023-10-15 16:48-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -334,7 +334,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 #: topic/templates/question/question_confirm_delete.html:52
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:193
-#: topic/templates/question/question_update.html:171
+#: topic/templates/question/question_update.html:195
 #: topic/templates/topic/topic_create.html:61
 #: topic/templates/topic/topic_update.html:71
 msgid "Contact your discipline coordinator"
@@ -1139,10 +1139,6 @@ msgid "ClassroomDelete: The teacher is not registered in a Discipline"
 msgstr "ClassroomDelete: o professor não está registrado na disciplina"
 
 #: course/views.py:573
-#, fuzzy
-#| msgid ""
-#| "LoanedClassroomByUserListView: The teacher is not registered in a "
-#| "Discipline"
 msgid "LoanedClassroomListView: The teacher is not registered in a Discipline"
 msgstr ""
 "LoanedClassroomByUserListView: o professor não está registrado na disciplina"
@@ -2061,16 +2057,12 @@ msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
 #: exam/views.py:830
-#, fuzzy
-#| msgid "correctStudentsExam: Error in read PDF file: "
 msgid "correctStudentsExam: Error in IRT or more Statists"
-msgstr "correctStudentsExam: erro ao ler PDF"
+msgstr "correctStudentsExam: erro na TRI ou em mais estatísticas"
 
 #: exam/views.py:870
-#, fuzzy
-#| msgid "correctStudentsExam: Error in read PDF file: "
 msgid "correctStudentsExam: Error in IRT"
-msgstr "correctStudentsExam: erro ao ler PDF"
+msgstr "correctStudentsExam: erro na TRI"
 
 #: exam/views.py:959
 msgid "Create variations first"
@@ -2081,10 +2073,8 @@ msgid "ERROR in generate_page, number_of_questions_text!!!!  "
 msgstr ""
 
 #: exam/views.py:977
-#, fuzzy
-#| msgid "ERROR in generate_page, class with zero students: "
 msgid "ERROR in generate_page, number_of_QM!!!! - no questions: "
-msgstr "ERRO: classe com zero estudantes: "
+msgstr "ERRO em generate_page, number_of_QM!!! - sem questões:"
 
 #: exam/views.py:1008
 msgid "ERROR in generate_page, class with zero students: "
@@ -3512,7 +3502,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:727
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:766
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -3524,7 +3514,7 @@ msgstr ""
 #: topic/templates/question/question_create.html:100
 #: topic/templates/question/question_list.html:134
 #: topic/templates/question/question_list_who_created_user.html:192
-#: topic/templates/question/question_update.html:170
+#: topic/templates/question/question_update.html:194
 msgid "Questions of the disciplines that I am enrolled"
 msgstr "Questões das disciplinas em que participo"
 
@@ -3656,7 +3646,45 @@ msgstr "Salva-Json"
 msgid "It will save all your questions to a file in json format"
 msgstr "Salvar questões de um arquivo (formato Json)"
 
-#: topic/templates/question/question_update.html:162
+#: topic/templates/question/question_update.html:161
+msgid "Upload-Image"
+msgstr "Upload-Image"
+
+#: topic/templates/question/question_update.html:163
+msgid "Choose a PNG file for import."
+msgstr "Escolha um arquivo PNG para importação."
+
+#: topic/templates/question/question_update.html:164
+msgid ""
+"Be cautious with the file name to avoid overwriting another file with the "
+"same name."
+msgstr ""
+"Tenha cuidado com o nome do arquivo para evitar sobrescrever outro arquivo "
+"com o mesmo nome."
+
+#: topic/templates/question/question_update.html:165
+msgid "One suggestion is to include a prefix in the file name like "
+msgstr "Uma sugestão é incluir um prefixo no nome do arquivo, como "
+
+#: topic/templates/question/question_update.html:166
+msgid "Do not include special characters and spaces in the file name."
+msgstr "Não inclua caracteres especiais e espaços no nome do arquivo."
+
+#: topic/templates/question/question_update.html:167
+msgid "This file will be retained for 180 days in server."
+msgstr "Este arquivo será mantido por 180 dias no servidor."
+
+#: topic/templates/question/question_update.html:168
+msgid "Remember that images in LaTeX make PDF generation extremely slow!"
+msgstr ""
+"Lembre-se de que as imagens em LaTeX tornam a geração do PDF extremamente "
+"lenta!"
+
+#: topic/templates/question/question_update.html:169
+msgid "See below how to include this image in a question."
+msgstr "Veja abaixo como incluir esta imagem em uma questão."
+
+#: topic/templates/question/question_update.html:186
 msgid "Delete this Question"
 msgstr "Apagar esta Questão"
 
@@ -3726,11 +3754,11 @@ msgstr "Somente coordenandor pode criar/atualizar tópicos"
 msgid "Topic Update"
 msgstr "Atualizar Tópico"
 
-#: topic/views.py:131
+#: topic/views.py:132
 msgid "ImportQuestionsJson: choose a JSON following the model!"
 msgstr "ImportQuestionsJson: escolher um arquivo JSON seguindo o modelo"
 
-#: topic/views.py:254 topic/views.py:584
+#: topic/views.py:255 topic/views.py:623
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -3740,15 +3768,15 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:326
+#: topic/views.py:327
 msgid "ImportQuestions: choose a TXT following the model!"
 msgstr "ImportQuestions: escolher um arquivo TXT seguindo o modelo"
 
-#: topic/views.py:372
+#: topic/views.py:373
 msgid "ImportQuestions: topic does not exist - created before in Topic: "
 msgstr "ImportQuestions: tópico não existe - criar antes em Tópico: "
 
-#: topic/views.py:379
+#: topic/views.py:380
 msgid ""
 "ImportQuestions: teacher is not associated with any discipline with this "
 "topic: "
@@ -3756,33 +3784,39 @@ msgstr ""
 "ImportQuestions: professor não está associado a uma disciplina com este "
 "tópico: "
 
-#: topic/views.py:404
+#: topic/views.py:405
 msgid "Questions Created:"
 msgstr "Questões Criadas"
 
-#: topic/views.py:415
+#: topic/views.py:416
 msgid "Similar question(s) exist in the DB:"
 msgstr "Questões similares no BD:"
 
-#: topic/views.py:483
+#: topic/views.py:436
+msgid "ImportQuestionsImage: choose a PNG following the model!"
+msgstr "ImportQuestions: escolher um arquivo PNG seguindo o exemplo"
+
+#: topic/views.py:456
+msgid "Image imported successfully! "
+msgstr "Imagem importada com sucesso! "
+
+#: topic/views.py:522
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:520
+#: topic/views.py:559
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:591
+#: topic/views.py:630
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
 
-#: topic/views.py:786
-#, fuzzy
-#| msgid "ExamUpdate: The teacher is not registered in a Discipline"
+#: topic/views.py:825
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:834
+#: topic/views.py:873
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 
