@@ -1524,7 +1524,7 @@ class cvMCTest(object):
     ####################################
 
     @staticmethod
-    def studentSendEmail(qr):  # gera pdf de feedback p/c/ aluno
+    def studentSendEmail(qr,choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
         try:
             s = Student.objects.filter(student_ID=qr['idStudent'])[0]
@@ -1544,30 +1544,33 @@ class cvMCTest(object):
             return ""
 
         if sex:
-            str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("Grade"), str(sex.grade))
+            aux = str(len(StudentExamQuestion.objects.filter(studentExam=sex)))
+            str1 += "\\noindent\\textbf{%s:} %s/%s \n\n" % (_("Grade"), str(sex.grade), aux)
 
-            titl = _("Multiple Choice Questions")
-            str1 += "\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+            if choiceReturnQuestions:  #  mostrar as questões com os gabaritos
+                titl = _("Multiple Choice Questions")
+                str1 += "\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
 
-            count = 0
-            for qe in StudentExamQuestion.objects.filter(studentExam=sex):
-                count += 1
-                str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (str(count), qe.question.question_text)
-                ###### VALIDAR ISSO !!!!!!
-                aa = [a for a in qe.question.answers2.all()]  ###### VALIDAR ISSO !!!!!!
-                str1 += "\\textbf{%s:} \t%s\n\n" % (_("Correct answer"), aa[0].answer_text)
+                count = 0
+                for qe in StudentExamQuestion.objects.filter(studentExam=sex):
+                    count += 1
 
-                if qe.studentAnswer in notas:
-                    index1 = notas.index(qe.studentAnswer)
-                    if aa[0].answer_text != aa[int(qe.answersOrder[index1])].answer_text:
-                        str1 += "\\textbf{%s:} \t[(%s)-%s]: %s \n\n" % (_("Your answer"),
-                                                                        qe.studentAnswer,
-                                                                        _("INCORRECT"),
-                                                                        aa[int(qe.answersOrder[index1])].answer_text)
-                    if aa[index1].answer_feedback:
-                        str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa[index1].answer_feedback)
-                else:
-                    str1 += "\\textbf{%s}\n\n" % _("Invalid answer!")
+                    str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (str(count), qe.question.question_text)
+                    ###### VALIDAR ISSO !!!!!!
+                    aa = [a for a in qe.question.answers2.all()]  ###### VALIDAR ISSO !!!!!!
+                    str1 += "\\textbf{%s:} \t%s\n\n" % (_("Correct answer"), aa[0].answer_text)
+
+                    if qe.studentAnswer in notas:
+                        index1 = notas.index(qe.studentAnswer)
+                        if aa[0].answer_text != aa[int(qe.answersOrder[index1])].answer_text:
+                            str1 += "\\textbf{%s:} \t[(%s)-%s]: %s \n\n" % (_("Your answer"),
+                                                                            qe.studentAnswer,
+                                                                            _("INCORRECT"),
+                                                                            aa[int(qe.answersOrder[index1])].answer_text)
+                        if aa[index1].answer_feedback:
+                            str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa[index1].answer_feedback)
+                    else:
+                        str1 += "\\textbf{%s}\n\n" % _("Invalid answer!")
 
         file_name = "studentEmail_e" + qr['idExam'] + "_r" + qr['idClassroom'] + "_s" + s.student_ID
         fileExameName = file_name + '.tex'

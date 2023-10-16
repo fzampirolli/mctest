@@ -516,6 +516,8 @@ def correctStudentsExam(request, pk):
             messages.error(request, _('correctStudentsExam: choose a PDF file with scanned exams!'))
             return render(request, 'exam/exam_errors.html', {})
 
+        choiceReturnQuestions = request.POST.get('choiceReturnQuestions')
+
         fs = FileSystemStorage()
         file0 = str(file.name)
         file0 = file0.replace(' ', '')
@@ -722,7 +724,7 @@ def correctStudentsExam(request, pk):
 
                 if (exam.exam_student_feedback == 'yes'):
                     cvMCTest.drawImageGAB(qr, strGAB, imgGAB_rgb)
-                    cvMCTest.studentSendEmail(qr)  # cria pdf com feedback p/ aluno
+                    cvMCTest.studentSendEmail(qr,choiceReturnQuestions)  # cria pdf com feedback p/ aluno
 
             countPage += 1
 
