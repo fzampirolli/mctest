@@ -1544,8 +1544,9 @@ class cvMCTest(object):
             return ""
 
         if sex:
-            aux = str(len(StudentExamQuestion.objects.filter(studentExam=sex)))
-            str1 += "\\noindent\\textbf{%s:} %s/%s \n\n" % (_("Grade"), str(sex.grade), aux)
+            aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
+            percent = round(int(sex.grade)/aux,3)
+            str1 += "\\noindent\\textbf{%s:} %s/%s (%.3f) \n\n" % (_("Grade"), str(sex.grade), str(aux), percent)
 
             if choiceReturnQuestions:  #  mostrar as questões com os gabaritos
                 titl = _("Multiple Choice Questions")
