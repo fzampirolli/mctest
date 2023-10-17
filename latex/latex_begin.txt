@@ -5,7 +5,6 @@
 \usepackage[table,xcdraw]{xcolor}
 
 \usepackage[hidelinks]{hyperref}
-
 %cachedir=./tmp/
 %outputdir=./tmp/
 %\usepackage[outputdir=tmp]{minted}

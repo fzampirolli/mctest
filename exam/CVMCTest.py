@@ -216,7 +216,7 @@ class cvMCTest(object):
                 qr['correct'] = ''  ### Quando o gabarito esta na primeira pagina do pdf
 
                 # ler gabarito do servidor
-                #fi = ';'.join([i for i in dec.split(';')[:-1]])
+                # fi = ';'.join([i for i in dec.split(';')[:-1]])
                 fileGAB = 'tmpGAB/' + dec + '.txt'
                 if os.path.exists(fileGAB):
                     with open(fileGAB, 'r') as myfile:
@@ -1451,7 +1451,7 @@ class cvMCTest(object):
                             if len(respostas[countQuestions]) == 3:
                                 lin = int(p1[0] - 13 + 28.6 * (notas.index(respostas[countQuestions][2]) + 1))
                                 if lin < p2[0]:
-                                    cv2.circle(img, (col, lin+5), 11, (255, 0, 255), 2)
+                                    cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
                         except:
                             pass
                     countQuestions += 1
@@ -1480,7 +1480,7 @@ class cvMCTest(object):
                 print(f + ' criado no HD')
                 L1 = ['Pag', 'ID', 'Resp', 'Quest', 'Inv', 'Grade']
 
-                try: # add in 31/3/2023
+                try:  # add in 31/3/2023
                     i = int(qr['correct'][0])  # se for inteiro entao tem questoes no BD
                     # L1.extend(range(1, 1 + len(qr['correct'])))  # questoes
                     # L1.extend(range(1, 1 + len(qr['correct'])))  # id das questoes no BD
@@ -1524,7 +1524,7 @@ class cvMCTest(object):
     ####################################
 
     @staticmethod
-    def studentSendEmail(qr,choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
+    def studentSendEmail(qr, choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
         try:
             s = Student.objects.filter(student_ID=qr['idStudent'])[0]
@@ -1545,10 +1545,13 @@ class cvMCTest(object):
 
         if sex:
             aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
-            percent = round(int(sex.grade)/aux,3)
-            str1 += "\\noindent\\textbf{%s:} %s/%s (%.3f) \n\n" % (_("Grade"), str(sex.grade), str(aux), percent)
-
-            if choiceReturnQuestions:  #  mostrar as questões com os gabaritos
+            percent = round(100*int(sex.grade) / aux, 3)
+            # str1 += "\\noindent\\textbf{%s:} %s/%s ($\\qty\{{%.3f}\}\{\\percent\}) \n\n" % (
+            # _("Grade"), str(sex.grade), str(aux), percent)
+            str1 += "\\noindent\\textbf{%s:} %s/%s ({%.3f}___percent___) \n\n" % (
+            _("Grade"), str(sex.grade), str(aux), percent)
+            str1 = str1.replace("___percent___", "\%")
+            if choiceReturnQuestions:  # mostrar as questões com os gabaritos
                 titl = _("Multiple Choice Questions")
                 str1 += "\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
 
@@ -1567,7 +1570,8 @@ class cvMCTest(object):
                             str1 += "\\textbf{%s:} \t[(%s)-%s]: %s \n\n" % (_("Your answer"),
                                                                             qe.studentAnswer,
                                                                             _("INCORRECT"),
-                                                                            aa[int(qe.answersOrder[index1])].answer_text)
+                                                                            aa[int(
+                                                                                qe.answersOrder[index1])].answer_text)
                         if aa[index1].answer_feedback:
                             str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa[index1].answer_feedback)
                     else:
@@ -1594,7 +1598,8 @@ class cvMCTest(object):
         proc = subprocess.Popen(cmd)
         proc.communicate()
 
-        enviaOK = cvMCTest.sendMail(file_name + ".pdf", "Exam Correction by MCTest", s.student_email, str(s.student_name))
+        enviaOK = cvMCTest.sendMail(file_name + ".pdf", "Exam Correction by MCTest", s.student_email,
+                                    str(s.student_name))
 
         path = os.getcwd()
         os.system("cp " + file_name + ".pdf " + path + "/pdfStudentEmail/")
