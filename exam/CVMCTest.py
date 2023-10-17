@@ -1546,8 +1546,6 @@ class cvMCTest(object):
         if sex:
             aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
             percent = round(100*int(sex.grade) / aux, 3)
-            # str1 += "\\noindent\\textbf{%s:} %s/%s ($\\qty\{{%.3f}\}\{\\percent\}) \n\n" % (
-            # _("Grade"), str(sex.grade), str(aux), percent)
             str1 += "\\noindent\\textbf{%s:} %s/%s ({%.3f}___percent___) \n\n" % (
             _("Grade"), str(sex.grade), str(aux), percent)
             str1 = str1.replace("___percent___", "\%")
