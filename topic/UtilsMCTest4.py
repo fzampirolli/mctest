@@ -149,7 +149,7 @@ class UtilsMC(object):
         return code
 
     @staticmethod
-    def questionParametric(question, answers):
+    def questionParametric(question, answers, exam):
         dt0 = datetime.datetime.now()
         print("questionParametric-00-" + str(dt0))
 
@@ -197,7 +197,8 @@ class UtilsMC(object):
         ############ answers #####
         AllLines = []
         for a in answers:
-            AllLines.append(a.answer_text + '\n')
+            if len(AllLines) < int(exam.exam_number_of_anwsers_question):
+                AllLines.append(a.answer_text + '\n')
         i = 0
         tam = len(AllLines)
 
@@ -214,9 +215,16 @@ class UtilsMC(object):
                         if len(str(k)) > 0:
                             for z in str(eval(k)).split('\n'):
                                 if z:
-                                    AllLines.insert(i, z.replace('\n\n', '\n'))
-                                    i += 1
-                                    m += 1
+                                    if exam: # limita pelo n. respostas do exame
+                                        if len(AllLines) < int(exam.exam_number_of_anwsers_question):
+                                            AllLines.insert(i, z.replace('\n\n', '\n'))
+                                            i += 1
+                                            m += 1
+                                    else:
+                                        AllLines.insert(i, z.replace('\n\n', '\n'))
+                                        i += 1
+                                        m += 1
+
                     i -= 1
                     tam = tam + m
                 AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))

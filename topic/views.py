@@ -247,9 +247,9 @@ def see_question_PDF(request, pk):
                         ans.append(a.answer_text + '\n')
             else:  # QUESTOES PARAMETRICAS
                 if q.question_type == "QM":
-                    [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers())
+                    [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
                 else:  # se for dissertativa, não colocar alternativas
-                    [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
+                    [quest, ans] = UtilsMC.questionParametric(q.question_text, [], [])
                 if quest == "":
                     messages.error(request,
                                    _('UtilsMC.questionParametric: do not use some words in the code, '
@@ -615,9 +615,9 @@ def see_topic_PDF(request, pk):
                 else:  # QUESTOES PARAMETRICAS
                     try:
                         if q.question_type == "QM":
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers())
+                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
                         else:  # se for dissertativa, não colocar alternativas
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
+                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [], [])
                         if quest == "":
                             messages.error(request,
                                            _('UtilsMC.questionParametric: do not use some words in the code, '

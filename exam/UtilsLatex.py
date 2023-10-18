@@ -1254,16 +1254,18 @@ _inst1_
                     quest = q.question_text
                     ans = []
                     for a in q.answers2.all():
-                        ans.append(a.answer_text)
 
-                    NUM_ans = q.answers2.all().count()
+                        if len(ans) < int(exam.exam_number_of_anwsers_question):
+                            ans.append(a.answer_text)
+
+                    NUM_ans = len(ans) # q.answers2.all().count()
 
                 else:  # QUESTOES PARAMETRICAS
                     try:
                         if q.question_type == "QM":
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers())
+                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
                         else:  # se não for questao de multipla escolha entao nao pegar as alternativas
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
+                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [], exam)
                     except:
                         messages.error(request, _('drawQuestionsMCDifficulty: Error in parametric question'))
                         return -1
@@ -1400,9 +1402,9 @@ _inst1_
                     quest = q.question_text
                 else:  # QUESTOES PARAMETRICAS
                     if q.question_type == "QM":
-                        [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers())
+                        [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
                     else:  # se não for QM entao nao pegar as alternativas
-                        [quest, ans] = UtilsMC.questionParametric(q.question_text, [])
+                        [quest, ans] = UtilsMC.questionParametric(q.question_text, [], exam)
 
                 bd_qT.append(
                     [count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest])
