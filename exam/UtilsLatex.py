@@ -340,7 +340,10 @@ class Utils(object):
                 strQuestions = Utils.drawCircles()
                 strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
                                                 data_hora)
-                strQuestions += Utils.drawAnswerSheet(request, exam)
+                if not Utils.drawAnswerSheet(request, exam):
+                    return False
+                else:
+                    strQuestions += Utils.drawAnswerSheet(request, exam)
                 strQuestions += Utils.drawCircles()
                 strQuestions += Utils.drawInstructions(exam)
                 try:
@@ -374,6 +377,7 @@ class Utils(object):
                 f.close()
                 if not Utils.genTex(path_to_file_VARIATIONS_DB, "pdfExam"):
                     messages.error(request, _('ERROR in genTex') + ': ' + path_to_file_VARIATIONS_DB)
+        return True
 
     # create file template of all variations in varia_gab_all
     @staticmethod
@@ -1069,8 +1073,10 @@ _inst1_
                 numQuadros += 1
 
                 if numResto < 3:
+                    #return HttpResponse("ERROR: The teacher is not registered in a Discipline (or in a classroom)")
                     messages.error(request, _("ERROR: Each block must have at least 3 questions/answers"))
-                    return render(request, 'exam/exam_errors.html', {})
+                    return '' #render(request, 'exam/exam_errors.html', {})
+                    #return -1
 
             if numQuadros == 0:
                 numQuadros += 1

@@ -239,7 +239,10 @@ def variationsExam(request, pk):
         if 'Latex' in choices:
             path_aux = BASE_DIR + "/report_Exam_" + str(pk)
             path_to_file_VARIATIONS_DB_Tex = path_aux + "_variations.tex"
-            Utils.createFile_Tex(request, exam, path_to_file_VARIATIONS_DB_Tex, data_hora)
+            if not Utils.createFile_Tex(request, exam, path_to_file_VARIATIONS_DB_Tex, data_hora):
+                #message_cases += _("ERROR: Each block must have at least 3 questions/answers") + '\n'
+                return render(request, 'exam/exam_msg.html', {})
+
             path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk)
             path_to_file_VARIATIONS_DB_Tex = path_aux + "_variations.tex"
             anexos.append([path_to_file_VARIATIONS_DB_Tex])

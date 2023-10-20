@@ -197,7 +197,9 @@ class UtilsMC(object):
         ############ answers #####
         AllLines = []
         for a in answers:
-            if len(AllLines) < int(exam.exam_number_of_anwsers_question):
+            if not exam:
+                AllLines.append(a.answer_text + '\n')
+            elif len(AllLines) < int(exam.exam_number_of_anwsers_question):
                 AllLines.append(a.answer_text + '\n')
         i = 0
         tam = len(AllLines)
