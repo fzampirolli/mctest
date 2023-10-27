@@ -6,10 +6,16 @@
 > Ano: 2023
 ---
 
-Este livro reúne e consolida as publicações disponibilizadas 
-no endereço [vision.ufabc.edu.br](http://vision.ufabc.edu.br), 
-especialmente aquelas em que o mesmo autor principal esteve envolvido. 
-Para obter mais informações, consulte o prefácio do livro.
+Este livro é uma compilação e consolidação das publicações 
+disponíveis no site [vision.ufabc.edu.br](http://vision.ufabc.edu.br). 
+Ele se concentra principalmente nas publicações em que o 
+autor principal esteve envolvido. Para obter mais informações, 
+o autor recomenda consultar o prefácio do livro.
+
+Atualmente, são feitas melhorias nesta obra para a segunda 
+edição, que está em processo de construção. Pode acompanhar o 
+progresso e contribuir com o projeto através deste 
+[link](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_process).
 
 ---
 ## Formatos do livro
