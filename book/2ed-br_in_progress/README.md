@@ -1,6 +1,6 @@
 # MCTest: Como Criar e Corrigir Exames Parametrizados Automaticamente
 
-## Primeira Edição:
+## [Primeira Edição](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress):
 
 ---
 > Autor: Francisco de Assis Zampirolli </br>
@@ -12,7 +12,9 @@ Este livro é uma compilação e consolidação das publicações
 disponíveis no site [vision.ufabc.edu.br](http://vision.ufabc.edu.br). 
 Ele se concentra principalmente nas publicações em que o 
 autor principal esteve envolvido. Para obter mais informações, 
-o autor recomenda consultar o prefácio do livro.
+o autor recomenda consultar o prefácio do livro. 
+A primeira edição está diponível nesse 
+[link](https://github.com/fzampirolli/mctest/blob/master/book/1ed-br).
 
 ---
 
