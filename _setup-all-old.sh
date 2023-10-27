@@ -545,4 +545,7 @@ https://nubisys.ufabc.edu.br:8001/OK
 http://nubisys.ufabc.edu.br:8002/OK
 https://vcad.ufabc.edu.br:8003/OK
 http://vcad.ufabc.edu.br:8004/OK
+
+resolver problemas de atualização do github:
+
 '

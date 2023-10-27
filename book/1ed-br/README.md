@@ -12,6 +12,8 @@ Ele se concentra principalmente nas publicações em que o
 autor principal esteve envolvido. Para obter mais informações, 
 o autor recomenda consultar o prefácio do livro.
 
+---
+
 Atualmente, são feitas melhorias nesta obra para a segunda 
 edição, que está em processo de construção. Pode acompanhar o 
 progresso e contribuir com o projeto através deste 
