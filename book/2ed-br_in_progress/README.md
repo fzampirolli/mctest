@@ -41,7 +41,9 @@ Ainda não achei um conversor adequado para o estilo utilizado.
  é o melhor visualizador de EPUB para Android que encontrei para este livro.
 
 ---
-## Caso queira imprimir, seguem sugestões
+## Caso queira imprimir esta segunda edição, seguem sugestões
+
+Observação: o ISBN é da primeira edição.
 
 ### 1) Fábrica do Livro 
 * https://www.fabricadolivro.com.br/
