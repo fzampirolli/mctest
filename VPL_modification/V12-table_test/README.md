@@ -23,4 +23,4 @@ se txt, processa:
  - vpl_utils.py
 
 Arquivos adaptados da versão 10 (https://github.com/fzampirolli/mctest/tree/master/VPL_modification/V10-new_selector) 
-criados pelo Heitor Rodrigues Savegnago e seu orientador Prof. Dr. Paulo Henrique Pisani
+criados pelo Heitor Rodrigues Savegnago e o seu orientador Prof. Dr. Paulo Henrique Pisani
