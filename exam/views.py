@@ -882,12 +882,16 @@ def correctStudentsExam(request, pk):
             for f in np.sort(glob.glob(MYFILES + "_RETURN_*.png")):
                 myfiles.append(f)
 
+            # incluir também os pdf enviados nos emails dos alunos
+            path0 = BASE_DIR + "/pdfStudentEmail/studentEmail_e" + str(exam.id)
+            os.system("zip -j " + path0 + ".zip " + path0 + "*.pdf")
+
             if True:  # len(myfiles):
                 try:
                     os.remove(MYFILES + "*.zip")
                 except Exception as e:
                     pass
-                os.system("zip -j " + MYFILES + ".zip " + MYFILES + "_RETURN_*")
+                os.system("zip -j " + MYFILES + ".zip " + MYFILES + "_RETURN_* " + path0 + ".zip")
             # else:
             #     fzip = MYFILES + "_RETURN__.csv"
 

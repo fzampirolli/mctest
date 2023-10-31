@@ -1445,11 +1445,11 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    col = int(p1[1] + 17 + 31.4 * q)
+                    col = int(p1[1] + 17 + 31.0 * q)
                     if col < p2[1]:
                         try:
                             if len(respostas[countQuestions]) == 3:
-                                lin = int(p1[0] - 13 + 28.6 * (notas.index(respostas[countQuestions][2]) + 1))
+                                lin = int(p1[0] - 13 + 28.2 * (notas.index(respostas[countQuestions][2]) + 1))
                                 if lin < p2[0]:
                                     cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
                         except:
