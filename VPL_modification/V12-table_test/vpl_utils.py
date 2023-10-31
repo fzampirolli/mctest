@@ -18,8 +18,7 @@ def terminate(score=0.0, comments=dict()):
         print()
     # print("Grade :=>>{score:.2}".format(score = GRADEMIN + score * (GRADEMAX-GRADEMIN)))
     #print("<|--")
-
-    print(f"GRADE == {round(score*100,2)}")
+    print(f"Grade = {round(score*100,2)}")
     #print("--|>")
     
     # print("<|-- ") # início de um comentário
@@ -57,6 +56,7 @@ class TesteDeMesa:
         else:
             raise Exception("Invalid function.")
 
+
     # Print source code
     def source(self):
         import re
@@ -64,25 +64,26 @@ class TesteDeMesa:
         count = 0
         for line in self.codeLines:
             count = count + 1
-            line = re.sub(r'^def ', r'Function ', line)
+            line = re.sub(r'^def ', r'Função ', line)
             line = re.sub(r':$ *', r'', line)
 
             # Repetition
-            line = re.sub(r'for *(.+) *in *(.+)', r'For \1 in \2, do:', line)
-            line = re.sub(r'in *range *\((.+) *, *(.+) *\)', r'from \1 until \2 (not included)', line)
-            line = re.sub(r'while *(.+)', r'While \1, do:', line)
+            line = re.sub(r'for *(.+) *in *(.+)', r'Para \1 em \2, faça:', line)
+            line = re.sub(r'em *range *\((.+) *, *(.+) *\)', r'de \1 até \2 (não incluso)', line)
+            line = re.sub(r'while *(.+)', r'Enquanto \1, faça:', line)
 
             # Conditional
-            line = re.sub(r'elif *(.+)', r'Else If \1, then:', line)
-            line = re.sub(r'if *(.+)', r'If \1, then:', line)
-            line = re.sub(r'else', r'Else:', line)
+            line = re.sub(r'elif *(.+)', r'Senão se \1, então:', line)
+            line = re.sub(r'if *(.+)', r'Se \1, então:', line)
+            line = re.sub(r'else', r'Senão:', line)
 
             # Functions
-            line = re.sub(r'print *\(.*"(.+)".*\)', r'Print "\1"', line) # print with "
-            line = re.sub(r'print *\(.*(.+).*\)', r'Print \1', line) # print without "
+            line = re.sub(r'print *\(.*"(.+)".*\)', r'Imprimir "\1"', line) # print with "
+            line = re.sub(r'print *\(.*(.+).*\)', r'Imprimir \1', line) # print without "
+            line = re.sub(r'len *\( *([^ ]+) *\)', r'\1.lenght', line) # len
 
             # Return
-            line = re.sub(r'^( +)return', r'\1Return', line)
+            line = re.sub(r'^( +)return', r'\1Retorna', line)
 
             # Operators
             line = re.sub(r'([a-z0-9]+) *=[^=] *(.*)', r'\1 ← \2', line)
@@ -90,6 +91,10 @@ class TesteDeMesa:
             line = re.sub(r'>=', r'≥', line)
             line = re.sub(r'==', r'=', line)
             line = re.sub(r'!=', r'≠', line)
+            line = re.sub(r'([a-z0-9\[\]]+) *\+= *([a-z0-9\[\]]+)', r'\1 = \1 + \2', line) # +=
+            line = re.sub(r'([a-z0-9\[\]]+) *-= *([a-z0-9\[\]]+)', r'\1 = \1 - \2', line) # -=
+            line = re.sub(r'([a-z0-9\[\]]+) *\*= *([a-z0-9\[\]]+)', r'\1 = \1 * \2', line) # *=
+            line = re.sub(r'([a-z0-9\[\]]+) */= *([a-z0-9\[\]]+)', r'\1 = \1 / \2', line) # /=
             line = re.sub(r'([a-z0-9]+) *\* *([a-z0-9]+)', r'\1 × \2', line) # /
             line = re.sub(r'([a-z0-9]+) */ *([a-z0-9]+)', r'\1 ÷ \2', line) # *
             line = re.sub(r'([a-z0-9]+) *% *([a-z0-9]+)', r'\1 mod \2', line) # mod
@@ -110,7 +115,7 @@ class TesteDeMesa:
 
 
     # Exec code and create the matrix
-    def make(self, args):
+    def make(self, args, ignoreVars = []):
 
         # Init
         lines = []
@@ -168,7 +173,7 @@ class TesteDeMesa:
         allVars = []
         for vars in lines[:-1]:
             for var in vars['vars']:
-                if var not in allVars:
+                if var not in allVars and var not in ignoreVars:
                     allVars.append(var)
 
         # First line
@@ -207,21 +212,63 @@ class TesteDeMesa:
             str = str + '\n' # f"{line[1]}"
         return str #.replace(' ', '_')
 
+    # @staticmethod
+    # def str2table(str):
+    #     line = 1
+    #     tbl = []
+    #     for row in str.splitlines():
+    #         cols = []
+    #         for col in row.strip().split(' '):
+    #             if col.strip() != '':
+    #                 cols.append(col.strip())
+    #         if len(cols) == 0:
+    #             raise Exception(f"A linha {line} está vazia. Favor, remova!")
+    #         tbl.append(cols)
+    #         line = line + 1
+    #     return tbl
+
     @staticmethod
     def str2table(str):
         line = 1
         tbl = []
+        import json
         for row in str.splitlines():
             cols = []
-            for col in row.strip().split(' '):
-                if col.strip() != '':
-                    cols.append(col.strip())
+            v = None
+            
+            if line == 1:
+                tbl.append(row.split())
+                line += 1
+                continue
+                
+            for col in row.strip().replace(',', ' ').replace('t', ' ').split(' '):
+                c = col.strip()
+                if c != '':
+                    if c[0] == '[':
+                        if v != None:
+                            raise Exception(f"Matriz não suportado na linha {line}")
+                        elif len(c) > 1:
+                            v = [ c[1:] ]
+                        else:
+                            v = []
+                    elif c[-1] == ']':
+                        if v == None:
+                            raise Exception(f"Vetor ainda não inicializado na linha {line}")
+                        elif len(c) > 1:
+                            v.append(c[:-1])
+                        print(v)
+                        cols.append('[' + ', '.join(v) + ']')
+                        v = None
+                    elif v != None:
+                        v.append(c)
+                    else:
+                        cols.append(c)
             if len(cols) == 0:
                 raise Exception(f"A linha {line} está vazia. Favor, remova!")
             tbl.append(cols)
             line = line + 1
         return tbl
-
+        
     # Set a custom table template
     def setTable(self, table):
         if isinstance(table, str):
@@ -268,7 +315,8 @@ class TesteDeMesa:
                     if not answers[i][0].isnumeric():
                         feedback = f"A primeira coluna da linha {i+1}, que representa o número da linha, precisa ser inteiro."
                     for j in range(1, len(answers[i])):
-                        if not answers[i][j].isnumeric() and answers[i][j] != '?':
+                        #if not answers[i][j].isnumeric() and answers[i][j] != '?':
+                        if not answers[i][j].isnumeric() and answers[i][j] != '?' and ( answers[i][j][0] != '[' and answers[i][j][-1] != ']'):
                             feedback = f"A coluna {j+1} da linha {i+1} precisa ter um valor inteiro ou '?' caso for indefinido."
                             isCorrect = False
         

@@ -77,11 +77,12 @@ for i in $ALL_QUESTIONS ; do
     	
         if [ "${THIS_QUESTION_CHOSEN_FILE##*.}" = "txt" ]; then    ############### table test
 
-            #echo "GRADE == 50" >> $THIS_QUESTION_OUTFILE  ############### NÃO ESTÁ PEGANDO A NOTA!!!!!!
+            #echo "Grade :=>> 50" >> $THIS_QUESTION_OUTFILE  ############### NÃO ESTÁ PEGANDO A NOTA!!!!!!
             #cat $THIS_QUESTION_OUTFILE
 
-            PARTIAL=$(cat $THIS_QUESTION_OUTFILE | grep -Eo 'GRADE == [[:digit:]]+([.][[:digit:]]+)?')
-            PARTIAL="${PARTIAL:9}"
+            PARTIAL=$(cat $THIS_QUESTION_OUTFILE | grep -Eo 'Grade = +[[:digit:]]+([.][[:digit:]]+)?')
+            #echo "-Nota: $PARTIAL" >> $BUFFER_FILE
+            PARTIAL="${PARTIAL:8}"
         else
         	PARTIAL=$( awk '{ /^PartialGrade :=>> +[[:digit:]]+([.][[:digit:]]+)?$/ } END { print $NF }' $THIS_QUESTION_OUTFILE | grep -Eo '[[:digit:]]+([.][[:digit:]]+)?')
 		fi
