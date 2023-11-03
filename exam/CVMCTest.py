@@ -982,7 +982,7 @@ class cvMCTest(object):
 
         img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 175, 1)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png",
+            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03.png",
             img)
         img[:, W - 1] = img[:, 1] = img[1, :] = img[H - 1, :] = 0
 
@@ -1051,7 +1051,7 @@ class cvMCTest(object):
                                 countSquare + 1) +
                             "_p_04_q" + str(q) + "_" + str(count_aux) + "_area_" + str(area) + ".png", iii)
 
-                    if area > 58:  ################################# SENSIVEL!!!!!
+                    if area > 55:  ################################# SENSIVEL!!!!!
                         if DEBUG: rect.append([x, y, w, h])
 
                         n = notas[countQuestions]
@@ -1445,7 +1445,7 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    col = int(p1[1] + 17 + 31.0 * q)
+                    col = int(p1[1] + 17 + 30.3 * q)
                     if col < p2[1]:
                         try:
                             if len(respostas[countQuestions]) == 3:
