@@ -52,7 +52,7 @@ pandas==1.5.2
 patsy==0.5.3
 pdf2image==1.16.2
 pikepdf==6.2.8.post1
-Pillow==9.4.0
+Pillow==10.0.1
 pycparser==2.21
 pymc3==3.11.5
 PyMySQL==1.0.2
