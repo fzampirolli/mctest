@@ -830,7 +830,7 @@ class cvMCTest(object):
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
-        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
+        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)) ### fz: estava 4,4
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
             "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
@@ -887,7 +887,9 @@ class cvMCTest(object):
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
-        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
+        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)) ### fz: estava 4,4
+        if DEBUG: cv2.imwrite(
+            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_00.png", img)
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
             "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
@@ -986,6 +988,12 @@ class cvMCTest(object):
             img)
         img[:, W - 1] = img[:, 1] = img[1, :] = img[H - 1, :] = 0
 
+        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)) ### FILTRO NOVO
+        img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
+        if DEBUG: cv2.imwrite(
+            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03aa.png",
+            img)
+
         img3 = cv2.bitwise_and(imgCols, imgLines)
         if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_03and1.png", img3)
@@ -1012,7 +1020,7 @@ class cvMCTest(object):
             if jfim >= W:
                 break
             if jini > 4:
-                jini -= 4
+                jini -= 1 #### fz: estava 4
             ## verifica qual foi a resposta em cada coluna/questao
             im = img[:, jini:jfim]
 
@@ -1035,7 +1043,7 @@ class cvMCTest(object):
             count_aux = 0
             for cnt in contoursOrder:  # loop over the contours
                 area = cv2.contourArea(cnt)
-                if area > 100:  ################################# SENSIVEL!!!!!
+                if area > 110:  ################################# SENSIVEL!!!!!
                     count_aux += 1
                     x, y, w, h = cv2.boundingRect(cnt)
                     iii = im[y:y + h, x:x + w]
@@ -1051,7 +1059,7 @@ class cvMCTest(object):
                                 countSquare + 1) +
                             "_p_04_q" + str(q) + "_" + str(count_aux) + "_area_" + str(area) + ".png", iii)
 
-                    if area > 55:  ################################# SENSIVEL!!!!!
+                    if area > 65:  ################################# SENSIVEL estava 55 !!!!!
                         if DEBUG: rect.append([x, y, w, h])
 
                         n = notas[countQuestions]
@@ -1445,12 +1453,12 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    col = int(p1[1] + 17 + 30.3 * q)
+                    col = int(p1[1] + 17 + 30.3 * q) ######################## 30.3 SENSIVEL
                     if col < p2[1]:
                         try:
                             if len(respostas[countQuestions]) == 3:
                                 lin = int(p1[0] - 13 + 28.2 * (notas.index(respostas[countQuestions][2]) + 1))
-                                if lin < p2[0]:
+                                if lin < p2[0]: ######################## 28.2 SENSIVEL
                                     cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
                         except:
                             pass
