@@ -543,6 +543,76 @@ class TopicDelete(LoginRequiredMixin, generic.DeleteView):
             return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
 
 
+
+@login_required
+def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQuestions):
+    for qid in new_order:
+        q = get_object_or_404(Question, pk=questions_id[qid])
+        print('#######################', q.id, q.question_short_description)
+
+        countQuestions += 1
+        str1 = "\\noindent\\rule{\\textwidth}{0.8pt}\\\\\n"
+        str1 += "\\noindent\\textbf{Count:} %d\\\\\n" % countQuestions
+        str1 += "\\noindent\\textbf{Short Description:} %s\\\\\n" % q.question_short_description
+        str1 += "\\noindent\\textbf{Group:} %s\\\\\n" % q.question_group
+        str1 += "\\noindent\\textbf{Type:} %s\\\\\n" % q.question_type
+        str1 += "\\noindent\\textbf{Difficulty:} %s\\\\\n" % q.question_difficulty
+        str1 += "\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy
+        str1 += "\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update
+        str1 += "\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created
+        str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (
+            os.getenv('IP_HOST2'), q.id)
+        str1 += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper()
+
+        st = q.question_text
+        a, b = st.find('begin{comment}'), st.find('end{comment}')
+        if a < b:
+            str1 += "\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL'
+
+        ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
+        ss = ss1 % str(q.id).zfill(4)
+
+        str1 += "%s %s." % (ss, 1)
+
+        if q.question_parametric == 'no':
+            quest = q.question_text + '\n'
+            ans = []
+            if q.question_type == "QM":
+                for a in q.answers():
+                    ans.append(a.answer_text + '\n')
+        else:  # QUESTOES PARAMETRICAS
+            try:
+                if q.question_type == "QM":
+                    [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
+                else:  # se for dissertativa, não colocar alternativas
+                    [quest, ans] = UtilsMC.questionParametric(q.question_text, [], [])
+                if quest == "":
+                    messages.error(request,
+                                   _('UtilsMC.questionParametric: do not use some words in the code, '
+                                     'for ex. exec, cmd, open, import os, remove, mkdir, sys, gnureadline, '
+                                     'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
+                    messages.error(request, 'Question: %d' % q.id)
+                    return render(request, 'exam/exam_errors.html', {})
+            except:
+                str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
+                messages.error(request, _('ERROR IN THE PARAMETRIC PART!!!'))
+                messages.error(request, 'Question: %d' % q.id)
+                return render(request, 'exam/exam_errors.html', {})
+                # continue
+
+        str1 += r' %s\n\n' % ''.join(quest)
+        str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\\hspace{-3mm}\n"
+        for a in random.sample(ans, len(ans)):
+            if ans.index(a) == 0:
+                str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
+            else:
+                str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (str(ans.index(a)), a)
+        str1 += "\\end{oneparchoices}\\vspace{0mm}\\\\\n"
+
+        allQuestionsStr.append(str1)
+
+    return countQuestions, allQuestionsStr
+
 @login_required
 def see_topic_PDF(request, pk):
     if request.user.get_group_permissions():
@@ -572,76 +642,21 @@ def see_topic_PDF(request, pk):
 
             questions_id, questions_text = [], []
             for q in topic.questions2.all().order_by('question_text'):
-                questions_id.append(q.id)
-                questions_text.append(q.question_text)
-
+                if q.question_type == 'QM':
+                    questions_id.append(q.id)
+                    questions_text.append(q.question_text)
             new_order = UtilsMC.sortedBySimilarity2(questions_text)
+            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQuestions)
 
-            # for q in topic.questions2.all():
-            for qid in new_order:
-                q = get_object_or_404(Question, pk=questions_id[qid])
-                print('#######################', q.id, q.question_short_description)
+            allQuestionsStr.append("\\newpage\\\\\n")
 
-                countQuestions += 1
-                str1 = "\\noindent\\rule{\\textwidth}{0.8pt}\\\\\n"
-                str1 += "\\noindent\\textbf{Count:} %d\\\\\n" % countQuestions
-                str1 += "\\noindent\\textbf{Short Description:} %s\\\\\n" % q.question_short_description
-                str1 += "\\noindent\\textbf{Group:} %s\\\\\n" % q.question_group
-                str1 += "\\noindent\\textbf{Type:} %s\\\\\n" % q.question_type
-                str1 += "\\noindent\\textbf{Difficulty:} %s\\\\\n" % q.question_difficulty
-                str1 += "\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy
-                str1 += "\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update
-                str1 += "\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created
-                str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (
-                    os.getenv('IP_HOST2'), q.id)
-                str1 += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper()
-
-                st = q.question_text
-                a, b = st.find('begin{comment}'), st.find('end{comment}')
-                if a < b:
-                    str1 += "\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL'
-
-                ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
-                ss = ss1 % str(q.id).zfill(4)
-
-                str1 += "%s %s." % (ss, 1)
-
-                if q.question_parametric == 'no':
-                    quest = q.question_text + '\n'
-                    ans = []
-                    if q.question_type == "QM":
-                        for a in q.answers():
-                            ans.append(a.answer_text + '\n')
-                else:  # QUESTOES PARAMETRICAS
-                    try:
-                        if q.question_type == "QM":
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
-                        else:  # se for dissertativa, não colocar alternativas
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [], [])
-                        if quest == "":
-                            messages.error(request,
-                                           _('UtilsMC.questionParametric: do not use some words in the code, '
-                                             'for ex. exec, cmd, open, import os, remove, mkdir, sys, gnureadline, '
-                                             'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
-                            messages.error(request, 'Question: %d' % q.id)
-                            return render(request, 'exam/exam_errors.html', {})
-                    except:
-                        str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
-                        messages.error(request, _('ERROR IN THE PARAMETRIC PART!!!'))
-                        messages.error(request, 'Question: %d' % q.id)
-                        return render(request, 'exam/exam_errors.html', {})
-                        # continue
-
-                str1 += r' %s\n\n' % ''.join(quest)
-                str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\\hspace{-3mm}\n"
-                for a in random.sample(ans, len(ans)):
-                    if ans.index(a) == 0:
-                        str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
-                    else:
-                        str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (str(ans.index(a)), a)
-                str1 += "\\end{oneparchoices}\\vspace{0mm}\\\\\n"
-
-                allQuestionsStr.append(str1)
+            questions_id, questions_text = [], []
+            for q in topic.questions2.all().order_by('question_text'):
+                if q.question_type == 'QT':
+                    questions_id.append(q.id)
+                    questions_text.append(q.question_text)
+            new_order = UtilsMC.sortedBySimilarity2(questions_text)
+            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQuestions)
 
             fileQuestion.write("\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n")
             fileQuestion.write("\\noindent\\textbf{Topic:} %s\\\\\n" % topic.topic_text)
