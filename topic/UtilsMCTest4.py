@@ -135,7 +135,7 @@ class UtilsMC(object):
         code = []
         start = '\[\[' + str + ':'
         end = '\]\]'
-        reg = re.compile(start + '(\S+|\w+|.*)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
+        reg = re.compile(start + '([^]]+?)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
         for groups in reg.findall(s):
 
             for i in ['cmd', 'mkdir',
