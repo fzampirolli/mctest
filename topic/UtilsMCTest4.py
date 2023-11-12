@@ -548,7 +548,7 @@ class UtilsMC(object):
         np.fill_diagonal(m, 0)  # preenche a diagonal com zero
 
         questions_new, id_del = [], []
-        while m.max() > 0:
+        while len(m) and m.max() > 0:
             idLMax = np.where(m == np.amax(m))[0][0] # linha com maior similaridade
 
             questions_new.append(questions[idLMax])
