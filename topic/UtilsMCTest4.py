@@ -135,7 +135,8 @@ class UtilsMC(object):
         code = []
         start = '\[\[' + str + ':'
         end = '\]\]'
-        reg = re.compile(start + '([^]]+?)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
+        # (\S+|\w+|.*)  ->  (\w+|.*)
+        reg = re.compile(start + '(\S+|\w+|.*)' + end, re.IGNORECASE | re.DOTALL | re.MULTILINE)
         for groups in reg.findall(s):
 
             for i in ['cmd', 'mkdir',
@@ -143,6 +144,9 @@ class UtilsMC(object):
                       'shlex', 'commands']:
                 if i in groups:
                     return None  # HttpResponse('ERROR: do not use that word in the code: '+i)
+
+            if str == 'code':
+                groups = groups.replace(" ", "")
 
             code.append(groups)
 
