@@ -833,9 +833,10 @@ class Utils(object):
         return 1
 
     @staticmethod
-    def getBegin():
+    def getBegin(font_size="10"):
         with open('./latex/latex_begin.txt', 'r') as latex_begin:
             str = latex_begin.read()
+        str = str.replace("10pt,brazil,a4paper", f'{font_size}pt,brazil,a4paper')
         return str
 
     @staticmethod

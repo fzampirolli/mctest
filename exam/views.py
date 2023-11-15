@@ -960,6 +960,9 @@ def generate_page(request, pk):
         # start = time.time()
         # tempoTeX = 0
         # tempoPDF = 0
+
+        font_size = request.POST.get('font_size')
+
         st = Utils.validateProf(exam, request.user)
         if st != None:
             return HttpResponse(st)
@@ -1152,7 +1155,7 @@ def generate_page(request, pk):
                     try:
                         with open(fileExamNameSTUDENT, 'w') as fileExamSTUDENT:
                             fileExamSTUDENT = open(fileExamNameSTUDENT, 'w')
-                            fileExamSTUDENT.write(Utils.getBegin())
+                            fileExamSTUDENT.write(Utils.getBegin(font_size))
                             fileExamSTUDENT.write(strSTUDENT)
                             fileExamSTUDENT.write("\\end{document}")
                             fileExamSTUDENT.close()
@@ -1193,7 +1196,7 @@ def generate_page(request, pk):
             try:
                 with open(fileExamName, 'w') as fileExam:
                     fileExam = open(fileExamName, 'w')
-                    fileExam.write(Utils.getBegin())
+                    fileExam.write(Utils.getBegin(font_size))
                     fileExam.write(strALL)
                     fileExam.write("\\end{document}")
                     fileExam.close()
