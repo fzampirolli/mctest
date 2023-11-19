@@ -1750,9 +1750,11 @@ _inst1_
                         sum_bloom += bloom_array.index(qBD.question_bloom_taxonomy) + 1
             variantExam_rankin_bloom.append([vars['variations'][0]['variant'], variationsExam.id, sum_bloom])
 
-        # Converter para um array numpy and sort by bloom
-        array_data = np.array(variantExam_rankin_bloom)
-        variantExam_rankin_bloom_sort = array_data[array_data[:, 2].argsort()]
+        # Convert the last column to integers
+        data = [[item[0], item[1], int(item[2])] for item in variantExam_rankin_bloom]
+
+        # Sort the data by the converted last column
+        variantExam_rankin_bloom_sort = np.array(sorted(data, key=lambda x: x[2]))
 
         # Create a CSV writer
         with open(path_to_file_ADAPTIVE_TEST_variations, 'w', newline='') as csv_file:
