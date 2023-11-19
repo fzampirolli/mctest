@@ -48,9 +48,11 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 
-
 from topic.UtilsMCTest4 import UtilsMC
 from topic.models import Question
+from exam.models import VariationExam
+from exam.models import Exam
+from exam.models import StudentExam
 
 
 class Utils(object):
@@ -88,9 +90,9 @@ class Utils(object):
         return strQM
 
     @staticmethod
-    def getQRanswers(exam):
+    def getQRanswers(variations):
         qr_answers_all = []
-        for v in exam.variationsExams2.all():
+        for v in variations:
             qr_answers = ''
             s = eval(v.variation)
             for var in s['variations']:
@@ -101,6 +103,37 @@ class Utils(object):
                     qr_answers += ';'
             qr_answers_all.append(qr_answers)
         return qr_answers_all
+
+    @staticmethod
+    def getQRanswersbyVariation(qr, exam):
+        # pega a variação que está no QRcode e o gabarito do bd em VariantExam
+        if 'correct' in qr and not 'ERROR' in qr['correct']:  # se conseguiu ler o QRCode, pega a variação
+            id_variante = int(qr['variations']) + int(qr['variant'])
+            if id_variante > int(qr['variations']) + int(exam.exam_variations):  # não existe variant
+                return qr
+            try:
+                variationsExam = get_object_or_404(VariationExam, pk=str(id_variante))
+            except:
+                qr['correct'] = 'ERROR'
+                return qr
+
+            qr_answers = []
+            dbtext = []
+            s = eval(variationsExam.variation)
+            for var in s['variations']:
+                for q in var['questions']:
+                    if q['type'] == 'QM':
+                        qr_ans = str(q['key'])
+                        for a in q['answers']:
+                            qr_ans += str(a['sort'])
+                        qr_answers.append(qr_ans)
+                    else:
+                        dbtext.append(str(q['key']))
+
+            qr['correct'] = qr_answers
+            qr['dbtext'] = dbtext
+
+        return qr
 
     # sort DB question by topic, used in XML format of Moodle
     @staticmethod
@@ -762,7 +795,7 @@ class Utils(object):
         return (hash_base_B + hash_base_C + hash_base_D + 5 * hash_base_E) // 8
 
     @staticmethod
-    def defineQRcode(exam, room, idStudent):
+    def defineQRcode(exam, room, idStudent, strVarExam="", hash_num=""):
         str1 = ''
         # if (exam.exam_print in ['ques','answ','both']):
         mill = str(int(round(time.time() * 1000)))
@@ -797,8 +830,12 @@ class Utils(object):
             str1 += exam.exam_number_of_questions_text + ';'  # 11 = numero de questões dissertativas
             str1 += exam.exam_number_of_anwsers_question + ';'  # 12 = quantidade de alternativas/respostas
 
+            # alteração em 15/11/2023
+            str1 += strVarExam + ';'  # 13 = variations
+            str1 += hash_num + ';'  # 14 = variation in variations
+
         if exam.exam_print == 'ques':
-            str1 += exam.exam_number_of_questions_text + ';'  # 13 = REMOVER ISSO POIS JÁ ESTÁ EM 11 #################
+            str1 += exam.exam_number_of_questions_text + ';'  # 15
 
         qrfile = './tmp/QRCode_' + str(room_id) + '_' + str(exam.id) + '_' + str(idStudent) + '.eps'
         # print('$$$$$ QR0=',[qrfile,str1])
@@ -1074,10 +1111,10 @@ _inst1_
                 numQuadros += 1
 
                 if numResto < 3:
-                    #return HttpResponse("ERROR: The teacher is not registered in a Discipline (or in a classroom)")
+                    # return HttpResponse("ERROR: The teacher is not registered in a Discipline (or in a classroom)")
                     messages.error(request, _("ERROR: Each block must have at least 3 questions/answers"))
-                    return '' #render(request, 'exam/exam_errors.html', {})
-                    #return -1
+                    return ''  # render(request, 'exam/exam_errors.html', {})
+                    # return -1
 
             if numQuadros == 0:
                 numQuadros += 1
@@ -1265,7 +1302,7 @@ _inst1_
                         if len(ans) < int(exam.exam_number_of_anwsers_question):
                             ans.append(a.answer_text)
 
-                    NUM_ans = len(ans) # q.answers2.all().count()
+                    NUM_ans = len(ans)  # q.answers2.all().count()
 
                 else:  # QUESTOES PARAMETRICAS
                     try:
@@ -1315,7 +1352,8 @@ _inst1_
         return ([str1, qr_bytes, count, db_questions])
 
     @staticmethod
-    def drawQuestionsTDifficulty(request, exam, room, student_ID, student_name, countVariations, data_hora):
+    def drawQuestionsTDifficulty(request, exam, room, student_ID, student_name, countVariations, data_hora,
+                                 strVarExam="", hash_num=""):
         qr_bytes = ''
         titl = _("Text Questions")
         strQT = '\n\n% QUESTOES DISSERTATIVAS\n\n'
@@ -1336,7 +1374,7 @@ _inst1_
                     if (exam.exam_print_eco == 'no'):
 
                         # criar um qrcode por questao dissertativa, por pagina, se nao for ecologico
-                        myqr = Utils.defineQRcode(exam, room, student_ID)
+                        myqr = Utils.defineQRcode(exam, room, student_ID, strVarExam, hash_num)
                         myqr[0] = myqr[0][:-4] + '_q' + str(q['key']) + '.eps'
                         myqr[1] += str(q['key'])
 
@@ -1526,6 +1564,7 @@ _inst1_
         sbeforeQR = binascii.hexlify(id_hashed + compressed)
         sbeforeQR_ALL = binascii.hexlify(id_hashed + compressed_ALL)
 
+        ''' OBSOLETO, OS GABARITOS ESTÃO NO BD EM VariantExam
         # template of each exam is save on service mctest
         if exam.exam_print == 'both':
             fileGAB = 'tmpGAB/' + myqr[1] + '.txt'
@@ -1555,6 +1594,7 @@ _inst1_
 
             if s_ALL != decompressed:
                 return HttpResponse("ERROR: in compression")
+        '''
 
         # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
         qr = pyqrcode.create(sbeforeQR, error='M')
@@ -1564,3 +1604,214 @@ _inst1_
             str1 += "\n \ \ \\ \n \\newpage\n"
 
         return str1
+
+    @staticmethod
+    def createAdaptativeTest(request, exam, choice_adaptive_test, path_to_file_ADAPTIVE_TEST):
+
+        # Initialize a dictionary to store student grades for each exam
+        student_grades_by_exam = {}
+
+        # Inicialize um conjunto para armazenar todos os IDs de exames
+        all_exam_ids = set()
+
+        for room in exam.classrooms.all():  ############## PARA CADA TURMA
+
+            # Assuming Exam has an attribute 'exam_data'
+            exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
+            exams_aux = list(exams_with_same_room)  # Convert queryset to list
+
+            # Sort exams_aux by the 'exam_data' attribute
+            exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
+
+            # Iterate through sorted exams
+            for exam0 in exams_aux_sorted:
+                # Iterate through students in the room
+                for s in room.students.all():
+                    # Find the corresponding grade for the student in the current exam
+                    student_exam0 = StudentExam.objects.filter(exam=exam0, student=s).first()
+                    grade = student_exam0.grade if student_exam0 else None
+
+                    # Initialize a dictionary for the current student if not exists
+                    if s.id not in student_grades_by_exam:
+                        student_grades_by_exam[s.id] = {
+                            'room_id': room.id,
+                            'room_code': room.classroom_code,
+                            'name': s.student_name,
+                            'email': s.student_email,
+                            'grades': [],
+                        }
+
+                    # Append the grade to the list of grades for the current student and exam
+                    student_grades_by_exam[s.id]['grades'].append({
+                        'exam_hour': exam0.exam_hour,
+                        'exam_id': exam0.id,
+                        'grade': grade,
+                    })
+
+                # Adicione o ID do exame ao conjunto
+                all_exam_ids.add(exam0.id)
+
+        # Calcule o número máximo de exames
+        max_num_exams = len(all_exam_ids)
+
+        # Create a CSV writer
+        with open(path_to_file_ADAPTIVE_TEST, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',')
+
+            # Write header
+            header_row = ['RoomID', 'RoomCode', 'NomeAluno', 'EmailAluno']
+            # Add exam information to the header
+            for i in range(1, max_num_exams + 2):
+                header_row.append(f'IDExame{i}')
+                header_row.append(f'DataExame{i}')
+                header_row.append(f'GradeExame{i}')
+            csv_writer.writerow(header_row)
+
+            # Write data
+            maxStudentsClassGrade = 0
+            for student_id, student_data in student_grades_by_exam.items():
+                row_data = [student_data['room_id'], student_data['room_code'], student_data['name'],
+                            student_data['email']]
+
+                # Variável para armazenar a soma das últimas X notas
+                total_grades = []
+
+                # Populate exam information for each exam
+                for exam_grade in student_data['grades']:
+                    # Make sure 'exam_id' is included in the dictionary, or use get method with a default value
+                    row_data.extend(
+                        [exam_grade['exam_id'], str(exam_grade['exam_hour'])[:10], exam_grade['grade']])
+
+                    nota = int(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
+                    total_grades.append(nota)
+
+                if len(total_grades) > int(choice_adaptive_test):
+                    somaUtimos = sum(total_grades[-int(choice_adaptive_test):])
+                else:
+                    somaUtimos = sum(total_grades)
+
+                if maxStudentsClassGrade < somaUtimos:
+                    maxStudentsClassGrade = somaUtimos
+
+                row_data.extend([float(somaUtimos)])
+
+                csv_writer.writerow(row_data)
+
+        # limpeza do df
+        import pandas as pd
+        df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
+
+        # Iterar pelas colunas do final para o começo
+        for col in reversed(df.columns):
+            # Verificar se todos os valores da coluna são NaN
+            if df[col].isna().all():
+                # Se for, remover a coluna
+                df.drop(col, axis=1, inplace=True)
+            else:
+                # Se encontrar uma coluna com valor diferente de NaN, parar
+                break
+
+        # Obter o nome atual da última coluna
+        ultimo_cabecalho = df.columns[-1]
+
+        # Criar um dicionário de mapeamento para renomear o cabeçalho
+        novo_cabecalho = 'SumLatestGrades'
+        mapeamento = {ultimo_cabecalho: novo_cabecalho}
+
+        # Renomear o cabeçalho da última coluna
+        df = df.rename(columns=mapeamento)
+        df.to_csv(path_to_file_ADAPTIVE_TEST, index=False)
+
+        return maxStudentsClassGrade
+
+    @staticmethod
+    def createCariantExam_rankin_bloom_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations):
+
+        bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
+
+        #########################################
+        ### definir peso das variações pelo bloom
+        str1 = ''
+        id_variante = 0
+        variantExam_rankin_bloom = []
+        for variationsExam in exam.variationsExams2.all():
+            vars = eval(variationsExam.variation)
+            sum_bloom = 0
+            for var in vars['variations']:
+                for q in var['questions']:  # para cada questão
+
+                    # pego a questão no BD para saber a taxonomia de bloom
+                    qBD = get_object_or_404(Question, pk=str(q['key']))
+                    aBD = []
+                    for a in qBD.answers2.all():
+                        aBD.append(a.id)
+
+                    if q['type'] == 'QM':
+                        sum_bloom += bloom_array.index(qBD.question_bloom_taxonomy) + 1
+            variantExam_rankin_bloom.append([vars['variations'][0]['variant'], variationsExam.id, sum_bloom])
+
+        # Converter para um array numpy and sort by bloom
+        array_data = np.array(variantExam_rankin_bloom)
+        variantExam_rankin_bloom_sort = array_data[array_data[:, 2].argsort()]
+
+        # Create a CSV writer
+        with open(path_to_file_ADAPTIVE_TEST_variations, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',')
+
+            # Write header
+            header_row = ['Variation', 'VariationID', 'SumBloomQuestions']
+            csv_writer.writerow(header_row)
+
+            for v in variantExam_rankin_bloom_sort:
+                csv_writer.writerow(v)
+
+        return variantExam_rankin_bloom_sort
+
+    @staticmethod
+    def getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort, student_name, maxStudentsClassGrade):
+        import pandas as pd
+
+        # Filtre as linhas com 'NomeAluno' igual ao nome do aluno
+        df_student = df[df['NomeAluno'] == student_name]
+        aluno_escolhido_students_same_name = df_student.shape[0]
+
+        if aluno_escolhido_students_same_name > 1:
+            messages.error(request, _('ERROR - students with same name') + student_name)
+            return render(request, 'exam/exam_errors.html', {})
+
+        # Encontre o último elemento que não seja NaN
+        vet_aux = df_student.values[0]
+        # Encontrar índices onde o valor é diferente de NaN
+        indices_nao_nan = np.where(pd.notna(vet_aux))[0]
+        # Verificar se há índices não nulos
+        if indices_nao_nan.size > 0:
+            # Obter o último índice diferente de NaN
+            ultimo_indice = indices_nao_nan[-1]
+            # Obter o último valor diferente de NaN
+            nota_student = vet_aux[ultimo_indice]
+        else:
+            # Tratar caso não haja valores não nulos
+            nota_student = 0
+
+        rmax = np.max(variantExam_rankin_bloom_sort[:, -1].astype(int))
+        rmin = np.min(variantExam_rankin_bloom_sort[:, -1].astype(int))
+
+        nota_student_proportion = 0
+        if maxStudentsClassGrade and (rmax - rmin):
+            proporcao = nota_student / maxStudentsClassGrade  # Valor relativo em relação ao maximo
+            nota_student_proportion = round(rmin + proporcao * (rmax - rmin))
+
+        # Filtrar as linhas com valor igual a nota_student_porcent na última coluna
+        linhas_hash_num = []
+        nota_aux = nota_student_proportion
+        while not linhas_hash_num:
+            linhas_hash_num = [linha for linha in variantExam_rankin_bloom_sort if
+                               linha[-1] == str(nota_aux)]
+            nota_aux += 1
+            if nota_aux > 100:  # pega uma variante aleatória
+                linhas_hash_num = variantExam_rankin_bloom_sort
+                break
+        # Selecionar uma linha aleatória
+        var_hash = int(random.choice(linhas_hash_num)[0]) % int(exam.exam_variations)
+
+        return var_hash, nota_student

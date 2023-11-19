@@ -32,6 +32,7 @@ import glob
 import json
 import os
 import re
+import pandas as pd
 
 import PyPDF2
 import cv2  # pip install opencv-python
@@ -62,6 +63,9 @@ from mctest.settings import webMCTest_SERVER
 from .forms import UpdateExamForm, ExamCreateForm
 from .models import Exam
 from .models import VariationExam
+from .models import StudentExam
+from topic.models import Question
+from topic.models import Answer
 
 
 @login_required
@@ -240,7 +244,7 @@ def variationsExam(request, pk):
             path_aux = BASE_DIR + "/report_Exam_" + str(pk)
             path_to_file_VARIATIONS_DB_Tex = path_aux + "_variations.tex"
             if not Utils.createFile_Tex(request, exam, path_to_file_VARIATIONS_DB_Tex, data_hora):
-                #message_cases += _("ERROR: Each block must have at least 3 questions/answers") + '\n'
+                # message_cases += _("ERROR: Each block must have at least 3 questions/answers") + '\n'
                 return render(request, 'exam/exam_msg.html', {})
 
             path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk)
@@ -511,6 +515,14 @@ def correctStudentsExam(request, pk):
         return HttpResponseRedirect("/")
     exam = get_object_or_404(Exam, pk=pk)
 
+    strf2 = BASE_DIR + "/pdfStudentEmail/studentEmail_e" + str(exam.id) + "*"
+    try:
+        for fi in glob.glob(strf2):
+            os.remove(fi)
+        pass
+    except Exception as e:
+        pass
+
     if request.method == 'POST':
         dataset = Dataset()
         try:
@@ -601,6 +613,9 @@ def correctStudentsExam(request, pk):
                 qr['question'] = '0'
                 qr['respgrade'] = '0'
                 qr['stylesheet'] = '0'  # default horizonal=0
+
+                qr['variations'] = '0'
+                qr['variant'] = '0'
 
             qr['exam_print'] = exam.exam_print
 
@@ -721,13 +736,17 @@ def correctStudentsExam(request, pk):
 
                     qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)  # deixa as respostas de cada quadro em uma linha
 
+                    # alterado em 15/11/2023
+                    if len(qr0) == 0:  # se usou questões do BD
+                        qr = Utils.getQRanswersbyVariation(qr, exam)
+
                     qr = cvMCTest.studentGrade(qr, qr0)  # calcula nota final do aluno
 
                 cvMCTest.saveCSVone(qr)  # salva arquivo CSV
 
-                if (exam.exam_student_feedback == 'yes'):
+                if (exam.exam_student_feedback == 'yes' and not 'ERROR' in qr['correct']):
                     cvMCTest.drawImageGAB(qr, strGAB, imgGAB_rgb)
-                    cvMCTest.studentSendEmail(qr,choiceReturnQuestions)  # cria pdf com feedback p/ aluno
+                    cvMCTest.studentSendEmail(exam, qr, choiceReturnQuestions)  # cria pdf com feedback p/ aluno
 
             countPage += 1
 
@@ -951,9 +970,13 @@ def generate_page(request, pk):
 
     path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk) + "_varID_" + strVarExam
     path_to_file_REPORT = path_aux + "_sendMails.csv"
-    path_to_file_VARIATIONS = path_aux + "_variations.csv"
-    path_to_file_VARIATIONS_VPL = path_aux + "_students_variations.csv"
     path_to_file_STUDENTS = path_aux + "_students.csv"
+
+    path_aux0 = BASE_DIR + "/pdfExam/_e" + str(pk) + "_varID_" + strVarExam
+    path_to_file_VARIATIONS_VPL = path_aux0 + "_students_variations.csv"
+    path_to_file_VARIATIONS = path_aux0 + "_variations.csv"
+    path_to_file_ADAPTIVE_TEST = path_aux0 + '_adaptive_test.csv'
+    path_to_file_ADAPTIVE_TEST_variations = path_aux0 + '_adaptive_test_variations_by_bloom.csv'
 
     if request.POST:
         countStudentsAll = 0
@@ -962,6 +985,7 @@ def generate_page(request, pk):
         # tempoPDF = 0
 
         font_size = request.POST.get('font_size')
+        choice_adaptive_test = request.POST.get('adaptative_test')
 
         st = Utils.validateProf(exam, request.user)
         if st != None:
@@ -973,10 +997,10 @@ def generate_page(request, pk):
         print("generate_page-02-" + str(datetime.datetime.now()))
 
         numVariations = exam.variationsExams2.all().count()
-        qr_answers = Utils.getQRanswers(exam)
+        qr_answers = Utils.getQRanswers(exam.variationsExams2.all())
 
-        d = exam.variationsExams2.all().first()
         if exam.exam_print != 'answ':
+            d = exam.variationsExams2.all().first()
             exam0dict = eval(d.variation)
             numQM = len([v['type'] for v in exam0dict['variations'][0]['questions'] if v['type'] == 'QM'])
             numQT = len([v['type'] for v in exam0dict['variations'][0]['questions'] if v['type'] == 'QT'])
@@ -998,7 +1022,6 @@ def generate_page(request, pk):
             return render(request, 'exam/exam_errors.html', {})
 
         strAnswerSheet = Utils.drawAnswerSheet(request, exam)
-
         strCircles = Utils.drawCircles()
         strInstructions = Utils.drawInstructions(exam)
 
@@ -1010,7 +1033,7 @@ def generate_page(request, pk):
         except Exception as e:
             pass
 
-        listVariations = [['Room', 'ID', 'Name', 'Variation']]
+        listVariations = [['Room', 'ID', 'Name', 'Variation', 'SumLatestGrades']]
         maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             if maxStudentsClass < len(room.students.all()):
@@ -1020,6 +1043,21 @@ def generate_page(request, pk):
                 messages.error(request, _('ERROR in generate_page, class with zero students: ') +
                                str(room.classroom_code))
                 return render(request, 'exam/exam_errors.html', {})
+
+        ####################################
+        ### PARA TESTE ADAPTATIVO 17/11/2023
+
+        if exam.exam_print != 'answ' and int(choice_adaptive_test) and Utils.getNumMCQuestions(exam):
+            maxStudentsClassGrade = Utils.createAdaptativeTest(request, exam, choice_adaptive_test,
+                                                               path_to_file_ADAPTIVE_TEST)
+
+            variantExam_rankin_bloom_sort = Utils.createCariantExam_rankin_bloom_sort(
+                request, exam, path_to_file_ADAPTIVE_TEST_variations)
+
+            df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
+
+        ### PARA TESTE ADAPTATIVO 17/11/2023 - FIM
+        ##########################################
 
         # create directory with key is room
         distribute_students_by_room_random = {}
@@ -1066,8 +1104,7 @@ def generate_page(request, pk):
             distribute_students_by_room_random[room.id] = distribute_students_random
 
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
-            file_name = "_e" + str(
-                exam.id) + "_class_" + str(room.id) + "_varID_" + strVarExam
+            file_name = "_e" + str(exam.id) + "_varID_" + strVarExam + "_class_" + str(room.id)
             file_name = file_name.replace(" ", "")
 
             fileExamName = file_name + ".tex"
@@ -1084,26 +1121,36 @@ def generate_page(request, pk):
                 strSTUDENT = ''
                 countStudents += 1
                 countVariations += 1
-                myqr = Utils.defineQRcode(exam, room, s.student_ID)
+
+                stname = s.student_name.split(' ')
+                stname = stname[0] + ' ' + stname[-1]  # USE FULL NAME
+                stname = stname.upper()  # CHANGED: 29/06/22
+
+                indStudent = np.where(distribute_students_random[:, 0] == stname)
+
+                hash_num = int(distribute_students_random[indStudent, 1][0])
+                if hash_num == -1:
+                    messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
+                    return render(request, 'exam/exam_errors.html', {})
+
+                var_hash = hash_num % int(exam.exam_variations)
+
+                ################################### 18/11/2023 pega hash adaptativo
+                nota_student = 0
+                if exam.exam_print != 'answ' and int(choice_adaptive_test) and Utils.getNumMCQuestions(
+                        exam) and maxStudentsClassGrade:  # novo var_hash somente se maxStudentsClassGrade>0
+
+                    var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort,
+                                                                     s.student_name, maxStudentsClassGrade)
+
+                ################################### 18/11/2023 pega hash adaptativo - FIM
+
+                listVariations.append(
+                    [room.classroom_code, s.student_ID, s.student_name, var_hash, nota_student])
+
+                myqr = Utils.defineQRcode(exam, room, s.student_ID, strVarExam, str(var_hash))
                 strQuestions = ''
                 if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
-                    stname = s.student_name.split(' ')
-                    stname = stname[0] + ' ' + stname[-1]  # USE FULL NAME
-                    stname = stname.upper()  # CHANGED: 29/06/22
-
-                    indStudent = np.where(distribute_students_random[:, 0] == stname)
-                    hash_num = int(distribute_students_random[indStudent, 1][0])
-
-                    # indStudent = distribute_students_random[:,0].index(stname)
-                    # hash_num = distribute_students_random[indStudent,1]
-
-                    listVariations.append(
-                        [room.classroom_code, s.student_ID, s.student_name, hash_num % int(exam.exam_variations)])
-
-                    var_hash = hash_num % int(exam.exam_variations)
-                    if hash_num == -1:
-                        messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
-                        return render(request, 'exam/exam_errors.html', {})
 
                     if exam.exam_print != 'answ':
                         myqr.append(qr_answers[var_hash])  # inclui as respostas
@@ -1230,6 +1277,23 @@ def generate_page(request, pk):
         os.system('chgrp -R ' + getuser + ' ' + path + ' .')
 
         anexos = []
+
+        # send file by email with variation of each student
+        if int(exam.exam_variations) > 0 and exam.exam_print != 'answ':
+            with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
+                writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
+                                    lineterminator='\n')
+                writer.writerows(listVariations)
+            anexos.append(path_to_file_VARIATIONS) # util para quando tem várias turmas
+
+            aux = np.array(listVariations)
+            with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
+                writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
+                                    lineterminator='\n')
+                aux = aux[:, 2:4]  # get columns aluno e variacao
+                writer.writerows(aux)  # return name; variation
+            anexos.append([path_to_file_VARIATIONS_VPL])
+
         message_cases = 'Following all variations of each student and pdf/tex\n\n'
         if exam.classrooms.all().count() == 1:
             path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
@@ -1244,32 +1308,19 @@ def generate_page(request, pk):
             path_to_zip = os.path.dirname(fzip) + "/" + os.path.basename(fzip)
             anexos.append(path_to_zip)
 
+        if exam.exam_print != 'answ' and int(choice_adaptive_test) and Utils.getNumMCQuestions(exam):
+            anexos.append(path_to_file_ADAPTIVE_TEST)
+            anexos.append(path_to_file_ADAPTIVE_TEST_variations)
+
         try:
-
-            # send file by email with variation of each student
-            if int(exam.exam_variations) > 0 and exam.exam_print != 'answ':
-                with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
-                    writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
-                                        lineterminator='\n')
-                    writer.writerows(listVariations)
-                # anexos.append(path_to_file_VARIATIONS) # util para quando tem várias turmas
-
-                aux = np.array(listVariations)
-                with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
-                    writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
-                                        lineterminator='\n')
-                    aux = aux[:, -2:]  # get last two columns
-                    writer.writerows(aux)  # return name; variation
-                anexos.append([path_to_file_VARIATIONS_VPL])
-
-                enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
-                                               587,
-                                               webMCTest_FROM,
-                                               webMCTest_PASS,
-                                               str(request.user),
-                                               'MCTest: Templates and Variations: ' + str(
-                                                   exam.exam_name) + ' - ' + data_hora,
-                                               message_cases, anexos)
+            enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
+                                           587,
+                                           webMCTest_FROM,
+                                           webMCTest_PASS,
+                                           str(request.user),
+                                           'MCTest: Templates and Variations: ' + str(
+                                               exam.exam_name) + ' - ' + data_hora,
+                                           message_cases, anexos)
         except:
             pass
 

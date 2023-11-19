@@ -50,6 +50,7 @@ from django.utils.translation import gettext_lazy as _
 from pyzbar.pyzbar import decode
 from skimage.measure import label
 from skimage.measure import regionprops  # pip install scikit-image
+from django.shortcuts import get_object_or_404, render
 
 from exam.UtilsLatex import Utils
 from exam.models import Exam, StudentExam, StudentExamQuestion
@@ -59,6 +60,8 @@ from mctest.settings import webMCTest_PASS
 from mctest.settings import webMCTest_SERVER
 from student.models import Student
 from topic.models import Question
+from topic.models import Answer
+from .models import VariationExam
 
 circle_min = 650
 circle_max = 940  # 895
@@ -214,7 +217,13 @@ class cvMCTest(object):
                 qr['answer'] = ss[12]
                 qr['numquest'] = numMCQ
                 qr['correct'] = ''  ### Quando o gabarito esta na primeira pagina do pdf
+                qr['dbtext'] = ''
 
+                # alteração em 15/11/2023
+                qr['variations'] = ss[13]  # ID das variacoes no BD
+                qr['variant'] = ss[14]  # variacao sorteada para o aluno
+
+                ''' OBSOLETE, GABARITO ESTÁ NO BD EM VariantExam
                 # ler gabarito do servidor
                 # fi = ';'.join([i for i in dec.split(';')[:-1]])
                 fileGAB = 'tmpGAB/' + dec + '.txt'
@@ -234,12 +243,13 @@ class cvMCTest(object):
                 decompressed = decompressed.decode('utf-8')
                 ss0 = str(decompressed).split(';')
                 print(ss, '!=', ss0)
-                if ss[0:12] != ss0[0:12]:
+                if ss[0:14] != ss0[0:14]:
                     raise Http404("ERRO:", ss, '!=', ss0)
 
-                if len(ss0) > 12:  ### Quando as respostas corretas estao no QRcode
+                if len(ss0) > 14:  ### Quando as respostas corretas estao no QRcode
                     qr['correct'] = ss0[len(ss0) - numMCQ - numQT - 1:-1 - numQT]
                     qr['dbtext'] = ss0[len(ss0) - numQT - 1: -1]
+                '''
 
         return qr
 
@@ -830,7 +840,7 @@ class cvMCTest(object):
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
-        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)) ### fz: estava 4,4
+        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))  ### fz: estava 4,4
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
             "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
@@ -887,7 +897,7 @@ class cvMCTest(object):
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
-        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)) ### fz: estava 4,4
+        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))  ### fz: estava 4,4
         if DEBUG: cv2.imwrite(
             "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_00.png", img)
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
@@ -988,7 +998,7 @@ class cvMCTest(object):
             img)
         img[:, W - 1] = img[:, 1] = img[1, :] = img[H - 1, :] = 0
 
-        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)) ### FILTRO NOVO
+        se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))  ### FILTRO NOVO
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
         if DEBUG: cv2.imwrite(
             "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03aa.png",
@@ -1020,7 +1030,7 @@ class cvMCTest(object):
             if jfim >= W:
                 break
             if jini > 4:
-                jini -= 1 #### fz: estava 4
+                jini -= 1  #### fz: estava 4
             ## verifica qual foi a resposta em cada coluna/questao
             im = img[:, jini:jfim]
 
@@ -1378,9 +1388,11 @@ class cvMCTest(object):
                     for i in range(0, len(ss0)):
                         if ss0[i] == ss1[i]:
                             nota += 1
-                            str2 += ss0[i] + ','
+                            str2 += ss0[i]
                         else:
-                            str2 += ss1[i] + "/" + ss0[i] + ','
+                            str2 += ss1[i] + "/" + ss0[i]
+                        if i < len(ss0) - 1:
+                            str2 += ','
 
                 qr['correct'] = str2
 
@@ -1408,7 +1420,7 @@ class cvMCTest(object):
         qra = qr['answers'].split(',')
 
         flagQuestions = False  # somente respostas
-        if len(qr['respgrade']):
+        if 'respgrade' in qr and len(qr['respgrade']):
             flagQuestions = True  # questoes no BD
         elif int(qr['page']) == 0:
             return 0
@@ -1453,12 +1465,12 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    col = int(p1[1] + 17 + 30.3 * q) ######################## 30.3 SENSIVEL
+                    col = int(p1[1] + 17 + 30.3 * q)  ######################## 30.3 SENSIVEL
                     if col < p2[1]:
                         try:
                             if len(respostas[countQuestions]) == 3:
                                 lin = int(p1[0] - 13 + 28.2 * (notas.index(respostas[countQuestions][2]) + 1))
-                                if lin < p2[0]: ######################## 28.2 SENSIVEL
+                                if lin < p2[0]:  ######################## 28.2 SENSIVEL
                                     cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
                         except:
                             pass
@@ -1495,7 +1507,7 @@ class cvMCTest(object):
                     L1.extend(['Q' + str(i) for i in range(1, 1 + len(qr['correct']))])
                     L1.extend(['K' + str(i) for i in range(1, 1 + len(qr['correct']))])
                 except:
-                    L1.extend(['Q' + str(i) for i in range(1, 1 + len(qr['correct']))])
+                    L1.extend(['Q' + str(i) for i in range(1, 1 + len(qr['correct'].split(',')))])
                     pass
 
                 spamWriter.writerow([','.join([str(x) for x in L1])])
@@ -1532,7 +1544,7 @@ class cvMCTest(object):
     ####################################
 
     @staticmethod
-    def studentSendEmail(qr, choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
+    def studentSendEmail(exam, qr, choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
         notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
         try:
             s = Student.objects.filter(student_ID=qr['idStudent'])[0]
@@ -1553,14 +1565,67 @@ class cvMCTest(object):
 
         if sex:
             aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
-            percent = round(100*int(sex.grade) / aux, 3)
+            percent = 0
+            if aux:
+                percent = round(100 * int(sex.grade) / aux, 3)
             str1 += "\\noindent\\textbf{%s:} %s/%s ({%.3f}___percent___) \n\n" % (
-            _("Grade"), str(sex.grade), str(aux), percent)
+                _("Grade"), str(sex.grade), str(aux), percent)
             str1 = str1.replace("___percent___", "\%")
-            if choiceReturnQuestions:  # mostrar as questões com os gabaritos
-                titl = _("Multiple Choice Questions")
-                str1 += "\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
 
+            if choiceReturnQuestions:  # mostrar as questões com os gabaritos
+                # alterado em 16/11/2023
+                # pega a variação que está no QRcode e o gabarito do bd em VariantExam
+                if not 'ERROR' in qr['correct']:  # se conseguiu ler o QRCode, pega a variação
+
+                    titl = _("Multiple Choice Questions")
+                    str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+
+                    id_variante = int(qr['variations']) + int(qr['variant'])
+                    if id_variante > int(qr['variations']) + int(exam.exam_variations):  # não existe variant
+                        return ""
+
+                    variationsExam = get_object_or_404(VariationExam, pk=str(id_variante))
+                    vars = eval(variationsExam.variation)
+                    for var in vars['variations']:
+                        for q in var['questions']: # para cada questão
+
+                            # pego a questão no BD para dar o feedbak
+                            qBD = get_object_or_404(Question, pk=str(q['key']))
+                            aBD = []
+                            for a in qBD.answers2.all():
+                                aBD.append(a.id)
+
+                            if q['type'] == 'QM':
+                                str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
+                                for a in q['answers']:
+                                    if a['sort'] == '0':
+                                        str1 += "\\textbf{%s:} (%s) \t%s\n\n" % (
+                                            _("Correct answer"), notas[a['answer']], a['text'])
+
+                                        if len(aBD) == len(q['answers']):
+                                            aa = get_object_or_404(Answer, pk=str(aBD[int(a['sort'])]))
+                                            if aa.answer_feedback:
+                                                str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa.answer_feedback)
+
+                                if len(qr['respgrade'][int(q['number']) - 1]) > 1:  # errou
+                                    aa0 = qr['respgrade'][int(q['number']) - 1][0]
+                                    for a in q['answers']:
+                                        if aa0 == notas[a['answer']]:
+                                            str1 += "\\textbf{%s:} \hspace{5.5mm} (%s) %s \n\n" % (_("Your answer"), aa0, a['text'])
+                                            if len(aBD) == len(q['answers']):
+                                                aa = get_object_or_404(Answer, pk=str(aBD[int(a['sort'])]))
+                                                if aa.answer_feedback:
+                                                    str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa.answer_feedback)
+
+                    titl = _("Text Questions")
+                    str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+
+                    for var in vars['variations']:
+                        for q in var['questions']: # para cada questão dissertativa
+                            if q['type'] == 'QT':
+                                str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
+
+                ''' OBSOLETE, PEGA agora AS QUESTÕES DE VariationExam
                 count = 0
                 for qe in StudentExamQuestion.objects.filter(studentExam=sex):
                     count += 1
@@ -1582,6 +1647,7 @@ class cvMCTest(object):
                             str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa[index1].answer_feedback)
                     else:
                         str1 += "\\textbf{%s}\n\n" % _("Invalid answer!")
+                    '''
 
         file_name = "studentEmail_e" + qr['idExam'] + "_r" + qr['idClassroom'] + "_s" + s.student_ID
         fileExameName = file_name + '.tex'

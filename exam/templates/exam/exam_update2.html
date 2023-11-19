@@ -38,11 +38,24 @@
                                                    class="btn btn-outline-danger"
                                                    onclick="window.open('https://youtu.be/WBruh6wqIDw')">
 
-                                            <!-- \documentclass[10pt,brazil,a4paper]{exam} -->
-                                            <div class="input-group mb-3">
+                                            <div style="font-size: 12px">
+                                                <hr>
+
+                                                {% trans "Adjust PDF font size:" %}
                                                 <input type="range" class="form-control" name="font_size"
-                                                       min="10" max="12" value="10"
+                                                       min="10" max="12" value="11"
                                                        title="{% trans "Adjust font size: QRcode MUST be inside the 4 black discs" %}">
+
+                                                {% trans "Adaptive testing with QM in the DB:" %}
+                                                <span id="rangeValue">0</span>
+                                                <input type="range" class="form-control" name="adaptative_test" min="0"
+                                                       max="20" value="0" onchange="updateRangeValue(this.value)"
+                                                title="{% trans "Adaptive tests: consider X tests performed, where the standard is X=0" %}">
+                                                <script>
+                                                    function updateRangeValue(value) {
+                                                        document.getElementById('rangeValue').textContent = value;
+                                                    }
+                                                </script>
                                             </div>
 
                                         </form>
