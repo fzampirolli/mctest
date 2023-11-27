@@ -1441,10 +1441,10 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    lin = int(p1[0] + 15 + 22.7 * q)
+                    lin = int(p1[0] + 15 + 22.3 * q) ######################## 22.1 SENSIVEL
                     if lin < p2[0]:
                         try:
-                            if len(respostas[countQuestions]) == 3:
+                            if len(respostas[countQuestions]) == 3: ######################## 30.0 SENSIVEL
                                 col = int(p1[1] + 31 * (notas.index(respostas[countQuestions][2]) + 1) - 14)
                                 if col < p2[1]:
                                     cv2.circle(img, (col, lin), 11, (255, 0, 255), 2)
@@ -1587,13 +1587,7 @@ class cvMCTest(object):
                     variationsExam = get_object_or_404(VariationExam, pk=str(id_variante))
                     vars = eval(variationsExam.variation)
                     for var in vars['variations']:
-                        for q in var['questions']: # para cada questão
-
-                            # pego a questão no BD para dar o feedbak
-                            qBD = get_object_or_404(Question, pk=str(q['key']))
-                            aBD = []
-                            for a in qBD.answers2.all():
-                                aBD.append(a.id)
+                        for q in var['questions']:  # para cada questão
 
                             if q['type'] == 'QM':
                                 str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
@@ -1602,26 +1596,24 @@ class cvMCTest(object):
                                         str1 += "\\textbf{%s:} (%s) \t%s\n\n" % (
                                             _("Correct answer"), notas[a['answer']], a['text'])
 
-                                        if len(aBD) == len(q['answers']):
-                                            aa = get_object_or_404(Answer, pk=str(aBD[int(a['sort'])]))
-                                            if aa.answer_feedback:
-                                                str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa.answer_feedback)
+                                        if a['feedback'] != '\n':
+                                            str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
 
                                 if len(qr['respgrade'][int(q['number']) - 1]) > 1:  # errou
                                     aa0 = qr['respgrade'][int(q['number']) - 1][0]
                                     for a in q['answers']:
                                         if aa0 == notas[a['answer']]:
-                                            str1 += "\\textbf{%s:} \hspace{5.5mm} (%s) %s \n\n" % (_("Your answer"), aa0, a['text'])
-                                            if len(aBD) == len(q['answers']):
-                                                aa = get_object_or_404(Answer, pk=str(aBD[int(a['sort'])]))
-                                                if aa.answer_feedback:
-                                                    str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa.answer_feedback)
+                                            str1 += "\\textbf{%s:} \hspace{5.5mm} (%s) %s \n\n" % (
+                                            _("Your answer"), aa0, a['text'])
+
+                                            if a['feedback'] != '\n':
+                                                str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
 
                     titl = _("Text Questions")
                     str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
 
                     for var in vars['variations']:
-                        for q in var['questions']: # para cada questão dissertativa
+                        for q in var['questions']:  # para cada questão dissertativa
                             if q['type'] == 'QT':
                                 str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
 

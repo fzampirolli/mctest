@@ -209,7 +209,8 @@ class UtilsMC(object):
         tam = len(AllLines)
 
         for a in UtilsMC.get_code(''.join(AllLines), 'code'):  # get the args in answers
-            arg.append(a)
+            if a not in arg:
+                arg.append(a)
 
         while i < tam:
             for j in arg:
@@ -241,7 +242,32 @@ class UtilsMC(object):
 
             i = i + 1
 
-        return [q_param, AllLines]
+
+        ############ Feedback #####
+        AllLinesFeedback = []
+        for a in answers:
+            if not exam:
+                AllLinesFeedback.append(a.answer_feedback + '\n')
+            elif len(AllLinesFeedback) < int(exam.exam_number_of_anwsers_question):
+                AllLinesFeedback.append(a.answer_feedback + '\n')
+        i = 0
+        tam = len(AllLinesFeedback)
+
+        for a in UtilsMC.get_code(''.join(AllLinesFeedback), 'code'):  # get the args in answers
+            if a not in arg:
+                arg.append(a)
+
+        while i < tam:
+            for j in arg:
+                AllLinesFeedback[i] = AllLinesFeedback[i].replace("[[code:" + j + "]]", str(eval(j)))
+
+            if i >= len(AllLinesFeedback) or AllLinesFeedback[i].find("[[def:") > -1:
+                tam = i
+                break
+
+            i = i + 1
+
+        return [q_param, AllLines, AllLinesFeedback]
 
     @staticmethod
     def questionsReadFiles(request, file):

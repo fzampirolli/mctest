@@ -134,6 +134,7 @@ def variationsExam(request, pk):
                 answer['answer'] = key
                 answer['sort'] = a[0]
                 answer['text'] = a[1]
+                answer['feedback'] = a[2]
                 question['answers'].append(answer)
             variant['questions'].append(question)
         if len(db_questions) >= 2:  # QM and QT
@@ -152,6 +153,7 @@ def variationsExam(request, pk):
                         answer['answer'] = 0
                         answer['sort'] = 0
                         answer['text'] = ans.strip()
+                        answer['feedback'] = '\n'
                         question['answers'].append(answer)
 
                     # Text question with test cases for Moodel+VPL

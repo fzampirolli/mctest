@@ -236,6 +236,7 @@ def see_question_PDF(request, pk):
                 fileQuestion.write("\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL')
 
             ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
+            # Renomear a variável str para evitar conflito
             ss = ss1 % str(q.id).zfill(4)
             str1 = "%s %s." % (ss, 1)
 
@@ -247,9 +248,9 @@ def see_question_PDF(request, pk):
                         ans.append(a.answer_text + '\n')
             else:  # QUESTOES PARAMETRICAS
                 if q.question_type == "QM":
-                    [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
+                    [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
                 else:  # se for dissertativa, não colocar alternativas
-                    [quest, ans] = UtilsMC.questionParametric(q.question_text, [], [])
+                    [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], [])
                 if quest == "":
                     messages.error(request,
                                    _('UtilsMC.questionParametric: do not use some words in the code, '
@@ -264,6 +265,13 @@ def see_question_PDF(request, pk):
                     str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
                 else:
                     str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (str(ans.index(a)), a)
+
+                try:
+                    if feedback_ans[ans.index(a)] != '\n':
+                        str1 += '[' + feedback_ans[ans.index(a)] + ']'  ############# NOVO
+                except:  # quando cria alternativas automáticas, não tem feedback
+                    pass
+
             str1 += "\\end{oneparchoices}\\vspace{0mm}\n"
 
             fileQuestion.write(str1)
@@ -583,9 +591,9 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
         else:  # QUESTOES PARAMETRICAS
             try:
                 if q.question_type == "QM":
-                    [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
+                    [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
                 else:  # se for dissertativa, não colocar alternativas
-                    [quest, ans] = UtilsMC.questionParametric(q.question_text, [], [])
+                    [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], [])
                 if quest == "":
                     messages.error(request,
                                    _('UtilsMC.questionParametric: do not use some words in the code, '
@@ -607,6 +615,13 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
                 str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
             else:
                 str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (str(ans.index(a)), a)
+
+            try:
+                if feedback_ans[ans.index(a)] != '\n':
+                    str1 += '[' + feedback_ans[ans.index(a)] + ']'############# NOVO
+            except: # quando cria alternativas automáticas, não tem feedback
+                pass
+
         str1 += "\\end{oneparchoices}\\vspace{0mm}\\\\\n"
 
         allQuestionsStr.append(str1)

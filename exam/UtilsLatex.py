@@ -35,6 +35,7 @@ import subprocess
 import time
 import unicodedata
 import zlib
+import requests
 
 import bcrypt
 import numpy as np
@@ -357,6 +358,81 @@ class Utils(object):
                     c += 1
                     for q in varia:
                         f.write(str(q) + '\n')
+
+
+    @staticmethod
+    def createRequest_BD_Moodle(exam, path_to_file_VARIATIONS_DB):
+
+        # Constantes
+        MOODLE_URL = "http://localhost/moodle/webservice/rest/server.php"
+        TOKEN = "1d6040a8333e399a7740442024e7eb2d"
+
+        def fazer_solicitacao(payload, url):
+            '''
+            Função genérica para fazer uma solicitação POST para a URL fornecida com o payload fornecido.
+            Retorna o conteúdo da resposta.
+            '''
+            payload['wstoken'] = TOKEN
+            payload['moodlewsrestformat'] = 'json'
+
+            response = requests.post(url, data=payload)
+            return response.content
+
+        def construir_payload(**kwargs):
+            '''
+            Função para construir um payload com base nos parâmetros fornecidos.
+            Retorna o payload como um dicionário.
+            '''
+            payload = {}
+            for key, value in kwargs.items():
+                payload[key] = value
+            return payload
+
+
+        letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+        varia_gab_all, count_varia = [], 0
+        for v in exam.variationsExams2.all():
+            s = eval(v.variation)
+            questions_DB = []
+            count_varia += 1
+            jsonDict = {}
+            for var in s['variations']:
+                for q in var['questions']:
+                    jsonDict["nomeDoCurso"] = exam.clasrooms.all()[0].disciple.discipline_code
+                    jsonDict["categoria"] = 'MCTest'
+                    jsonDict["feedbackCorreto"] = "Sua resposta está correta."
+                    jsonDict["feedbackParcialmenteCorreto"] = "Sua resposta está parcialmente correta."
+                    jsonDict["feedbackIncorreto"] = "Sua resposta está incorreta."
+                    jsonDict["nomeDaQuestao"] = str(q['topic']) + str(q['key'])
+                    jsonDict["textoDaQuestao"] = Utils.convertWordsMoodle(q['text'])
+                    questions_DB.append("#c:" + str(q['number']) + " #id:" + str(q['key']) + " #topic:" + str(
+                        q['topic']) + " #type:" + str(str(q['type'])) + " #diff:" + str(q['weight']) + "\n")
+                    questions_DB.append(Utils.convertWordsMoodle(q['text']))
+                    if q['type'] == 'QM':  # QM
+                        for k, a in enumerate(q['answers']):
+                            jsonDict["alternativa"+letras_1[k]] = a['answer']
+                            questions_DB.append(letras_1[int(a['answer'])] + ") " + Utils.convertWordsMoodle(a['text']))
+                            if not int(a['sort']):
+                                jsonDict["fracaoA" + letras_1[k]] = "1.0"
+                            else:
+                                jsonDict["fracaoA" + letras_1[k]] = "0.0"
+                    #else:  # QT with
+                    #    if len(q['answers']) == 1:
+                    #        questions_DB.append('ANSWER: ' + q['answers'][0]['text'] + '\n\n')
+
+            if questions_DB:
+                varia_gab_all.append(questions_DB)
+
+        if varia_gab_all:
+            with open(path_to_file_VARIATIONS_DB, 'w') as f:
+                c = 0
+                for varia in varia_gab_all:
+                    f.write("############# variation ########## " + str(c) + '\n\n')
+                    c += 1
+                    for q in varia:
+                        f.write(str(q) + '\n')
+
+
 
     # create file DB with all variations in aiken format
     @staticmethod
@@ -1199,7 +1275,7 @@ _inst1_
                 if (exam.exam_print in ['answ', 'both']):
                     str1 += "\\begin{center} \n"
                     for i in range(QL):  # para cada linha de quadros
-                        str1 += "\n \\vspace{-2mm} \\ \n"
+                        str1 += "\n \\vspace{-5mm} \\ \\hspace{-7mm} \n"
                         for j in range(QC):  # para cada coluna de quadros
                             numQuestEnd = int(fimQuadro_ij[i][j])
                             if numQuestStart == numQuestEnd + 1:
@@ -1307,9 +1383,9 @@ _inst1_
                 else:  # QUESTOES PARAMETRICAS
                     try:
                         if q.question_type == "QM":
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
+                            [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
                         else:  # se não for questao de multipla escolha entao nao pegar as alternativas
-                            [quest, ans] = UtilsMC.questionParametric(q.question_text, [], exam)
+                            [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], exam)
                     except:
                         messages.error(request, _('drawQuestionsMCDifficulty: Error in parametric question'))
                         return -1
@@ -1331,7 +1407,10 @@ _inst1_
                 db_answers = []
                 for a in random.sample(ans, len(ans)):
                     stra += str(ans.index(a))
-                    db_answers.append([str(ans.index(a)), a])
+                    try:
+                        feed = feedback_ans[ans.index(a)]
+                    except:  # quando cria alternativas automáticas, não tem feedback
+                        feed = '\n'
                     if exam.exam_student_feedback:  # se enviar pdf ao aluno, retira gabarito
                         str1 += "\n\n\\choice %s" % a
                     else:
@@ -1340,6 +1419,11 @@ _inst1_
                         else:
                             str1 += "\n\\choice \\hspace{-2.0mm}{\\tiny{\\color{white}#%s}}\\hspace{2.0mm}%s" % (
                                 str(ans.index(a)), a)
+
+                        if feed != '\n':
+                            str1 += '[' + feed + ']'  ############# NOVO
+
+                    db_answers.append([str(ans.index(a)), a, feed])
 
                 str1 += "\n\\end{oneparchoices}\\vspace{1mm}\n\n"
 
@@ -1447,9 +1531,9 @@ _inst1_
                     quest = q.question_text
                 else:  # QUESTOES PARAMETRICAS
                     if q.question_type == "QM":
-                        [quest, ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
+                        [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
                     else:  # se não for QM entao nao pegar as alternativas
-                        [quest, ans] = UtilsMC.questionParametric(q.question_text, [], exam)
+                        [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], exam)
 
                 bd_qT.append(
                     [count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest])
