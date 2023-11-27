@@ -66,6 +66,7 @@ from .models import VariationExam
 from .models import StudentExam
 from topic.models import Question
 from topic.models import Answer
+from topic.models import Topic
 
 
 @login_required
@@ -1372,6 +1373,7 @@ def UpdateExam(request, pk):
     exam_inst = get_object_or_404(Exam, pk=pk)
     questions = exam_inst.questions
     classrooms = exam_inst.classrooms
+    #topics = exam_inst.topics
 
     try:
         variation_ID = exam_inst.variationsExams2.all()[0].id
@@ -1411,10 +1413,14 @@ def UpdateExam(request, pk):
             exam_inst.exam_instructions = form.cleaned_data['exam_instructions']
 
             classrooms = form.cleaned_data['classrooms']
-
             for q in exam_inst.classrooms.all():
                 exam_inst.classrooms.remove(q)
             exam_inst.classrooms.add(*classrooms)
+
+            # topics = form.cleaned_data['topics']
+            # for q in exam_inst.topics.all():
+            #     exam_inst.topics.remove(q)
+            # exam_inst.topics.add(*topics)
 
             questions = form.cleaned_data['questions']
             # raise Http404(len(exam_inst.questions.all()))
@@ -1431,9 +1437,18 @@ def UpdateExam(request, pk):
             return render(request, 'exam/exam_errors.html', {})
 
     else:
+        #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+        # tt = []
+        # for c in classrooms.all():
+        #     d = c.discipline
+        #     for t in Topic.objects.filter(discipline=d):
+        #         if t not in tt:
+        #           tt.append(t)
+
         form = UpdateExamForm(initial={
             'exam_name': exam_inst.exam_name,
             'classrooms': [c for c in classrooms.filter().values_list('id', flat=True)],
+            #'topics': tt,
             'questions': [q for q in questions.filter().values_list('id', flat=True)],
             # .course.discipline_profs==request.user],
             'exam_number_of_questions_var1': exam_inst.exam_number_of_questions_var1,

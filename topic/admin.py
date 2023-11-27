@@ -39,8 +39,8 @@ class ChoiceInline(admin.StackedInline):
 # admin.site.register(Topic, TopicAdmin) ou
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
+    #list_display = ('display_Topic','topic_text')
     pass
-
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):

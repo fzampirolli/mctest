@@ -30,7 +30,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from course.models import Classroom, Discipline
-from topic.models import Question, User
+from topic.models import Question, User, Topic
 from .models import Exam
 
 
@@ -77,6 +77,11 @@ class UpdateExamForm(forms.Form):
         queryset=Classroom.objects.all(),
         help_text=_("Choose the classrooms"),
         label=_("Classrooms"))
+    topics = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Topic.objects.all(),
+        help_text=_("Choose the topics"),
+        label=_("Topics"))
     questions = forms.ModelMultipleChoiceField(required=False,
                                                widget=forms.CheckboxSelectMultiple,
                                                queryset=Question.objects.filter(),
@@ -201,6 +206,9 @@ class UpdateExamForm(forms.Form):
                         if p == usuario:
                             qs.append(c.pk)
                 qs = Classroom.objects.filter(pk__in=qs)
+
+            #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+            #self.fields['topics'].queryset = discipline.topics2.all()
 
             self.fields[
                 'questions'].queryset = questions  # Question.objects.filter(topic__discipline__discipline_profs=user)

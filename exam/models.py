@@ -33,6 +33,7 @@ from account.models import User
 from course.models import Classroom
 from student.models import Student
 from topic.models import Question
+from topic.models import Topic
 
 # Create your models here.
 class Exam(models.Model):
@@ -50,6 +51,12 @@ class Exam(models.Model):
                                        blank=True,
                                        help_text=_("Choose the questions"),
                                        verbose_name=_("Questions"))
+    # NOVO: 27/11/2023  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+    # topics = models.ManyToManyField(Topic,
+    #                                    related_name='exams2',  # relacionamento reverso
+    #                                    blank=True,
+    #                                    help_text=_("Choose the topics"),
+    #                                    verbose_name=_("Topics"))
     exam_number_of_questions_var1 = models.CharField(
         default=20, max_length=3,
         help_text=_("Number of questions with difficulty level x"),

@@ -50,7 +50,7 @@
                                                 <span id="rangeValue">0</span>
                                                 <input type="range" class="form-control" name="adaptative_test" min="0"
                                                        max="20" value="0" onchange="updateRangeValue(this.value)"
-                                                title="{% trans "Adaptive exam: consider X exams performed, where the standard is X=0" %}">
+                                                       title="{% trans "Adaptive exam: consider X exams performed, where the standard is X=0" %}">
                                                 <script>
                                                     function updateRangeValue(value) {
                                                         document.getElementById('rangeValue').textContent = value;
@@ -175,46 +175,6 @@
                                     </div>
                                     {% render_field form.exam_name class+="form-control" placeholder=form.exam_name.help_text %}
                                 </div>
-
-                                <!-- classrooms
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <script>
-                                            var countClassrrom = 0;
-
-                                            function get_ID_classroom(countClassrrom) {
-                                                var aux = "id_classrooms_" + countClassrrom.toString();
-                                                var x = document.getElementById(aux).value;
-                                                return x.toString();
-                                            }
-                                        </script>
-                                        <table class="table">
-                                            <tr bgcolor="#e6f2ff" style="width:140px; height: 20px;">
-                                                <span class="input-group-text">{ trans "Choose Classrooms" }</span>
-                                            </tr>
-                                            { for c in form.classrooms }
-                                                { if  forloop.counter0|divisibleby:10 %}
-                                                    <tr>
-                                                { endif }
-                                            <td style="width:120px; height: 5px; font-size:15px" align="left"
-                                                bgcolor="#e6f2ff">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        { c }
-                                                    </label>
-                                                    <script>
-                                                        document.write("<a href=\"/course/classroom/" + get_ID_classroom(countClassrrom++) + "\" ");
-                                                        document.write(" target=\"_blank\">*</a>");
-                                                    </script>
-                                                </div>
-                                            </td>
-                                            { if  forloop.counter|divisibleby:10 }
-                                                </tr>
-                                            { endif }
-                                            { endfor }
-                                        </table>
-                                    </div>
-                                </div> -->
 
                                 <p></p>
 
@@ -373,6 +333,91 @@
                                 </div>
 
                                 <p></p>
+                                <!-- Topics -- NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+                                <br class="card-body" style="background-color:#f3f3f3;">
+                                <h5 class="card-title">{% trans "Topics List" %}</h5>
+                                <script>
+                                    var count_topic = 0;
+
+                                    function get_ID_topic(con) {
+                                        var aux = "id_topics_" + con.toString();
+                                        var x = document.getElementById(aux).value;
+                                        console.log(x);
+                                        return x.toString();
+                                    }
+
+                                    function get_Name_topic(con, str) {
+                                        var aux = "id_topics_" + con.toString();
+                                        var x = document.getElementById(aux);
+                                        var text = x.labels[1].innerText;
+                                        var ini = text.indexOf(str) + 1;
+                                        var sub = text.substring(ini, text.length);
+                                        var fim = sub.indexOf('>');
+                                        console.log(x);
+                                        return sub.substring(0, fim);
+                                    }
+
+                                    function selectAll_topic() {
+                                        this.emp.forEach(element => {
+                                            element.checkedTopic = true;
+                                        });
+                                    }
+                                </script>
+
+                                <table id="example6" class="table table-striped table-bordered"
+                                       style="width:100%">
+                                    <thead class="thead-light">
+                                    <-- header --
+                                    <tr>
+
+                                        <th scope="col">
+                                            >
+                                            <input type="checkbox" id="mass_select_all_Topic"
+                                                   data-to-table="tasks">
+                                        </th>
+
+                                        <th scope="col">{ % trans "Topic" % }</th> <-- Choose --
+
+                                        <th scope="col" class="text-right">{ % trans "See" % }</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <-- topics --
+                                    { % for t in form.topics % }
+                                        {% csrf_token %}
+                                        <tr>
+                                            !-- topics --
+                                            <td class="text-center">
+                                                <div class="btn btn-outline-primary btn-sm">
+                                                    <label>
+                                                        <div style="color:white;font-size:1px;width:12px">{{ t }}</div>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn btn-outline-light text-dark btn-sm">
+                                                    <script>
+                                                        document.write(get_Name_topic(count_topic, '<'));
+                                                    </script>
+                                                </div>
+                                            </td>
+
+                                            -- see --
+                                            <td class="text-center">
+                                                <script>
+                                                    document.write("<a href=\"/topic/topic/" + get_ID_topic(count_topic) + "\"");
+                                                    document.write("class=\"btn btn-outline-primary btn-sm\"");
+                                                    document.write(" target=\"_blank\">" + get_ID_topic(count_topic++) + "</a>");
+                                                </script>
+
+                                            </td>
+                                        </tr>
+
+                                    { % endfor % }
+                                </table>
+
+                                <p></p> -->
 
                                 <!-- questions -->
                                 <br class="card-body" style="background-color:#f3f3f3;">
@@ -417,32 +462,6 @@
                                         });
                                     }
                                 </script>
-
-                                <!--
-                                { % if form.questions|length > 100 %}
-
-                                    { % trans "For discipline with more than 100 questions, choose the question IDs first" %}
-
-                                    <br>
-
-                                    { % for q in form.questions %}
-                                        { % csrf_token %}
-                                        <div class="btn btn-outline-primary btn-sm">
-                                            <label>
-                                                <div style="color:white;font-size:1px;width:12px">{ { q }}</div>
-                                            </label>
-                                            <script>
-                                                document.write("<a href=\"/topic/question/" + get_ID(count) + "/update/\"");
-                                                document.write("class=\"btn btn-outline-primary btn-sm\"");
-                                                document.write(" target=\"_blank\">" + get_ID(count++) + "</a>");
-                                            </script>
-                                            { { q.question_group }}
-                                        </div>
-
-                                    { % endfor %}
-
-                                { % endif %}
-                                -->
 
                                 <table id="example1" class="table table-striped table-bordered"
                                        style="width:100%">
