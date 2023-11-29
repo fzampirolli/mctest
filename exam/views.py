@@ -1360,7 +1360,6 @@ def SerializersExam(request, pk):
 
     return render(request, 'exam/exam_list.html', {})
 
-
 @login_required
 def UpdateExam(request, pk):
     if request.user.get_group_permissions():
@@ -1371,9 +1370,12 @@ def UpdateExam(request, pk):
         return HttpResponseRedirect("/")
 
     exam_inst = get_object_or_404(Exam, pk=pk)
-    questions = exam_inst.questions
     classrooms = exam_inst.classrooms
+
+    # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
     #topics = exam_inst.topics
+
+    questions = exam_inst.questions
 
     try:
         variation_ID = exam_inst.variationsExams2.all()[0].id
@@ -1417,6 +1419,7 @@ def UpdateExam(request, pk):
                 exam_inst.classrooms.remove(q)
             exam_inst.classrooms.add(*classrooms)
 
+            # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
             # topics = form.cleaned_data['topics']
             # for q in exam_inst.topics.all():
             #     exam_inst.topics.remove(q)
@@ -1437,20 +1440,14 @@ def UpdateExam(request, pk):
             return render(request, 'exam/exam_errors.html', {})
 
     else:
-        #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
-        # tt = []
-        # for c in classrooms.all():
-        #     d = c.discipline
-        #     for t in Topic.objects.filter(discipline=d):
-        #         if t not in tt:
-        #           tt.append(t)
+        # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+        # topics
 
         form = UpdateExamForm(initial={
             'exam_name': exam_inst.exam_name,
             'classrooms': [c for c in classrooms.filter().values_list('id', flat=True)],
-            #'topics': tt,
+            #'topics': [t for t in topics.filter().values_list('id', flat=True)],
             'questions': [q for q in questions.filter().values_list('id', flat=True)],
-            # .course.discipline_profs==request.user],
             'exam_number_of_questions_var1': exam_inst.exam_number_of_questions_var1,
             'exam_number_of_questions_var2': exam_inst.exam_number_of_questions_var2,
             'exam_number_of_questions_var3': exam_inst.exam_number_of_questions_var3,

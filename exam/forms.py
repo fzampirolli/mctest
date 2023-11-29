@@ -77,11 +77,14 @@ class UpdateExamForm(forms.Form):
         queryset=Classroom.objects.all(),
         help_text=_("Choose the classrooms"),
         label=_("Classrooms"))
-    topics = forms.ModelMultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        queryset=Topic.objects.all(),
-        help_text=_("Choose the topics"),
-        label=_("Topics"))
+
+    #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+    # topics = forms.ModelMultipleChoiceField(
+    #     widget=forms.CheckboxSelectMultiple,
+    #     queryset=Topic.objects.all(),
+    #     help_text=_("Choose the topics"),
+    #     label=_("Topics"))
+
     questions = forms.ModelMultipleChoiceField(required=False,
                                                widget=forms.CheckboxSelectMultiple,
                                                queryset=Question.objects.filter(),
@@ -208,10 +211,12 @@ class UpdateExamForm(forms.Form):
                 qs = Classroom.objects.filter(pk__in=qs)
 
             #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+            #topics = Topic.objects.filter(discipline__discipline_pk=discipline.pk)
             #self.fields['topics'].queryset = discipline.topics2.all()
 
             self.fields[
                 'questions'].queryset = questions  # Question.objects.filter(topic__discipline__discipline_profs=user)
+
             self.fields[
                 'classrooms'].queryset = qs  # Classroom.objects.filter(discipline__discipline_profs=user)
 

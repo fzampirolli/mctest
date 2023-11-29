@@ -503,7 +503,7 @@
 </script>
 
 
-<!-- table example6 - show topics in update exam  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE --
+<!-- table example6 - show topics in update exam  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE -->
 <script>
     $('body').on('change', '#mass_select_all_Topic', function () {
         var rows, checked;
@@ -533,35 +533,35 @@
             buttons: [
                 {
                     extend: 'copy',
-                    text: '{ % trans 'copy' % }',
+                    text: '{% trans 'copy' %}',
                     exportOptions: {
                         columns: ':visible'
                     }
                 },
                 {
                     extend: 'csv',
-                    text: '{ % trans 'csv' % }',
+                    text: '{% trans 'csv' %}',
                     exportOptions: {
                         columns: ':visible'
                     }
                 },
                 {
                     extend: 'excel',
-                    text: '{ % trans 'excel' % }',
+                    text: '{% trans 'excel' %}',
                     exportOptions: {
                         columns: ':visible'
                     }
                 },
                 {
                     extend: 'pdf',
-                    text: '{ % trans 'pdf' % }',
+                    text: '{% trans 'pdf' %}',
                     exportOptions: {
                         columns: ':visible'
                     }
                 },
                 {
                     extend: 'print',
-                    text: '{ % trans 'print' % }',
+                    text: '{% trans 'print' %}',
                     exportOptions: {
                         columns: ':visible'
                     }
@@ -569,7 +569,7 @@
 
                 {
                     extend: 'colvis',
-                    text: '{ % trans 'column visibility' % }',
+                    text: '{% trans 'column visibility' %}',
                     exportOptions: {
                         columns: ':visible'
                     }
@@ -589,7 +589,7 @@
         });
     });
 </script>
--->
+
 
 <!-- table example4 - show classrooms in create exam -->
 <script>

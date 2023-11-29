@@ -51,12 +51,15 @@ class Exam(models.Model):
                                        blank=True,
                                        help_text=_("Choose the questions"),
                                        verbose_name=_("Questions"))
+
     # NOVO: 27/11/2023  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+    # primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
     # topics = models.ManyToManyField(Topic,
     #                                    related_name='exams2',  # relacionamento reverso
     #                                    blank=True,
     #                                    help_text=_("Choose the topics"),
     #                                    verbose_name=_("Topics"))
+
     exam_number_of_questions_var1 = models.CharField(
         default=20, max_length=3,
         help_text=_("Number of questions with difficulty level x"),
