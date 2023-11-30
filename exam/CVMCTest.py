@@ -307,6 +307,7 @@ class cvMCTest(object):
     @staticmethod
     def get_circles(img, countPage):
         DEBUG = False
+
         if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
 
         img = cv2.medianBlur(img, 3)
@@ -366,6 +367,7 @@ class cvMCTest(object):
         H, W = img.shape
         if (H < W):
             img = np.rot90(img)
+
         if DEBUG: cv2.imwrite("_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
         # padroniza dimensoes da imagem   
         H = 1754;

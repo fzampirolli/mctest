@@ -591,6 +591,7 @@ def correctStudentsExam(request, pk):
             print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
             myfile0 = MYFILES + '_p' + str(countPage) + '.png'
             img = cv2.imread(myfile0)
+            #img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 
             DEBUG = False
 
