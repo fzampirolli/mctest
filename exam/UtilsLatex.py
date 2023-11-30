@@ -359,7 +359,6 @@ class Utils(object):
                     for q in varia:
                         f.write(str(q) + '\n')
 
-
     @staticmethod
     def createRequest_BD_Moodle(exam, path_to_file_VARIATIONS_DB):
 
@@ -388,7 +387,6 @@ class Utils(object):
                 payload[key] = value
             return payload
 
-
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
         varia_gab_all, count_varia = [], 0
         for v in exam.variationsExams2.all():
@@ -410,13 +408,13 @@ class Utils(object):
                     questions_DB.append(Utils.convertWordsMoodle(q['text']))
                     if q['type'] == 'QM':  # QM
                         for k, a in enumerate(q['answers']):
-                            jsonDict["alternativa"+letras_1[k]] = a['answer']
+                            jsonDict["alternativa" + letras_1[k]] = a['answer']
                             questions_DB.append(letras_1[int(a['answer'])] + ") " + Utils.convertWordsMoodle(a['text']))
                             if not int(a['sort']):
                                 jsonDict["fracaoA" + letras_1[k]] = "1.0"
                             else:
                                 jsonDict["fracaoA" + letras_1[k]] = "0.0"
-                    #else:  # QT with
+                    # else:  # QT with
                     #    if len(q['answers']) == 1:
                     #        questions_DB.append('ANSWER: ' + q['answers'][0]['text'] + '\n\n')
 
@@ -432,11 +430,9 @@ class Utils(object):
                     for q in varia:
                         f.write(str(q) + '\n')
 
-
-
     # create file DB with all variations in aiken format
     @staticmethod
-    def createFile_Tex(request, exam, path_to_file_VARIATIONS_DB, data_hora):
+    def createFile_Tex(request, exam, path_to_file_VARIATIONS_DB, data_hora, font_size=11):
         room = exam.classrooms.all()[0]
         varia_gab_all, s_student_ID = [], 0
         for v in exam.variationsExams2.all():
@@ -448,7 +444,7 @@ class Utils(object):
                 myqr = Utils.defineQRcode(exam, room, student_name)
                 strQuestions = Utils.drawCircles()
                 strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
-                                                data_hora)
+                                                data_hora, font_size)
                 if not Utils.drawAnswerSheet(request, exam):
                     return False
                 else:
@@ -465,7 +461,7 @@ class Utils(object):
 
                 strQuestions += Utils.drawQuestions(request, myqr,
                                                     exam, room, student_name, student_name,
-                                                    hash_num % int(exam.exam_variations), data_hora)
+                                                    hash_num % int(exam.exam_variations), data_hora, font_size)
 
                 questions_DB.append(strQuestions + '\n\n')
 
@@ -986,7 +982,8 @@ _inst1_
         return str1
 
     @staticmethod
-    def getHeader(request, exam, room, idStudent, nameStudent, myqr, data_hora):  # define o cabeçalho de cada página
+    def getHeader(request, exam, room, idStudent, nameStudent, myqr, data_hora,
+                  font_size=11):  # define o cabeçalho de cada página
         inst = []
         logo = ''
         for course in room.discipline.courses.all():
@@ -1004,6 +1001,13 @@ _inst1_
         for p in room.classroom_profs.all().order_by('username'):
             prof.append(p.first_name + " " + p.last_name)
         prof = ', '.join(prof)
+
+        institute = Utils.format_size_text(institute, font_size)
+        discipline = Utils.format_size_text(discipline, font_size)
+        course = Utils.format_size_text(course, font_size)
+        classroom = Utils.format_size_text(classroom, font_size)
+        prof = Utils.format_size_text(prof, font_size)
+        nameStudent = Utils.format_size_text(nameStudent, font_size)
 
         disc = "\\textbf{%s:} %s \\hfill" % (_("Discipline"), discipline)
         turma = "\\textbf{%s:} %s\n" % (_("Classroom"), classroom)
@@ -1073,7 +1077,24 @@ _inst1_
         else:
             str1 += "\\vspace{4mm}\n\n"
 
-        return str1.replace("_nameStudent_", nameStudent).replace("_idStudent_", idStudent)
+        return str1.replace("_nameStudent_",nameStudent).replace("_idStudent_", idStudent)
+
+    @staticmethod
+    def format_size_text(text, font_size):
+        if len(text) > 45:
+            text = text[:45]
+        if int(font_size) == 11:
+            if len(text) > 35:
+                text = '{\\small ' + text + '}'
+            elif len(text) > 28:
+                text = '{\\scriptsize ' + text + '}'
+        if int(font_size) == 12:
+            if len(text) > 35:
+                text = '{\\scriptsize ' + text + '}'
+            elif len(text) > 28:
+                text = '{\\tiny ' + text + '}'
+
+        return text
 
     @staticmethod
     def drawSignatureQR(exam, room, idStudent, nameStudent):
@@ -1437,7 +1458,7 @@ _inst1_
 
     @staticmethod
     def drawQuestionsTDifficulty(request, exam, room, student_ID, student_name, countVariations, data_hora,
-                                 strVarExam="", hash_num=""):
+                                 strVarExam="", hash_num="", font_size=11):
         qr_bytes = ''
         titl = _("Text Questions")
         strQT = '\n\n% QUESTOES DISSERTATIVAS\n\n'
@@ -1487,7 +1508,8 @@ _inst1_
                         qr.eps(myqr[0])
 
                         strQT += Utils.drawCircles()
-                        strQT += Utils.getHeader(request, exam, room, student_ID, student_name, myqr, data_hora)
+                        strQT += Utils.getHeader(request, exam, room, student_ID, student_name, myqr, data_hora,
+                                                 font_size)
                         strQT += Utils.drawCircles()
                         strQT += "\\vspace{-1mm}\n"
                         strQT += Utils.drawInstructions(exam)
@@ -1604,7 +1626,7 @@ _inst1_
         return db_questions
 
     @staticmethod
-    def drawQuestions(request, myqr, exam, room, student_ID, student_name, countVariations, data_hora):
+    def drawQuestions(request, myqr, exam, room, student_ID, student_name, countVariations, data_hora, font_size=11):
         count = 0
 
         try:
@@ -1622,7 +1644,7 @@ _inst1_
                 str1 += "\n\n\\newpage\n\n"
 
             s = Utils.drawQuestionsTDifficulty(request, exam, room, student_ID, student_name, countVariations,
-                                               data_hora)
+                                               data_hora, font_size)
             str1 += s[0]
             count += 1
 

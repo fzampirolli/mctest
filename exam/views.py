@@ -100,6 +100,8 @@ def variationsExam(request, pk):
     data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
     print("variationsExam-00-" + str(datetime.datetime.now()))
 
+    font_size = request.POST.get('font_size')
+
     exam = get_object_or_404(Exam, pk=pk)
 
     if exam.exam_print == 'answ':
@@ -246,7 +248,7 @@ def variationsExam(request, pk):
         if 'Latex' in choices:
             path_aux = BASE_DIR + "/report_Exam_" + str(pk)
             path_to_file_VARIATIONS_DB_Tex = path_aux + "_variations.tex"
-            if not Utils.createFile_Tex(request, exam, path_to_file_VARIATIONS_DB_Tex, data_hora):
+            if not Utils.createFile_Tex(request, exam, path_to_file_VARIATIONS_DB_Tex, data_hora, font_size):
                 # message_cases += _("ERROR: Each block must have at least 3 questions/answers") + '\n'
                 return render(request, 'exam/exam_msg.html', {})
 
@@ -1160,7 +1162,7 @@ def generate_page(request, pk):
 
                     strQuestions += Utils.drawQuestions(request, myqr,
                                                         exam, room, s.student_ID, s.student_name,
-                                                        var_hash, data_hora)
+                                                        var_hash, data_hora, font_size)
 
 
                 else:
@@ -1175,7 +1177,7 @@ def generate_page(request, pk):
                         strSTUDENT += Utils.drawJumpPage()
                         strSTUDENT += strCircles
                         strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
-                                                      data_hora)
+                                                      data_hora, font_size)
                         strSTUDENT += strAnswerSheet
                         strSTUDENT += strCircles
                         '''
@@ -1187,14 +1189,14 @@ def generate_page(request, pk):
                         if exam.exam_print_eco == 'no' and exam.exam_print == 'both':
                             strSTUDENT += "\n\n\\newpage\n\n"
                             strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
-                                                          data_hora)
+                                                          data_hora, font_size)
                         if exam.exam_print == 'both':
                             strSTUDENT += strQuestions
                 if exam.exam_print in ['ques']:
                     if int(exam.exam_number_of_questions_text):
                         if exam.exam_print_eco == 'yes':
                             strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
-                                                          data_hora)
+                                                          data_hora, font_size)
                             strSTUDENT += strInstructions
                         strSTUDENT += strQuestions
 
