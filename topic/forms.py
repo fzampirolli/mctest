@@ -26,6 +26,7 @@ GNU General Public License for more details.
 =====================================================================
 '''
 from django import forms
+from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
 from .models import Question, Topic, User, Discipline
@@ -74,6 +75,7 @@ class QuestionCreateForm(forms.ModelForm):
             'question_bloom_taxonomy',
             'question_parametric',
         ]
+
         # template_name = 'question/question_create.html'
         # success_url = reverse_lazy('topic:question-create')
 
@@ -114,6 +116,14 @@ class UpdateQuestionForm(forms.Form):
         label=_("Who Created"))
     question_last_update = forms.DateField(
         label=_("Last Update"))
+
+
+    # Novos campos 04/12/2023
+    question_correction_count = forms.IntegerField(label=_("Correction Count"))
+    question_correct_count = forms.IntegerField(label=_("Correct Count"))
+    question_IRT_a_discrimination = forms.FloatField(label=_("Discrimination"))
+    question_IRT_b_ability = forms.FloatField(label=_("Ability"))
+    question_IRT_c_guessing = forms.FloatField(label=_("Guessing"))
 
     def __init__(self,  *args, **kwargs):
         super(UpdateQuestionForm, self).__init__(*args, **kwargs)

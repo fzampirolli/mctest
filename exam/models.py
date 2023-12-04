@@ -4,7 +4,7 @@ Copyright (C) 2018-2023 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.2.
+This file is part of MCTest 5.3.
 
 Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
@@ -52,13 +52,20 @@ class Exam(models.Model):
                                        help_text=_("Choose the questions"),
                                        verbose_name=_("Questions"))
 
-    # NOVO: 27/11/2023  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
-    # primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
-    # topics = models.ManyToManyField(Topic,
-    #                                    related_name='exams2',  # relacionamento reverso
-    #                                    blank=True,
-    #                                    help_text=_("Choose the topics"),
-    #                                    verbose_name=_("Topics"))
+    ''' NOVO: 27/11/2023  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+    primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
+    sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+    sudo find . -path "*/migrations/*.pyc"  -delete
+    mysql -u root -p DB_MCTest < "mysql-2023-11-30.sql"
+    python3.8 manage.py shell < _delete_exams_classrooms_students.py
+    python3.8 manage.py makemigrations
+    python3.8 manage.py migrate
+    '''
+    topics = models.ManyToManyField(Topic,
+                                       related_name='exams2',  # relacionamento reverso
+                                       blank=True,
+                                       help_text=_("Choose the topics"),
+                                       verbose_name=_("Topics"))
 
     exam_number_of_questions_var1 = models.CharField(
         default=20, max_length=3,

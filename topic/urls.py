@@ -28,6 +28,7 @@ GNU General Public License for more details.
 from django.urls import path
 from course import views as vi
 from . import views
+from django.urls import reverse
 
 app_name = 'topic'
 
@@ -57,4 +58,5 @@ urlpatterns += [
     path('question/<int:pk>', views.QuestionDetailView.as_view(), name='question-detail'),
     path('question/<int:pk>/update/', views.UpdateQuestion, name='question-update'),
     path('question/<int:pk>/delete/', views.QuestionDelete.as_view(), name='question-delete'),
+    path('question/<int:pk>/copy/', views.copy_question, name='copy_question')
 ]

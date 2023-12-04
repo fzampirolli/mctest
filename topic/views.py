@@ -59,10 +59,41 @@ from .forms import UpdateQuestionForm, QuestionCreateForm, TopicCreateForm, Topi
 # from django.contrib.auth.models import User
 from .models import Topic, Question, Answer
 from .resources import QuestionResource
-
+from django.utils.html import format_html
 
 # from sympy import *
 
+from django.shortcuts import redirect
+
+
+from django.urls import reverse
+
+def copy_question(request, pk):
+    question_to_copy = get_object_or_404(Question, pk=pk)
+
+    if request.method == 'POST':
+        text = question_to_copy.question_short_description
+        if len(text) > 47:
+            text = text[:47] + '-cp'
+        else:
+            text += '-cp'
+        new_question = Question.objects.create(
+            topic=question_to_copy.topic,
+            question_group=question_to_copy.question_group,
+            question_short_description=text,
+            question_text=question_to_copy.question_text,
+            question_type=question_to_copy.question_type,
+            question_difficulty=question_to_copy.question_difficulty,
+            question_bloom_taxonomy=question_to_copy.question_bloom_taxonomy,
+            question_parametric=question_to_copy.question_parametric,
+            question_last_update=question_to_copy.question_last_update,
+            question_who_created=request.user,
+        )
+        new_question.save()
+
+        messages.error(request, format_html(_('The question has been successfully duplicated! You can <a href="../../{}/update/">view and edit the duplicated question here</a>.'), new_question.id))
+
+    return render(request, 'exam/exam_msg.html', {})
 
 @login_required
 def save_question_Json(request, pk):
@@ -755,6 +786,7 @@ from django.core import serializers
 
 @login_required
 def UpdateQuestion(request, pk):
+
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
         if not 'topic.change_question' in perm:
@@ -829,6 +861,13 @@ def UpdateQuestion(request, pk):
             question_inst.question_parametric = form.cleaned_data['question_parametric']
             question_inst.question_who_created = form.cleaned_data['question_who_created']
             question_inst.question_last_update = form.cleaned_data['question_last_update']
+
+            question_inst.question_correction_count = form.cleaned_data['question_correction_count']
+            question_inst.question_correct_count = form.cleaned_data['question_correct_count']
+            question_inst.question_IRT_a_discrimination = form.cleaned_data['question_IRT_a_discrimination']
+            question_inst.question_IRT_b_ability = form.cleaned_data['question_IRT_b_ability']
+            question_inst.question_IRT_c_guessing = form.cleaned_data['question_IRT_c_guessing']
+
             question_inst.save()
 
         formset = AnswerInlineFormSet(request.POST, request.FILES,
@@ -869,6 +908,12 @@ def UpdateQuestion(request, pk):
             'question_parametric': question_inst.question_parametric,
             'question_who_created': question_inst.question_who_created,
             'question_last_update': question_inst.question_last_update,
+
+            'question_correction_count': question_inst.question_correction_count,
+            'question_correct_count': question_inst.question_correct_count,
+            'question_IRT_a_discrimination': question_inst.question_IRT_a_discrimination,
+            'question_IRT_b_ability': question_inst.question_IRT_b_ability,
+            'question_IRT_c_guessing': question_inst.question_IRT_c_guessing,
         })
 
     return render(request, 'question/question_update.html', {

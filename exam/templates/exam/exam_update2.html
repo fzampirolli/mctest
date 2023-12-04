@@ -333,9 +333,9 @@
                                 </div>
 
                                 <p></p>
-                                <!-- Topics -- NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE --
+                                <!-- Topics -- NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE -->
                                 <br class="card-body" style="background-color:#f3f3f3;">
-                                <h5 class="card-title">{ % trans "Topics List" % }</h5>
+                                <h5 class="card-title">{% trans "Topics List" %}</h5>
                                 <script>
                                     var count_topic = 0;
 
@@ -367,7 +367,7 @@
                                 <table id="example6" class="table table-striped table-bordered"
                                        style="width:100%">
                                     <thead class="thead-light">
-                                    !-- header --
+                                    <!-- header -->
                                     <tr>
 
                                         <th scope="col">
@@ -376,22 +376,22 @@
                                                    data-to-table="tasks">
                                         </th>
 
-                                        <th scope="col">{ % trans "Topic" % }</th> !-- Choose --
+                                        <th scope="col">{% trans "Topic" %}</th> <!-- Choose -->
 
-                                        <th scope="col" class="text-right">{ % trans "See" % }</th>
+                                        <th scope="col" class="text-right">{% trans "See" %}</th>
 
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    !-- topics --
-                                    { % for t in form.topics % }
-                                        { % csrf_token % }
+                                    <!-- topics -->
+                                    {% for t in form.topics %}
+                                        {% csrf_token %}
                                         <tr>
-                                            !-- topics --
+                                            <!-- topics -->
                                             <td class="text-center">
                                                 <div class="btn btn-outline-primary btn-sm">
                                                     <label>
-                                                        <div style="color:white;font-size:1px;width:12px">{ { t } }</div>
+                                                        <div style="color:white;font-size:1px;width:12px">{{ t }}</div>
                                                     </label>
                                                 </div>
                                             </td>
@@ -403,7 +403,7 @@
                                                 </div>
                                             </td>
 
-                                            !-- see --
+                                            <!-- see -->
                                             <td class="text-center">
                                                 <script>
                                                     document.write("<a href=\"/topic/topic/" + get_ID_topic(count_topic) + "\"");
@@ -414,10 +414,10 @@
                                             </td>
                                         </tr>
 
-                                    { % endfor % }
+                                    {% endfor %}
                                 </table>
 
-                                <p></p> -->
+                                <p></p>
 
                                 <!-- questions -->
                                 <br class="card-body" style="background-color:#f3f3f3;">

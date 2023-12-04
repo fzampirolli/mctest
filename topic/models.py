@@ -127,6 +127,8 @@ class Question(models.Model):
                                                choices=question_bloom_choice,
                                                verbose_name=_("Bloom Taxonomy"),
                                                )
+
+
     question_parametric_choice = (
         ('yes', _('Yes')),
         ('no', _('No')),
@@ -143,6 +145,22 @@ class Question(models.Model):
     question_who_created = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                              verbose_name=_("Who Created"),
                                              )
+
+    ''' Novos campos 04/12/2023
+    primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
+    find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+    find . -path "*/migrations/*.pyc"  -delete
+    mysql -u root -p DB_MCTest < "mysql-2023-11-30.sql"
+    python3.8 manage.py shell < _novos_campos_questao.py
+    python3.8 manage.py makemigrations topic
+    python3.8 manage.py migrate topic
+    brew services restart mysql
+    '''
+    question_correction_count = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name=_("Correction Count"))
+    question_correct_count = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name=_("Correct Count"))
+    question_IRT_a_discrimination = models.FloatField(default=0.0, null=True, blank=True, verbose_name=_("Discrimination"))
+    question_IRT_b_ability = models.FloatField(default=0.0, null=True, blank=True, verbose_name=_("Ability"))
+    question_IRT_c_guessing = models.FloatField(default=0.0, null=True, blank=True, verbose_name=_("Guessing"))
 
     def display_Topic(self):
         return self.topic.topic_text

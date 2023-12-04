@@ -4,7 +4,7 @@ Copyright (C) 2018-2023 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.2.
+This file is part of MCTest 5.3.
 
 Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
@@ -1376,7 +1376,7 @@ def UpdateExam(request, pk):
     classrooms = exam_inst.classrooms
 
     # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
-    #topics = exam_inst.topics
+    topics = exam_inst.topics
 
     questions = exam_inst.questions
 
@@ -1423,10 +1423,10 @@ def UpdateExam(request, pk):
             exam_inst.classrooms.add(*classrooms)
 
             # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
-            # topics = form.cleaned_data['topics']
-            # for q in exam_inst.topics.all():
-            #     exam_inst.topics.remove(q)
-            # exam_inst.topics.add(*topics)
+            topics = form.cleaned_data['topics']
+            for q in exam_inst.topics.all():
+                exam_inst.topics.remove(q)
+            exam_inst.topics.add(*topics)
 
             questions = form.cleaned_data['questions']
             # raise Http404(len(exam_inst.questions.all()))
@@ -1445,12 +1445,14 @@ def UpdateExam(request, pk):
     else:
         # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
         # topics
+        tt = topics.filter().values_list('id', flat=True)
+        qq = questions.filter(topic__id__in=tt).values_list('id', flat=True)
 
         form = UpdateExamForm(initial={
             'exam_name': exam_inst.exam_name,
             'classrooms': [c for c in classrooms.filter().values_list('id', flat=True)],
-            #'topics': [t for t in topics.filter().values_list('id', flat=True)],
-            'questions': [q for q in questions.filter().values_list('id', flat=True)],
+            'topics': tt,
+            'questions': qq,
             'exam_number_of_questions_var1': exam_inst.exam_number_of_questions_var1,
             'exam_number_of_questions_var2': exam_inst.exam_number_of_questions_var2,
             'exam_number_of_questions_var3': exam_inst.exam_number_of_questions_var3,

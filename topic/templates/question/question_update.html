@@ -17,7 +17,8 @@
                                 <tr>
                                     <th><br>
                                         <!-- Create-PDF -->
-                                        <form class="input-group mb-3" action="../createPDF/" method="post" target="_blank">
+                                        <form class="input-group mb-3" action="../createPDF/" method="post"
+                                              target="_blank">
                                             {% csrf_token %}
                                             <input class="btn btn-primary" type="submit" action=""
                                                    value={% trans "Create-PDF" %}>
@@ -25,11 +26,12 @@
                                         <h6>{% trans "See this question in PDF format" %}</h6>
                                     </th>
 
-                                      <th><br>
+                                    <th><br>
                                         <!-- Colab-Compile -->
-                                          <a href="https://colab.research.google.com/drive/1R7eyIorqdJMSW5XSI1NjD8jD4MEY0zRt#scrollTo=r9LuQe6AqlEd"
-                                             class="btn btn-outline-danger" target="_blank">
-                                        {% trans "Compile-Colab" %}</a><p>
+                                        <a href="https://colab.research.google.com/drive/1R7eyIorqdJMSW5XSI1NjD8jD4MEY0zRt#scrollTo=r9LuQe6AqlEd"
+                                           class="btn btn-outline-danger" target="_blank">
+                                            {% trans "Compile-Colab" %}</a>
+                                        <p>
                                         <h6>{% trans "Copy-Paste the description of question for test in Colab Google" %}</h6>
 
                                     </th>
@@ -37,7 +39,7 @@
 
                                     <th><br>
                                         <!-- Save-Json -->
-                                        <form class="input-group mb-3 text-right" action="../saveJson/"  target="_blank"
+                                        <form class="input-group mb-3 text-right" action="../saveJson/" target="_blank"
                                               method="post">
                                             {% csrf_token %}
                                             <input class="btn btn-primary" type="submit" action=""
@@ -136,37 +138,104 @@
 
                                 <hr>
 
+
                                 <!-- Answers -->
                                 {{ formset.management_form }}
                                 {% for f_form in formset %}
                                     {{ f_form.as_p }}
                                 {% endfor %}
 
-                                <hr>
+
+                                <!-- Statistics -->
+                                <div class="card p-3 mb-3 shadow-sm" style="background-color: #f2f7fb;">
+                                    <h5 class="card-title">{% trans "Multiple Choice Question (QM) Statistics: Corrections, Accuracy (Correct/Correction), and IRT" %}</h5>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3 d-flex flex-column">
+                                                <label class="form-label">{% trans "Correction Count" %}</label>
+                                                {% render_field form.question_correction_count class+="form-control" placeholder=form.question_correction_count.help_text onkeyup="updateAccuracy()" %}
+                                                <div class="mt-2">
+                                                    <span id="accuracyResult" class="text-muted "></span>
+                                                    <span id="accuracyCalc" class="text-muted small"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label class="form-label">{% trans "Correct Count" %}</label>
+                                                {% render_field form.question_correct_count class+="form-control" placeholder=form.question_correction_count.help_text onkeyup="updateAccuracy()" %}
+                                            </div>
+                                        </div>
+                                        <script>
+                                            function updateAccuracy() {
+                                                const correctionCount = parseInt(document.getElementById("id_question_correction_count").value, 10);
+                                                const correctCount = parseInt(document.getElementById("id_question_correct_count").value, 10);
+                                                const accuracy = (correctCount / (correctionCount || 1)) * 100; // Avoid division by zero
+
+                                                document.getElementById("accuracyResult").textContent = `${accuracy.toFixed(2)}%`;
+                                                document.getElementById("accuracyCalc").textContent = `( = 100 * ${correctCount} / ${correctionCount || 1} )`;
+                                            }
+
+                                            updateAccuracy(); // Update on initial render as well
+                                        </script>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                            <span class="h5 font-weight-bold mr-3">IRT:</span>
+                                            <div class="form-group mr-3">
+                                                <label class="form-label">{% trans "Discrimination (a)" %}</label>
+                                                {% render_field form.question_IRT_a_discrimination class+="form-control" placeholder=form.question_IRT_a_discrimination.help_text %}
+                                            </div>
+                                            <div class="form-group mr-3">
+                                                <label class="form-label">{% trans "Ability (b)" %}</label>
+                                                {% render_field form.question_IRT_b_ability class+="form-control" placeholder=form.question_IRT_b_ability.help_text %}
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">{% trans "Guessing (c)" %}</label>
+                                                {% render_field form.question_IRT_c_guessing class+="form-control" placeholder=form.question_IRT_c_guessing.help_text %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <!-- Actions buttons -->
                                 <div class="text-right">
                                     <a href="{% url 'topic:myquestions-list' %}"
                                        class="btn btn-outline-primary">{% trans "Back" %}</a>
-                                    <a href="{% url 'main:According' %}" class="btn btn-outline-danger">
-                                        {% trans "According" %}</a>
+                                    <a href="{% url 'main:According' %}"
+                                       class="btn btn-outline-danger">{% trans "According" %}</a>
                                     <input class="btn btn-primary" type="submit" value={% trans "Save" %}>
                                     <hr>
                                 </div>
                             </form>
 
+                            <form method="post" action="../copy/" target="_blank">
+                                <div class="text-right">
+                                    {% csrf_token %}
+                                    <input class="btn btn-outline-primary" type="submit" name="copy_question"
+                                           value="{% trans 'Duplicate This Question' %}">
+                                </div>
+                            </form>
+
                             <!-- Actions buttons to upload images -->
-                            <form action="/topic/myquestions/importImage/"  method="POST" enctype="multipart/form-data" target="_blank">
+                            <form action="/topic/myquestions/importImage/" method="POST" enctype="multipart/form-data"
+                                  target="_blank">
                                 {% csrf_token %}
                                 <input type="file" name="myfile">
                                 <button class="btn btn-primary" type="submit">{% trans "Upload-Image" %}</button>
 
                                 <p>{% trans "Choose a PNG file for import." %}
-                                {% trans "Be cautious with the file name to avoid overwriting another file with the same name." %}
-                                {% trans "One suggestion is to include a prefix in the file name like " %} <bf>fz_PDI_image01.png</bf>.
-                                {% trans "Do not include special characters and spaces in the file name." %}
-                                {% trans "This file will be retained for 180 days in server." %}
-                                {% trans "Remember that images in LaTeX make PDF generation extremely slow!" %}
-                                {% trans "See below how to include this image in a question." %}
+                                    {% trans "Be cautious with the file name to avoid overwriting another file with the same name." %}
+                                    {% trans "One suggestion is to include a prefix in the file name like " %}
+                                    <bf>fz_PDI_image01.png</bf>
+                                    .
+                                    {% trans "Do not include special characters and spaces in the file name." %}
+                                    {% trans "This file will be retained for 180 days in server." %}
+                                    {% trans "Remember that images in LaTeX make PDF generation extremely slow!" %}
+                                    {% trans "See below how to include this image in a question." %}
                                 </p>
                                 <pre>
 \begin{figure}[h!]\centering
@@ -176,21 +245,21 @@
                                 </pre>
                             </form>
 
-                            <hr>
+                            <!-- Copy and Delete buttons -->
+                            <div class="text-right">
 
-                            <!-- Delete button -->
-                            <form action="../delete/" method="">
-                                {% csrf_token %}
-                                <div class="text-right">
+                                <form action="../delete/" method="">
+                                    {% csrf_token %}
                                     <input class="btn btn-danger" type="submit" action=""
                                            value={% trans "Delete this Question" %}/>
-                                </div>
+                                </form>
+                                <hr>
+                            </div>
 
-                            </form>
+
 
                         {% endif %}
 
-                        <hr>
                         {% trans "Questions of the disciplines that I am enrolled" %}<br>
                         {% trans "Contact your discipline coordinator" %}
                     </div>

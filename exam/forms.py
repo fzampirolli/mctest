@@ -4,7 +4,7 @@ Copyright (C) 2018-2023 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.2.
+This file is part of MCTest 5.3.
 
 Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
@@ -79,11 +79,11 @@ class UpdateExamForm(forms.Form):
         label=_("Classrooms"))
 
     #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
-    # topics = forms.ModelMultipleChoiceField(
-    #     widget=forms.CheckboxSelectMultiple,
-    #     queryset=Topic.objects.all(),
-    #     help_text=_("Choose the topics"),
-    #     label=_("Topics"))
+    topics = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Topic.objects.all(),
+        help_text=_("Choose the topics"),
+        label=_("Topics"))
 
     questions = forms.ModelMultipleChoiceField(required=False,
                                                widget=forms.CheckboxSelectMultiple,
@@ -211,14 +211,22 @@ class UpdateExamForm(forms.Form):
                 qs = Classroom.objects.filter(pk__in=qs)
 
             #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
-            #topics = Topic.objects.filter(discipline__discipline_pk=discipline.pk)
-            #self.fields['topics'].queryset = discipline.topics2.all()
+            self.fields['topics'].queryset =  discipline.topics2.all()
 
-            self.fields[
-                'questions'].queryset = questions  # Question.objects.filter(topic__discipline__discipline_profs=user)
+            # Obtém os tópicos selecionados do formulário
+            selected_topics = self.initial.get('topics', [])
 
-            self.fields[
-                'classrooms'].queryset = qs  # Classroom.objects.filter(discipline__discipline_profs=user)
+            # Filtra as questões relacionadas aos tópicos selecionados
+            available_questions = Question.objects.filter(topic__id__in=selected_topics)
+
+            # Atualiza as opções do campo 'questions' no formulário
+            self.fields['questions'].queryset = available_questions
+
+            #self.fields['questions'].queryset = questions
+            # Question.objects.filter(topic__discipline__discipline_profs=user)
+
+            self.fields['classrooms'].queryset = qs
+            # Classroom.objects.filter(discipline__discipline_profs=user)
 
         except:
             pass
