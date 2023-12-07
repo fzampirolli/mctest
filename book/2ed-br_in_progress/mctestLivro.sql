@@ -47,7 +47,7 @@ CREATE TABLE `account_user` (
 
 LOCK TABLES `account_user` WRITE;
 /*!40000 ALTER TABLE `account_user` DISABLE KEYS */;
-INSERT INTO `account_user` VALUES (1,'pbkdf2_sha256$150000$4zxBrMk9MeNY$0s4uwkF2IE8LZCNLZQUV2jhnp+BZjx0AuhooEkpzyDg=','2023-12-07 17:27:40.098976',1,'fzampirolli','Francisco','Zampirolli','fzampirolli@ufabc.edu.br',1,1,'2019-01-14 18:03:04.000000',0),(53,'pbkdf2_sha256$600000$ZI9m2tjIBRzu1ErAOkJQjm$5ebijVAQZuPGJx8mpiF3B8GPqVJyqzuc8GymsEjRbiw=','2022-05-26 17:03:49.359608',0,'fzstudent','Francisco','Estudante','fzstudent@ufabc.edu.br',0,1,'2019-01-31 07:27:04.065858',0),(65,'pbkdf2_sha256$600000$o50RY7ieNBhOjl7Uq5EJmN$S8zQK1gi875c+TQYYLZG51s7Q3wQAwYGPOZxWSdzd2c=','2022-07-12 22:54:55.679807',0,'fzprof','Francisco','Professor','fzprof@ufabc.edu.br',0,1,'2019-09-02 20:48:18.000000',0),(66,'pbkdf2_sha256$600000$2fc5ARaUAsn5yimb26laij$KA3BvUBxbGbARHnXel4amkgkysr8YWCYUZnM22aUEss=','2022-05-26 17:12:07.229064',0,'fzcoord','Francisco','Coordenador','fzcoord@ufabc.edu.br',0,1,'2019-09-02 20:49:06.000000',0);
+INSERT INTO `account_user` VALUES (1,'pbkdf2_sha256$150000$xGdP6X2OLWAD$uZ1q63pt6OlbARtftm+vOhrAUO/+fMkmsBajUtdTsi4=','2023-12-07 21:14:42.311811',1,'fzampirolli','Francisco','Zampirolli','fzampirolli@ufabc.edu.br',1,1,'2019-01-14 18:03:04.000000',0),(53,'pbkdf2_sha256$150000$hDwV19zGzvc3$dd1CmCzW9lN5tA1ex+LYh6G3QArn3y1I5F3d6Dm54Ws=','2023-05-30 21:03:55.160832',0,'fzstudent','Francisco','Estudante','fzstudent@ufabc.edu.br',0,1,'2019-01-31 07:27:04.065858',0),(65,'pbkdf2_sha256$150000$mFNA1cf6k7L0$thI+JbzmQQbezu7tFCWNAeqzFl/A8YDbyfiti31HgzU=','2023-07-07 17:09:52.083993',0,'fzprof','Francisco','Professor','fzprof@ufabc.edu.br',0,1,'2019-09-02 20:48:18.000000',0),(66,'pbkdf2_sha256$150000$cBbUBMF37piE$LyK66878fkQanHbYcFSnOFwx2hF4JDPh9AEOKW8mYTc=','2023-05-18 12:31:00.187012',0,'fzcoord','Francisco','Coordenador','fzcoord@ufabc.edu.br',0,1,'2019-09-02 20:49:06.000000',0);
 /*!40000 ALTER TABLE `account_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +207,7 @@ CREATE TABLE `course_classroom` (
   PRIMARY KEY (`id`),
   KEY `course_classroom_discipline_id_6c1c6c02_fk_course_discipline_id` (`discipline_id`),
   CONSTRAINT `course_classroom_discipline_id_6c1c6c02_fk_course_discipline_id` FOREIGN KEY (`discipline_id`) REFERENCES `course_discipline` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=671 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=672 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,7 +216,7 @@ CREATE TABLE `course_classroom` (
 
 LOCK TABLES `course_classroom` WRITE;
 /*!40000 ALTER TABLE `course_classroom` DISABLE KEYS */;
-INSERT INTO `course_classroom` VALUES (670,'fzTurmaTeste','virtual','2023.3','PClass',51);
+INSERT INTO `course_classroom` VALUES (671,'fz-turmaTeste','virtual','2023.3','PClass',51);
 /*!40000 ALTER TABLE `course_classroom` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +236,7 @@ CREATE TABLE `course_classroom_classroom_profs` (
   KEY `course_classroom_cla_user_id_3d589b69_fk_account_u` (`user_id`),
   CONSTRAINT `course_classroom_cla_classroom_id_f7438abe_fk_course_cl` FOREIGN KEY (`classroom_id`) REFERENCES `course_classroom` (`id`),
   CONSTRAINT `course_classroom_cla_user_id_3d589b69_fk_account_u` FOREIGN KEY (`user_id`) REFERENCES `account_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +245,7 @@ CREATE TABLE `course_classroom_classroom_profs` (
 
 LOCK TABLES `course_classroom_classroom_profs` WRITE;
 /*!40000 ALTER TABLE `course_classroom_classroom_profs` DISABLE KEYS */;
-INSERT INTO `course_classroom_classroom_profs` VALUES (3,670,1);
+INSERT INTO `course_classroom_classroom_profs` VALUES (5,671,1);
 /*!40000 ALTER TABLE `course_classroom_classroom_profs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +265,7 @@ CREATE TABLE `course_classroom_students` (
   KEY `course_classroom_stu_student_id_4e5d6532_fk_student_s` (`student_id`),
   CONSTRAINT `course_classroom_stu_classroom_id_63b3b2e3_fk_course_cl` FOREIGN KEY (`classroom_id`) REFERENCES `course_classroom` (`id`),
   CONSTRAINT `course_classroom_stu_student_id_4e5d6532_fk_student_s` FOREIGN KEY (`student_id`) REFERENCES `student_student` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,7 +289,7 @@ CREATE TABLE `course_course` (
   `course_name` varchar(100) NOT NULL,
   `course_code` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,7 +298,7 @@ CREATE TABLE `course_course` (
 
 LOCK TABLES `course_course` WRITE;
 /*!40000 ALTER TABLE `course_course` DISABLE KEYS */;
-INSERT INTO `course_course` VALUES (12,'Curso Exemplo','CE');
+INSERT INTO `course_course` VALUES (12,'Curso Exemplo','CE'),(13,'Engenharia da Computação','EC'),(14,'Bacharelado em Ciência da Computação','BCC'),(15,'Pós em Ciência da Computação','POSCOMP'),(16,'Bacharelado em Ciência e Tecnologia','BCT');
 /*!40000 ALTER TABLE `course_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,7 +374,7 @@ CREATE TABLE `course_course_institutes` (
   KEY `course_course_instit_institute_id_9fa7b95c_fk_course_in` (`institute_id`),
   CONSTRAINT `course_course_instit_institute_id_9fa7b95c_fk_course_in` FOREIGN KEY (`institute_id`) REFERENCES `course_institute` (`id`),
   CONSTRAINT `course_course_institutes_course_id_4721f5a6_fk_course_course_id` FOREIGN KEY (`course_id`) REFERENCES `course_course` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -383,7 +383,7 @@ CREATE TABLE `course_course_institutes` (
 
 LOCK TABLES `course_course_institutes` WRITE;
 /*!40000 ALTER TABLE `course_course_institutes` DISABLE KEYS */;
-INSERT INTO `course_course_institutes` VALUES (12,12,3);
+INSERT INTO `course_course_institutes` VALUES (12,12,3),(13,13,4),(14,13,5),(15,14,4),(16,15,4),(17,16,6);
 /*!40000 ALTER TABLE `course_course_institutes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -400,7 +400,7 @@ CREATE TABLE `course_discipline` (
   `discipline_code` varchar(20) NOT NULL,
   `discipline_objective` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -409,7 +409,7 @@ CREATE TABLE `course_discipline` (
 
 LOCK TABLES `course_discipline` WRITE;
 /*!40000 ALTER TABLE `course_discipline` DISABLE KEYS */;
-INSERT INTO `course_discipline` VALUES (51,'Disciplina Exemplo','DE','');
+INSERT INTO `course_discipline` VALUES (51,'Disciplina Exemplo','DE',''),(52,'Processamento Digital de Imagens','PDI',''),(53,'Programação Estruturada','PE',''),(54,'Processamento da Informação','PI','Ementa: Introdução a algoritmos. Variáveis e tipos de dados. Operadores aritméticos, lógicos e precedência. Métodos/Funções e parâmetros. Estruturas de seleção. Estruturas de repetição. Vetores. Matrizes. Entrada e saída de dados. Depuração. Melhores práticas de programação.'),(55,'Bases Computacionais da Ciência','BCC','');
 /*!40000 ALTER TABLE `course_discipline` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,7 +429,7 @@ CREATE TABLE `course_discipline_courses` (
   KEY `course_discipline_courses_course_id_9b08f936_fk_course_course_id` (`course_id`),
   CONSTRAINT `course_discipline_co_discipline_id_58803173_fk_course_di` FOREIGN KEY (`discipline_id`) REFERENCES `course_discipline` (`id`),
   CONSTRAINT `course_discipline_courses_course_id_9b08f936_fk_course_course_id` FOREIGN KEY (`course_id`) REFERENCES `course_course` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,7 +438,7 @@ CREATE TABLE `course_discipline_courses` (
 
 LOCK TABLES `course_discipline_courses` WRITE;
 /*!40000 ALTER TABLE `course_discipline_courses` DISABLE KEYS */;
-INSERT INTO `course_discipline_courses` VALUES (1,51,12);
+INSERT INTO `course_discipline_courses` VALUES (1,51,12),(2,52,14),(3,52,15),(4,53,14),(5,54,16),(6,55,16);
 /*!40000 ALTER TABLE `course_discipline_courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -458,7 +458,7 @@ CREATE TABLE `course_discipline_discipline_coords` (
   KEY `course_discipline_di_user_id_1b546641_fk_account_u` (`user_id`),
   CONSTRAINT `course_discipline_di_discipline_id_dffbcc8f_fk_course_di` FOREIGN KEY (`discipline_id`) REFERENCES `course_discipline` (`id`),
   CONSTRAINT `course_discipline_di_user_id_1b546641_fk_account_u` FOREIGN KEY (`user_id`) REFERENCES `account_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -467,7 +467,7 @@ CREATE TABLE `course_discipline_discipline_coords` (
 
 LOCK TABLES `course_discipline_discipline_coords` WRITE;
 /*!40000 ALTER TABLE `course_discipline_discipline_coords` DISABLE KEYS */;
-INSERT INTO `course_discipline_discipline_coords` VALUES (1,51,1);
+INSERT INTO `course_discipline_discipline_coords` VALUES (1,51,1),(2,51,66),(3,52,1),(8,52,66),(9,53,1),(4,53,66),(10,54,1),(5,54,66),(6,55,1),(7,55,66);
 /*!40000 ALTER TABLE `course_discipline_discipline_coords` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -487,7 +487,7 @@ CREATE TABLE `course_discipline_discipline_profs` (
   KEY `course_discipline_di_user_id_af64824b_fk_account_u` (`user_id`),
   CONSTRAINT `course_discipline_di_discipline_id_8f7f8690_fk_course_di` FOREIGN KEY (`discipline_id`) REFERENCES `course_discipline` (`id`),
   CONSTRAINT `course_discipline_di_user_id_af64824b_fk_account_u` FOREIGN KEY (`user_id`) REFERENCES `account_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -496,7 +496,7 @@ CREATE TABLE `course_discipline_discipline_profs` (
 
 LOCK TABLES `course_discipline_discipline_profs` WRITE;
 /*!40000 ALTER TABLE `course_discipline_discipline_profs` DISABLE KEYS */;
-INSERT INTO `course_discipline_discipline_profs` VALUES (2,51,1),(1,51,65),(3,51,66);
+INSERT INTO `course_discipline_discipline_profs` VALUES (2,51,1),(1,51,65),(3,51,66),(4,52,1),(12,52,66),(6,53,1),(5,53,65),(7,53,66),(9,54,1),(8,54,65),(11,55,1),(10,55,65);
 /*!40000 ALTER TABLE `course_discipline_discipline_profs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -517,7 +517,7 @@ CREATE TABLE `course_institute` (
   `institute_exams_corrected` int NOT NULL,
   `institute_questions_corrected` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -526,7 +526,7 @@ CREATE TABLE `course_institute` (
 
 LOCK TABLES `course_institute` WRITE;
 /*!40000 ALTER TABLE `course_institute` DISABLE KEYS */;
-INSERT INTO `course_institute` VALUES (3,'Instituto Exemplo','IE','logo','www.ufabc.edu.br',6,0,0);
+INSERT INTO `course_institute` VALUES (3,'Instituto Exemplo','IE','ufabc','www.ufabc.edu.br',75,216,6234),(4,'Centro de Matemática, Computação e Cognição','CMCC','ufabc','cmcc.ufabc.edu.br',0,0,0),(5,'Centro de Engenharia, Modelagem e Ciências Sociais','CECS','ufabc','cecs.ufabc.edu.br',0,0,0),(6,'Universidade Federal do ABC','UFABC','ufabc','www.ufabc.edu.br',0,0,0);
 /*!40000 ALTER TABLE `course_institute` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -694,7 +694,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('6bkvenjhpms5t5hqtj0osp64qrv4qoia','.eJxVjDsOgzAQBe-ydWSxxsnalOk5g2Uv6-B8jIQhTZS7J0g0tG9m3gfK-vLvXPNSoTMn8GFdRr9WmX0eoAOEwxYDP6RsYLiHcpsUT2WZc1SbonZaVT8N8rzu7uFgDHX81-GsbQpBrGgm7YjYkTOEbbKSWkJjG-s4xUsUagSN00mcIBM3WiMjfH-JIDzr:1poAUi:_IGXUfTlb-Ww6B8ClQKfAbz0Z-WqHEIF4a1mEzeH6ms','2023-04-30 22:05:12.566797'),('8pmhspw3qtni8aplahikuydegnc30064','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQk8HCLwuY1irziEP0APCbossdy1_MNy4XCcjU1nmHM1fMRut5jIN-jhv7u5g5Dr-aj5al5jVqRWynkg8-Y6wTU5TS9i5xnlJ8RSVGsXO26ReUUgaa1EQPl-LJDzu:1poWaI:0rHZEv7HsdgaKvgofiPBVNnJjUV8FdKMwQZiT7IlBQU','2023-05-01 21:40:26.251775'),('abkr7xgenau6xyxog5ojhqmkxckvzs4a','eyJudW1fdmlzaXRzIjoxfQ:1poWz4:Ag8M9PXeqeyAnzU84KKFjEYsSawk1iDelVoaL3t2NMM','2023-05-01 22:06:02.104105'),('f8446tksu730gajit317ukfizdveq8ny','eyJudW1fdmlzaXRzIjoxfQ:1poqve:TT6bDKl7Ji5SIRPUE8UpMFoqZ0tqYh7m4TUEz__rHpw','2023-05-02 19:23:50.998501'),('lf0cqwqml0ozbloigke66e82n9v3yc4d','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQu8PEHhdxrBWnUMeoAeE3RZZ7lr-YLhxuU5GprLMOZq_YjZazWUa9HHe3N3ByHX81Xy0LjGrUytkPZF48h1hm5ymlrBzjfOS4ikqNYqdt0m9opA01qIgfL6MfDzw:1poPEP:R_Q96IddxIzaaDwk0V6d9r5DfJBEqa7Z9Khx5pLuhS0','2023-05-01 13:49:21.369099'),('lsqa9d8ms1uzt5x1ptpo9wyia2tdg1ne','NWNmNzBlOWMyOTBjZDE0MTE3YTFkNDhlYjU5YmZkZDAzYTBhZGQwNTp7Im51bV92aXNpdHMiOjMsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzOGNjNTlmYzMwMmFkMWMyZmE2ZWY0ODdmNzAxODJlMDU5Yjg0Nzc1In0=','2023-12-21 17:27:40.203130'),('rgys2ur51zdn7svn2uk81wcgal1niy3t','eyJudW1fdmlzaXRzIjoyfQ:1poPLQ:bWcFBpV8OSIBo9alTqGLqM9LvI7yD8TylMJpFx_MIlU','2023-05-01 13:56:36.550054');
+INSERT INTO `django_session` VALUES ('1nl7r299z46gv3daz3aly09u1ecja3qv','ZmFlODA2ZGIzZjRlNDhlZTI0MjdlYTg2NGQ2ZmJmOTQ3YzJkNmFhNjp7Im51bV92aXNpdHMiOjYsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-05-30 21:08:40.993302'),('21f9d8uyoxifehhz2q90pev1wa4696zw','YmIwNDYxZjJiZTM1MjkzYjEzNGM5MmU3NWIxNzc1YmM0ZmU3MzVmMjp7Im51bV92aXNpdHMiOjN9','2023-06-11 10:50:42.306846'),('6bkvenjhpms5t5hqtj0osp64qrv4qoia','.eJxVjDsOgzAQBe-ydWSxxsnalOk5g2Uv6-B8jIQhTZS7J0g0tG9m3gfK-vLvXPNSoTMn8GFdRr9WmX0eoAOEwxYDP6RsYLiHcpsUT2WZc1SbonZaVT8N8rzu7uFgDHX81-GsbQpBrGgm7YjYkTOEbbKSWkJjG-s4xUsUagSN00mcIBM3WiMjfH-JIDzr:1poAUi:_IGXUfTlb-Ww6B8ClQKfAbz0Z-WqHEIF4a1mEzeH6ms','2023-04-30 22:05:12.566797'),('8a172xlbtdulq6alxgoy09fovs65y3cp','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-12-03 10:42:13.592129'),('8pmhspw3qtni8aplahikuydegnc30064','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQk8HCLwuY1irziEP0APCbossdy1_MNy4XCcjU1nmHM1fMRut5jIN-jhv7u5g5Dr-aj5al5jVqRWynkg8-Y6wTU5TS9i5xnlJ8RSVGsXO26ReUUgaa1EQPl-LJDzu:1poWaI:0rHZEv7HsdgaKvgofiPBVNnJjUV8FdKMwQZiT7IlBQU','2023-05-01 21:40:26.251775'),('abkr7xgenau6xyxog5ojhqmkxckvzs4a','eyJudW1fdmlzaXRzIjoxfQ:1poWz4:Ag8M9PXeqeyAnzU84KKFjEYsSawk1iDelVoaL3t2NMM','2023-05-01 22:06:02.104105'),('at7ubuftwgx87cppsb5wbq3eoxy5e4fg','MmUzN2EzYWJjY2VlOTkzY2M1NzgxOTMwNGFjM2Q2MTE2ZWM1NWYzMDp7Im51bV92aXNpdHMiOjF9','2023-06-10 19:00:47.360598'),('blgrqf8smtfqsnopcqo40dyd8vr3efq0','ZDUwNzY1Y2YwZmM2ZWIxNzk0YzcwYjI3NzQ1NGIyNmNkYWRmNmM2MDp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiI2NSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZGMwNDRiNTVlMWQ4ZDgyN2JiMzdjNTNkZjFmMjAzZGMyZjdkMjI5MyJ9','2023-07-20 20:14:38.425845'),('c5pipkjq49100r9i19rxwqq8w9zb9qoj','MmUzN2EzYWJjY2VlOTkzY2M1NzgxOTMwNGFjM2Q2MTE2ZWM1NWYzMDp7Im51bV92aXNpdHMiOjF9','2023-06-13 21:04:15.092218'),('drv4kghk1d5uoh4r8adr3fsvfj5ybe9z','NjcxYzFhMjkwMjdhM2Q0NDhkYzg0N2FiZWVkZjNlMjZhMGRkOGZmODp7Im51bV92aXNpdHMiOjcsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-08-01 20:35:21.316569'),('f8446tksu730gajit317ukfizdveq8ny','eyJudW1fdmlzaXRzIjoxfQ:1poqve:TT6bDKl7Ji5SIRPUE8UpMFoqZ0tqYh7m4TUEz__rHpw','2023-05-02 19:23:50.998501'),('gvbqjclrk5rlcrg5xrquzuhty0q3rba6','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-07-18 17:58:04.632487'),('ifqj02gmyewg42f1y98vjtejks14red8','ZDUwNzY1Y2YwZmM2ZWIxNzk0YzcwYjI3NzQ1NGIyNmNkYWRmNmM2MDp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiI2NSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZGMwNDRiNTVlMWQ4ZDgyN2JiMzdjNTNkZjFmMjAzZGMyZjdkMjI5MyJ9','2023-06-18 13:32:46.482082'),('jpgv5aykitta9qjabr7cde9k173eqnxk','YzlhMDk2YWYzOTMyZjE0MGI1MDNlNmVjZDhhYzY0ZDk2YzE0NDA0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIiwibnVtX3Zpc2l0cyI6MX0=','2023-06-01 13:13:17.572640'),('lf0cqwqml0ozbloigke66e82n9v3yc4d','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQu8PEHhdxrBWnUMeoAeE3RZZ7lr-YLhxuU5GprLMOZq_YjZazWUa9HHe3N3ByHX81Xy0LjGrUytkPZF48h1hm5ymlrBzjfOS4ikqNYqdt0m9opA01qIgfL6MfDzw:1poPEP:R_Q96IddxIzaaDwk0V6d9r5DfJBEqa7Z9Khx5pLuhS0','2023-05-01 13:49:21.369099'),('og6i3vdeto0p9bjus5h5wuqk9zhupv7z','ZmFlODA2ZGIzZjRlNDhlZTI0MjdlYTg2NGQ2ZmJmOTQ3YzJkNmFhNjp7Im51bV92aXNpdHMiOjYsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-07-15 13:35:35.140109'),('ou4iyyab7khz4xgz2ednodovn640qrsi','Mjg0OGNmM2FlYWVhMWMzMWNlOTA4YTU4MWVmYTExNmRiNWY0ZmU1NTp7Im51bV92aXNpdHMiOjI2LCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNGMwYmFlODg3MWNjZTMwMmQxYzE3NzY0NDExNWY1OGRkNWM3ZWUxZiJ9','2023-12-07 18:14:29.606800'),('pvznj9p5513lva3cksl37cmpao1jookr','MmUzN2EzYWJjY2VlOTkzY2M1NzgxOTMwNGFjM2Q2MTE2ZWM1NWYzMDp7Im51bV92aXNpdHMiOjF9','2023-07-18 19:58:30.076497'),('q1m2jrhpsgbk2eceub9dirpgz21aq88s','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-07-25 18:58:46.106201'),('qr4jq9flptlwl6raeuhcfcjzdfgdxzrc','YmIwNDYxZjJiZTM1MjkzYjEzNGM5MmU3NWIxNzc1YmM0ZmU3MzVmMjp7Im51bV92aXNpdHMiOjN9','2023-06-09 19:51:17.842844'),('qxvbwx3abbd4io1b4h771u0uc2zttnrg','ZDUwNzY1Y2YwZmM2ZWIxNzk0YzcwYjI3NzQ1NGIyNmNkYWRmNmM2MDp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiI2NSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZGMwNDRiNTVlMWQ4ZDgyN2JiMzdjNTNkZjFmMjAzZGMyZjdkMjI5MyJ9','2023-07-13 13:50:13.081674'),('rgys2ur51zdn7svn2uk81wcgal1niy3t','eyJudW1fdmlzaXRzIjoyfQ:1poPLQ:bWcFBpV8OSIBo9alTqGLqM9LvI7yD8TylMJpFx_MIlU','2023-05-01 13:56:36.550054'),('sgb1o3hn6ewtqo1qx34te5ogpwazlmba','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-12-21 21:14:42.420482'),('tqi73aijqstof9xzbpz85kqvddqd21rm','ZDUwNzY1Y2YwZmM2ZWIxNzk0YzcwYjI3NzQ1NGIyNmNkYWRmNmM2MDp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiI2NSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZGMwNDRiNTVlMWQ4ZDgyN2JiMzdjNTNkZjFmMjAzZGMyZjdkMjI5MyJ9','2023-07-13 14:41:31.751700'),('tugtpiweyt4e59e4bfsw7929cj5s5kdd','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-08-08 23:34:57.945979'),('u3p7thdoreviuiskerozdxwnj5smkwjn','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-06-10 19:41:32.714279'),('w45yokz6fx45snsilvvg1tqdviiinme2','MDgxYTVjZmQxMGRiMjNjOGZiYTNkYjc5NzNjNjczZDdmMzM4ZjI3ODp7Im51bV92aXNpdHMiOjIsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-07-25 09:08:42.340650'),('x3abfp0dsfgt89gcnoupxkarq0jv62uz','ZmFlODA2ZGIzZjRlNDhlZTI0MjdlYTg2NGQ2ZmJmOTQ3YzJkNmFhNjp7Im51bV92aXNpdHMiOjYsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0YzBiYWU4ODcxY2NlMzAyZDFjMTc3NjQ0MTE1ZjU4ZGQ1YzdlZTFmIn0=','2023-08-11 16:57:56.097492'),('xhzjo4w4wak5a4ggtzh4mtwjcao6poch','NzUxODIxMGE5NzMyOGYxNzk4MTc2YzA4MjhjNDFlNTNkMzFmOTNiZjp7Im51bV92aXNpdHMiOjI0LCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNGMwYmFlODg3MWNjZTMwMmQxYzE3NzY0NDExNWY1OGRkNWM3ZWUxZiJ9','2023-07-23 13:42:16.653867');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -759,7 +759,7 @@ CREATE TABLE `exam_exam` (
   PRIMARY KEY (`id`),
   KEY `exam_exam_exam_who_created_id_de138c84_fk_account_user_id` (`exam_who_created_id`),
   CONSTRAINT `exam_exam_exam_who_created_id_de138c84_fk_account_user_id` FOREIGN KEY (`exam_who_created_id`) REFERENCES `account_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=486 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -768,7 +768,7 @@ CREATE TABLE `exam_exam` (
 
 LOCK TABLES `exam_exam` WRITE;
 /*!40000 ALTER TABLE `exam_exam` DISABLE KEYS */;
-INSERT INTO `exam_exam` VALUES (476,'exameTesteQR-QM','20','0','0','0','0','5','0','2','10','1','Hor','answ','yes','no',NULL,'2023-12-07 05:00:00.000000','t1','\\item desligar o celular',1);
+INSERT INTO `exam_exam` VALUES (485,'exameQR-QM','20','0','0','0','0','5','0','2','10','1','Hor','answ','yes','no',NULL,'2023-12-07 03:00:00.000000','t1','\\item desligar o celular',1);
 /*!40000 ALTER TABLE `exam_exam` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -788,7 +788,7 @@ CREATE TABLE `exam_exam_classrooms` (
   KEY `exam_exam_classrooms_classroom_id_6435a4cf_fk_course_cl` (`classroom_id`),
   CONSTRAINT `exam_exam_classrooms_classroom_id_6435a4cf_fk_course_cl` FOREIGN KEY (`classroom_id`) REFERENCES `course_classroom` (`id`),
   CONSTRAINT `exam_exam_classrooms_exam_id_edf09d98_fk_exam_exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exam_exam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9429 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9495 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -797,7 +797,7 @@ CREATE TABLE `exam_exam_classrooms` (
 
 LOCK TABLES `exam_exam_classrooms` WRITE;
 /*!40000 ALTER TABLE `exam_exam_classrooms` DISABLE KEYS */;
-INSERT INTO `exam_exam_classrooms` VALUES (9428,476,670);
+INSERT INTO `exam_exam_classrooms` VALUES (9494,485,671);
 /*!40000 ALTER TABLE `exam_exam_classrooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -817,7 +817,7 @@ CREATE TABLE `exam_exam_questions` (
   KEY `exam_exam_questions_question_id_cc6e86f0_fk_topic_question_id` (`question_id`),
   CONSTRAINT `exam_exam_questions_exam_id_74f97ebb_fk_exam_exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exam_exam` (`id`),
   CONSTRAINT `exam_exam_questions_question_id_cc6e86f0_fk_topic_question_id` FOREIGN KEY (`question_id`) REFERENCES `topic_question` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41088 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41220 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -841,7 +841,7 @@ CREATE TABLE `exam_exam_topics` (
   `exam_id` int NOT NULL,
   `topic_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -850,7 +850,7 @@ CREATE TABLE `exam_exam_topics` (
 
 LOCK TABLES `exam_exam_topics` WRITE;
 /*!40000 ALTER TABLE `exam_exam_topics` DISABLE KEYS */;
-INSERT INTO `exam_exam_topics` VALUES (1,561,11);
+INSERT INTO `exam_exam_topics` VALUES (1,561,11),(3,485,238);
 /*!40000 ALTER TABLE `exam_exam_topics` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -871,7 +871,7 @@ CREATE TABLE `exam_studentexam` (
   KEY `exam_studentexam_student_id_b67a86ca_fk_student_student_id` (`student_id`),
   CONSTRAINT `exam_studentexam_exam_id_b33d0b66_fk_exam_exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exam_exam` (`id`),
   CONSTRAINT `exam_studentexam_student_id_b67a86ca_fk_student_student_id` FOREIGN KEY (`student_id`) REFERENCES `student_student` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2803 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3028 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -901,7 +901,7 @@ CREATE TABLE `exam_studentexamquestion` (
   KEY `exam_studentexamques_studentExam_id_0fcf82a2_fk_exam_stud` (`studentExam_id`),
   CONSTRAINT `exam_studentexamques_question_id_f120cc5c_fk_topic_que` FOREIGN KEY (`question_id`) REFERENCES `topic_question` (`id`),
   CONSTRAINT `exam_studentexamques_studentExam_id_0fcf82a2_fk_exam_stud` FOREIGN KEY (`studentExam_id`) REFERENCES `exam_studentexam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31323 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31383 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -927,7 +927,7 @@ CREATE TABLE `exam_variationexam` (
   PRIMARY KEY (`id`),
   KEY `exam_variationexam_exam_id_ba3b75d0_fk_exam_exam_id` (`exam_id`),
   CONSTRAINT `exam_variationexam_exam_id_ba3b75d0_fk_exam_exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exam_exam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60968 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=61031 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -952,7 +952,7 @@ CREATE TABLE `student_student` (
   `student_ID` varchar(20) NOT NULL,
   `student_email` varchar(254) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28518 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28519 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -979,7 +979,7 @@ CREATE TABLE `topic_answer` (
   PRIMARY KEY (`id`),
   KEY `topic_answer_question_id_9112ef5a_fk_topic_question_id` (`question_id`),
   CONSTRAINT `topic_answer_question_id_9112ef5a_fk_topic_question_id` FOREIGN KEY (`question_id`) REFERENCES `topic_question` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8945 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9018 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -988,7 +988,7 @@ CREATE TABLE `topic_answer` (
 
 LOCK TABLES `topic_answer` WRITE;
 /*!40000 ALTER TABLE `topic_answer` DISABLE KEYS */;
-INSERT INTO `topic_answer` VALUES (8930,'1a alternativa criada','',2443),(8931,'2a alternativa criada','',2443),(8932,'3a alternativa criada','',2443),(8933,'4a alternativa criada','',2443),(8934,'5a alternativa criada','',2443),(8935,'1a alternativa criada','',2444),(8936,'2a alternativa criada','',2444),(8937,'3a alternativa criada','',2444),(8938,'4a alternativa criada','',2444),(8939,'5a alternativa criada','',2444),(8940,'1a alternativa criada','',2445),(8941,'2a alternativa criada','',2445),(8942,'3a alternativa criada','',2445),(8943,'4a alternativa criada','',2445),(8944,'5a alternativa criada','',2445);
+INSERT INTO `topic_answer` VALUES (8930,'1a alternativa criada','',2443),(8931,'2a alternativa criada','',2443),(8932,'3a alternativa criada','',2443),(8933,'4a alternativa criada','',2443),(8934,'5a alternativa criada','',2443),(8935,'1a alternativa criada','',2444),(8936,'2a alternativa criada','',2444),(8937,'3a alternativa criada','',2444),(8938,'4a alternativa criada','',2444),(8939,'5a alternativa criada','',2444),(8940,'1a alternativa criada','',2445),(8941,'2a alternativa criada','',2445),(8942,'3a alternativa criada','',2445),(8943,'4a alternativa criada','',2445),(8944,'5a alternativa criada','',2445),(8945,'1a alternativa criada','',2446),(8946,'2a alternativa criada','',2446),(8947,'3a alternativa criada','',2446),(8948,'4a alternativa criada','',2446),(8949,'5a alternativa criada','',2446),(8950,'[[code:area1]]','',2449),(8956,'[[code:area2]]','',2449),(8957,'[[code:area3]]','',2449),(8958,'[[code:area4]]','',2449),(8959,'[[code:correctAnswer]] % primeira alternativa (sempre) correta','',2450),(8960,'[[code:createWrongAnswers([3,10])]] % cria 3 alter. erradas +/- 10','',2450),(8961,'Teclado          % alternativa correta - sempre a primeira','',2455),(8962,'Impressora','',2455),(8963,'Caixa de som','',2455),(8964,'Monitor','',2455),(8965,'Placa de vídeo','',2455),(8966,'Memória RAM','',2456),(8967,'Placa-mãe','',2456),(8968,'Processador','',2456),(8969,'Teclado','',2456),(8970,'Placa de vídeo','',2456),(8971,'HyperText Markup Language','',2457),(8972,'High Technical Machine Language','',2457),(8973,'Home Tool Management Language','',2457),(8974,'Hyper Transfer Machine Learning','',2457),(8975,'Hardware Technical Maintenance Language','',2457),(8976,'JavaScript','',2458),(8977,'HTML','',2458),(8978,'CSS','',2458),(8979,'Python','',2458),(8980,'C++','',2458),(8981,'127.0.0.1','',2459),(8982,'192.168.0.300','',2459),(8983,'10.0.0.256','',2459),(8984,'172.16.0.0','',2459),(8985,'256.256.256.256','',2459),(8986,'SMTP','',2460),(8987,'FTP','',2460),(8988,'HTTP','',2460),(8989,'DNS','',2460),(8990,'SSH','',2460),(8991,'D0','',2461),(8992,'F0','',2461),(8993,'D4','',2461),(8994,'D1','',2461),(8995,'E0','',2461),(8996,'[[code:respostas[3]]]','',2464),(8997,'[[code:respostas[2]]]','',2464),(8998,'[[code:respostas[1]]]','',2464),(8999,'[[code:respostas[0]]]','',2464),(9000,'[[code:respostas[3]]]','',2465),(9001,'[[code:respostas[2]]]','',2465),(9002,'[[code:respostas[1]]]','',2465),(9003,'[[code:respostas[0]]]','',2465),(9004,'[[code:f\"{correctAnswer:.2f}\"]]','',2467),(9005,'[[code:f\"{correctAnswer+1.2:.2f}\"]]','',2467),(9006,'[[code:f\"{correctAnswer+4.8:.2f}\"]]','',2467),(9007,'[[code:f\"{correctAnswer-0.9:.2f}\"]]','',2467),(9008,'[[code:correctAnswer]]','',2468),(9009,'[[code:createWrongAnswers([4,10])]]','',2468),(9010,'\\([[code:correctAnswer]]\\)','',2469),(9011,'\\([[code:error1]]\\)','',2469),(9012,'\\([[code:error2]]\\)','',2469),(9013,'\\([[code:error3]]\\)','',2469),(9014,'\\verb|[[code:correctAnswer]]| \\\\','',2471),(9015,'\\verb|[[code:error1]]| \\\\','',2471),(9016,'\\verb|[[code:error2]]| \\\\','',2471),(9017,'\\verb|[[code:error3]]| \\\\','',2471);
 /*!40000 ALTER TABLE `topic_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1021,7 +1021,7 @@ CREATE TABLE `topic_question` (
   KEY `topic_question_topic_id_aa9661f2_fk_topic_topic_id` (`topic_id`),
   CONSTRAINT `topic_question_question_who_created_0b2f6e68_fk_account_u` FOREIGN KEY (`question_who_created_id`) REFERENCES `account_user` (`id`),
   CONSTRAINT `topic_question_topic_id_aa9661f2_fk_topic_topic_id` FOREIGN KEY (`topic_id`) REFERENCES `topic_topic` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2447 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2474 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1030,7 +1030,7 @@ CREATE TABLE `topic_question` (
 
 LOCK TABLES `topic_question` WRITE;
 /*!40000 ALTER TABLE `topic_question` DISABLE KEYS */;
-INSERT INTO `topic_question` VALUES (2443,'','QE1','Primeira Questao - Sempre a primeira alternativa criada eh a correta.','QM','1','remember','no','2023-04-17',1,238,0,0,0,0,0),(2444,'','QE2','Segunda Questao','QM','1','remember','no','2023-04-17',1,238,0,0,0,0,0),(2445,'','QE3','Terceira questao','QM','1','remember','no','2023-04-17',1,238,0,0,0,0,0),(2446,'','QE 4','Quarta questão.','QM','1','remember','no','2023-12-07',1,238,0,0,0,0,0);
+INSERT INTO `topic_question` VALUES (2443,'','QE1','Primeira Questao - Sempre a primeira alternativa criada eh a correta.','QM','1','apply','no','2023-04-17',1,238,0,0,0,0,0),(2444,'','QE2','Segunda Questao','QM','1','analyze','no','2023-04-17',1,238,0,0,0,0,0),(2445,'','QE3','Terceira questao','QM','1','evaluate','no','2023-04-17',1,238,0,0,0,0,0),(2446,'A','QE4','Quarta questão.','QM','1','remember','no','2023-06-04',65,238,0,0,0,0,0),(2447,'B','texto','Preencher a tabela com os valores corretos da variável soma e da condição correspondente em cada iteração do laço, para um valor de entrada N específico. Além disso, considerar os números das linhas do algoritmo para preencher a tabela para facilitar a referência.\r\n\r\n\\begin{verbatim}\r\n1. Inicializar a variável N com 7\r\n2. Inicializar a variável soma com 0\r\n3. Inicializar a variável contador com 1\r\n4. Enquanto contador <= N faça\r\n5.     Se contador é par então\r\n6.         soma = soma + contador\r\n7.     Senão\r\n8.         soma = soma - contador\r\n9.     Fim se\r\n10.    Incrementar contador em 1\r\n11. Fim enquanto\r\n12. Imprimir o valor da variável soma\r\n\\end{verbatim}\r\n\r\n\\begin{tabular}{|c|c|c|c|}\r\n\\hline\r\n\\textbf{linha} & \\textbf{contador} & \\textbf{soma} \\\\\r\n\\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n\\end{tabular}','QT','1','remember','no','2023-06-04',65,238,0,0,0,0,0),(2448,'B','texto','Descrição da questão dissertativa.\r\n\r\n\\drawLines{5}','QT','1','remember','no','2023-06-29',1,238,0,0,0,0,0),(2449,'A','área círculo - ex.1','Qual é a área do círculo de raio \\( [[code:raio1]] \\)?\r\n\r\n% comentário em LaTex. Observe que a variável raio1, após \"code:\" \r\n% foi definida na linha 18 abaixo\r\n\r\n[[def: # comentário em Python\r\n# o bloco de código Python deve sempre iniciar com a linha anterior!\r\nimport random\r\n\r\ndef area_circulo(raio): # método para calcular a área do círculo\r\n    import math # necessário importar biblioteca(s) no método\r\n    return math.pi * raio ** 2\r\n\r\n# lista de 4 raios aleatórios entre 20 e 50\r\nraio1,raio2,raio3,raio4 = random.sample(range(20,51), 4)\r\n\r\n# formata as áreas com 2 casas decimais\r\narea1 = f\"{area_circulo(raio1):.2f}\"\r\narea2 = f\"{area_circulo(raio2):.2f}\"\r\narea3 = f\"{area_circulo(raio3):.2f}\"\r\narea4 = f\"{area_circulo(raio4):.2f}\"\r\n\r\n# incluir nas alternativas:\r\n# [[code:area1]]\r\n# [[code:area2]]\r\n# [[code:area3]]\r\n# [[code:area4]]\r\n\r\n# o bloco de código Python deve sempre terminar com a próxima linha\r\n]]\r\nTodo o texto que aparece após a linha anterior é ignorado.','QM','1','remember','yes','2023-06-29',1,238,0,0,0,0,0),(2450,'A','área círculo - ex.2','Qual é a área do círculo de raio [[code:raio1]]?\r\n\r\n[[def:\r\nimport random\r\n\r\ndef area_circulo(raio): \r\n    import math # necessário importar biblioteca(s) no método\r\n    return math.pi * raio ** 2\r\n\r\nraio1 = random.randint(10, 51) # sorteia valor entre 10 e 50\r\n\r\nglobal correctAnswer # variável necessária para usar o método \r\n# createWrongAnswers, a resposta deve ter valor inteiro\r\ncorrectAnswer = int(area_circulo(raio1)) \r\n\r\n# incluir nas alternativas da questão: \r\n# [[code:correctAnswer]] % primeira alternativa (sempre) correta\r\n# [[code:createWrongAnswers([3,10])]] % cria 3 alter. erradas +/- 10\r\n]]','QM','1','remember','yes','2023-06-30',1,238,0,0,0,0,0),(2451,'','teste de mesa - par 1','Preencha a tabela com os valores corretos das variáveis contador e soma \r\nem cada iteração do laço.  Além disso, considere os números das linhas do \r\ncódigo para preencher a tabela, a fim de facilitar a referência. Considere \r\ninicialmente N=[[code:N1]], contador=[[code:N2]] e soma=[[code:N3]].\r\n\r\n\\begin{verbatim}\r\n1. Inicializar a variável N com [[code:N1]]\r\n2. Inicializar a variável contador com [[code:N2]]\r\n3. Inicializar a variável soma com [[code:N3]]\r\n4. Enquanto contador <= N faça\r\n5.     Se contador é par então\r\n6.         soma = soma + contador\r\n7.     Senão\r\n8.         soma = soma - contador\r\n9.     Fim se\r\n10.    Incrementar contador em 1\r\n11. Fim enquanto\r\n12. Imprimir o valor da variável soma\r\n\\end{verbatim}\r\n\r\n\\begin{tabular}{|c|c|c|c|}\r\n\\hline\r\n\\textbf{linha} & \\textbf{contador} & \\textbf{soma} \\\\\r\n\\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n\\end{tabular}\r\n\r\n[[def:\r\nimport random\r\nN1 = random.randint(7,16)\r\nN2 = random.randint(1,6)\r\nN3 = random.randint(1,5)\r\n]]','QT','1','remember','yes','2023-07-01',1,238,0,0,0,0,0),(2452,'','teste de mesa - par 2','Preencha a tabela com os valores corretos das variáveis contador e soma \r\nem cada iteração do laço.  Além disso, considere os números das linhas do \r\ncódigo para preencher a tabela, a fim de facilitar a referência. Considere \r\ninicialmente N=[[code:N1]], contador=[[code:N2]] e soma=[[code:N3]].\r\n\r\n\\begin{verbatim}\r\n1. Inicializar a variável N com [[code:N1]]\r\n2. Inicializar a variável contador com [[code:N2]]\r\n3. Inicializar a variável soma com [[code:N3]]\r\n4. Enquanto contador <= N faça\r\n5.     Se contador é par então\r\n6.         soma = soma + contador\r\n7.     Senão\r\n8.         soma = soma - contador\r\n9.     Fim se\r\n10.    Incrementar contador em 1\r\n11. Fim enquanto\r\n12. Imprimir o valor da variável soma\r\n\\end{verbatim}\r\n\r\n\\begin{tabular}{|c|c|c|c|}\r\n\\hline\r\n\\textbf{linha} & \\textbf{contador} & \\textbf{soma} \\\\\r\n\\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n\\end{tabular}\r\n\r\n{\\color{blue} {\\small\r\n\\begin{verbatim}\r\n[[code:tabela]]\r\n\\end{verbatim}\r\n}}\r\n\r\n[[def:\r\nimport random\r\n\r\ndef gerar_gabarito(N1, N2, N3):\r\n    s = \"Linha\\tContador\\tSoma\\n\"\r\n    s += \"---------------------\\n\"\r\n    \r\n    soma = N2\r\n    s += f\"  2 {soma:14d}\\n\"\r\n    contador = N3\r\n    s += f\"  3 {contador:7d} {soma:6d}\\n\"\r\n\r\n\r\n    while contador <= N1:\r\n        if contador % 2 == 0:\r\n            soma = soma + contador\r\n            s += f\"  6 {contador:7d} {soma:6d}\\n\"\r\n        else:\r\n            soma = soma - contador\r\n            s += f\"  8 {contador:7d} {soma:6d}\\n\"\r\n\r\n        contador += 1\r\n        s += f\" 10 {contador:7d} {soma:6d}\\n\"\r\n    \r\n    return s\r\n\r\n# Exemplo de uso:\r\nwhile True:\r\n    N1, N2, N3 = random.sample(range(4, 20), 3)\r\n    tabela = gerar_gabarito(N1, N2, N3)\r\n    if 10 < len(tabela.split(\'\\n\')) < 15:\r\n        break\r\n]]','QT','1','remember','yes','2023-07-01',1,238,0,0,0,0,0),(2453,'','teste de mesa - par 3','Preencha a tabela com os valores corretos das variáveis contador e soma \r\nem cada iteração do laço, para valores de entrada específicos do método. \r\nAlém disso, considere os números das linhas do código para preencher a \r\ntabela, a fim de facilitar a referência. Considere inicialmente \r\nN1=[[code:N1]], contador=[[code:N2]] e soma=[[code:N3]].\r\n\r\n\\begin{verbatim}\r\n1. def gerar_gabarito(N1, contador, soma):\r\n2.    while contador <= N1:\r\n3.        if contador % 2 == 0:\r\n4.            soma = soma + contador\r\n5.        else:\r\n6.            soma = soma - contador\r\n7.        contador += 1\r\n\\end{verbatim}\r\n\r\n\\begin{tabular}{|c|c|c|c|}\r\n\\hline\r\n\\textbf{linha} & \\textbf{contador} & \\textbf{soma} \\\\\r\n\\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n & & \\\\ \\hline\r\n\\end{tabular}\r\n\r\n{\\color{blue} {\\small\r\n\\begin{verbatim}\r\n[[code:tabela]]\r\n\\end{verbatim}\r\n}}\r\n\r\n[[def:\r\nimport random, sys\r\nglobal trace\r\n\r\ndef trace(frame, event, arg_unused):\r\n    global output\r\n    if event == \'line\':\r\n        lineno = frame.f_lineno  # pega a linha\r\n        locals_dict = frame.f_locals  # pega todas variáveis locais\r\n        contador = locals_dict.get(\'contador\')  # pega a variável contador\r\n        soma = locals_dict.get(\'soma\')  # pega a variável soma\r\n        output.append(f\"{lineno-16:3d} {contador:7d} {soma:7d}\\n\")  \r\n        # armazena a string na lista\r\n    return trace\r\n\r\ndef gerar_gabarito(N1, soma, contador):\r\n    while contador <= N1:\r\n        if contador % 2 == 0:\r\n            soma = soma + contador\r\n        else:\r\n            soma = soma - contador\r\n        contador += 1\r\n\r\n# Exemplo de uso:\r\nwhile True:\r\n    N1, N2, N3 = random.sample(range(4, 20), 3)\r\n    output = []\r\n    output.append(\"Linha Contador Soma\\n\")\r\n    output.append(\"---------------------\\n\")\r\n    sys.settrace(trace)  # Inicializa o rastreamento\r\n    gerar_gabarito(N1, N2, N3)\r\n    sys.settrace(None)  # Finaliza o rastreamento\r\n    tabela = \'\'.join(output)  # converte a lista de strings em uma string\r\n    if 10 < len(tabela.split(\'\\n\')) < 15:\r\n        break\r\n]]','QT','1','remember','yes','2023-07-01',1,238,0,0,0,0,0),(2454,'','questaoQT-EP-1','Escreva um programa que auxilia uma loja na hora de efetuar uma venda. Seu \r\nprograma deve perguntar o preço do produto e considerar que a loja parcela \r\neste preço em somente em  [[code:parcelas]] parcelas (sem juros).  O seu \r\nprograma deve mostrar quanto será o valor de uma parcela (arredondando \r\npara duas casas decimais apenas). Veja exemplo a seguir: \\\\\r\n\r\n\\noindent\\textbf{Exemplo de Entrada:}\r\n\\begin{verbatim}\r\n[[code:caso0_inp]]\r\n\\end{verbatim}\r\n\r\n\\noindent\\textbf{Exemplo de Saída:}\r\n\\begin{verbatim}\r\n[[code:caso0_out]]\r\n\\end{verbatim}\r\n\r\n% necessário para gerar casos de testes no moodle\r\n\\begin{comment}\r\n[[code:moodle_cases]]\r\n\\end{comment}\r\n\r\n[[def: \r\n# Antes de prosseguir, é recomendado testar o trecho de código  \r\n# Python a seguir em uma IDE para garantir seu funcionamento correto.\r\nimport json\r\nimport numpy as np # Usamos a biblioteca numpy para gerar número aleatório \r\n\r\n# Passo 1: Criar os parâmetros do enunciado da questão\r\nparcelas =  np.random.randint(8,20)\r\n\r\n# Passo 2: Criar os casos de teste\r\ninp_list, out_list = [], []  # Listas vazias para armazenar os casos de teste\r\ncasos_teste = 2  # Número de casos de teste desejado\r\n# Aumentar esse número após validar a questão também na atividade VPL do Moodle\r\n\r\n# Para cada caso de teste, faremos o seguinte:\r\nfor i in range(casos_teste):    \r\n    #>>>> begin - casos de teste\r\n    # Gerar um valor aleatório para o preço do produto\r\n    valor_total = np.random.randint(100)/10 + 5001 \r\n\r\n    # Criar a entrada do caso de teste como uma string\r\n    inp = str(valor_total)+\'\\n\'\r\n\r\n    # Calcular o valor da parcela arredondado para duas casas decimais\r\n    out = f\'{(valor_total/parcelas):.2f}\'\r\n    #<<<< end - casos de teste\r\n\r\n    # Adicionar a entrada e saída do caso de teste às listas\r\n    inp_list.append(inp)\r\n    out_list.append(out)\r\n\r\n# Passo 3: Criar o dicionário com os casos de teste\r\ncases = {}\r\ncases[\'input\']  = np.array(inp_list).tolist()\r\ncases[\'output\'] = np.array(out_list).tolist()\r\nmoodle_cases = json.dumps(cases)\r\n\r\n# Passo 4: Mostrar um exemplo no enunciado da questão\r\ncaso0_inp = cases[\'input\'][0]\r\ncaso0_out = cases[\'output\'][0]\r\n\r\n#print(moodle_cases) # para testar em uma IDE\r\n]]','QT','1','remember','yes','2023-07-04',1,238,0,0,0,0,0),(2455,'','DE-TIC000','Qual dos seguintes dispositivos é usado exclusivamente para entrada de dados em um computador?','QM','1','remember','no','2023-07-09',1,242,0,0,0,0,0),(2456,'','DE-TIC001','Qual é o componente principal de um computador que armazena dados e programas?','QM','1','understand','no','2023-07-09',1,242,0,0,0,0,0),(2457,'','DE-TIC002','O que significa a sigla HTML?','QM','3','remember','no','2023-07-09',1,242,0,0,0,0,0),(2458,'','DE-TIC003','Qual das seguintes linguagens de programação é amplamente utilizada para o desenvolvimento de sites dinâmicos?','QM','3','remember','no','2023-07-09',1,242,0,0,0,0,0),(2459,'','DE-TIC004','Qual das seguintes opções representa corretamente um endereço IP válido?','QM','5','remember','no','2023-07-09',1,242,0,0,0,0,0),(2460,'','DE-TIC005','Qual dos seguintes protocolos de internet é utilizado para enviar e-mails?','QM','5','remember','no','2023-07-09',1,242,0,0,0,0,0),(2461,'','DE-TIC006','Qual é o resultado da soma dos números hexadecimais 7C e 54?','QM','5','remember','no','2023-07-09',1,242,0,0,0,0,0),(2462,'','texto sobre TI','Descreva brevemente a importância da tecnologia da informação (TI) na sociedade moderna e mencione pelo menos duas áreas onde a TI desempenha um papel fundamental.\r\n\r\n%%{exata}%%\r\n\r\n\\drawLines{10}','QT','1','remember','no','2023-07-09',1,242,0,0,0,0,0),(2463,'','DE-matriz','Considere uma matriz de inteiros de dimensões \\([[code:Linhas]] \\times\r\n[[code:Colunas]]\\). Escreva um programa capaz de calcular a soma de todos\r\nos elementos dessa matriz. O programa deve solicitar ao usuário os números \r\ninteiros da matriz, linha por linha. Ao final, o programa deve exibir a \r\nsoma de todos os elementos da matriz. Veja exemplo a seguir: \\\\\r\n\r\n\\noindent\\textbf{Exemplo de Entrada:}\r\n\\begin{verbatim}\r\n[[code:caso0_inp]]\r\n\\end{verbatim}\r\n\r\n\\noindent\\textbf{Exemplo de Saída:}\r\n\\begin{verbatim}\r\n[[code:caso0_out]]\r\n\\end{verbatim}\r\n\r\n% necessário para gerar casos de testes no moodle\r\n\\begin{comment}\r\n[[code:moodle_cases]]\r\n\\end{comment}\r\n\r\n[[def: \r\nimport json, numpy as np\r\n\r\n# Passo 1: Criar os parâmetros do enunciado da questão\r\nLinhas, Colunas =  np.random.randint(4, 8, size=2)\r\n    \r\n# Passo 2: Criar os casos de teste\r\ninp_list, out_list = [], []  # Listas vazias para armazenar os casos de teste\r\ncasos_teste = 2  # Número de casos de teste desejado\r\n# Aumentar esse número após validar a questão também na atividade VPL do Moodle\r\n\r\ndef matriz2texto(M):\r\n    \"\"\"Converte uma matriz em formato de texto.\"\"\"\r\n    texto = \'\'\r\n    for linha in M:\r\n        texto += \' \'.join(str(elemento) for elemento in linha) + \'\\n\'\r\n    return texto\r\n    \r\n# Para cada caso de teste, faremos o seguinte:\r\nfor i in range(casos_teste):    \r\n\r\n    #>>>> begin - casos de teste\r\n    # Gerar valores aleatórios entre 0 e 9 para a matriz \r\n    M = np.random.randint(10, size=(Linhas, Colunas)) \r\n\r\n    # Criar a entrada do caso de teste como uma string\r\n    inp = matriz2texto(M) +\'\\n\'\r\n\r\n    # Calcular o valor da parcela arredondado para duas casas decimais\r\n    out = f\'soma = {np.sum(M)}\'\r\n    #<<<< end - casos de teste\r\n\r\n    # Adicionar a entrada e saída do caso de teste às listas\r\n    inp_list.append(inp), out_list.append(out)\r\n\r\n# Passo 3: Criar o dicionário com os casos de teste\r\ncases = {}\r\ncases[\'input\']  = np.array(inp_list).tolist()\r\ncases[\'output\'] = np.array(out_list).tolist()\r\nmoodle_cases = json.dumps(cases)\r\n\r\n# Passo 4: Mostrar um exemplo no enunciado da questão\r\ncaso0_inp, caso0_out = cases[\'input\'][0], cases[\'output\'][0]\r\n#print(moodle_cases) # para testar em uma IDE\r\n]]','QT','1','remember','yes','2023-07-11',1,243,0,0,0,0,0),(2464,'','equação da reta','Qual é a equação da reta que passa pelos pontos ([[code:x1]], [[code:y1]]) e ([[code:x2]], [[code:y2]])?\r\n\r\n[[def: \r\nimport random\r\n\r\ndef equacao_reta(x1, y1, x2, y2):\r\n  \"\"\"Calcula a equação da reta que passa pelos pontos (x1, y1) e (x2, y2)\"\"\"\r\n  m = (y2 - y1) / (x2 - x1)\r\n  b = y1 - m * x1\r\n  return f\"y = {m:.2f}x + {b:.2f}\"\r\n\r\n# Lista de respostas\r\nrespostas = []\r\n\r\n# Gerar 4 equações de reta aleatórias\r\nwhile len(respostas) < 4:\r\n  # Gerar 2 pontos aleatórios\r\n  x1,y1,x2,y2 = random.sample(range(1,10), 4)\r\n  if x1 == x2: # A reta é vertical: não é possível calcular a inclinação m\r\n    continue\r\n\r\n  equacao = equacao_reta(x1, y1, x2, y2)\r\n  if equacao not in respostas:\r\n      respostas.append(equacao)\r\n        \r\n# [[code:respostas[3]]] # última será a correta\r\n\r\n]]','QM','1','remember','yes','2023-07-13',1,238,0,0,0,0,0),(2465,'','idades irmãos','Uma pessoa tem x anos e seu irmão tem y anos. Se a diferença entre suas idades é de [[code:diferenca]] anos, e a soma das idades é [[code:soma]], determine as idades da pessoa e do irmão, respectivamente. \r\n\r\n[[def: \r\nimport random\r\n\r\ndef calcular_idades(soma, diferenca):\r\n  \"\"\"Calcula idades, dados soma e diferença.\r\n  x - y = diferenca ==> x + y = soma ==> 2x = (soma + diferenca)\"\"\"\r\n\r\n  # Calcular a idade da pessoa\r\n  x = (soma + diferenca) / 2\r\n\r\n  # Calcular a idade do irmão\r\n  y = soma - x\r\n\r\n  if not x%1 and x>0 and y>0: # somente inteiros positivos\r\n    return f\"{x:2.0f} e {y:2.0f}\"\r\n  else:\r\n    return \"\"\r\n\r\n# Lista de respostas\r\nrespostas = []\r\n\r\n# Gerar 4 equações de reta aleatórias\r\nwhile len(respostas) < 4:\r\n  # Gerar 2 valores aleatórios\r\n  soma, diferenca = random.sample(range(2, 30), 2)\r\n  r = calcular_idades(soma, diferenca)\r\n  if not r: # somente inteiros positivos\r\n    continue\r\n  if r not in respostas: # respostas distintas\r\n    respostas.append(r)\r\n    \r\n# [[code:respostas[3]]] # última será a correta\r\n]]','QM','1','remember','yes','2023-07-13',1,238,0,0,0,0,0),(2466,'','resposta exata - vetor','Dado um vetor de inteiros de tamanho \\( n = [[code:n]]\\), ordenar o trecho do \r\nvetor que começa no índice \\( inicio = [[code:inicio]] \\) e termina no índice \r\n\\( fim = [[code:fim]]\\). Onde, \\( 0<início<fim<n \\), ou seja, o trecho a ser\r\nordenado está entre início (inclusive) e fim (inclusive). Vale ressaltar que \r\nos índices do vetor começam em 0 e terminam em \\( n-1\\). \r\n\r\nConsidere esta entrada:\r\n[[code:caso0_inp]]\r\n\r\n%%{[[code:caso0_out]]}%%\r\n\r\n[[def: \r\nimport json, numpy as np\r\n\r\n# Passo 1: Criar os parâmetros do enunciado da questão\r\nn = np.random.randint(20,40)\r\ninicio = np.random.randint(2,n//2-2)\r\nfim = np.random.randint(n//2+2,n-2)\r\n    \r\n# Passo 2: Criar os casos de teste\r\ninp_list, out_list = [], []  # Listas vazias para armazenar os casos de teste\r\ncasos_teste = 1  # Número de casos de teste desejado\r\n\r\ndef ordena_parte_vetor(vetor,inicio,fim):        \r\n    \"\"\" Ordenação da parte do vetor entre inicio e fim\"\"\"\r\n    for i in range(inicio, fim+1):\r\n        for j in range(i+1, fim+1):\r\n            if vetor[i] > vetor[j]:\r\n                vetor[i], vetor[j] = vetor[j], vetor[i]\r\n    # Retorno do vetor ordenado\r\n    return vetor\r\n    \r\n# Para cada caso de teste, faremos o seguinte:\r\nfor i in range(casos_teste):    \r\n\r\n    #>>>> begin - casos de teste\r\n    # Gerar valores aleatórios entre 0 e 9 para a matriz \r\n    v = np.random.randint(10, size=n) \r\n\r\n    # Criar a entrada do caso de teste como uma string\r\n    inp = \' \'.join(str(i) for i in v) + \'\\n\'\r\n\r\n    # Calcular o vetor de saída\r\n    out = \' \'.join(str(i) for i in ordena_parte_vetor(v,inicio,fim)) + \'\\n\'\r\n    #<<<< end - casos de teste\r\n\r\n    # Adicionar a entrada e saída do caso de teste às listas\r\n    inp_list.append(inp), out_list.append(out)\r\n\r\n# Passo 3: Criar o dicionário com os casos de teste\r\ncases = {}\r\ncases[\'input\']  = np.array(inp_list).tolist()\r\ncases[\'output\'] = np.array(out_list).tolist()\r\nmoodle_cases = json.dumps(cases)\r\n\r\n# Passo 4: Mostrar um exemplo no enunciado da questão\r\ncaso0_inp, caso0_out = cases[\'input\'][0], cases[\'output\'][0]\r\n#print(moodle_cases) # para testar em uma IDE\r\n]]','QT','1','remember','yes','2023-07-13',1,238,0,0,0,0,0),(2467,'','DE-mru','Um automóvel percorre uma estrada com função horária \\( s=[[code:a0]] + \r\n[[code:a1]]t \\), onde \\(s\\) é dado em quilômetros e \\(t\\) em horas. \r\nO automóvel passa pelo km [[code:a2]] após:\r\n\r\n[[def:\r\ndef generate_numbers():\r\n    \"\"\" Gera três números aleatórios e retorna-os como uma lista. \"\"\"\r\n    import random\r\n    global a0, a1, a2 # necessário declarar como global para utilizar no enunciado\r\n    a0 = random.randrange(-6, 12, 1)  # s0 - posição inicial\r\n    a1 = random.randrange(3, 8, 1)      # v  - velocidade\r\n    a2 = random.randrange(3, 8, 1)     # s  - posição final\r\n    return [a0, a1, a2]\r\n\r\ndef algorithm(a):\r\n    \"\"\" Executa um algoritmo matemático utilizando os valores passados como \r\n    parâmetro. Retorna o resultado do algoritmo. \"\"\"\r\n    from sympy import symbols, solve\r\n    a0, a1, a2 = a    # s0, v, s\r\n    s, t = symbols(\'s,t\')\r\n    s = a0 + a1 * t\r\n\r\n    r = float(solve(s - a2, t)[0])\r\n    return r\r\n\r\n# Gera os números aleatórios\r\nnumbers = generate_numbers()\r\n\r\n# Executa o algoritmo utilizando os números gerados\r\ncorrectAnswer = algorithm(numbers)\r\n# [[code:f\"{correctAnswer:.2f}\"]]\r\n\r\n# Opções de respostas erradas com base no resultado do algoritmo\r\n# [[code:f\"{correctAnswer+1.2:.2f}\"]]\r\n# [[code:f\"{correctAnswer+4.8:.2f}\"]]\r\n# [[code:f\"{correctAnswer-0.9:.2f}\"]]\r\n]]','QM','1','remember','yes','2023-07-18',1,238,0,0,0,0,0),(2468,'','DE-criar matriz','Criar uma matriz \\( [[code:Linhas]] \\times [[code:Colunas]] \\) com elementos \r\n\\( (i,j) = ((((i+1) * [[code:a2]]) + ( ( j+1) * [[code:a3]])) \\mod{100}) \\). \r\nCalcular a soma dos elementos desta matriz. Os índices \\(i\\) são as linhas\r\ne \\(j\\) as colunas iniciadas com o valor \\(0\\).\r\n\r\n[[def:\r\nimport numpy as np, random\r\n\r\n# Gerar número aleatório de linhas e colunas\r\nLinhas = np.random.randint(4, 8)\r\nColunas = np.random.randint(4, 8)\r\n\r\n# Escolher valores aleatórios para a2 e a3\r\na2 = random.choice([7, 13, 19])\r\na3 = random.choice([11, 17, 23])\r\n\r\n# Inicializar matriz com zeros\r\nM = np.zeros((Linhas, Colunas), dtype=int)\r\n\r\n# Preencher a matriz com os cálculos\r\nfor i in range(Linhas):\r\n    for j in range(Colunas):\r\n        M[i, j] = (((i+1) * a2) + ((j+1) * a3)) % 100\r\n\r\n# Calcular a soma dos elementos da matriz\r\nglobal correctAnswer\r\ncorrectAnswer = np.sum(M)\r\n\r\n# incluir nas alternativas da questão: \r\n# [ [code:correctAnswer] ] % primeira alternativa (sempre) correta\r\n# [ [code:createWrongAnswers([3,10])] ] % cria 3 alter. erradas +/- 10\r\n]]','QM','1','create','yes','2023-07-18',1,243,0,0,0,0,0),(2469,'','equação e figura','A integral da função  \\([[code:a0]]\\) tem seu gráfico representado abaixo. \r\nCalcule o valor da integral e marque a alternativa correta.\r\n\r\n\\begin{figure}[ht!]\r\n\\centering \\includegraphics[scale=0.7]{[[code:figura]]} \r\n\\centerline{Figura da integral}\r\n\\end{figure}\r\n\r\n[[def:\r\nfrom sympy import symbols, sin, cos, plot, latex, Integral, integrate\r\nimport random\r\n\r\n# Geração dos parâmetros aleatórios\r\na1 = random.randrange(3, 6, 1)\r\na2 = random.randrange(2, 4, 1)\r\na3 = random.randrange(1, 3, 1)\r\n\r\n# Definição da variável simbólica e da função\r\nx = symbols(\'x\')\r\nf = a1*sin(a2*x) - a3*cos(x)\r\n\r\n# Plotagem da função\r\nimport hashlib\r\ns =str([a1,a2,a3]) \r\nh = hashlib.md5(s.encode()) # create hash - arquivo único\r\nh = str(h.hexdigest())\r\np = plot(f, (x, -5, 5), show=False)\r\nfigura = f\'./tmp/imgs180days/fz_figIntegral_01_{a1}_{a2}_{a3}_{h}.png\'\r\np.save(figura)\r\n\r\n# Cálculo da integral e conversão para notação LaTeX\r\na0 = latex(Integral(f, x))\r\ncorrectAnswer = latex(integrate(f, x))\r\nerror1 = latex(integrate(f + x, x))\r\nerror2 = latex(integrate(f - x, x))\r\nerror3 = latex(integrate(x**5 + x + 1, x))\r\n# nas alternativas: \\([[code:correctAnswer]]\\); \\([[code:error1]]\\); ...\r\n]]','QM','1','remember','yes','2023-07-18',1,238,0,0,0,0,0),(2470,'','rosa dos ventos','Um elemento \\(a_0=(i,j)\\) é de uma matriz dito ser \\textbf{[[code:direcao]]\r\n[[code:maiormenor]]} se seu valor é  [[code:maiormenor]] do que o valor de \r\nseus vizinhos nas direções [[code:direcao_viz]], considerando a seguinte\r\ncodificação para as possíveis direções: \r\n\\\r\n\\begin{table}[h!]\r\n\\centering\\vspace{-2mm}\r\n\\begin{tabular}{lllll}\r\n\\cline{1-3}\r\n\\multicolumn{1}{|l|}{\\(a_8=\\) Noroeste} & \\multicolumn{1}{l|}{\\(a_1=\\) Norte}  & \r\n\\multicolumn{1}{l|}{\\(a_2=\\) Nordeste} &  &  \\\\ \\cline{1-3}\r\n\\multicolumn{1}{|l|}{\\(a_7=\\) Oeste}      & \\multicolumn{1}{l|}{\\(a_0=(i,j)\\)} &\r\n\\multicolumn{1}{l|}{\\(a_3=\\) Leste}      &  &  \\\\ \\cline{1-3}\r\n\\multicolumn{1}{|l|}{\\(a_6=\\) Sudoeste} & \\multicolumn{1}{l|}{\\(a_5=\\) Sul}    & \r\n\\multicolumn{1}{l|}{\\(a_4=\\) Sudeste}  &  &  \\\\ \\cline{1-3}\r\n\\end{tabular}\r\n\\end{table}\r\n\r\n\\vspace{-2mm}\r\n\\noindent Faça um programa para criar e ler uma matriz de entrada \\(E\\) de inteiros. \r\nSeu programa deve criar também uma matriz de saída \\(F\\) e inicializa-la com o valor \r\n``-1\'\'. Dizemos que um elemento \\((i,j)\\) de \\(F\\) é \\emph{ativado} quando atribuímos a \r\n\\(F[i,j]\\) o valor de \\(E[i,j]\\), isto é, quando fazemos \\(F[i,j] \\leftarrow E[i,j]\\). O \r\nseu programa deve também imprimir a matriz \\(F\\) depois de ativar todos os seus \r\nelementos que são \\textbf{[[code:direcao]]  [[code:maiormenor]]}. Veja a seguir \r\num exemplo \\([[code:Linhas]] \\times [[code:Colunas]]\\) com a entrada e a saída \r\ncorrespondente. \\\\\r\n\r\n\\noindent {\\bf Obs.:} considere \\(a_0=(i,j)\\) não pertencer a um pixel de borda, isto \r\né, na matriz \\(F\\) todos os elementos de borda ficam com valor ``-1\'\'. O seu programa \r\ndeve funcionar para matrizes de quaisquer dimensões. \r\n \r\n\\begin{table}[h!]\\vspace{-4mm}\r\n\\begin{tabular}{cc}\r\n\\includegraphics[scale=0.56]{[[code:f\"./tmp/imgs180days/{pathGraficoA}\"]]}  &  \r\n\\includegraphics[scale=0.56]{[[code:f\"./tmp/imgs180days/{pathGraficoB}\"]]}  \r\n\\end{tabular}\r\n\\end{table}\r\n\r\n[[def:\r\nimport json, random, numpy as np\r\n\r\ndef direcoes(offset, dir):\r\n  \"\"\" Método que retorna as direções adjacentes à direção dada. \"\"\"\r\n  dir1, dir2 = (dir - 1) % 8 + 1, (dir + 1) % 8 + 1\r\n  return (dir1, dir, dir2)\r\n    \r\n# Parâmetros utilizados no enunciado da questão \r\n#>>>> BEGIN \r\ndir = random.choice([1,2,3,4,5,6,7,8])  \r\ndirecaoAll = [\"Norte\",\"Nordeste\",\"Oeste\",\"Sudeste\",\"Sul\",\"Sudoeste\",\"Leste\",\"Noroeste\"]\r\ndirecao = direcaoAll[dir-1]\r\n\r\nmaiormenor = random.choice([\"maior\", \"menor\"])\r\nm, n = random.randrange(7, 9, 1), random.randrange(15, 21, 1)\r\nLinhas, Colunas = m, n\r\n\r\n#direcoes  0      1      2     3     4     5      6      7       8\r\noffset = [[0,0],[-1,0],[-1,1],[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1]]\r\n(dir1,dir0,dir2) = direcoes(offset,dir)\r\ndirecao_viz = \"$a_\"+str(dir1)+\"$, $a_\"+str(dir0)+\"$, $a_\"+str(dir2)+\"$\"\r\n#<<<< END \r\n\r\nA = (np.random.random((m, n)) * 10).astype(int)\r\nB = (np.zeros(A.shape) - 1).astype(int)\r\nfor i in range(1, m - 1):\r\n  for j in range(1, n - 1):\r\n    if maiormenor == \"menor\":\r\n      if (A[i + offset[dir1][0], j + offset[dir1][1]] > A[i, j]\r\n        and A[i + offset[dir0][0], j + offset[dir0][1]] > A[i, j]\r\n        and A[i + offset[dir2][0], j + offset[dir2][1]] > A[i, j]):\r\n        B[i, j] = A[i, j]\r\n    else:\r\n      if (A[i + offset[dir1][0], j + offset[dir1][1]] < A[i, j]\r\n        and A[i + offset[dir0][0], j + offset[dir0][1]] < A[i, j]\r\n        and A[i + offset[dir2][0], j + offset[dir2][1]] < A[i, j]):\r\n        B[i, j] = A[i, j]\r\n\r\nimport hashlib\r\ns =\'\'.join([str(i) for i in A.flatten()]) # 2d to 1d to str\r\nh = hashlib.md5(s.encode()) # create hash - arquivo único\r\npathGrafico = \'figRosa(\' + direcao + \')(\' + maiormenor + \')(\' + str(h.hexdigest()) + \')\' \r\npathGraficoA, pathGraficoB = pathGrafico + \'a.png\', pathGrafico + \'b.png\'\r\n\r\ndrawMatrix(A, pathGraficoA)\r\ndrawMatrix(B, pathGraficoB)\r\n]]','QT','1','remember','yes','2023-07-18',1,243,0,0,0,0,0),(2471,'','grafo','Qual é o caminho de Dijkstra neste grafo, entre os nós \\(a\\) e \\(e\\), com os \r\nseguintes pesos \\\\ \\verb|[[code:grafo]]|?\r\n\r\n\\begin{figure}[!h] \r\n\\centering\\includegraphics[scale=0.7]{[[code:pathGrafico]]}\r\n\\end{figure} \r\n\r\n[[def:\r\nimport matplotlib.pyplot as plt, networkx as nx\r\nfrom itertools import permutations\r\n\r\nwhile True:\r\n  plt.clf()\r\n  G = nx.Graph() # Definição do grafo\r\n  w1,w2,w3,w4,w5,w6,w7 =  random.sample(range(1,10), 7)\r\n  edges=[(\'a\',\'b\',w1),(\'b\',\'c\',w2),(\'a\',\'c\',w3),(\'c\',\'d\',w4),\r\n   (\'b\',\'d\',w5),(\'d\',\'e\',w6),(\'e\',\'c\',w7)]\r\n  G.add_weighted_edges_from(edges)\r\n  grafo = str(edges)\r\n\r\n  v = nx.dijkstra_path(G, \'a\', \'e\') # Cálculo do caminho mínimo\r\n  if len(v)<5: continue # aceita pelo menos 5 nós\r\n\r\n  perm_list = [] # criar permutações\r\n  for perm in permutations(v):\r\n    if perm[0] == v[0] and perm[-1] == v[-1]:\r\n      perm_list.append(perm)\r\n  break\r\n\r\ncorrectAnswer = str(perm_list[0])\r\nerror1,error2,error3 = str(perm_list[1]), str(perm_list[2]), str(perm_list[3])\r\n# nas alternativas: \\verb|[[code:correctAnswer]]| \\\\ ; \\verb|[[code:error1]]| \\\\ ...\r\n\r\npos = nx.spring_layout(G) # Plotagem do grafo\r\nnx.draw(G, pos=pos)\r\nnx.draw_networkx_labels(G, pos=pos)\r\nnx.draw_networkx_edge_labels(G, pos=pos)\r\n\r\nimport hashlib # Salvando a figura\r\ns =str(edges) \r\nh = hashlib.md5(s.encode()) # create hash - arquivo único\r\npathGrafico = \'figGrafo(\' + str(h.hexdigest()) + \')\' \r\nplt.savefig(pathGrafico)\r\n]]','QM','1','remember','yes','2023-07-18',1,238,0,0,0,0,0),(2473,'','grafo genérico com erro','Qual é o caminho de Dijkstra neste grafo, entre os nós \\(a\\) e \\(e\\), com os \r\nseguintes pesos \\\\ \r\n\r\n\\begin{verbatim}\r\n[[code:grafo]]\r\n\\end{verbatim}\r\n\r\n\\begin{figure}[!h] \r\n\\centering\\includegraphics[scale=0.7]{[[code:pathGrafico]]}\r\n\\end{figure} \r\n\r\n[[def:\r\nimport matplotlib.pyplot as plt\r\nfrom itertools import permutations\r\nimport networkx as nx\r\nimport random\r\nimport string\r\n\r\nwhile True:\r\n  \r\n  # Criar um grafo vazio\r\n  G = nx.Graph()\r\n\r\n  # Adicionar nós ao grafo\r\n  global nodes\r\n  nodes = list(string.ascii_lowercase)[:5]  # Seleciona as 5 primeiras letras minúsculas\r\n  G.add_nodes_from(nodes)\r\n\r\n  # Adicionar arestas aleatórias ao grafo com pesos aleatórios\r\n  edges = [(u, v) for u in nodes for v in nodes if u != v]\r\n  for u, v in edges:\r\n      if random.random() < 0.5:  # Probabilidade de 0.5 de adicionar a aresta\r\n          G.add_edge(u, v, weight=random.randint(1, 10))\r\n\r\n  # Calcular o caminho mínimo entre \'a\' e \'f\' usando Dijkstra\r\n  try:\r\n      v = nx.dijkstra_path(G, nodes[0], nodes[-1])\r\n  except:\r\n    continue\r\n\r\n  if len(v)<len(nodes): # aceita pelo menos 5 nós\r\n    continue\r\n\r\n  v_length = nx.dijkstra_path_length(G, nodes[0], nodes[-1])\r\n  vsoma = []\r\n\r\n  perm_list = [] # criar permutações\r\n  for perm in permutations(v):\r\n    if perm[0] == v[0] and perm[-1] == v[-1]:\r\n      p = list(perm)\r\n      try:\r\n        vsoma.append(sum(G[u][v0][\'weight\'] for u, v0 in zip(p, p[1:])))\r\n      except:\r\n        continue\r\n      perm_list.append(perm)\r\n\r\n  if len(perm_list) < 4:\r\n    continue\r\n\r\n  break\r\n\r\n\r\ngrafo = \'\'\r\nfor u, v, data in G.edges(data=True):\r\n    grafo += f\"Aresta: ({u}, {v}), Peso: {data[\'weight\']}\\n\"\r\n\r\ncorrectAnswer = str(perm_list[0])\r\nerror1 = str(perm_list[1])\r\nerror2 = str(perm_list[2])\r\nerror3 = str(perm_list[3])\r\n\r\npos = nx.spring_layout(G) # Plotagem do grafo\r\nnx.draw(G, pos=pos)\r\nnx.draw_networkx_labels(G, pos=pos)\r\nnx.draw_networkx_edge_labels(G, pos=pos)\r\n\r\nimport hashlib # Salvando a figura\r\ns =str(edges)\r\nh = hashlib.md5(s.encode()) # create hash - arquivo único\r\npathGrafico = \'figGrafo(\' + str(h.hexdigest()) + \')\'\r\nplt.savefig(pathGrafico)\r\n]]','QT','1','remember','yes','2023-07-28',1,238,0,0,0,0,0);
 /*!40000 ALTER TABLE `topic_question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1046,7 +1046,7 @@ CREATE TABLE `topic_topic` (
   `topic_text` varchar(50) NOT NULL,
   `topic_description` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1055,7 +1055,7 @@ CREATE TABLE `topic_topic` (
 
 LOCK TABLES `topic_topic` WRITE;
 /*!40000 ALTER TABLE `topic_topic` DISABLE KEYS */;
-INSERT INTO `topic_topic` VALUES (238,'Topico Exemplo','');
+INSERT INTO `topic_topic` VALUES (238,'Topico Exemplo',''),(239,'01-Lógica de Programação: Sequencial',''),(240,'01-Lógica de Programação: Condicional',''),(241,'01-Lógica de Programação: Repetição',''),(242,'DE-TIC',''),(243,'DE-matriz','');
 /*!40000 ALTER TABLE `topic_topic` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1103,7 +1103,7 @@ CREATE TABLE `topic_topic_discipline` (
   KEY `topic_topic_discipli_discipline_id_7980c44d_fk_course_di` (`discipline_id`),
   CONSTRAINT `topic_topic_discipli_discipline_id_7980c44d_fk_course_di` FOREIGN KEY (`discipline_id`) REFERENCES `course_discipline` (`id`),
   CONSTRAINT `topic_topic_discipline_topic_id_80b689ef_fk_topic_topic_id` FOREIGN KEY (`topic_id`) REFERENCES `topic_topic` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1112,7 +1112,7 @@ CREATE TABLE `topic_topic_discipline` (
 
 LOCK TABLES `topic_topic_discipline` WRITE;
 /*!40000 ALTER TABLE `topic_topic_discipline` DISABLE KEYS */;
-INSERT INTO `topic_topic_discipline` VALUES (1,238,51);
+INSERT INTO `topic_topic_discipline` VALUES (1,238,51),(2,239,53),(3,239,54),(4,239,55),(5,240,53),(6,240,54),(7,240,55),(8,241,53),(9,241,54),(10,241,55),(11,242,51),(12,243,51);
 /*!40000 ALTER TABLE `topic_topic_discipline` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1125,4 +1125,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-07 18:11:19
+-- Dump completed on 2023-12-07 18:42:26

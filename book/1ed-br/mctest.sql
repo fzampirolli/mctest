@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for macos12.6 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.32, for Linux (x86_64)
 --
 -- Host: localhost    Database: DB_MCTest
 -- ------------------------------------------------------
--- Server version	8.0.21
+-- Server version	8.0.32-0ubuntu0.20.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -47,7 +47,7 @@ CREATE TABLE `account_user` (
 
 LOCK TABLES `account_user` WRITE;
 /*!40000 ALTER TABLE `account_user` DISABLE KEYS */;
-INSERT INTO `account_user` VALUES (1,'pbkdf2_sha256$150000$4zxBrMk9MeNY$0s4uwkF2IE8LZCNLZQUV2jhnp+BZjx0AuhooEkpzyDg=','2023-12-07 17:27:40.098976',1,'fzampirolli','Francisco','Zampirolli','fzampirolli@ufabc.edu.br',1,1,'2019-01-14 18:03:04.000000',0),(53,'pbkdf2_sha256$600000$ZI9m2tjIBRzu1ErAOkJQjm$5ebijVAQZuPGJx8mpiF3B8GPqVJyqzuc8GymsEjRbiw=','2022-05-26 17:03:49.359608',0,'fzstudent','Francisco','Estudante','fzstudent@ufabc.edu.br',0,1,'2019-01-31 07:27:04.065858',0),(65,'pbkdf2_sha256$600000$o50RY7ieNBhOjl7Uq5EJmN$S8zQK1gi875c+TQYYLZG51s7Q3wQAwYGPOZxWSdzd2c=','2022-07-12 22:54:55.679807',0,'fzprof','Francisco','Professor','fzprof@ufabc.edu.br',0,1,'2019-09-02 20:48:18.000000',0),(66,'pbkdf2_sha256$600000$2fc5ARaUAsn5yimb26laij$KA3BvUBxbGbARHnXel4amkgkysr8YWCYUZnM22aUEss=','2022-05-26 17:12:07.229064',0,'fzcoord','Francisco','Coordenador','fzcoord@ufabc.edu.br',0,1,'2019-09-02 20:49:06.000000',0);
+INSERT INTO `account_user` VALUES (1,'pbkdf2_sha256$600000$OEkkexWDUMR9YhPHYy8Xkz$GQDbyzD4X67w/xqZTzybzXu/Qd7bbcBQ0GsXUPdwI4s=','2023-04-18 19:23:48.959665',1,'fzampirolli','Francisco','Zampirolli','fzampirolli@ufabc.edu.br',1,1,'2019-01-14 18:03:04.000000',0),(53,'pbkdf2_sha256$600000$ZI9m2tjIBRzu1ErAOkJQjm$5ebijVAQZuPGJx8mpiF3B8GPqVJyqzuc8GymsEjRbiw=','2022-05-26 17:03:49.359608',0,'fzstudent','Francisco','Estudante','fzstudent@ufabc.edu.br',0,1,'2019-01-31 07:27:04.065858',0),(65,'pbkdf2_sha256$600000$o50RY7ieNBhOjl7Uq5EJmN$S8zQK1gi875c+TQYYLZG51s7Q3wQAwYGPOZxWSdzd2c=','2022-07-12 22:54:55.679807',0,'fzprof','Francisco','Professor','fzprof@ufabc.edu.br',0,1,'2019-09-02 20:48:18.000000',0),(66,'pbkdf2_sha256$600000$2fc5ARaUAsn5yimb26laij$KA3BvUBxbGbARHnXel4amkgkysr8YWCYUZnM22aUEss=','2022-05-26 17:12:07.229064',0,'fzcoord','Francisco','Coordenador','fzcoord@ufabc.edu.br',0,1,'2019-09-02 20:49:06.000000',0);
 /*!40000 ALTER TABLE `account_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +207,7 @@ CREATE TABLE `course_classroom` (
   PRIMARY KEY (`id`),
   KEY `course_classroom_discipline_id_6c1c6c02_fk_course_discipline_id` (`discipline_id`),
   CONSTRAINT `course_classroom_discipline_id_6c1c6c02_fk_course_discipline_id` FOREIGN KEY (`discipline_id`) REFERENCES `course_discipline` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=671 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=670 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,7 +216,7 @@ CREATE TABLE `course_classroom` (
 
 LOCK TABLES `course_classroom` WRITE;
 /*!40000 ALTER TABLE `course_classroom` DISABLE KEYS */;
-INSERT INTO `course_classroom` VALUES (670,'fzTurmaTeste','virtual','2023.3','PClass',51);
+INSERT INTO `course_classroom` VALUES (669,'Turma Exemplo','TE','2023.1','PClass',51);
 /*!40000 ALTER TABLE `course_classroom` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +236,7 @@ CREATE TABLE `course_classroom_classroom_profs` (
   KEY `course_classroom_cla_user_id_3d589b69_fk_account_u` (`user_id`),
   CONSTRAINT `course_classroom_cla_classroom_id_f7438abe_fk_course_cl` FOREIGN KEY (`classroom_id`) REFERENCES `course_classroom` (`id`),
   CONSTRAINT `course_classroom_cla_user_id_3d589b69_fk_account_u` FOREIGN KEY (`user_id`) REFERENCES `account_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +245,7 @@ CREATE TABLE `course_classroom_classroom_profs` (
 
 LOCK TABLES `course_classroom_classroom_profs` WRITE;
 /*!40000 ALTER TABLE `course_classroom_classroom_profs` DISABLE KEYS */;
-INSERT INTO `course_classroom_classroom_profs` VALUES (3,670,1);
+INSERT INTO `course_classroom_classroom_profs` VALUES (1,669,1),(2,669,66);
 /*!40000 ALTER TABLE `course_classroom_classroom_profs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -274,6 +274,7 @@ CREATE TABLE `course_classroom_students` (
 
 LOCK TABLES `course_classroom_students` WRITE;
 /*!40000 ALTER TABLE `course_classroom_students` DISABLE KEYS */;
+INSERT INTO `course_classroom_students` VALUES (1,669,28516),(2,669,28517);
 /*!40000 ALTER TABLE `course_classroom_students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -694,7 +695,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('6bkvenjhpms5t5hqtj0osp64qrv4qoia','.eJxVjDsOgzAQBe-ydWSxxsnalOk5g2Uv6-B8jIQhTZS7J0g0tG9m3gfK-vLvXPNSoTMn8GFdRr9WmX0eoAOEwxYDP6RsYLiHcpsUT2WZc1SbonZaVT8N8rzu7uFgDHX81-GsbQpBrGgm7YjYkTOEbbKSWkJjG-s4xUsUagSN00mcIBM3WiMjfH-JIDzr:1poAUi:_IGXUfTlb-Ww6B8ClQKfAbz0Z-WqHEIF4a1mEzeH6ms','2023-04-30 22:05:12.566797'),('8pmhspw3qtni8aplahikuydegnc30064','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQk8HCLwuY1irziEP0APCbossdy1_MNy4XCcjU1nmHM1fMRut5jIN-jhv7u5g5Dr-aj5al5jVqRWynkg8-Y6wTU5TS9i5xnlJ8RSVGsXO26ReUUgaa1EQPl-LJDzu:1poWaI:0rHZEv7HsdgaKvgofiPBVNnJjUV8FdKMwQZiT7IlBQU','2023-05-01 21:40:26.251775'),('abkr7xgenau6xyxog5ojhqmkxckvzs4a','eyJudW1fdmlzaXRzIjoxfQ:1poWz4:Ag8M9PXeqeyAnzU84KKFjEYsSawk1iDelVoaL3t2NMM','2023-05-01 22:06:02.104105'),('f8446tksu730gajit317ukfizdveq8ny','eyJudW1fdmlzaXRzIjoxfQ:1poqve:TT6bDKl7Ji5SIRPUE8UpMFoqZ0tqYh7m4TUEz__rHpw','2023-05-02 19:23:50.998501'),('lf0cqwqml0ozbloigke66e82n9v3yc4d','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQu8PEHhdxrBWnUMeoAeE3RZZ7lr-YLhxuU5GprLMOZq_YjZazWUa9HHe3N3ByHX81Xy0LjGrUytkPZF48h1hm5ymlrBzjfOS4ikqNYqdt0m9opA01qIgfL6MfDzw:1poPEP:R_Q96IddxIzaaDwk0V6d9r5DfJBEqa7Z9Khx5pLuhS0','2023-05-01 13:49:21.369099'),('lsqa9d8ms1uzt5x1ptpo9wyia2tdg1ne','NWNmNzBlOWMyOTBjZDE0MTE3YTFkNDhlYjU5YmZkZDAzYTBhZGQwNTp7Im51bV92aXNpdHMiOjMsIl9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzOGNjNTlmYzMwMmFkMWMyZmE2ZWY0ODdmNzAxODJlMDU5Yjg0Nzc1In0=','2023-12-21 17:27:40.203130'),('rgys2ur51zdn7svn2uk81wcgal1niy3t','eyJudW1fdmlzaXRzIjoyfQ:1poPLQ:bWcFBpV8OSIBo9alTqGLqM9LvI7yD8TylMJpFx_MIlU','2023-05-01 13:56:36.550054');
+INSERT INTO `django_session` VALUES ('6bkvenjhpms5t5hqtj0osp64qrv4qoia','.eJxVjDsOgzAQBe-ydWSxxsnalOk5g2Uv6-B8jIQhTZS7J0g0tG9m3gfK-vLvXPNSoTMn8GFdRr9WmX0eoAOEwxYDP6RsYLiHcpsUT2WZc1SbonZaVT8N8rzu7uFgDHX81-GsbQpBrGgm7YjYkTOEbbKSWkJjG-s4xUsUagSN00mcIBM3WiMjfH-JIDzr:1poAUi:_IGXUfTlb-Ww6B8ClQKfAbz0Z-WqHEIF4a1mEzeH6ms','2023-04-30 22:05:12.566797'),('8pmhspw3qtni8aplahikuydegnc30064','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQk8HCLwuY1irziEP0APCbossdy1_MNy4XCcjU1nmHM1fMRut5jIN-jhv7u5g5Dr-aj5al5jVqRWynkg8-Y6wTU5TS9i5xnlJ8RSVGsXO26ReUUgaa1EQPl-LJDzu:1poWaI:0rHZEv7HsdgaKvgofiPBVNnJjUV8FdKMwQZiT7IlBQU','2023-05-01 21:40:26.251775'),('abkr7xgenau6xyxog5ojhqmkxckvzs4a','eyJudW1fdmlzaXRzIjoxfQ:1poWz4:Ag8M9PXeqeyAnzU84KKFjEYsSawk1iDelVoaL3t2NMM','2023-05-01 22:06:02.104105'),('f8446tksu730gajit317ukfizdveq8ny','eyJudW1fdmlzaXRzIjoxfQ:1poqve:TT6bDKl7Ji5SIRPUE8UpMFoqZ0tqYh7m4TUEz__rHpw','2023-05-02 19:23:50.998501'),('lf0cqwqml0ozbloigke66e82n9v3yc4d','.eJxVjEsOwjAMBe_iNYrqtOCkS_acIXJch4ZPKjUtG8TdAambbt_MvDeU9RleuealQu8PEHhdxrBWnUMeoAeE3RZZ7lr-YLhxuU5GprLMOZq_YjZazWUa9HHe3N3ByHX81Xy0LjGrUytkPZF48h1hm5ymlrBzjfOS4ikqNYqdt0m9opA01qIgfL6MfDzw:1poPEP:R_Q96IddxIzaaDwk0V6d9r5DfJBEqa7Z9Khx5pLuhS0','2023-05-01 13:49:21.369099'),('rgys2ur51zdn7svn2uk81wcgal1niy3t','eyJudW1fdmlzaXRzIjoyfQ:1poPLQ:bWcFBpV8OSIBo9alTqGLqM9LvI7yD8TylMJpFx_MIlU','2023-05-01 13:56:36.550054');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -759,7 +760,7 @@ CREATE TABLE `exam_exam` (
   PRIMARY KEY (`id`),
   KEY `exam_exam_exam_who_created_id_de138c84_fk_account_user_id` (`exam_who_created_id`),
   CONSTRAINT `exam_exam_exam_who_created_id_de138c84_fk_account_user_id` FOREIGN KEY (`exam_who_created_id`) REFERENCES `account_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=476 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -768,7 +769,7 @@ CREATE TABLE `exam_exam` (
 
 LOCK TABLES `exam_exam` WRITE;
 /*!40000 ALTER TABLE `exam_exam` DISABLE KEYS */;
-INSERT INTO `exam_exam` VALUES (476,'exameTesteQR-QM','20','0','0','0','0','5','0','2','10','1','Hor','answ','yes','no',NULL,'2023-12-07 05:00:00.000000','t1','\\item desligar o celular',1);
+INSERT INTO `exam_exam` VALUES (475,'Exame Exemplo','3','0','0','0','0','5','0','2','3','1','Hor','both','yes','no',NULL,'2023-04-17 03:00:00.000000','t1','\\item desligar o celular',1);
 /*!40000 ALTER TABLE `exam_exam` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -788,7 +789,7 @@ CREATE TABLE `exam_exam_classrooms` (
   KEY `exam_exam_classrooms_classroom_id_6435a4cf_fk_course_cl` (`classroom_id`),
   CONSTRAINT `exam_exam_classrooms_classroom_id_6435a4cf_fk_course_cl` FOREIGN KEY (`classroom_id`) REFERENCES `course_classroom` (`id`),
   CONSTRAINT `exam_exam_classrooms_exam_id_edf09d98_fk_exam_exam_id` FOREIGN KEY (`exam_id`) REFERENCES `exam_exam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9429 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9428 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -797,7 +798,7 @@ CREATE TABLE `exam_exam_classrooms` (
 
 LOCK TABLES `exam_exam_classrooms` WRITE;
 /*!40000 ALTER TABLE `exam_exam_classrooms` DISABLE KEYS */;
-INSERT INTO `exam_exam_classrooms` VALUES (9428,476,670);
+INSERT INTO `exam_exam_classrooms` VALUES (9427,475,669);
 /*!40000 ALTER TABLE `exam_exam_classrooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -826,32 +827,8 @@ CREATE TABLE `exam_exam_questions` (
 
 LOCK TABLES `exam_exam_questions` WRITE;
 /*!40000 ALTER TABLE `exam_exam_questions` DISABLE KEYS */;
+INSERT INTO `exam_exam_questions` VALUES (41085,475,2443),(41086,475,2444),(41087,475,2445);
 /*!40000 ALTER TABLE `exam_exam_questions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `exam_exam_topics`
---
-
-DROP TABLE IF EXISTS `exam_exam_topics`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `exam_exam_topics` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `exam_id` int NOT NULL,
-  `topic_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `exam_exam_topics`
---
-
-LOCK TABLES `exam_exam_topics` WRITE;
-/*!40000 ALTER TABLE `exam_exam_topics` DISABLE KEYS */;
-INSERT INTO `exam_exam_topics` VALUES (1,561,11);
-/*!40000 ALTER TABLE `exam_exam_topics` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -936,6 +913,7 @@ CREATE TABLE `exam_variationexam` (
 
 LOCK TABLES `exam_variationexam` WRITE;
 /*!40000 ALTER TABLE `exam_variationexam` DISABLE KEYS */;
+INSERT INTO `exam_variationexam` VALUES (60966,'{\'variations\': [{\'variant\': \'1\', \'questions\': [{\'number\': 1, \'key\': 2443, \'topic\': \'Topico Exemplo\', \'type\': \'QM\', \'weight\': \'1\', \'short\': \'QE1\', \'text\': \'Primeira Questao - Sempre a primeira alternativa criada eh a correta.\', \'answers\': [{\'answer\': 0, \'sort\': \'3\', \'text\': \'4a alternativa criada\'}, {\'answer\': 1, \'sort\': \'1\', \'text\': \'2a alternativa criada\'}, {\'answer\': 2, \'sort\': \'0\', \'text\': \'1a alternativa criada\'}, {\'answer\': 3, \'sort\': \'4\', \'text\': \'5a alternativa criada\'}, {\'answer\': 4, \'sort\': \'2\', \'text\': \'3a alternativa criada\'}]}, {\'number\': 2, \'key\': 2444, \'topic\': \'Topico Exemplo\', \'type\': \'QM\', \'weight\': \'1\', \'short\': \'QE2\', \'text\': \'Segunda Questao\', \'answers\': [{\'answer\': 0, \'sort\': \'3\', \'text\': \'4a alternativa criada\'}, {\'answer\': 1, \'sort\': \'1\', \'text\': \'2a alternativa criada\'}, {\'answer\': 2, \'sort\': \'2\', \'text\': \'3a alternativa criada\'}, {\'answer\': 3, \'sort\': \'4\', \'text\': \'5a alternativa criada\'}, {\'answer\': 4, \'sort\': \'0\', \'text\': \'1a alternativa criada\'}]}, {\'number\': 3, \'key\': 2445, \'topic\': \'Topico Exemplo\', \'type\': \'QM\', \'weight\': \'1\', \'short\': \'QE3\', \'text\': \'Terceira questao\', \'answers\': [{\'answer\': 0, \'sort\': \'4\', \'text\': \'5a alternativa criada\'}, {\'answer\': 1, \'sort\': \'1\', \'text\': \'2a alternativa criada\'}, {\'answer\': 2, \'sort\': \'3\', \'text\': \'4a alternativa criada\'}, {\'answer\': 3, \'sort\': \'0\', \'text\': \'1a alternativa criada\'}, {\'answer\': 4, \'sort\': \'2\', \'text\': \'3a alternativa criada\'}]}]}]}',475),(60967,'{\'variations\': [{\'variant\': \'2\', \'questions\': [{\'number\': 1, \'key\': 2445, \'topic\': \'Topico Exemplo\', \'type\': \'QM\', \'weight\': \'1\', \'short\': \'QE3\', \'text\': \'Terceira questao\', \'answers\': [{\'answer\': 0, \'sort\': \'3\', \'text\': \'4a alternativa criada\'}, {\'answer\': 1, \'sort\': \'2\', \'text\': \'3a alternativa criada\'}, {\'answer\': 2, \'sort\': \'4\', \'text\': \'5a alternativa criada\'}, {\'answer\': 3, \'sort\': \'1\', \'text\': \'2a alternativa criada\'}, {\'answer\': 4, \'sort\': \'0\', \'text\': \'1a alternativa criada\'}]}, {\'number\': 2, \'key\': 2443, \'topic\': \'Topico Exemplo\', \'type\': \'QM\', \'weight\': \'1\', \'short\': \'QE1\', \'text\': \'Primeira Questao - Sempre a primeira alternativa criada eh a correta.\', \'answers\': [{\'answer\': 0, \'sort\': \'4\', \'text\': \'5a alternativa criada\'}, {\'answer\': 1, \'sort\': \'0\', \'text\': \'1a alternativa criada\'}, {\'answer\': 2, \'sort\': \'1\', \'text\': \'2a alternativa criada\'}, {\'answer\': 3, \'sort\': \'3\', \'text\': \'4a alternativa criada\'}, {\'answer\': 4, \'sort\': \'2\', \'text\': \'3a alternativa criada\'}]}, {\'number\': 3, \'key\': 2444, \'topic\': \'Topico Exemplo\', \'type\': \'QM\', \'weight\': \'1\', \'short\': \'QE2\', \'text\': \'Segunda Questao\', \'answers\': [{\'answer\': 0, \'sort\': \'2\', \'text\': \'3a alternativa criada\'}, {\'answer\': 1, \'sort\': \'1\', \'text\': \'2a alternativa criada\'}, {\'answer\': 2, \'sort\': \'4\', \'text\': \'5a alternativa criada\'}, {\'answer\': 3, \'sort\': \'3\', \'text\': \'4a alternativa criada\'}, {\'answer\': 4, \'sort\': \'0\', \'text\': \'1a alternativa criada\'}]}]}]}',475);
 /*!40000 ALTER TABLE `exam_variationexam` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -961,6 +939,7 @@ CREATE TABLE `student_student` (
 
 LOCK TABLES `student_student` WRITE;
 /*!40000 ALTER TABLE `student_student` DISABLE KEYS */;
+INSERT INTO `student_student` VALUES (28516,'joão silva','123','joao@gmail.com'),(28517,'maria campos','987','maria@gmail.com');
 /*!40000 ALTER TABLE `student_student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1011,17 +990,12 @@ CREATE TABLE `topic_question` (
   `question_last_update` date DEFAULT NULL,
   `question_who_created_id` int DEFAULT NULL,
   `topic_id` int DEFAULT NULL,
-  `question_correction_count` int DEFAULT '0',
-  `question_correct_count` int DEFAULT '0',
-  `question_IRT_a_discrimination` double DEFAULT '0',
-  `question_IRT_b_ability` double DEFAULT '0',
-  `question_IRT_c_guessing` double DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `topic_question_question_who_created_0b2f6e68_fk_account_u` (`question_who_created_id`),
   KEY `topic_question_topic_id_aa9661f2_fk_topic_topic_id` (`topic_id`),
   CONSTRAINT `topic_question_question_who_created_0b2f6e68_fk_account_u` FOREIGN KEY (`question_who_created_id`) REFERENCES `account_user` (`id`),
   CONSTRAINT `topic_question_topic_id_aa9661f2_fk_topic_topic_id` FOREIGN KEY (`topic_id`) REFERENCES `topic_topic` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2447 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2446 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1030,7 +1004,7 @@ CREATE TABLE `topic_question` (
 
 LOCK TABLES `topic_question` WRITE;
 /*!40000 ALTER TABLE `topic_question` DISABLE KEYS */;
-INSERT INTO `topic_question` VALUES (2443,'','QE1','Primeira Questao - Sempre a primeira alternativa criada eh a correta.','QM','1','remember','no','2023-04-17',1,238,0,0,0,0,0),(2444,'','QE2','Segunda Questao','QM','1','remember','no','2023-04-17',1,238,0,0,0,0,0),(2445,'','QE3','Terceira questao','QM','1','remember','no','2023-04-17',1,238,0,0,0,0,0),(2446,'','QE 4','Quarta questão.','QM','1','remember','no','2023-12-07',1,238,0,0,0,0,0);
+INSERT INTO `topic_question` VALUES (2443,'','QE1','Primeira Questao - Sempre a primeira alternativa criada eh a correta.','QM','1','remember','no','2023-04-17',1,238),(2444,'','QE2','Segunda Questao','QM','1','remember','no','2023-04-17',1,238),(2445,'','QE3','Terceira questao','QM','1','remember','no','2023-04-17',1,238);
 /*!40000 ALTER TABLE `topic_question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1125,4 +1099,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-07 18:11:19
+-- Dump completed on 2023-04-18 16:24:21
