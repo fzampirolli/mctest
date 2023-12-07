@@ -147,14 +147,34 @@ class Question(models.Model):
                                              )
 
     ''' Novos campos 04/12/2023
-    primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
-    find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-    find . -path "*/migrations/*.pyc"  -delete
-    mysql -u root -p DB_MCTest < "mysql-2023-11-30.sql"
-    python3.8 manage.py shell < _novos_campos_questao.py
-    python3.8 manage.py makemigrations topic
-    python3.8 manage.py migrate topic
-    brew services restart mysql
+primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
+find . -path "*/migrations/*.pyc"  -delete
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+python3.8 manage.py makemigrations 
+python3.8 manage.py makemigrations 
+python3.8 manage.py migrate
+brew services restart mysql
+
+mysql -u root -p DB_MCTest
+use DB_MCTest;
+show tables;
+describe topic_question;
+
+ALTER TABLE topic_question
+ADD COLUMN question_correction_count INT DEFAULT 0,
+ADD COLUMN question_correct_count INT DEFAULT 0,
+ADD COLUMN question_IRT_a_discrimination DOUBLE DEFAULT 0.0,
+ADD COLUMN question_IRT_b_ability DOUBLE DEFAULT 0.0,
+ADD COLUMN question_IRT_c_guessing DOUBLE DEFAULT 0.0;
+
+
+UPDATE topic_question SET
+question_correction_count = IFNULL(question_correction_count, 0),
+question_correct_count = IFNULL(question_correct_count, 0),
+question_IRT_a_discrimination = IFNULL(question_IRT_a_discrimination, 0.0),
+question_IRT_b_ability = IFNULL(question_IRT_b_ability, 0.0),
+question_IRT_c_guessing = IFNULL(question_IRT_c_guessing, 0.0);
+
     '''
     question_correction_count = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name=_("Correction Count"))
     question_correct_count = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name=_("Correct Count"))
