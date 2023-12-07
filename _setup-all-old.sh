@@ -2,7 +2,7 @@
 # ATENÇÃO: esse INSTALADOR não está funcionando CORRETAMENTE ainda !!!!!
 # Fazer INSTALAÇÃO MANUAL APÓS INDICAÇÃO !!!!!
 #
-# rodar em um ambiente virtual com sudo:
+# executar em um ambiente virtual com sudo:
 # para instalar:
 
 #cd ..

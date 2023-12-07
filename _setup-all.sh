@@ -16,7 +16,7 @@
 
 # e vários outros de requirements-titan256GB.txt
 
-# rodar esse script como sudo: sudo su
+# executar esse script como sudo: sudo su
 
 # fazer download do arquivo de configuração
 # wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
@@ -26,7 +26,7 @@
 # sudo emacs -nw /etc/environment
 # incluir no final: GTK_IM_MODULE=cedilla
 
-# rodar:
+# executar:
 # source _setup-all.sh
 
 # se pedir uma senha do mysql, incluir "ufabc12345", se não mudou em _settings.env
@@ -44,6 +44,11 @@ sudo apt install -y git
 git clone https://github.com/fzampirolli/mctest.git
 
 cd mctest
+
+# para clonar o GitHub de uma data específica:
+# Para a primeira edição do livro, em 2023-09-07,
+# executar dentro da pasta mctest:
+# git checkout 8ad0d60055a35fdb5f0e821601a6129ea15ab28a
 
 mkdir tmp
 mkdir tmp/imgs180days
