@@ -1353,8 +1353,10 @@ class cvMCTest(object):
 
                 n = notas[a.find('0')]
 
+                acertou = 0
                 if n == resp[count]:
                     nota += 1
+                    acertou += 1
                     coresp.append(n)
                 else:
                     coresp.append(resp[count] + '/' + n)
@@ -1366,6 +1368,10 @@ class cvMCTest(object):
                             studentAnswer=str(resp[count]),
                             answersOrder=a,
                         )
+                    question = Question.objects.get(pk=qID)
+                    question.question_correction_count += 1
+                    question.question_correct_count += acertou
+                    question.save()
                 except:
                     pass
 

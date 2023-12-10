@@ -559,21 +559,6 @@ def correctStudentsExam(request, pk):
             messages.error(request, _("correctStudentsExam: Error in read PDF file: ") + str(file))
             return render(request, 'exam/exam_errors.html', {})
 
-        passou = False
-
-        try:
-            # imgs = cvMCTest.get_images_from_pdf(file)
-            passou = True
-        except:
-            pass
-            # messages.error(request, _("correctStudentsExam: Error in read PDF: ") + str(file))
-            # return render(request, 'exam/exam_errors.html', {})
-
-        # darken = request.POST.getlist('choicesDarken')
-        # if darken and darken[0] == 'DARKEN':
-        # print(f'convert -density 300x300 {file} -monochrome -quality 100 {file[:-4]+"darken.pdf"}')
-        # os.system(f'convert -density 300x300 .\{file} -monochrome -quality 100 .\{file}')
-
         # try reading the pdf file using another way
         pages = convert_from_path(file, 200)  # dpi 100=min 500=max
         numPAGES = 0
