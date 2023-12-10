@@ -14,7 +14,7 @@ Yasuharu Okamoto, 2019.02
 # pip3 install arviz
 # pip3 install matplotlib==3.1.1
 # syntax:
-# python3 _irt_pymc3_shell.py file.csv
+# python3.8 _irt_pymc3_shell.py _irt_test_12QM.csv
 
 import sys
 
