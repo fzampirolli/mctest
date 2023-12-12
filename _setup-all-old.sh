@@ -548,5 +548,7 @@ http://vcad.ufabc.edu.br:8004/OK
 
 resolver problemas de atualização do github:
 
-oi
+pip install django-extensions
+python3.8 manage.py graph_models -a -g -o static/MCTest_UML_comp.png
+
 '
