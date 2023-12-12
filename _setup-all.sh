@@ -166,3 +166,8 @@ cp runDjango.sh ../
 
 # source ../runDjango.sh &
 
+# incluir em /etc/crontab
+# 2  3    * * *   root    /home/fz/django_webmctest/mctest/_myBackup.sh
+# 5  3    * * *   fz      /home/fz/django_webmctest/_backup-mctest.sh
+# */10 *  * * *   root    /home/fz/django_webmctest/crontabDjango.sh
+
