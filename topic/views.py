@@ -68,6 +68,8 @@ from django.shortcuts import redirect
 
 from django.urls import reverse
 
+from copy import copy
+
 def copy_question(request, pk):
     question_to_copy = get_object_or_404(Question, pk=pk)
 
@@ -77,19 +79,20 @@ def copy_question(request, pk):
             text = text[:47] + '-cp'
         else:
             text += '-cp'
-        new_question = Question.objects.create(
-            topic=question_to_copy.topic,
-            question_group=question_to_copy.question_group,
-            question_short_description=text,
-            question_text=question_to_copy.question_text,
-            question_type=question_to_copy.question_type,
-            question_difficulty=question_to_copy.question_difficulty,
-            question_bloom_taxonomy=question_to_copy.question_bloom_taxonomy,
-            question_parametric=question_to_copy.question_parametric,
-            question_last_update=question_to_copy.question_last_update,
-            question_who_created=request.user,
-        )
+
+        # Copiar a questão
+        new_question = copy(question_to_copy)
+        new_question.pk = None
+        new_question.question_short_description = text
+        new_question.question_who_created = request.user
         new_question.save()
+
+        # Copiar as respostas relacionadas
+        for answer in question_to_copy.answers2.all():
+            copied_answer = copy(answer)
+            copied_answer.pk = None  # Limpar a chave primária
+            copied_answer.question = new_question
+            copied_answer.save()
 
         messages.error(request, format_html(_('The question has been successfully duplicated! You can <a href="../../{}/update/">view and edit the duplicated question here</a>.'), new_question.id))
 
