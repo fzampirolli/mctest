@@ -175,12 +175,24 @@ def ImportClassroomsDiscipline(request, pk):
                         c = caux
                         break
 
+                from datetime import datetime
+
+                # Obter a data atual
+                data_atual = datetime.now()
+
+                # Obter o ano e o quadrimestre
+                ano = data_atual.year
+                quadrimestre = (data_atual.month + 3) // 4
+
+                # Criar a variável desejada
+                variavel_ano_quadrimestre = f"{ano}.{quadrimestre}"
+
                 if not c:
                     c = Classroom.objects.create(
                         discipline=discipline,
                         classroom_code=codigo,
                         classroom_room=sala,
-                        classroom_days='',
+                        classroom_days=variavel_ano_quadrimestre,
                         classroom_type=modo,
                     )
 

@@ -34,7 +34,8 @@
                                     {% render_field form.classroom_profs class+="form-control" value='{{ user.email }}' %}
                                     <p>{% trans "If you are not the course coordinator, to include students you must choose at least one teacher from the class" %}<br>
                                         {% trans "The teacher who creates a class and does NOT mark the email above will NOT be able to add students to the class" %}<br>
-                                    {% trans "Search with CTRL+F" %} - {% trans "Hold CTRL to mark more than one teacher" %} </p>
+                                        {% trans "Search with CTRL+F" %}
+                                        - {% trans "Hold CTRL to mark more than one teacher" %} </p>
                                 </div>
 
                                 <p></p>
@@ -54,13 +55,35 @@
                                     </div>
                                     {% render_field form.classroom_room class+="form-control" placeholder=form.classroom_room.label %}
                                 </div>
+
                                 <!-- Creation Period -->
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">{% trans "Period" %} ({% trans "Format" %}: 2023.3)</span>
+                                {% block body %}
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">{% trans "Period" %} ({% trans "Format" %}: <span
+                                                    id="anoQuadrimestreSpan"></span>)</span>
+                                        </div>
+                                        {% render_field form.classroom_days class+="form-control" value='XXX' id="classroomDaysField" %}
                                     </div>
-                                    {% render_field form.classroom_days class+="form-control" value='2023.3' %}
-                                </div>
+
+                                    <script>
+                                        // Obter a data atual
+                                        var dataAtual = new Date();
+
+                                        // Obter o ano e o quadrimestre
+                                        var ano = dataAtual.getFullYear();
+                                        var quadrimestre = Math.floor((dataAtual.getMonth() + 3) / 4);
+
+                                        // Criar a variável desejada
+                                        var variavelAnoQuadrimestre = ano + '.' + quadrimestre;
+
+                                        // Atualizar o conteúdo da span e o valor do campo de formulário
+                                        document.getElementById('anoQuadrimestreSpan').innerText = variavelAnoQuadrimestre;
+                                        document.getElementById('classroomDaysField').value = variavelAnoQuadrimestre;
+                                    </script>
+
+                                {% endblock %}
 
                                 <!-- classroom_type -->
                                 <div class="btn-group-vertical">
