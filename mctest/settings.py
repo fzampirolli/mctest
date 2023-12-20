@@ -32,7 +32,7 @@ load_dotenv(os.path.join(BASE_DIR, '../_settings.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #os.getenv('DEBUG')
+DEBUG = True #os.getenv('DEBUG')
 
 #SECURE_SSL_REDIRECT = True
 #SESSION_COOKIE_SECURE = True
