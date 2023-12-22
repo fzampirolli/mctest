@@ -1,0 +1,404 @@
+{
+  "variations": [
+    {
+      "variant": "1",
+      "questions": [
+        {
+          "key": "1968",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "table test"
+          ],
+          "description": [
+            {
+              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
+              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "[9, 12]"
+              ],
+              "output": [
+                " Linha     a       b      tmp   \n   2       9       12      ?    \n   3       9       12      9    \n   4       12      12      9    \n   5       12      9       9    \n   2       12      9       9    \n   3       12      9       12   \n   4       9       9       12   \n   5       9       3       12   \n   2       9       3       12   \n   3       9       3       9    \n   4       3       3       9    \n   5       3       0       9    \n   2       3       0       9    \n   6       3    \n"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1652",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "operators"
+          ],
+          "description": [
+            {
+              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $12$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "599.55\n"
+              ],
+              "output": [
+                "49.96"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "685.86\n"
+              ],
+              "output": [
+                "57.16"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "618.74\n"
+              ],
+              "output": [
+                "51.56"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "2",
+      "questions": [
+        {
+          "key": "1968",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "table test"
+          ],
+          "description": [
+            {
+              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
+              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "[8, 12]"
+              ],
+              "output": [
+                " Linha     a       b      tmp   \n   2       8       12      ?    \n   3       8       12      8    \n   4       12      12      8    \n   5       12      8       8    \n   2       12      8       8    \n   3       12      8       12   \n   4       8       8       12   \n   5       8       4       12   \n   2       8       4       12   \n   3       8       4       8    \n   4       4       4       8    \n   5       4       0       8    \n   2       4       0       8    \n   6       4    \n"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1652",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "operators"
+          ],
+          "description": [
+            {
+              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $23$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "662.39\n"
+              ],
+              "output": [
+                "28.80"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "761.49\n"
+              ],
+              "output": [
+                "33.11"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "766.43\n"
+              ],
+              "output": [
+                "33.32"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "3",
+      "questions": [
+        {
+          "key": "1968",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "table test"
+          ],
+          "description": [
+            {
+              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
+              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "[3, 12]"
+              ],
+              "output": [
+                " Linha     a       b      tmp   \n   2       3       12      ?    \n   3       3       12      3    \n   4       12      12      3    \n   5       12      3       3    \n   2       12      3       3    \n   3       12      3       12   \n   4       3       3       12   \n   5       3       0       12   \n   2       3       0       12   \n   6       3    \n"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1652",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "operators"
+          ],
+          "description": [
+            {
+              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $21$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "654.16\n"
+              ],
+              "output": [
+                "31.15"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "732.8\n"
+              ],
+              "output": [
+                "34.90"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "712.91\n"
+              ],
+              "output": [
+                "33.95"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "4",
+      "questions": [
+        {
+          "key": "1652",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "operators"
+          ],
+          "description": [
+            {
+              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $13$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "716.45\n"
+              ],
+              "output": [
+                "55.11"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "641.58\n"
+              ],
+              "output": [
+                "49.35"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "557.08\n"
+              ],
+              "output": [
+                "42.85"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1968",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "table test"
+          ],
+          "description": [
+            {
+              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
+              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "[4, 16]"
+              ],
+              "output": [
+                " Linha     a       b      tmp   \n   2       4       16      ?    \n   3       4       16      4    \n   4       16      16      4    \n   5       16      4       4    \n   2       16      4       4    \n   3       16      4       16   \n   4       4       4       16   \n   5       4       0       16   \n   2       4       0       16   \n   6       4    \n"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "5",
+      "questions": [
+        {
+          "key": "1652",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "operators"
+          ],
+          "description": [
+            {
+              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $15$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "643.51\n"
+              ],
+              "output": [
+                "42.90"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "776.06\n"
+              ],
+              "output": [
+                "51.74"
+              ]
+            },
+            {
+              "case": "test_3",
+              "input": [
+                "575.45\n"
+              ],
+              "output": [
+                "38.36"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "1968",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [
+            "table test"
+          ],
+          "description": [
+            {
+              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
+              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
+            }
+          ],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "[4, 19]"
+              ],
+              "output": [
+                " Linha     a       b      tmp   \n   2       4       19      ?    \n   3       4       19      4    \n   4       19      19      4    \n   5       19      4       4    \n   2       19      4       4    \n   3       19      4       19   \n   4       4       4       19   \n   5       4       3       19   \n   2       4       3       19   \n   3       4       3       4    \n   4       3       3       4    \n   5       3       1       4    \n   2       3       1       4    \n   3       3       1       3    \n   4       1       1       3    \n   5       1       0       3    \n   2       1       0       3    \n   6       1    \n"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
