@@ -180,9 +180,11 @@ class UpdateExamForm(forms.Form):
                                         widget=forms.Textarea(attrs={'cols': 80, 'rows': 4}),
                                         help_text=_("Exam instructions, for example, '\item turning off the phone'"),
                                         label=_("Instructions"))
-
     def __init__(self, *args, **kwargs):
         super(UpdateExamForm, self).__init__(*args, **kwargs)
+        # Configurar 'topics' como não obrigatório
+        self.fields['topics'].required = False
+
         try:  # ao criar um exame, é necessário definir uma classe!!! então....
 
             # pego a classe do exame
@@ -210,7 +212,6 @@ class UpdateExamForm(forms.Form):
                             qs.append(c.pk)
                 qs = Classroom.objects.filter(pk__in=qs)
 
-            #  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
             self.fields['topics'].queryset =  discipline.topics2.all()
 
             # Obtém os tópicos selecionados do formulário
@@ -222,11 +223,6 @@ class UpdateExamForm(forms.Form):
             # Atualiza as opções do campo 'questions' no formulário
             self.fields['questions'].queryset = available_questions
 
-            #self.fields['questions'].queryset = questions
-            # Question.objects.filter(topic__discipline__discipline_profs=user)
-
             self.fields['classrooms'].queryset = qs
-            # Classroom.objects.filter(discipline__discipline_profs=user)
-
         except:
             pass

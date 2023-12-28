@@ -1422,10 +1422,8 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            messages.error(request, _(
-                'Invalid Form! Verify if date follows the format or if there is at least one room marked, for example.'))
-            messages.error(request, _('Please refresh Exam page before new changes.'))
-            return render(request, 'exam/exam_errors.html', {})
+            messages.error(request,str(form.errors))
+            return render(request, 'exam/exam_errors.html', {'form': form})
 
     else:
         # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
