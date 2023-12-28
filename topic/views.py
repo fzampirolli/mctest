@@ -531,9 +531,37 @@ class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
         kwargs = super(TopicUpdate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+    def form_valid(self, form):
+        # Verifica se já existe um tópico com o mesmo topic_text
+        topic_text = form.cleaned_data['topic_text']
+        discipline_initials = form.cleaned_data['discipline'][0].discipline_code
+        topic_count = Topic.objects.filter(topic_text__startswith=f"{discipline_initials}_").count()
+
+        if Topic.objects.filter(topic_text=topic_text).exists():
+            # Sugere um nome com prefixo e contador
+            suggested_topic_text = f"{discipline_initials}_{topic_count + 1:02d}_{topic_text}"
+            messages.error(
+                self.request,
+                _("A topic with the same text already exists. Please consider using a unique name. Suggested name: {}").format(
+                    suggested_topic_text)
+            )
+            return render(self.request, 'exam/exam_errors.html', {})
+
+        d = form.cleaned_data['discipline']
+        d_obj = get_object_or_404(Discipline, pk=d[0].pk)
+        if not self.request.user in d_obj.discipline_coords.all():
+            messages.error(self.request, _("TopicCreate: the user isn't the coordinator of the discipline"))
+            return render(self.request, 'exam/exam_errors.html', {})
+
+        return super(TopicCreate, self).form_valid(form)
 
     def get_queryset(self):
-        return Topic.objects.all().distinct()
+        if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
+            return Topic.objects.filter(discipline__discipline_coords=self.request.user).distinct()
+        if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
+            return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
+
+
 
 
 class TopicDetailView(LoginRequiredMixin, generic.DetailView):
@@ -558,6 +586,21 @@ class TopicCreate(LoginRequiredMixin, generic.CreateView):
         return kwargs
 
     def form_valid(self, form):
+        # Verifica se já existe um tópico com o mesmo topic_text
+        topic_text = form.cleaned_data['topic_text']
+        discipline_initials = form.cleaned_data['discipline'][0].discipline_code
+        topic_count = Topic.objects.filter(topic_text__startswith=f"{discipline_initials}_").count()
+
+        if Topic.objects.filter(topic_text=topic_text).exists():
+            # Sugere um nome com prefixo e contador
+            suggested_topic_text = f"{discipline_initials}_{topic_count + 1:02d}_{topic_text}"
+            messages.error(
+                self.request,
+                _("A topic with the same text already exists. Please consider using a unique name. Suggested name: {}").format(
+                    suggested_topic_text)
+            )
+            return render(self.request, 'exam/exam_errors.html', {})
+
         d = form.cleaned_data['discipline']
         d_obj = get_object_or_404(Discipline, pk=d[0].pk)
         if not self.request.user in d_obj.discipline_coords.all():

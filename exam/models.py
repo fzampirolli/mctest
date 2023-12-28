@@ -43,7 +43,7 @@ class Exam(models.Model):
         verbose_name=_("Exam name"))
     classrooms = models.ManyToManyField(Classroom,
                                         related_name='exams2',  # relacionamento reverso
-                                        #        blank=True,
+                                        #blank=True,
                                         help_text=_("Choose the classrooms"),
                                         verbose_name=_("Classrooms"))
     questions = models.ManyToManyField(Question,
@@ -55,7 +55,7 @@ class Exam(models.Model):
     ''' NOVO: 27/11/2023  NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
     primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-find . -path "*/migrations/*.pyc"  -delete
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 mysql -u root -p DB_MCTest < "mysql-2023-11-30.sql"
 ## deixar comentado topics question_* (novos)
 python3.8 manage.py shell < _delete_exams_classrooms_students.py
