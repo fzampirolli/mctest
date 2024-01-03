@@ -1,4 +1,4 @@
-# MCTest v. 5.2
+# MCTest v. 5.3
 
 Welcome to MCTest, a website dedicated to assisting in exam preparation and grading.
 
@@ -100,9 +100,11 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 
 
 ##### MCTest 5.3 - Currently in progress
-* Questions with skills in linker.json by Teubl, Irineu, Paulo, Wagner
+* Questions with skills in linker.json
 * Table test skill by Teubl 
 * Hash with email 
+* Exam with topics and adapted test
+* VPL 13 for Moodle 4.1
 
 ---
 ## Install MCTest
