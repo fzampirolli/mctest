@@ -414,15 +414,15 @@ class cvMCTest(object):
         if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_08open35x1.png", img)
 
         # find the contours in the thresholded image
-        (_, cnts, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # if no contours were found, return None
-        if len(cnts) == 0:
+        if len(contours) == 0:
             return None
 
         # c = sorted(cnts, key = cv2.contourArea, reverse = True)[0]
 
-        for c in cnts:
+        for c in contours:
             x, y, w, h = cv2.boundingRect(c)
             if abs(w - h) < 30 and x + w > 800 and y < 200:  # quadrado e no topo direito
 
@@ -459,7 +459,7 @@ class cvMCTest(object):
 
         # Given a black and white image, first find all of its contours
         imgBWcopy = imgBW.copy()
-        (_, contours, _) = cv2.findContours(imgBWcopy.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(imgBWcopy.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
         # Get dimensions of image
         imgRows = imgBW.shape[0]
@@ -524,7 +524,7 @@ class cvMCTest(object):
 
         imgSquares = img
 
-        (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
 
         # size_rectangle_max = 0
@@ -620,7 +620,7 @@ class cvMCTest(object):
 
         imgSquares = img
 
-        (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
 
         # size_rectangle_max = 0
@@ -855,7 +855,7 @@ class cvMCTest(object):
         if DEBUG: cv2.imwrite(
             "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
 
-        (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
         NUM = len(contours)
         if DEBUG: print("NUM_COLUMNS=", NUM)
@@ -884,7 +884,7 @@ class cvMCTest(object):
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
-        (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
         NUM = len(contours)
         if DEBUG: print("NUM_COLUMNS=", NUM)
@@ -922,7 +922,7 @@ class cvMCTest(object):
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
-        (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
         NUM = len(contours)
         if DEBUG: print("NUM_LINES=", NUM)
@@ -959,7 +959,7 @@ class cvMCTest(object):
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
-        (_, contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
         NUM = len(contours)
         if DEBUG: print("NUM_LINES=", NUM)
@@ -1041,7 +1041,7 @@ class cvMCTest(object):
                     countSquare + 1) + "_p_04_" + str(jfim) + ".png",
                 im)
 
-            (_, contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            (contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
             # ordenar pelo eixo vertical
             boundingBoxes = [cv2.boundingRect(c) for c in contours]
@@ -1194,7 +1194,7 @@ class cvMCTest(object):
                     countSquare + 1) + "_q_04_" + str(jfim) + ".png",
                 im)
 
-            (_, contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            (contours, _) = cv2.findContours(im.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             answers_area = []  # em questões duplicadas, pegar a com maior area
             answers_n = []
             for cnt in contours:  # loop over the contours

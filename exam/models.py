@@ -58,15 +58,15 @@ find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 mysql -u root -p DB_MCTest < "mysql-2023-11-30.sql"
 ## deixar comentado topics question_* (novos)
-python3.8 manage.py shell < _delete_exams_classrooms_students.py
+python manage.py shell < _delete_exams_classrooms_students.py
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.pyc"  -delete
-python3.8 manage.py makemigrations
-python3.8 manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 ## descomentar topics e question_* (novos)
 brew services restart mysql
-python3.8 manage.py makemigrations
-python3.8 manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
     '''
     topics = models.ManyToManyField(Topic,
                                        related_name='exams2',  # relacionamento reverso

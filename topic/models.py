@@ -150,9 +150,9 @@ class Question(models.Model):
 primeiro apaga pyc, makemigrations, migrate, detela exames e depois inclui topicos, makemigrations...
 find . -path "*/migrations/*.pyc"  -delete
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-python3.8 manage.py makemigrations 
-python3.8 manage.py makemigrations 
-python3.8 manage.py migrate
+python manage.py makemigrations 
+python manage.py makemigrations 
+python manage.py migrate
 brew services restart mysql
 
 mysql -u root -p DB_MCTest
