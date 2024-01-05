@@ -7,7 +7,7 @@
 # Django 4.2
 # python 3
 
-# cv2 3.4.18.65 - precisa alterar código para usar 4.7:
+# cv2 3.4.18.65 - precisa alterar código para usar 4.9:
 # pip uninstall opencv-python
 # pip install opencv-python
 # repassar todos as ocorrencias de findContours:
@@ -101,6 +101,12 @@ FLUSH PRIVILEGES;
 exit
 EOF
 
+SET GLOBAL validate_password_policy=LOW;
+SHOW VARIABLES LIKE 'validate_password%';
+SET GLOBAL validate_password.policy = 0;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'177.104.62.5' IDENTIFIED BY 'ZAQ!@#$%678***' WITH GRANT OPTION;
+
 # Configura arquivos do mysql
 sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 echo '[client]
@@ -127,7 +133,7 @@ pip install -r requirements-titan256GB.txt
 pip install --upgrade pip setuptools
 pip install --upgrade scipy
 pip install scikit-image==0.20.0
-pip install django==4.2
+pip install django
 pip install python-dotenv
 pip install django-widget-tweaks
 pip install django-extensions
@@ -138,7 +144,7 @@ pip install pyqrcode
 pip install matplotlib
 pip install python-decouple
 pip install pypdf2
-pip install opencv-python==3.4.18.65
+pip install opencv-python
 pip install img2pdf
 pip install pandas
 pip install pdf2image
@@ -171,4 +177,4 @@ cp runDjango.sh ../
 # 2  3    * * *   root    /home/fz/django_webmctest/mctest/_myBackup.sh
 # 5  3    * * *   fz      /home/fz/django_webmctest/_backup-mctest.sh
 # */10 *  * * *   root    /home/fz/django_webmctest/crontabDjango.sh
-
+# sudo service cron start

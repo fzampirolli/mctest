@@ -51,6 +51,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
+from django.urls import reverse_lazy
 from pdf2image import convert_from_path
 from tablib import Dataset
 
@@ -1542,7 +1543,7 @@ class ExamCreate(CreateView):
 class ExamDelete(DeleteView):
     model = Exam
     template_name = 'exam/exam_confirm_delete.html'
-    success_url = '/exam/myexams'
+    success_url = reverse_lazy('exam:myexams')
 
     def get_queryset(self):
         return Exam.objects.filter(exam_who_created=self.request.user).distinct()
@@ -1551,6 +1552,8 @@ class ExamDelete(DeleteView):
         if not Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user):
             messages.error(self.request, _('ClassroomUpdate: The teacher is not registered in a Discipline'))
             return render(self.request, 'exam/exam_errors.html', {})
+
+        return super().form_valid(form)
 
 
 class LoanedExamByUserListView(LoginRequiredMixin, generic.ListView):

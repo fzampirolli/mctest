@@ -40,6 +40,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart  # sudo pip install email
 from email.mime.text import MIMEText
+import ssl
 
 import PyPDF2  # pip install PyPDF2
 import bcrypt
@@ -445,11 +446,19 @@ class cvMCTest(object):
 
     @staticmethod
     def imfillhole(img):
-        # label
+        # from skimage.measure import label
+        DEBUG = False
+
+        if DEBUG: cv2.imwrite("_imfillhole" + "_01.png", img)
+
         labels = label(img == 0)
+        if DEBUG: cv2.imwrite("_imfillhole" + "_02.png", labels)
+
         labelCount = np.bincount(labels.ravel())
         background = np.argmax(labelCount)
         img[labels != background] = 255
+        if DEBUG: cv2.imwrite("_imfillhole" + "_03.png", img)
+
         # labels = label(img)
         return img
 
@@ -1473,11 +1482,11 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    col = int(p1[1] + 17 + 30.3 * q)  ######################## 30.3 SENSIVEL
+                    col = int(p1[1] + 20 + 31.6 * q)  ######################## 30.3 SENSIVEL
                     if col < p2[1]:
                         try:
                             if len(respostas[countQuestions]) == 3:
-                                lin = int(p1[0] - 13 + 28.2 * (notas.index(respostas[countQuestions][2]) + 1))
+                                lin = int(p1[0] - 12 + 28.8 * (notas.index(respostas[countQuestions][2]) + 1))
                                 if lin < p2[0]:  ######################## 28.2 SENSIVEL
                                     cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
                         except:
@@ -1576,6 +1585,10 @@ class cvMCTest(object):
             percent = 0
             if aux:
                 percent = round(100 * int(sex.grade) / aux, 3)
+            else:
+                aux = qr['numquest']
+                percent = round(100 * int(sex.grade) / qr['numquest'], 3)
+
             str1 += "\\noindent\\textbf{%s:} %s/%s ({%.3f}___percent___) \n\n" % (
                 _("Grade"), str(sex.grade), str(aux), percent)
             str1 = str1.replace("___percent___", "\%")
@@ -1625,35 +1638,14 @@ class cvMCTest(object):
                             if q['type'] == 'QT':
                                 str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
 
-                ''' OBSOLETE, PEGA agora AS QUESTÕES DE VariationExam
-                count = 0
-                for qe in StudentExamQuestion.objects.filter(studentExam=sex):
-                    count += 1
-
-                    str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (str(count), qe.question.question_text)
-                    ###### VALIDAR ISSO !!!!!!
-                    aa = [a for a in qe.question.answers2.all()]  ###### VALIDAR ISSO !!!!!!
-                    str1 += "\\textbf{%s:} \t%s\n\n" % (_("Correct answer"), aa[0].answer_text)
-
-                    if qe.studentAnswer in notas:
-                        index1 = notas.index(qe.studentAnswer)
-                        if aa[0].answer_text != aa[int(qe.answersOrder[index1])].answer_text:
-                            str1 += "\\textbf{%s:} \t[(%s)-%s]: %s \n\n" % (_("Your answer"),
-                                                                            qe.studentAnswer,
-                                                                            _("INCORRECT"),
-                                                                            aa[int(
-                                                                                qe.answersOrder[index1])].answer_text)
-                        if aa[index1].answer_feedback:
-                            str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), aa[index1].answer_feedback)
-                    else:
-                        str1 += "\\textbf{%s}\n\n" % _("Invalid answer!")
-                    '''
-
         file_name = "studentEmail_e" + qr['idExam'] + "_r" + qr['idClassroom'] + "_s" + s.student_ID
         fileExameName = file_name + '.tex'
 
         strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr[
             'idStudent'] + '_GAB.png'
+
+        if not os.path.exists(strGAB): # se não existe arquivo, aborta
+            return ''
 
         with open(fileExameName, 'w') as fileExam:
             fileExam = open(fileExameName, 'w')
@@ -1687,13 +1679,14 @@ class cvMCTest(object):
             pass
 
     # funcao para envio do email
+
     @staticmethod
     def envia_email(servidor, porta, FROM, PASS, TO, subject, texto, anexo=[]):
         msg = MIMEMultipart()
         msg['From'] = FROM
         msg['To'] = TO
         msg['Subject'] = subject
-        msg.attach(MIMEText(texto))
+        msg.attach(MIMEText(texto, 'plain'))
 
         # Anexa os arquivos
         for f in anexo:
@@ -1703,27 +1696,41 @@ class cvMCTest(object):
                 part = MIMEBase('application', 'octet-stream')
                 part.set_payload(open(f, 'rb').read())
                 encoders.encode_base64(part)
-                part.add_header('Content-Disposition', 'attachment;filename="%s"' % os.path.basename(f))
+                part.add_header('Content-Disposition', f'attachment; filename="{os.path.basename(f)}"')
                 msg.attach(part)
-            except Exception:
-                return "****ERROR****"
+            except Exception as e:
+                return f"****ERROR****: {str(e)}"
 
         try:
             gm = smtplib.SMTP(servidor, porta)
             gm.ehlo()
-            gm.starttls()
+            context = ssl.create_default_context()
+            context.set_ciphers('DEFAULT@SECLEVEL=1')
+            gm.starttls(context=context)
             gm.ehlo()
             gm.login(FROM, PASS)
             gm.sendmail(FROM, TO, msg.as_string())
-            gm.close()
-        except Exception:
-            return "****ERROR****"
+        except:
+            pass
+
+        try:
+            context = ssl.create_default_context()
+            context.check_hostname = False  # Desativar verificação do nome do host
+            context.verify_mode = ssl.CERT_NONE  # Desativar verificação do certificado
+            with smtplib.SMTP(servidor, porta) as gm:
+                gm.ehlo()
+                gm.starttls(context=context)
+                gm.ehlo()
+                gm.login(FROM, PASS)
+                gm.sendmail(FROM, TO, msg.as_string())
+        except:
+            pass
+
         return ''
 
     @staticmethod
     def sendMail(arquivo, msg_str, mailSend, aluno):
         destinatario = mailSend
-        # destinatario = 'fzampirolli@gmail.com'
 
         # porta smtp do gmail e ufabc
         myporta = 587
@@ -1731,10 +1738,7 @@ class cvMCTest(object):
         # Assunto do email
         assunto = "Mensagem automática enviada pelo MCTest"
 
-        mensagem = "\n"
-        mensagem += "Prezado(a) "
-        mensagem += aluno + "\n"
-        # mensagem += msg_str + "\n\n"
+        mensagem = f"\nPrezado(a) {aluno}\n{msg_str}\n\n"
         mensagem += '''
 Segue em anexo a sua atividade: Lista de Exercícios ou Exame.
 
@@ -1764,3 +1768,4 @@ automática e está sendo desenvolvido com apoio das instituições públicas:
                                     assunto,
                                     mensagem,
                                     [arquivo])
+
