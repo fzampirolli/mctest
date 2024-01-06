@@ -1,0 +1,62 @@
+QE::DE-TIC::      
+Qual é o componente principal de um computador que armazena dados e programas?
+A: Memória RAM   
+A: Placa-mãe
+A: Processador
+A: Teclado
+A: Placa de vídeo
+
+QE::DE-TIC::        
+Qual dos seguintes dispositivos é usado exclusivamente para entrada de dados em um 
+computador?
+A: Teclado          % alternativa correta - sempre a primeira
+A: Impressora
+A: Caixa de som
+A: Monitor
+A: Placa de vídeo
+
+
+QM::DE-TIC::
+O que significa a sigla HTML?
+A: HyperText Markup Language
+A: High Technical Machine Language
+A: Home Tool Management Language
+A: Hyper Transfer Machine Learning
+A: Hardware Technical Maintenance Language
+
+QM::DE-TIC:: 
+Qual das seguintes linguagens de programação é amplamente utilizada para o desenvolvimento 
+de sites dinâmicos?
+A: JavaScript
+A: HTML
+A: CSS
+A: Python
+A: C++
+
+QH::DE-TIC::
+Qual das seguintes opções representa corretamente um endereço IP válido?
+A: 127.0.0.1
+A: 192.168.0.300
+A: 10.0.0.256
+A: 172.16.0.0
+A: 256.256.256.256
+
+QH::DE-TIC::
+Qual dos seguintes protocolos de internet é utilizado para enviar e-mails?
+A: SMTP
+A: FTP
+A: HTTP
+A: DNS
+A: SSH
+
+QH::DE-TIC::
+Qual é o resultado da soma dos números hexadecimais 7C e 54?
+A: D0
+A: F0
+A: D4
+A: D1
+A: E0
+
+QE::DE-TIC::
+Descreva brevemente a importância da tecnologia da informação (TI) na sociedade moderna 
+e mencione pelo menos duas áreas em que a TI desempenha um papel fundamental.
