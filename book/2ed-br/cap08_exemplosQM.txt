@@ -57,6 +57,3 @@ A: D4
 A: D1
 A: E0
 
-QE::DE-TIC::
-Descreva brevemente a importância da tecnologia da informação (TI) na sociedade moderna 
-e mencione pelo menos duas áreas em que a TI desempenha um papel fundamental.

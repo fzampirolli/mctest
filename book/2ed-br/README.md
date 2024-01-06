@@ -1,6 +1,6 @@
 # MCTest: Como Criar e Corrigir Exames Parametrizados Automaticamente
 
-## [Primeira Edição](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress):
+## [Primeira Edição](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br):
 
 ---
 > Autor: Francisco de Assis Zampirolli </br>
@@ -32,9 +32,9 @@ Fazer *download* para visualizar melhor.
 
 ### Versão digital:
 
-* PDF: [livro.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress/livro.pdf)
-* HTML: [livro.html](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress/livro.html)
-* EPUB: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress/livro.epub)
+* PDF: [livro.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br/livro.pdf)
+* HTML: [livro.html](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br/livro.html)
+* EPUB: [livro.epub](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br/livro.epub)
 
 O formato EPUB altera muito o estilo do livro. 
 Ainda não achei um conversor adequado para o estilo utilizado. 
@@ -65,9 +65,9 @@ Observação: o ISBN é da primeira edição.
 * Frete R$ 9 - motoboy São Paulo
 
 #### Versão para impressão:
-* [livro-capa21x29.7.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress/livro-capa21x29.7.pdf)
-* [livro-impressao11pt.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress/livro-impressao11pt.pdf)
-* [livro-impressao12pt.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress/livro-impressao12pt.pdf)
+* [livro-capa21x29.7.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br/livro-capa21x29.7.pdf)
+* [livro-impressao11pt.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br/livro-impressao11pt.pdf)
+* [livro-impressao12pt.pdf](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br/livro-impressao12pt.pdf)
 
 O arquivo *12pt.pdf tem letras grandes, mas com pouca margem (superior, inferior e laterais).
 

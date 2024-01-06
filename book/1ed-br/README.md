@@ -17,7 +17,7 @@ o autor recomenda consultar o prefácio do livro.
 Atualmente, são feitas melhorias nesta obra para a segunda 
 edição, que está em processo de construção. Pode acompanhar o 
 progresso e contribuir com o projeto através deste 
-[link](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br_in_progress).
+[link](https://github.com/fzampirolli/mctest/blob/master/book/2ed-br).
 
 ---
 ## Formatos do livro
