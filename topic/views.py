@@ -65,10 +65,10 @@ from django.utils.html import format_html
 
 from django.shortcuts import redirect
 
-
 from django.urls import reverse
 
 from copy import copy
+
 
 def copy_question(request, pk):
     question_to_copy = get_object_or_404(Question, pk=pk)
@@ -94,9 +94,12 @@ def copy_question(request, pk):
             copied_answer.question = new_question
             copied_answer.save()
 
-        messages.error(request, format_html(_('The question has been successfully duplicated! You can <a href="../../{}/update/">view and edit the duplicated question here</a>.'), new_question.id))
+        messages.error(request, format_html(
+            _('The question has been successfully duplicated! You can <a href="../../{}/update/">view and edit the duplicated question here</a>.'),
+            new_question.id))
 
     return render(request, 'exam/exam_msg.html', {})
+
 
 @login_required
 def save_question_Json(request, pk):
@@ -461,6 +464,7 @@ def ImportQuestions(request):
     # return HttpResponseRedirect("../")
     return render(request, 'exam/exam_msg.html', {})
 
+
 @login_required
 def ImportQuestionsImage(request):
     if request.user.get_group_permissions():
@@ -500,6 +504,7 @@ def ImportQuestionsImage(request):
     # return HttpResponseRedirect("../")
     return render(request, 'exam/exam_msg.html', {})
 
+
 #######################################################################
 class TopicListView(LoginRequiredMixin, generic.ListView):
     model = Topic
@@ -531,13 +536,15 @@ class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
         kwargs = super(TopicUpdate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
     def form_valid(self, form):
         # Verifica se já existe um tópico com o mesmo topic_text
         topic_text = form.cleaned_data['topic_text']
         discipline_initials = form.cleaned_data['discipline'][0].discipline_code
         topic_count = Topic.objects.filter(topic_text__startswith=f"{discipline_initials}_").count()
+        topic_text0 = form.initial['topic_text']
 
-        if Topic.objects.filter(topic_text=topic_text).exists():
+        if Topic.objects.filter(topic_text=topic_text).exists() and topic_text != topic_text0:
             # Sugere um nome com prefixo e contador
             suggested_topic_text = f"{discipline_initials}_{topic_count + 1:02d}_{topic_text}"
             messages.error(
@@ -553,15 +560,13 @@ class TopicUpdate(LoginRequiredMixin, generic.UpdateView):
             messages.error(self.request, _("TopicCreate: the user isn't the coordinator of the discipline"))
             return render(self.request, 'exam/exam_errors.html', {})
 
-        return super(TopicCreate, self).form_valid(form)
+        return super(TopicUpdate, self).form_valid(form)
 
     def get_queryset(self):
         if len(Topic.objects.filter(discipline__discipline_coords=self.request.user)):
             return Topic.objects.filter(discipline__discipline_coords=self.request.user).distinct()
         if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
             return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
-
-
 
 
 class TopicDetailView(LoginRequiredMixin, generic.DetailView):
@@ -626,7 +631,6 @@ class TopicDelete(LoginRequiredMixin, generic.DeleteView):
             return Topic.objects.filter(discipline__discipline_coords=self.request.user).distinct()
         if len(Topic.objects.filter(discipline__discipline_profs=self.request.user)):
             return Topic.objects.filter(discipline__discipline_profs=self.request.user).distinct()
-
 
 
 @login_required
@@ -695,8 +699,8 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
 
             try:
                 if feedback_ans[ans.index(a)] != '\n':
-                    str1 += '[' + feedback_ans[ans.index(a)] + ']'############# NOVO
-            except: # quando cria alternativas automáticas, não tem feedback
+                    str1 += '[' + feedback_ans[ans.index(a)] + ']'  ############# NOVO
+            except:  # quando cria alternativas automáticas, não tem feedback
                 pass
 
         str1 += "\\end{oneparchoices}\\vspace{0mm}\\\\\n"
@@ -704,6 +708,7 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
         allQuestionsStr.append(str1)
 
     return countQuestions, allQuestionsStr
+
 
 @login_required
 def see_topic_PDF(request, pk):
@@ -738,7 +743,8 @@ def see_topic_PDF(request, pk):
                     questions_id.append(q.id)
                     questions_text.append(q.question_text)
             new_order = UtilsMC.sortedBySimilarity2(questions_text)
-            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQuestions)
+            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr,
+                                                                countQuestions)
 
             allQuestionsStr.append("\\newpage\\\\\n")
 
@@ -748,7 +754,8 @@ def see_topic_PDF(request, pk):
                     questions_id.append(q.id)
                     questions_text.append(q.question_text)
             new_order = UtilsMC.sortedBySimilarity2(questions_text)
-            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQuestions)
+            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr,
+                                                                countQuestions)
 
             fileQuestion.write("\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n")
             fileQuestion.write("\\noindent\\textbf{Topic:} %s\\\\\n" % topic.topic_text)
@@ -832,7 +839,6 @@ from django.core import serializers
 
 @login_required
 def UpdateQuestion(request, pk):
-
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
         if not 'topic.change_question' in perm:
@@ -895,7 +901,6 @@ def UpdateQuestion(request, pk):
             
             não funciona, pois ao visualizar o form mostra o codificado...
             '''
-
 
             question_inst.topic = form.cleaned_data['topic']
             question_inst.question_short_description = form.cleaned_data['question_short_description']
