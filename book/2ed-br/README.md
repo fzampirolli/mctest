@@ -24,7 +24,7 @@ Atualmente, são feitas melhorias nesta obra para a segunda
 edição, que está em processo de construção. É possível acompanhar o 
 progresso e contribuir com esse projeto entrando em contato com o autor.
 
-[Play List](https://youtube.com/playlist?list=PL5rrrH7S583Ad6iQ_neu0F7JwpPqyxNEh&si=PYf6PLBuPfTdZg41).
+[Playlist de capítulos do livro](https://youtube.com/playlist?list=PL5rrrH7S583Ad6iQ_neu0F7JwpPqyxNEh&si=PYf6PLBuPfTdZg41).
 
 ---
 
