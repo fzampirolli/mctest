@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# SCRIPT CRIADO EM 2023-04-26 UTILIZANDO
-
-# UBUNTU >= 20.04
+# UBUNTU = 22.04
 # Mint >= 21 Mate
-# Django 4.2
+# Django 5.0
 # python 3
 
 # cv2 3.4.18.65 - precisa alterar código para usar 4.9:
@@ -174,7 +172,7 @@ cp runDjango.sh ../
 # source ../runDjango.sh &
 
 # incluir em /etc/crontab
-# 2  3    * * *   root    /home/fz/django_webmctest/mctest/_myBackup.sh
-# 5  3    * * *   fz      /home/fz/django_webmctest/_backup-mctest.sh
-# */10 *  * * *   root    /home/fz/django_webmctest/crontabDjango.sh
+# 2  3    * * *   root     /home/operador/PycharmProjects/mctest/_myBackup.sh
+# 5  3    * * *   operador /home/operador/PycharmProjects/_backup-mctest.sh
+# *  *    * * *   root     /home/operador/PycharmProjects/crontabDjango0.sh
 # sudo service cron start
