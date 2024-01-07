@@ -6,6 +6,9 @@ MCTest is free and open-source software (see [License](License.txt)),
 with its most notable feature being the ability to handle parametric questions 
 using LaTeX and Python. This allows for numerous variations of the same question.
 
+[Books](book) and
+[Play List](https://youtube.com/playlist?list=PL5rrrH7S583Ad6iQ_neu0F7JwpPqyxNEh&si=PYf6PLBuPfTdZg41).
+
 Please access [vision.ufabc.edu.br](http://vision.ufabc.edu.br)
 for some [examples](http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/).
 
