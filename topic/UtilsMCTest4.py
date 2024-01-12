@@ -174,9 +174,10 @@ class UtilsMC(object):
                 exec('\n'.join(myDef))  # run the algorithm and variables
             except Exception as e:
                 e = str(e).replace('<','$<$').replace('>','$>$')
-                return [f"ERROR in [[def: ... ]]: {e}", ""]
+                e += '\n\n\n\\begin{verbatim}' + '\n'.join(myDef) + '\n\\end{verbatim}'
+                return [f"ERROR in [[def: ... ]]: {e}", "", ""]
         else:
-            return ["ERROR", "ERROR"]
+            return ["ERROR", "ERROR", "ERROR"]
 
         arg = UtilsMC.get_code(question, 'code')  # get the args in text
 
@@ -188,7 +189,8 @@ class UtilsMC(object):
                     AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
                 except Exception as e:
                     e = str(e).replace('<', '$<$').replace('>', '$>$')
-                    return [f"ERROR in [[code: ... ]]: {e} {j}", ""]
+                    e += '\n\n\n\\begin{verbatim}' + '\n'.join(myDef) + '\n\\end{verbatim}'
+                    return [f"ERROR in [[code: ... ]]: {e} {j}", "", ""]
             if i >= len(AllLines) or AllLines[i].find("[[def:") > -1:
                 tam = i
                 break

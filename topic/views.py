@@ -746,7 +746,8 @@ def see_topic_PDF(request, pk):
             countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr,
                                                                 countQuestions)
 
-            allQuestionsStr.append("\\newpage\\\\\n")
+            if countQuestions:
+                allQuestionsStr.append("\\newpage\\\\\n")
 
             questions_id, questions_text = [], []
             for q in topic.questions2.all().order_by('question_text'):

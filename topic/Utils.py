@@ -2,6 +2,57 @@
 
 import numpy as np
 
+def generate_unique_temp_file(extension=''):
+    import tempfile
+    # Specify the directory where the unique temporary file will be created
+    directory = './tmp'
+
+    # Create a unique temporary file with the specified extension in the specified directory
+    with tempfile.NamedTemporaryFile(delete=False, dir=directory, suffix=extension) as temp_file:
+        temp_file_path = temp_file.name
+
+    # You can now use the path of the temporary file as needed
+    return temp_file_path
+
+def read_csv_from_dropbox(url, sep=','):
+    """
+    Reads a CSV file from Dropbox, saves it to a unique file on the server, and returns the DataFrame.
+
+    Args:
+    - url (str): Dropbox URL of the CSV file.
+    - sep (str): Separator used in the CSV file (default is ',').
+
+    Returns:
+    - pd.DataFrame: DataFrame containing the CSV data.
+    """
+    import pandas as pd
+    import requests
+    import os
+    import warnings
+    from urllib3.exceptions import InsecureRequestWarning
+
+    # Disable InsecureRequestWarning
+    warnings.simplefilter('ignore', InsecureRequestWarning)
+
+    # Download the CSV file using requests
+    response = requests.get(url, verify=False)  # Disable SSL verification
+
+    # Generate a unique filename
+    unique_filename = generate_unique_temp_file('.csv')
+
+    # Save the downloaded content to the unique local file
+    local_file_path = os.path.join('./tmp/', unique_filename)
+    with open(local_file_path, 'wb') as file:
+        file.write(response.content)
+
+    # Read the CSV file using pandas with the specified separator
+    df = pd.read_csv(local_file_path, sep=sep)
+
+    # Delete the local file
+    os.remove(local_file_path)
+
+    return df
+
 
 def getCasesMoodle(inp=[], out=[], language=[], skills=[], description=[]):
     cases = {}

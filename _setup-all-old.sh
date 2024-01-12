@@ -284,8 +284,9 @@ echo $SECURE_MYSQL
 #MYSQL_ROOT_PASSWORD=$DB_PASS
 #
 mkdir tmp
-mkdir tmp/imgs180days
-mkdir tmpGAB
+mkdir /var/www/html/tmp/imgs180days
+ln -s /var/www/html/tmp/imgs180days
+#mkdir tmpGAB
 mkdir pdfExam
 mkdir pdfQuestion
 mkdir pdfTopic
@@ -293,7 +294,7 @@ mkdir pdfStudentEmail
 mkdir /backup
 mkdir /backup/json
 mkdir /backup/mysql
-mkdir /backup/tmpGAB
+#mkdir /backup/tmpGAB
 
 echo $DB_HOST
 echo $DB_NAME
@@ -466,7 +467,7 @@ pip3 install python-decouple
 
 tar -xvf mysql-2022-06-02.tar
 cat /etc/mysql/mysql.cnf
-mysql -u root -p DB_MCTest < "mysql-2022-06-02.sql"
+mysql -u root DB_MCTest < "mysql-2022-06-02.sql"
 
 mysql -u root -p DB_MCTest > "mctestLivro-cap5.sql"
 
