@@ -58,5 +58,7 @@ urlpatterns += [
     path('question/<int:pk>', views.QuestionDetailView.as_view(), name='question-detail'),
     path('question/<int:pk>/update/', views.UpdateQuestion, name='question-update'),
     path('question/<int:pk>/delete/', views.QuestionDelete.as_view(), name='question-delete'),
-    path('question/<int:pk>/copy/', views.copy_question, name='copy_question')
+    path('question/<int:pk>/copy/', views.copy_question, name='copy_question'),
+    path('ai-assist/', views.ai_assist, name='ai_assist'),  # Adicione esta linha para a IA Assistência
 ]
+

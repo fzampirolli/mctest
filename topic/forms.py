@@ -102,6 +102,10 @@ class UpdateQuestionForm(forms.Form):
     question_text = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 4}),
                                     help_text=_("Description (you can include latex format)"),
                                     label=_("Description"))
+
+    # ai_assist: comentado uso em question_update.html
+    language_choice = forms.ChoiceField(choices=[('pt-BR', 'BR'), ('en-US', 'US')], label="Language", widget=forms.Select(attrs={'class': 'form-control'}))
+
     question_type = forms.ChoiceField(choices=Question.question_type_choice,
                                       label=_("Type"))
     question_difficulty = forms.ChoiceField(choices=Question.question_difficulty_choice,

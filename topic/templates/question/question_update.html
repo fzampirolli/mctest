@@ -82,11 +82,51 @@
 
                                 <!-- question_text -->
                                 <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">{% trans "Description" %}</span>
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">{% trans "Description" %}</span>
+                                        </div>
+                                        {% render_field form.question_text class+="form-control" placeholder=form.question_text.help_text %}
+
+                                        <!-- comentado uso de ai_assist
+                                        <div class="mb-3">
+
+                                            <div class="text-muted small mb-2">
+                                                {% render_field form.language_choice class+="form-control d-inline-block ml-2 small-font" %}
+                                            </div>
+
+                                            <div class="input-group">
+                                                <button type="button" id="ai-assist-button" class="btn btn-primary ml-2"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="{% trans 'Does not work for LaTeX snippets' %}">{% trans 'spell check' %}
+                                                </button>
+                                            </div>
+                                        </div>-->
+
+                                        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#ai-assist-button").click(function () {
+                                                    // Adapte a chamada Ajax para incluir o valor da linguagem selecionada
+                                                    $.ajax({
+                                                        url: "{% url 'topic:ai_assist' %}",
+                                                        method: "POST",
+                                                        data: {
+                                                            question_text: $("#id_question_text").val(),
+                                                            language_choice: $("#id_language_choice").val(),  // Adicione este campo
+                                                        },
+                                                        success: function (data) {
+                                                            // Atualize o campo de texto da pergunta com as sugestões geradas pela IA
+                                                            $("#id_question_text").val(data.suggested_text);
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+
                                     </div>
-                                    {% render_field form.question_text class+="form-control" placeholder=form.question_text.help_text %}
                                 </div>
+
 
                                 <!-- question_type -->
                                 <div class="input-group mb-3">

@@ -152,6 +152,8 @@ pip install arviz
 pip install pymc3
 pip install mysqlclient
 pip install requests
+pip install autopep8
+pip install language_tool_python
 pip install --upgrade pip setuptools
 
 # instala mais alguns pacotes com apt

@@ -70,6 +70,85 @@ from django.urls import reverse
 from copy import copy
 
 
+# ai_assist: comentado uso em question_update.html
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from language_tool_python import LanguageTool
+import autopep8
+
+@csrf_exempt
+def ai_assist(request):
+    if request.method == 'POST':
+        question_text = request.POST.get('question_text', '')
+        language_choice = request.POST.get('language_choice', 'pt-BR')  # Valor padrão ou qualquer outra lógica que você preferir
+
+        # Identificar e salvar partes do texto entre [[code: e ]]
+        blocks = []
+        blocks_text = []
+        contador = 0
+        start = question_text.find('[[code:')
+        while start != -1:
+            end = question_text.find(']]', start)
+            if end != -1:
+                block = question_text[start:end + 2]
+                blocks.append(block)
+                text = "X" + str(contador).zfill(3) + "X"
+                blocks_text.append(text)
+                question_text = question_text[:start] + text + question_text[end + 2:]
+                start = question_text.find('[[code:', end - 7)
+                contador += 1
+            else:
+                break
+
+        # Identificar e salvar partes do texto entre [[def: e ]]
+        start = question_text.find('[[def:')
+        while start != -1:
+            end = question_text.find(']]', start)
+            if end != -1:
+                code_python = question_text[start:end + 2]
+
+                # Remover a primeira e a última linha do código
+                code_lines = code_python.split('\n')
+                first_line = code_lines.pop(0)
+                last_line = code_lines.pop(-1)
+
+                # Corrigir o código sem a primeira e última linha
+                code_python_correct = autopep8.fix_code('\n'.join(code_lines))
+
+                try:
+                    # Executar o código corrigido
+                    exec(code_python_correct, globals(), locals())
+                    code_python_correct = first_line + '\n' + code_python_correct + last_line
+                    code_python_correct += (f"\n% ==============\n% Código executado!\n")
+                except Exception as e:
+                    # Incluir a primeira e última linha novamente
+                    code_python_correct = first_line + '\n' + code_python_correct + last_line
+                    code_python_correct += (f"\n% ==========================\n% Erro ao executar o código: \n% {e}\n")
+
+                blocks.append(code_python_correct)
+                text = "X" + str(contador).zfill(3) + "X"
+                blocks_text.append(text)
+                question_text = question_text[:start] + text + question_text[end + 2:]
+                start = question_text.find('[[def:', end - 6)
+                contador += 1
+            else:
+                break
+
+        # Inicializar a ferramenta de correção ortográfica
+        tool = LanguageTool(language_choice)
+
+        # Corrigir os erros de ortografia apenas na parte não ignorada
+        matches = tool.check(question_text)
+        suggested_text = tool.correct(question_text)
+
+        # Restaurar as partes ignoradas
+        for block, text in zip(blocks, blocks_text):
+            suggested_text = suggested_text.replace(text, block)  # Mantém [[code: e ]]
+
+        return JsonResponse({'suggested_text': suggested_text})
+    else:
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+
 def copy_question(request, pk):
     question_to_copy = get_object_or_404(Question, pk=pk)
 
