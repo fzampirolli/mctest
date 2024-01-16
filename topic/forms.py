@@ -1,10 +1,10 @@
 '''
 =====================================================================
-Copyright (C) 2018-2023 Francisco de Assis Zampirolli
+Copyright (C) 2018-2024 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.2.
+This file is part of MCTest 5.3.
 
 Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest
@@ -103,7 +103,7 @@ class UpdateQuestionForm(forms.Form):
                                     help_text=_("Description (you can include latex format)"),
                                     label=_("Description"))
 
-    # ai_assist: comentado uso em question_update.html
+    # ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
     language_choice = forms.ChoiceField(choices=[('pt-BR', 'BR'), ('en-US', 'US')], label="Language", widget=forms.Select(attrs={'class': 'form-control'}))
 
     question_type = forms.ChoiceField(choices=Question.question_type_choice,

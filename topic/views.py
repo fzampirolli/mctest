@@ -1,10 +1,10 @@
 '''
 =====================================================================
-Copyright (C) 2018-2023 Francisco de Assis Zampirolli
+Copyright (C) 2018-2024 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.2.
+This file is part of MCTest 5.3.
 
 Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
 github.com/fzampirolli/mctest
@@ -70,7 +70,7 @@ from django.urls import reverse
 from copy import copy
 
 
-# ai_assist: comentado uso em question_update.html
+# ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from language_tool_python import LanguageTool

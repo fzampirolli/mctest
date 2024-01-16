@@ -1,6 +1,6 @@
 '''
 =====================================================================
-Copyright (C) 2018-2023 Francisco de Assis Zampirolli
+Copyright (C) 2018-2024 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 

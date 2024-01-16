@@ -1,10 +1,10 @@
 '''
 =====================================================================
-Copyright (C) 2018-2023 Francisco de Assis Zampirolli
+Copyright (C) 2018-2024 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.2.
+This file is part of MCTest 5.3.
 
 Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest
@@ -59,6 +59,7 @@ urlpatterns += [
     path('question/<int:pk>/update/', views.UpdateQuestion, name='question-update'),
     path('question/<int:pk>/delete/', views.QuestionDelete.as_view(), name='question-delete'),
     path('question/<int:pk>/copy/', views.copy_question, name='copy_question'),
-    path('ai-assist/', views.ai_assist, name='ai_assist'),  # Adicione esta linha para a IA Assistência
+    path('ai-assist/', views.ai_assist, name='ai_assist'),
+    # ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
 ]
 
