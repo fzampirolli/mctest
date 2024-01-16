@@ -406,10 +406,10 @@ def see_question_PDF(request, pk):
         os.system("cp " + file_name + ".pdf " + path + "/pdfQuestion/")
 
         getuser = path.split('/')
-        getuser = getuser[1]
+        getuser = getuser[2]
         getuser = getuser + ':' + getuser
-        os.system('chown -R ' + getuser + ' ' + path + ' .')
-        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
+        os.system('chown -R ' + getuser + ' ' + path)
+        #os.system('chgrp -R ' + getuser + ' ' + path)
 
         try:
             os.remove("{}.aux".format(file_name))
@@ -575,8 +575,8 @@ def ImportQuestionsImage(request):
         getuser = getuser[2]
         getuser = getuser + ':' + getuser
         os.system('mv ' + filename + ' ' + path + '/tmp/')
-        os.system('chown -R ' + getuser + ' ' + path + ' .')
-        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
+        os.system('chown -R ' + getuser + ' ' + path)
+        #os.system('chgrp -R ' + getuser + ' ' + path)
 
         messages.error(request, _('Image imported successfully! ') + filename)
 
@@ -856,10 +856,10 @@ def see_topic_PDF(request, pk):
         os.system("cp " + file_name + ".pdf " + path + "/pdfTopic/")
 
         getuser = path.split('/')
-        getuser = getuser[1]
+        getuser = getuser[2]
         getuser = getuser + ':' + getuser
-        os.system('chown -R ' + getuser + ' ' + path + ' .')
-        os.system('chgrp -R ' + getuser + ' ' + path + ' .')
+        os.system('chown -R ' + getuser + ' ' + path)
+        #os.system('chgrp -R ' + getuser + ' ' + path)
 
         try:
             os.remove("{}.aux".format(file_name))
