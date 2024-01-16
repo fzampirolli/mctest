@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-body">
 
-                <h5 class="card-title">{% trans "README" %} - MCTest v. 5.2</h5>
+                <h5 class="card-title">{% trans "README" %} - MCTest v.5.3</h5>
 
                 <hr>
 
@@ -28,7 +28,7 @@
                 </p>
                 <p>
                 <h6>{% trans "Help us spread MCTest. If more people use it, the faster the improvements" %}.</h6></p>
-                <p>{% trans "MCTest must be installed on an Ubuntu 20.04 server through ports 3306 and 8000" %}.</p>
+                <p>{% trans "MCTest must be installed on an Ubuntu 22.04 server through ports 3306 and 8000" %}.</p>
                 <p>{% trans "Define specific data in the file " %}
                     <a href="{% static '_settings.env' %}">_settings.env</a>.
                 </p>
@@ -109,6 +109,9 @@
                     <li>
                         <p>{% trans "Write a complete tutorial to install and use MCTest" %}.</p>
                     </li>
+                     <li>
+                        <p>{% trans "Include generative networks to help create questions" %}.</p>
+                    </li>
                 </ol>
 
                 <hr>
@@ -180,6 +183,17 @@
                             <li>{% trans "Grant: #2018/23561-1, São Paulo Research Foundation: " %} <a href="https://bv.fapesp.br/pt/auxilios/105047/um-sistema-universal-para-geracao-e-correcao-automatica-de-questoes-parametrizadas/">FAPESP</a></li>
                             <li>{% trans "Title: A universal system for generation and correction automatic of parametrized questions" %}</li>
                             <li>01/09/2019 - 31/08/2021</li>
+                            <li>{% trans "Book" %}: <a href="https://github.com/fzampirolli/mctest/tree/master/book/1ed-br">{% trans "1st edition" %}</a></li>
+                        </ul>
+                    </li>
+                    <p></p>
+                    <li>
+                        <p><strong>MCTest 5.3</strong></p>
+                        <ul>
+                            <li>{% trans "Grant: UFABC - Federal University of ABC" %} - <a href="https://sig.ufabc.edu.br/sigaa/public/docente/pesquisa.jsf?siape=1600876">SIGAA</a></li>
+                            <li>{% trans "Title: Modernization of the MCTest Test Generation and Correction System" %}</li>
+                            <li>05/01/2024 - {% trans "Current" %}</li>
+                            <li>{% trans "Book" %}: <a href="https://github.com/fzampirolli/mctest/tree/master/book/2ed-br">{% trans "2st edition" %} - {% trans "in construction" %}</a></li>
                         </ul>
                     </li>
                 </ul>

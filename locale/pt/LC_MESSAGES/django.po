@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-15 17:48-0300\n"
+"POT-Creation-Date: 2024-01-16 08:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -334,7 +334,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 #: topic/templates/question/question_confirm_delete.html:52
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:193
-#: topic/templates/question/question_update.html:303
+#: topic/templates/question/question_update.html:304
 #: topic/templates/topic/topic_create.html:61
 #: topic/templates/topic/topic_update.html:71
 msgid "Contact your discipline coordinator"
@@ -435,12 +435,12 @@ msgstr "Formatar"
 #: course/templates/classroom/classroom_update.html:98
 #: exam/templates/exam/exam_create.html:83
 #: exam/templates/exam/exam_update2.html:238
-#: exam/templates/exam/exam_update2.html:480 topic/forms.py:109
+#: exam/templates/exam/exam_update2.html:480 topic/forms.py:110
 #: topic/models.py:105 topic/templates/question/question_create.html:56
 #: topic/templates/question/question_detail.html:58
 #: topic/templates/question/question_list.html:23
 #: topic/templates/question/question_list_who_created_user.html:23
-#: topic/templates/question/question_update.html:133
+#: topic/templates/question/question_update.html:134
 #: topic/templates/topic/topic_detail.html:63
 msgid "Type"
 msgstr "Tipo"
@@ -458,7 +458,7 @@ msgstr "Tipo"
 #: student/templates/student/student_create.old.html:47
 #: topic/templates/question/question_create.html:89
 #: topic/templates/question/question_detail.html:30
-#: topic/templates/question/question_update.html:246
+#: topic/templates/question/question_update.html:247
 #: topic/templates/topic/topic_create.html:48
 #: topic/templates/topic/topic_update.html:52
 msgid "Back"
@@ -478,7 +478,7 @@ msgstr "Voltar"
 #: student/templates/student/student_create.old.html:48
 #: student/templates/student/student_update.html:48
 #: topic/templates/question/question_create.html:92
-#: topic/templates/question/question_update.html:249
+#: topic/templates/question/question_update.html:250
 #: topic/templates/topic/topic_create.html:49
 #: topic/templates/topic/topic_update.html:53
 #, fuzzy
@@ -2150,7 +2150,7 @@ msgstr "ExamDetailView: o professor não está registrado na disciplina"
 #: main/templates/According.html:10 main/templates/signup.html:36
 #: topic/templates/question/question_confirm_delete.html:32
 #: topic/templates/question/question_create.html:91
-#: topic/templates/question/question_update.html:248
+#: topic/templates/question/question_update.html:249
 msgid "According"
 msgstr "De Acordo"
 
@@ -2347,7 +2347,8 @@ msgstr "Quem utiliza"
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:696
+#: main/templates/base_generic.html:696 main/templates/readme.html:186
+#: main/templates/readme.html:196
 msgid "Book"
 msgstr "Livro"
 
@@ -2704,7 +2705,7 @@ msgstr "Dissertativa"
 
 #: main/templates/index-mctest.html:447 main/templates/index.html:499
 #: topic/templates/question/question_create.html:80
-#: topic/templates/question/question_update.html:157
+#: topic/templates/question/question_update.html:158
 msgid "Parametric"
 msgstr "Paramétrica"
 
@@ -2960,10 +2961,10 @@ msgstr ""
 
 #: main/templates/readme.html:31
 msgid ""
-"MCTest must be installed on an Ubuntu 20.04 server through ports 3306 and "
+"MCTest must be installed on an Ubuntu 22.04 server through ports 3306 and "
 "8000"
 msgstr ""
-"O MCtest deve ser instalado em um servidor Ubuntu 20.04 através das portas "
+"O MCtest deve ser instalado em um servidor Ubuntu 22.04 através das portas "
 "3306 e 8000"
 
 #: main/templates/readme.html:32
@@ -3076,102 +3077,132 @@ msgstr "Integrar com MakeTests"
 msgid "Write a complete tutorial to install and use MCTest"
 msgstr "Escrever um tutorial completo para instalar e usar o MCTest"
 
-#: main/templates/readme.html:116
+#: main/templates/readme.html:113
+msgid "Include generative networks to help create questions"
+msgstr "Incluir redes generativas para ajudar a criar questões"
+
+#: main/templates/readme.html:119
 msgid ""
 "Collaboration proposal with experts to write articles or technical reports"
 msgstr ""
 "Propostas de colaborações com especialistas para escrever artigos ou "
 "relatórios técnicos"
 
-#: main/templates/readme.html:118
+#: main/templates/readme.html:121
 msgid "A maximum of 5 authors per article"
 msgstr "Máximo de 5 autores por artigo"
 
-#: main/templates/readme.html:119
+#: main/templates/readme.html:122
 msgid "Authors' order proportional to the number of pages written"
 msgstr "Ordem dos autores proporcional ao número de páginas escritas"
 
-#: main/templates/readme.html:120
+#: main/templates/readme.html:123
 msgid "I already have data/implementations for some topics"
 msgstr "Já tenho dados/implementações para alguns tópicos"
 
-#: main/templates/readme.html:125
+#: main/templates/readme.html:128
 msgid "Security in exams using QRcode"
 msgstr "Segurança em exames utilizando QRCode"
 
-#: main/templates/readme.html:128
+#: main/templates/readme.html:131
 msgid "Answer sheet design comparisons"
 msgstr "Comparações com diferentes folhas de respostas"
 
-#: main/templates/readme.html:131
+#: main/templates/readme.html:134
 msgid "A case study using Item Response Theory"
 msgstr "Um estudo de casos utilizando Teoria de Resposta ao Item"
 
-#: main/templates/readme.html:134
+#: main/templates/readme.html:137
 msgid "MCTest: Software Requirements Specification"
 msgstr "MCTest: Especificações de Requisitos de Software"
 
-#: main/templates/readme.html:137
+#: main/templates/readme.html:140
 msgid "MCTest: graphic interface"
 msgstr "MCTest: interfaces gráficas"
 
-#: main/templates/readme.html:140
+#: main/templates/readme.html:143
 msgid "MCTest: data base"
 msgstr "MCTest: banco de dados"
 
-#: main/templates/readme.html:143
+#: main/templates/readme.html:146
 msgid "MCTest: software architecture"
 msgstr "MCTest: arquitetura de software"
 
-#: main/templates/readme.html:146
+#: main/templates/readme.html:149
 msgid "MCTest: software deployment"
 msgstr "MCTest: implantação de software"
 
-#: main/templates/readme.html:149
+#: main/templates/readme.html:152
 msgid ""
 "New question categories screen (with NLP) before opening the exam screen."
 msgstr ""
 "Nova tela de categorias de questões (com PNL) antes de abrir a tela de exame."
 
-#: main/templates/readme.html:156
+#: main/templates/readme.html:159
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:163
+#: main/templates/readme.html:166
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:164
+#: main/templates/readme.html:167
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:171
+#: main/templates/readme.html:174
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:172
+#: main/templates/readme.html:175
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:173
+#: main/templates/readme.html:176
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:180
+#: main/templates/readme.html:183
 msgid "Grant: #2018/23561-1, São Paulo Research Foundation: "
 msgstr ""
 "Processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo: "
 
-#: main/templates/readme.html:181
+#: main/templates/readme.html:184
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
 msgstr ""
 "Título: Um Sistema Universal para Geração e Correção Automática de Questões "
 "Parametrizadas"
+
+#: main/templates/readme.html:186
+msgid "1st edition"
+msgstr "1ª edição"
+
+#: main/templates/readme.html:193
+msgid "Grant: UFABC - Federal University of ABC"
+msgstr "Apoio: UFABC - Universidade Federal do ABC"
+
+#: main/templates/readme.html:194
+msgid ""
+"Title: Modernization of the MCTest Test Generation and Correction System"
+msgstr ""
+"Título: Modernização do Sistema de Geração e Correção de Provas do MCTest"
+
+#: main/templates/readme.html:195
+msgid "Current"
+msgstr "Atual"
+
+#: main/templates/readme.html:196
+msgid "2st edition"
+msgstr "2ª edição"
+
+#: main/templates/readme.html:196
+msgid "in construction"
+msgstr "Em construção"
 
 #: main/templates/signup.html:15
 msgid "Only teachers can register for this service."
@@ -3396,55 +3427,55 @@ msgstr "Somente uma questão por grupo será sorteada para cada exame"
 msgid "Description (you can include latex format)"
 msgstr "Descrição (você pode incluir fomato latex)"
 
-#: topic/forms.py:111 topic/models.py:116
+#: topic/forms.py:112 topic/models.py:116
 msgid "Difficulty"
 msgstr "Dificuldade"
 
-#: topic/forms.py:113 topic/models.py:128
+#: topic/forms.py:114 topic/models.py:128
 #: topic/templates/question/question_create.html:72
-#: topic/templates/question/question_update.html:149
+#: topic/templates/question/question_update.html:150
 msgid "Bloom Taxonomy"
 msgstr "Taxonomia de Bloom"
 
-#: topic/forms.py:115 topic/models.py:139
+#: topic/forms.py:116 topic/models.py:139
 msgid "Question with some randomly chosen values"
 msgstr "Questões com algum valores escolhidos aleatoriamente"
 
-#: topic/forms.py:116 topic/models.py:140
+#: topic/forms.py:117 topic/models.py:140
 msgid "Parametric question"
 msgstr "Questão Paramétrica"
 
-#: topic/forms.py:119 topic/models.py:146
+#: topic/forms.py:120 topic/models.py:146
 #: topic/templates/question/question_detail.html:62
-#: topic/templates/question/question_update.html:165
+#: topic/templates/question/question_update.html:166
 msgid "Who Created"
 msgstr "Quem criou"
 
-#: topic/forms.py:121 topic/models.py:143
+#: topic/forms.py:122 topic/models.py:143
 #: topic/templates/question/question_detail.html:66
-#: topic/templates/question/question_update.html:173
+#: topic/templates/question/question_update.html:174
 msgid "Last Update"
 msgstr "Última atualização"
 
-#: topic/forms.py:125 topic/models.py:179
-#: topic/templates/question/question_update.html:195
+#: topic/forms.py:126 topic/models.py:179
+#: topic/templates/question/question_update.html:196
 msgid "Correction Count"
 msgstr "Contador de Correções"
 
-#: topic/forms.py:126 topic/models.py:180
-#: topic/templates/question/question_update.html:205
+#: topic/forms.py:127 topic/models.py:180
+#: topic/templates/question/question_update.html:206
 msgid "Correct Count"
 msgstr "Contador de Corretas"
 
-#: topic/forms.py:127 topic/models.py:181
+#: topic/forms.py:128 topic/models.py:181
 msgid "Discrimination"
 msgstr "Discriminação"
 
-#: topic/forms.py:128 topic/models.py:182
+#: topic/forms.py:129 topic/models.py:182
 msgid "Ability"
 msgstr "Habilidade"
 
-#: topic/forms.py:129 topic/models.py:183
+#: topic/forms.py:130 topic/models.py:183
 msgid "Guessing"
 msgstr "Chute"
 
@@ -3538,7 +3569,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:962
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:960
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -3550,7 +3581,7 @@ msgstr ""
 #: topic/templates/question/question_create.html:100
 #: topic/templates/question/question_list.html:134
 #: topic/templates/question/question_list_who_created_user.html:192
-#: topic/templates/question/question_update.html:302
+#: topic/templates/question/question_update.html:303
 msgid "Questions of the disciplines that I am enrolled"
 msgstr "Questões das disciplinas em que participo"
 
@@ -3564,7 +3595,7 @@ msgid "Choose Topic"
 msgstr "Escolher Tópico"
 
 #: topic/templates/question/question_create.html:64
-#: topic/templates/question/question_update.html:141
+#: topic/templates/question/question_update.html:142
 msgid "Difficult"
 msgstr "Dificuldade"
 
@@ -3690,7 +3721,7 @@ msgstr "Não funciona para trechos LaTeX"
 msgid "spell check"
 msgstr "corretor"
 
-#: topic/templates/question/question_update.html:190
+#: topic/templates/question/question_update.html:191
 msgid ""
 "Multiple Choice Question (QM) Statistics: Corrections, Accuracy (Correct/"
 "Correction), and IRT"
@@ -3698,35 +3729,35 @@ msgstr ""
 "Estatísticas de questões de múltipla escolha (QM): correções, precisão "
 "(corretas/correções) e TRI"
 
-#: topic/templates/question/question_update.html:225
+#: topic/templates/question/question_update.html:226
 msgid "IRT:"
 msgstr "TRI:"
 
-#: topic/templates/question/question_update.html:227
+#: topic/templates/question/question_update.html:228
 msgid "Discrimination (a)"
 msgstr "Discriminação (a)"
 
-#: topic/templates/question/question_update.html:231
+#: topic/templates/question/question_update.html:232
 msgid "Ability (b)"
 msgstr "Habilidade (b)"
 
-#: topic/templates/question/question_update.html:235
+#: topic/templates/question/question_update.html:236
 msgid "Guessing (c)"
 msgstr "Chute (c)"
 
-#: topic/templates/question/question_update.html:258
+#: topic/templates/question/question_update.html:259
 msgid "Duplicate This Question"
 msgstr "Duplicar esta Questão"
 
-#: topic/templates/question/question_update.html:267
+#: topic/templates/question/question_update.html:268
 msgid "Upload-Image"
 msgstr "Upload-Image"
 
-#: topic/templates/question/question_update.html:269
+#: topic/templates/question/question_update.html:270
 msgid "Choose a PNG file for import."
 msgstr "Escolha um arquivo PNG para importação."
 
-#: topic/templates/question/question_update.html:270
+#: topic/templates/question/question_update.html:271
 msgid ""
 "Be cautious with the file name to avoid overwriting another file with the "
 "same name."
@@ -3734,29 +3765,29 @@ msgstr ""
 "Tenha cuidado com o nome do arquivo para evitar sobrescrever outro arquivo "
 "com o mesmo nome."
 
-#: topic/templates/question/question_update.html:271
+#: topic/templates/question/question_update.html:272
 msgid "One suggestion is to include a prefix in the file name like "
 msgstr "Uma sugestão é incluir um prefixo no nome do arquivo, como "
 
-#: topic/templates/question/question_update.html:274
+#: topic/templates/question/question_update.html:275
 msgid "Do not include special characters and spaces in the file name."
 msgstr "Não inclua caracteres especiais e espaços no nome do arquivo."
 
-#: topic/templates/question/question_update.html:275
+#: topic/templates/question/question_update.html:276
 msgid "This file will be retained for 180 days in server."
 msgstr "Este arquivo será mantido por 180 dias no servidor."
 
-#: topic/templates/question/question_update.html:276
+#: topic/templates/question/question_update.html:277
 msgid "Remember that images in LaTeX make PDF generation extremely slow!"
 msgstr ""
 "Lembre-se de que as imagens em LaTeX tornam a geração do PDF extremamente "
 "lenta!"
 
-#: topic/templates/question/question_update.html:277
+#: topic/templates/question/question_update.html:278
 msgid "See below how to include this image in a question."
 msgstr "Veja abaixo como incluir esta imagem em uma questão."
 
-#: topic/templates/question/question_update.html:293
+#: topic/templates/question/question_update.html:294
 msgid "Delete this Question"
 msgstr "Apagar esta Questão"
 
@@ -3826,7 +3857,7 @@ msgstr "Somente coordenandor pode criar/atualizar tópicos"
 msgid "Topic Update"
 msgstr "Atualizar Tópico"
 
-#: topic/views.py:179
+#: topic/views.py:177
 msgid ""
 "The question has been successfully duplicated! You can <a href=\"../../{}/"
 "update/\">view and edit the duplicated question here</a>."
@@ -3834,11 +3865,11 @@ msgstr ""
 "A questão foi duplicada com sucesso! Você pode <a href=\"../../{}/update/"
 "\">ver e editar a questão duplicada aqui</a>."
 
-#: topic/views.py:250
+#: topic/views.py:248
 msgid "ImportQuestionsJson: choose a JSON following the model!"
 msgstr "ImportQuestionsJson: escolher um arquivo JSON seguindo o modelo"
 
-#: topic/views.py:374 topic/views.py:761
+#: topic/views.py:372 topic/views.py:759
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -3848,15 +3879,15 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:453
+#: topic/views.py:451
 msgid "ImportQuestions: choose a TXT following the model!"
 msgstr "ImportQuestions: escolher um arquivo TXT seguindo o modelo"
 
-#: topic/views.py:499
+#: topic/views.py:497
 msgid "ImportQuestions: topic does not exist - created before in Topic: "
 msgstr "ImportQuestions: tópico não existe - criar antes em Tópico: "
 
-#: topic/views.py:506
+#: topic/views.py:504
 msgid ""
 "ImportQuestions: teacher is not associated with any discipline with this "
 "topic: "
@@ -3864,45 +3895,47 @@ msgstr ""
 "ImportQuestions: professor não está associado a uma disciplina com este "
 "tópico: "
 
-#: topic/views.py:531
+#: topic/views.py:529
 msgid "Questions Created:"
 msgstr "Questões Criadas"
 
-#: topic/views.py:542
+#: topic/views.py:540
 msgid "Similar question(s) exist in the DB:"
 msgstr "Questões similares no BD:"
 
-#: topic/views.py:563
+#: topic/views.py:561
 msgid "ImportQuestionsImage: choose a PNG following the model!"
 msgstr "ImportQuestions: escolher um arquivo PNG seguindo o exemplo"
 
-#: topic/views.py:583
+#: topic/views.py:581
 msgid "Image imported successfully! "
 msgstr "Imagem importada com sucesso! "
 
-#: topic/views.py:633 topic/views.py:685
+#: topic/views.py:631 topic/views.py:683
 msgid ""
 "A topic with the same text already exists. Please consider using a unique "
 "name. Suggested name: {}"
 msgstr ""
+"Já existe um tópico com o mesmo texto. Considere usar um nome exclusivo. "
+"Nome sugerido: {}"
 
-#: topic/views.py:641 topic/views.py:693
+#: topic/views.py:639 topic/views.py:691
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:768
+#: topic/views.py:766
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
 
-#: topic/views.py:807
+#: topic/views.py:805
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:1027
+#: topic/views.py:1025
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:1081
+#: topic/views.py:1079
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 

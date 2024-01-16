@@ -6,7 +6,7 @@ All rights reserved.
 
 This file is part of MCTest 5.3.
 
-Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
+Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
