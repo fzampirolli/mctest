@@ -101,7 +101,7 @@
                                                         title="{% trans 'Does not work for LaTeX snippets' %}">{% trans 'spell check' %}
                                                 </button>
                                             </div>
-                                        </div>-->
+                                        </div>
 
                                         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                                         <script>
@@ -109,7 +109,7 @@
                                                 $("#ai-assist-button").click(function () {
                                                     // Adapte a chamada Ajax para incluir o valor da linguagem selecionada
                                                     $.ajax({
-                                                        url: "{% url 'topic:ai_assist' %}",
+                                                        url: "{ % url 'topic:ai_assist' %}",
                                                         method: "POST",
                                                         data: {
                                                             question_text: $("#id_question_text").val(),
@@ -122,7 +122,7 @@
                                                     });
                                                 });
                                             });
-                                        </script>
+                                        </script>-->
 
                                     </div>
                                 </div>

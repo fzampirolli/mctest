@@ -59,7 +59,7 @@ urlpatterns += [
     path('question/<int:pk>/update/', views.UpdateQuestion, name='question-update'),
     path('question/<int:pk>/delete/', views.QuestionDelete.as_view(), name='question-delete'),
     path('question/<int:pk>/copy/', views.copy_question, name='copy_question'),
-    path('ai-assist/', views.ai_assist, name='ai_assist'),
+    #path('ai-assist/', views.ai_assist, name='ai_assist'),
     # ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
 ]
 

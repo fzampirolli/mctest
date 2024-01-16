@@ -104,7 +104,7 @@ class UpdateQuestionForm(forms.Form):
                                     label=_("Description"))
 
     # ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
-    language_choice = forms.ChoiceField(choices=[('pt-BR', 'BR'), ('en-US', 'US')], label="Language", widget=forms.Select(attrs={'class': 'form-control'}))
+    #language_choice = forms.ChoiceField(choices=[('pt-BR', 'BR'), ('en-US', 'US')], label="Language", widget=forms.Select(attrs={'class': 'form-control'}))
 
     question_type = forms.ChoiceField(choices=Question.question_type_choice,
                                       label=_("Type"))
