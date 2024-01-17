@@ -45,6 +45,7 @@ Including another URLconf
 from django.conf.urls import include
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 app_name = 'main'
 
@@ -55,6 +56,7 @@ urlpatterns = [
     path('license', views.license, name='license'),
     path('contributors', views.contributors, name='contributors'),
     path('According', views.According, name='According'),
+    path('account/logout/', views.custom_logout, name='logout'),
     path('users', views.users, name='users'),
     path('signup/', views.SignUp.as_view(), name='signup'),
 ]

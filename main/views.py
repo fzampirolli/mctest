@@ -12,6 +12,13 @@ from datetime import datetime
 
 # Create your views here.
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def custom_logout(request):
+    logout(request)
+    # Lógica adicional, se necessário
+    return redirect('/')
 
 class SignUp(generic.CreateView):
     form_class = UserCreateForm
