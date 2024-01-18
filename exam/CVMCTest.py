@@ -46,12 +46,12 @@ import PyPDF2  # pip install PyPDF2
 import bcrypt
 import cv2  # pip install opencv-python
 import numpy as np
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from pyzbar.pyzbar import decode
 from skimage.measure import label
 from skimage.measure import regionprops  # pip install scikit-image
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 
 from exam.UtilsLatex import Utils
 from exam.models import Exam, StudentExam, StudentExamQuestion
@@ -61,7 +61,6 @@ from mctest.settings import webMCTest_PASS
 from mctest.settings import webMCTest_SERVER
 from student.models import Student
 from topic.models import Question
-from topic.models import Answer
 from .models import VariationExam
 
 circle_min = 650

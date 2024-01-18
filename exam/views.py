@@ -1025,7 +1025,7 @@ def generate_page(request, pk):
         except Exception as e:
             pass
 
-        listVariations = [['Room', 'ID', 'Name', 'Variation', 'SumLatestGrades']]
+        listVariations = [['Room', 'ID', 'Name', 'Email', 'Variation', 'SumLatestGrades']]
         maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             if maxStudentsClass < len(room.students.all()):
@@ -1138,7 +1138,7 @@ def generate_page(request, pk):
                 ################################### 18/11/2023 pega hash adaptativo - FIM
 
                 listVariations.append(
-                    [room.classroom_code, s.student_ID, s.student_name, var_hash, nota_student])
+                    [room.classroom_code, s.student_ID, s.student_name, s.student_email, var_hash, nota_student])
 
                 myqr = Utils.defineQRcode(exam, room, s.student_ID, strVarExam, str(var_hash))
                 strQuestions = ''
@@ -1282,7 +1282,7 @@ def generate_page(request, pk):
             with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
                 writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
                                     lineterminator='\n')
-                aux = aux[:, 2:4]  # get columns aluno e variacao
+                aux = aux[:, 2:5]  # get columns aluno e variacao
                 writer.writerows(aux)  # return name; variation
             anexos.append([path_to_file_VARIATIONS_VPL])
 
