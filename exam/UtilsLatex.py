@@ -163,10 +163,10 @@ class Utils(object):
 
     @staticmethod
     def convertWordsMoodle(str1):
-        str1 = str1.replace('echo', 'e$$ $$cho')
-        str1 = str1.replace('val', 'v$$ $$al')
-        str1 = str1.replace('exec', 'e$$ $$xec')
-        str1 = str1.replace('python', 'p$$ $$ython')
+        # str1 = str1.replace('echo', 'e$$ $$cho')
+        # str1 = str1.replace('val', 'v$$ $$al')
+        # str1 = str1.replace('exec', 'e$$ $$xec')
+        # str1 = str1.replace('python', 'p$$ $$ython')
         return str1
 
     # create file DB with all variations in aiken format

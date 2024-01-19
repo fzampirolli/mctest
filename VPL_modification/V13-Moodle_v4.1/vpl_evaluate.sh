@@ -127,7 +127,7 @@ fi
 
 
 
-mv vpl_evaluate1.cpp vpl_evaluate.cpp.origin
+mv vpl_evaluate.cpp vpl_evaluate.cpp.origin
 
 #Add constants to vpl_evaluate.cpp
 echo "const float VPL_GRADEMIN=$VPL_GRADEMIN;" >vpl_evaluate.cpp
