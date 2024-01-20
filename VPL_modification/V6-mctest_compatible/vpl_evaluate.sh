@@ -96,7 +96,7 @@ fi
 
 mv vpl_evaluate.cpp vpl_evaluate.cpp.origin
 
-#Add constants to vpl_evaluate.cpp
+#Add constants to vpl_evaluate2012.cpp
 echo "const float VPL_GRADEMIN=$VPL_GRADEMIN;" >vpl_evaluate.cpp
 echo "const float VPL_GRADEMAX=$VPL_GRADEMAX;" >>vpl_evaluate.cpp
 let VPL_MAXTIME=VPL_MAXTIME-$SECONDS-1;
