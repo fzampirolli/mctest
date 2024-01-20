@@ -472,7 +472,7 @@ mysql -u root DB_MCTest < "mysql-2022-06-02.sql"
 mysql -u root -p DB_MCTest > "mctestLivro-cap5.sql"
 
 macos:
-mysqldump --no-defaults -u root -p DB_MCTest > mctestLivro.sql
+mysqldump --no-defaults -u root DB_MCTest > mctestLivro.sql
 
 # write code documentation
 pip3 install Sphinx
