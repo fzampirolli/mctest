@@ -102,7 +102,8 @@ def variationsExam(request, pk):
     print("variationsExam-00-" + str(datetime.datetime.now()))
 
     font_size = request.POST.get('font_size')
-
+    if font_size == None:
+        font_size = 11
     exam = get_object_or_404(Exam, pk=pk)
 
     if exam.exam_print == 'answ':
