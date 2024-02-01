@@ -101,9 +101,6 @@ def variationsExam(request, pk):
     data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
     print("variationsExam-00-" + str(datetime.datetime.now()))
 
-    font_size = request.POST.get('font_size')
-    if font_size == None:
-        font_size = 11
     exam = get_object_or_404(Exam, pk=pk)
 
     if exam.exam_print == 'answ':
@@ -179,6 +176,9 @@ def variationsExam(request, pk):
 
     choices_list = []
     if request.method == 'POST':
+        font_size = request.POST.get('font_size')
+        if font_size == None:
+            font_size = 11  # corrigir
         choices_list.append(request.POST.getlist('choicesJSON'))
         choices_list.append(request.POST.getlist('choicesTemplateCSV'))
         choices_list.append(request.POST.getlist('choicesAiken'))
@@ -578,7 +578,7 @@ def correctStudentsExam(request, pk):
             print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
             myfile0 = MYFILES + '_p' + str(countPage) + '.png'
             img = cv2.imread(myfile0)
-            #img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+            # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 
             DEBUG = False
 
@@ -978,7 +978,10 @@ def generate_page(request, pk):
         # tempoPDF = 0
 
         font_size = request.POST.get('font_size')
+        choice_adaptive_test_number = request.POST.get('adaptative_test_number')
         choice_adaptive_test = request.POST.get('adaptative_test')
+        if choice_adaptive_test == None:
+            choice_adaptive_test_number = 0
 
         st = Utils.validateProf(exam, request.user)
         if st != None:
@@ -1040,14 +1043,27 @@ def generate_page(request, pk):
         ####################################
         ### PARA TESTE ADAPTATIVO 17/11/2023
 
-        if exam.exam_print != 'answ' and int(choice_adaptive_test) and Utils.getNumMCQuestions(exam):
-            maxStudentsClassGrade = Utils.createAdaptativeTest(request, exam, choice_adaptive_test,
-                                                               path_to_file_ADAPTIVE_TEST)
+        if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
-            variantExam_rankin_bloom_sort = Utils.createCariantExam_rankin_bloom_sort(
-                request, exam, path_to_file_ADAPTIVE_TEST_variations)
+            if choice_adaptive_test == 'SAT':
+                maxStudentsClassGrade = Utils.createAdaptativeTest_SAT(request, exam, choice_adaptive_test_number,
+                                                                       path_to_file_ADAPTIVE_TEST)
 
-            df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
+                variantExam_rankin_bloom_sort = Utils.createCariantExam_rankin_SAT_sort(
+                    request, exam, path_to_file_ADAPTIVE_TEST_variations)
+
+                df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
+
+            if choice_adaptive_test == 'CAT':
+                messages.error(request, _('CAT not yet implemented'))
+                return render(request, 'exam/exam_errors.html', {})
+
+                maxStudentsClassGrade = Utils.createAdaptativeTest_CAT(request, exam, choice_adaptive_test_number,
+                                                                       path_to_file_ADAPTIVE_TEST)
+
+            if choice_adaptive_test == 'CTT':
+                messages.error(request, _('CTT not yet implemented'))
+                return render(request, 'exam/exam_errors.html', {})
 
         ### PARA TESTE ADAPTATIVO 17/11/2023 - FIM
         ##########################################
@@ -1130,7 +1146,7 @@ def generate_page(request, pk):
 
                 ################################### 18/11/2023 pega hash adaptativo
                 nota_student = 0
-                if exam.exam_print != 'answ' and int(choice_adaptive_test) and Utils.getNumMCQuestions(
+                if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(
                         exam) and maxStudentsClassGrade:  # novo var_hash somente se maxStudentsClassGrade>0
 
                     var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort,
@@ -1277,7 +1293,7 @@ def generate_page(request, pk):
                 writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
                                     lineterminator='\n')
                 writer.writerows(listVariations)
-            anexos.append(path_to_file_VARIATIONS) # util para quando tem várias turmas
+            anexos.append(path_to_file_VARIATIONS)  # util para quando tem várias turmas
 
             aux = np.array(listVariations)
             with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
@@ -1301,7 +1317,7 @@ def generate_page(request, pk):
             path_to_zip = os.path.dirname(fzip) + "/" + os.path.basename(fzip)
             anexos.append(path_to_zip)
 
-        if exam.exam_print != 'answ' and int(choice_adaptive_test) and Utils.getNumMCQuestions(exam):
+        if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
             anexos.append(path_to_file_ADAPTIVE_TEST)
             anexos.append(path_to_file_ADAPTIVE_TEST_variations)
 
@@ -1349,6 +1365,7 @@ def SerializersExam(request, pk):
     classrooms = exam_inst.classrooms
 
     return render(request, 'exam/exam_list.html', {})
+
 
 @login_required
 def UpdateExam(request, pk):
@@ -1424,7 +1441,7 @@ def UpdateExam(request, pk):
             exam_inst.save()
             return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
         else:
-            messages.error(request,str(form.errors))
+            messages.error(request, str(form.errors))
             return render(request, 'exam/exam_errors.html', {'form': form})
 
     else:

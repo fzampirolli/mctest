@@ -54,6 +54,7 @@ from topic.models import Question
 from exam.models import VariationExam
 from exam.models import Exam
 from exam.models import StudentExam
+from exam.models import StudentExamQuestion
 
 
 class Utils(object):
@@ -1077,7 +1078,7 @@ _inst1_
         else:
             str1 += "\\vspace{4mm}\n\n"
 
-        return str1.replace("_nameStudent_",nameStudent).replace("_idStudent_", idStudent)
+        return str1.replace("_nameStudent_", nameStudent).replace("_idStudent_", idStudent)
 
     @staticmethod
     def format_size_text(text, font_size):
@@ -1711,8 +1712,63 @@ _inst1_
 
         return str1
 
+    # Autor: Lucas Montagnani Calil Elias - 1/2/2024
     @staticmethod
-    def createAdaptativeTest(request, exam, choice_adaptive_test, path_to_file_ADAPTIVE_TEST):
+    def pl1_rasch_model(skill, difficulty):
+        d = 1.702
+        p = 1 / (1 + np.exp(-d * (skill - difficulty)))
+        return p
+    @staticmethod
+    def ability_estimation(th, b, r):
+
+        if np.sum(r) / len(r) == 1:
+            return max(r)
+        if np.sum(r) == 0:
+            return min(r)
+        # Calcula a habilidade atualizada do aluno
+        numerador = np.sum(r - Utils.pl1_rasch_model(th, b))
+        denominador = np.sum(Utils.pl1_rasch_model(th, b) * (1 - Utils.pl1_rasch_model(th, b)))
+        result = th + (numerador / denominador)
+        adjustment = numerador / denominador
+        # Calulcala o Standard Error
+        se = 1 / np.sqrt(denominador)
+
+        return result, se, adjustment
+
+    @staticmethod
+    def fisher_information(student_skill, question_difficulty):
+        d = 1.702
+        p = Utils.pl1_rasch_model(student_skill, question_difficulty)
+        q = 1 - p
+        I = d ** 2 * p * q
+        return I
+
+    @staticmethod
+    def item_selection(student_ability, question_topic, num_questions):
+        # Recupera todas as questões do topico escolhido na tela de Criar-PDF
+        questions = Question.objects.filter(topic = question_topic)
+        # Cria uma matriz para armazenar o ganho de informação de cada item
+        fi_matrix = []
+        # Itera sobre todas as questões
+        for q in questions.all():
+          # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
+          if (q.question_IRT_b_ability == null):
+            # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
+            b_parameter = q.question_bloom_taxonomy - 3
+          else:
+            b_parameter = q.question_IRT_b_ability
+          # Calcula o ganho de informação com base no theta calculado anteriormente e na dificuldade de cada questão
+          fi = Utils.fisher_information(student_ability, b_parameter)
+          # Adiciona uma tupla (vetor binario) contendo respectivamente o id e o ganho de informação da questão na matriz
+          fi_matrix.append([q.id, fi])
+        # Ordena a matrix de forma decrescente com base no ganho de informação, ou seja, as questões com maior ganho ficam no topo
+        ord_desc_mtx = sorted(fi_matrix, key=lambda x: x[1], reverse=True)
+        # Seleciona as n (num_questions) questões com mais ganho de informação, sendo n a quantidade de questões requisitadas para o exame
+        q_selected_ids = [row[0] for row in ord_desc_mtx[:num_questions]]
+        return q_selected_ids
+
+    @staticmethod
+    def createAdaptativeTest_CAT(request, exam, choice_adaptive_test, path_to_file_ADAPTIVE_TEST):
 
         # Initialize a dictionary to store student grades for each exam
         student_grades_by_exam = {}
@@ -1735,6 +1791,33 @@ _inst1_
                 for s in room.students.all():
                     # Find the corresponding grade for the student in the current exam
                     student_exam0 = StudentExam.objects.filter(exam=exam0, student=s).first()
+
+                    ################################################
+                    # Autor: Lucas Montagnani Calil Elias - 1/2/2024
+
+                    studExQt = StudentExamQuestion.objects.filter(studentExam=student_exam0)
+                    # Cria vetores vazios para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vertor u)
+                    b_vector = []
+                    u_vector = []
+                    # itera sobre todas as questões dos exames realizados anteriormente pelo aluno s (verifcar se não está pegando exames de disciplinas ou turmas anteriores)
+                    for seq in studExQt.all():
+                        # Recupera os dados da questão
+                        question = Question.objects.filter(id=seq.question).first()
+                        # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
+                        if (question.question_IRT_b_ability == null):
+                            # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
+                            b_parameter = question.question_bloom_taxonomy - 3
+                        else:
+                            b_parameter = question.question_IRT_b_ability
+                        # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
+                        b_vector.append(b_parameter)
+                        u_vector.append(seq.studentAnswer)
+                    # Calcula a habilidade do estudante
+                    student_ability = Utils.ability_estimation(b_vector, u_vector)
+
+                    Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
+                    ################################################
+
                     grade = student_exam0.grade if student_exam0 else None
 
                     # Initialize a dictionary for the current student if not exists
@@ -1765,7 +1848,7 @@ _inst1_
             csv_writer = csv.writer(csv_file, delimiter=',')
 
             # Write header
-            header_row = ['RoomID', 'RoomCode', 'NomeAluno', 'EmailAluno']
+            header_row = ['RoomID', 'RoomCode', 'NameStudent', 'EmailStudent']
             # Add exam information to the header
             for i in range(1, max_num_exams + 2):
                 header_row.append(f'IDExame{i}')
@@ -1830,8 +1913,132 @@ _inst1_
 
         return maxStudentsClassGrade
 
+
+
     @staticmethod
-    def createCariantExam_rankin_bloom_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations):
+    def createAdaptativeTest_SAT(request, exam, choice_adaptive_test, path_to_file_ADAPTIVE_TEST):
+
+        # Inicializa um dicionário para armazenar as notas dos alunos para cada prova
+        student_grades_by_exam = {}
+
+        # Inicializa um conjunto para armazenar todos os IDs de exames
+        all_exam_ids = set()
+
+        for room in exam.classrooms.all():  ############## PARA CADA TURMA
+
+            # Encontre todos os exames já aplicadados na turma
+            exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
+            exams_aux = list(exams_with_same_room)  # Convert queryset to list
+
+            # Sort exams_aux by the 'exam_data' attribute
+            exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
+
+            for exam0 in exams_aux_sorted:  ############ PARA CADA exam0
+
+                for s in room.students.all(): ### Laço para pegar a nota de cada aluno em exam0
+
+                    # Encontre a nota do aluno s em exam0
+                    student_exam0 = StudentExam.objects.filter(exam=exam0, student=s).first()
+
+                    # Se não achou student_exam0, atribua None
+                    grade = student_exam0.grade if student_exam0 else None
+
+                    # Inicialize um dicionário para o aluno atual, caso não exista
+                    if s.id not in student_grades_by_exam:
+                        student_grades_by_exam[s.id] = {
+                            'room_id': room.id,
+                            'room_code': room.classroom_code,
+                            'name': s.student_name,
+                            'email': s.student_email,
+                            'grades': [],
+                        }
+
+                    # Adicione a nota à lista de notas para o aluno e a prova atuais
+                    student_grades_by_exam[s.id]['grades'].append({
+                        'exam_hour': exam0.exam_hour,
+                        'exam_id': exam0.id,
+                        'grade': grade,
+                    })
+
+                # Adicione o ID do exame ao conjunto
+                all_exam_ids.add(exam0.id)
+
+        # Calcule o número máximo de exames
+        max_num_exams = len(all_exam_ids)
+
+        # Create a CSV: 'RoomID', 'RoomCode', 'NameStudent', 'EmailStudent',
+        # 'IDExame{i}', 'DataExame{i}', 'GradeExame{i}', ...
+        with open(path_to_file_ADAPTIVE_TEST, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',')
+
+            # Write header
+            header_row = ['RoomID', 'RoomCode', 'NameStudent', 'EmailStudent']
+            # Add exam information to the header
+            for i in range(1, max_num_exams + 2):
+                header_row.append(f'IDExame{i}')
+                header_row.append(f'DataExame{i}')
+                header_row.append(f'GradeExame{i}')
+            csv_writer.writerow(header_row)
+
+            # Write data
+            maxStudentsClassGrade = 0
+            for student_id, student_data in student_grades_by_exam.items():
+                row_data = [student_data['room_id'], student_data['room_code'], student_data['name'],
+                            student_data['email']]
+
+                # Lista para armazenar a soma das últimas X notas
+                total_grades = []
+
+                # Populate exam information for each exam
+                for exam_grade in student_data['grades']:
+                    # Make sure 'exam_id' is included in the dictionary, or use get method with a default value
+                    row_data.extend(
+                        [exam_grade['exam_id'], str(exam_grade['exam_hour'])[:10], exam_grade['grade']])
+
+                    nota = int(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
+                    total_grades.append(nota)
+
+                if len(total_grades) > int(choice_adaptive_test):
+                    somaUtimos = sum(total_grades[-int(choice_adaptive_test):])
+                else:
+                    somaUtimos = sum(total_grades)
+
+                if maxStudentsClassGrade < somaUtimos:
+                    maxStudentsClassGrade = somaUtimos
+
+                row_data.extend([float(somaUtimos)])
+
+                csv_writer.writerow(row_data)
+
+        # limpeza do df
+        import pandas as pd
+        df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
+
+        # Iterar pelas colunas do final para o começo
+        for col in reversed(df.columns):
+            # Verificar se todos os valores da coluna são NaN
+            if df[col].isna().all():
+                # Se for, remover a coluna
+                df.drop(col, axis=1, inplace=True)
+            else:
+                # Se encontrar uma coluna com valor diferente de NaN, parar
+                break
+
+        # Obter o nome atual da última coluna
+        ultimo_cabecalho = df.columns[-1]
+
+        # Criar um dicionário de mapeamento para renomear o cabeçalho
+        novo_cabecalho = 'SumLatestGrades'
+        mapeamento = {ultimo_cabecalho: novo_cabecalho}
+
+        # Renomear o cabeçalho da última coluna
+        df = df.rename(columns=mapeamento)
+        df.to_csv(path_to_file_ADAPTIVE_TEST, index=False)
+
+        return maxStudentsClassGrade
+
+    @staticmethod
+    def createCariantExam_rankin_SAT_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations):
 
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
@@ -1880,7 +2087,7 @@ _inst1_
         import pandas as pd
 
         # Filtre as linhas com 'NomeAluno' igual ao nome do aluno
-        df_student = df[df['NomeAluno'] == student_name]
+        df_student = df[df['NameStudent'] == student_name]
         aluno_escolhido_students_same_name = df_student.shape[0]
 
         if aluno_escolhido_students_same_name > 1:

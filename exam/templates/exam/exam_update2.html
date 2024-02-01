@@ -28,9 +28,9 @@
                             <table frame="hsides" rules="cols" style="width:100%">
                                 <tr>
                                     <!-- Create-PDF -->
-                                    <td>
+                                    <td  style="font-size: 12px; width: 25%; max-width: 200px; margin: 0 auto;">
                                         <form action="../generate/" class="input-group mb-3" method="post"
-                                              target="_blank">
+                                              target="_blank" >
                                             {% csrf_token %}
                                             <input action="" class="btn btn-primary" type="submit"
                                                    value={% trans "Create-PDF" %}>
@@ -38,24 +38,78 @@
                                                    class="btn btn-outline-danger"
                                                    onclick="window.open('https://youtu.be/WBruh6wqIDw')">
 
-                                            <div style="font-size: 12px">
+                                            <div style="font-size: 12px; width: 100%; max-width: 600px; margin: 0 auto;">
                                                 <hr>
 
-                                                {% trans "Adjust PDF font size:" %}
-                                                <input type="range" class="form-control" name="font_size"
-                                                       min="10" max="12" value="11"
-                                                       title="{% trans "Adjust font size: QRcode MUST be inside the 4 black discs" %}">
+                                                <span style="font-size: 14px;">{% trans "Adjust PDF font size:" %}</span>
+                                                <span id="font_size" style="font-size: 12px;">11</span>pt
 
-                                                {% trans "Adaptive exam with QM in the DB:" %}
-                                                <span id="rangeValue">0</span>
-                                                <input type="range" class="form-control" name="adaptative_test" min="0"
-                                                       max="20" value="0" onchange="updateRangeValue(this.value)"
-                                                       title="{% trans "Adaptive exam: consider X exams performed, where the standard is X=0" %}">
+                                                <input type="range" class="form-control" name="font_size" id="font_size"
+                                                       min="10" max="12" value="11"
+                                                       onchange="updateFontSize(this.value)"
+                                                       title="{% trans "Adjust font size: QRcode MUST be inside the 4 black discs" %}">
                                                 <script>
-                                                    function updateRangeValue(value) {
-                                                        document.getElementById('rangeValue').textContent = value;
+                                                    function updateFontSize(value) {
+                                                        var font_sizeElement = document.getElementById('font_size');
+
+                                                        font_sizeElement.textContent = value;
+
                                                     }
                                                 </script>
+
+
+                                                <table class="table" style="width: 100%;">
+                                                    <tr>
+                                                        <td style="font-size: 12px;" align="left" bgcolor="#e6f2ff">
+
+                                                            <span style="font-size: 14px;">{% trans "Adaptive Exam" %}</span>
+                                                            <br>
+
+                                                            <!-- Autor: Lucas Montagnani Calil Elias - 1/2/2024 -->
+                                                            {% trans "Type of statistic:" %}
+                                                            <div style="display: flex; margin-top: 0px;">
+                                                                <label style="margin-right: 25px;"
+                                                                       title="{% trans "Classical Testing Theory (CTT): Traditional evaluation method. This method assesses your performance based on the total number of correct answers." %}">
+                                                                    <input type="radio" class="form-control"
+                                                                           name="adaptative_test" value="CTT">
+                                                                    CTT
+                                                                </label>
+                                                                <label style="margin-right: 25px;"
+                                                                       title="{% trans "Computerized Adaptive Testing (CAT): The system dynamically adjusts the difficulty of questions based on your previous responses, aiming for a more personalized assessment." %}">
+                                                                    <input type="radio" class="form-control"
+                                                                           name="adaptative_test" value="CAT">
+                                                                    CAT
+                                                                </label>
+                                                                <label title="{% trans "Semi-Adaptive Testing (SAT): Adaptive assessment method where the teacher manually sets the Bloom's Taxonomy level for each question. This method combines adaptability with personalized assessment, allowing the system to dynamically adjust the difficulty of questions based on students' answers in previous exams, while also considering cognitive levels pre-defined by the teacher." %}">
+                                                                    <input type="radio" class="form-control"
+                                                                           name="adaptative_test" value="SAT">
+                                                                    SAT
+                                                                </label>
+                                                            </div>
+
+                                                            {% trans "Number of Exams with QM: " %}
+                                                            <span id="rangeValue" style="font-size: 1.2em;">∞</span>
+                                                            <input type="range" class="form-control"
+                                                                   name="adaptative_test_number" min="1"
+                                                                   max="10" value="10"
+                                                                   onchange="updateRangeValue(this.value)"
+                                                                   title="{% trans "Adaptive exam: consider X exams performed" %}">
+                                                            <script>
+                                                                function updateRangeValue(value) {
+                                                                    var rangeValueElement = document.getElementById('rangeValue');
+
+                                                                    if (value == 10) {
+                                                                        rangeValueElement.innerHTML = '<span style="font-size: 1.2em;">∞</span>';
+                                                                    } else {
+                                                                        rangeValueElement.textContent = value;
+                                                                    }
+                                                                }
+                                                            </script>
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
                                             </div>
 
                                         </form>
@@ -63,7 +117,7 @@
                                         <h6>{% trans "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, if the circles are defective, the broker may not work correctly - we recommend that you change the printer and print again. (3) Before applying the exam, it is strongly recommended to print a sheet, fill in, scan and follow the step on the right side. Upload-PDF >>>" %}</h6>
                                     </td>
                                     <!-- Upload-PDF -->
-                                    <td>
+                                    <td  style="font-size: 12px; width: 28%; max-width: 200px; margin: 0 auto;">
                                         <form action="../correct/" class="input-group mb-3"
                                               enctype="multipart/form-data"
                                               method="POST" target="_blank">
@@ -95,7 +149,7 @@
 
                                     </td>
                                     <!-- Send-Feedback-Students Text -->
-                                    <td>
+                                    <td  style="font-size: 12px; width: 42%; max-width: 200px; margin: 0 auto;">
 
                                         <form action="../sendFeedbackStudentsText/" method="post"
                                               enctype="multipart/form-data" target="_blank">
