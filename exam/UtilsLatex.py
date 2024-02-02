@@ -1718,6 +1718,7 @@ _inst1_
         d = 1.702
         p = 1 / (1 + np.exp(-d * (skill - difficulty)))
         return p
+
     @staticmethod
     def ability_estimation(th, b, r):
 
@@ -1746,21 +1747,21 @@ _inst1_
     @staticmethod
     def item_selection(student_ability, question_topic, num_questions):
         # Recupera todas as questões do topico escolhido na tela de Criar-PDF
-        questions = Question.objects.filter(topic = question_topic)
+        questions = Question.objects.filter(topic=question_topic)
         # Cria uma matriz para armazenar o ganho de informação de cada item
         fi_matrix = []
         # Itera sobre todas as questões
         for q in questions.all():
-          # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
-          if (q.question_IRT_b_ability == null):
-            # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
-            b_parameter = q.question_bloom_taxonomy - 3
-          else:
-            b_parameter = q.question_IRT_b_ability
-          # Calcula o ganho de informação com base no theta calculado anteriormente e na dificuldade de cada questão
-          fi = Utils.fisher_information(student_ability, b_parameter)
-          # Adiciona uma tupla (vetor binario) contendo respectivamente o id e o ganho de informação da questão na matriz
-          fi_matrix.append([q.id, fi])
+            # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
+            if (q.question_IRT_b_ability == null):
+                # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
+                b_parameter = q.question_bloom_taxonomy - 3
+            else:
+                b_parameter = q.question_IRT_b_ability
+            # Calcula o ganho de informação com base no theta calculado anteriormente e na dificuldade de cada questão
+            fi = Utils.fisher_information(student_ability, b_parameter)
+            # Adiciona uma tupla (vetor binario) contendo respectivamente o id e o ganho de informação da questão na matriz
+            fi_matrix.append([q.id, fi])
         # Ordena a matrix de forma decrescente com base no ganho de informação, ou seja, as questões com maior ganho ficam no topo
         ord_desc_mtx = sorted(fi_matrix, key=lambda x: x[1], reverse=True)
         # Seleciona as n (num_questions) questões com mais ganho de informação, sendo n a quantidade de questões requisitadas para o exame
@@ -1768,7 +1769,7 @@ _inst1_
         return q_selected_ids
 
     @staticmethod
-    def createAdaptativeTest_CAT(request, exam, choice_adaptive_test, path_to_file_ADAPTIVE_TEST):
+    def createAdaptativeTest_CAT(request, exam, choice_adaptive_test_number, path_to_file_ADAPTIVE_TEST):
 
         # Initialize a dictionary to store student grades for each exam
         student_grades_by_exam = {}
@@ -1804,11 +1805,7 @@ _inst1_
                         # Recupera os dados da questão
                         question = Question.objects.filter(id=seq.question).first()
                         # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
-                        if (question.question_IRT_b_ability == null):
-                            # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
-                            b_parameter = question.question_bloom_taxonomy - 3
-                        else:
-                            b_parameter = question.question_IRT_b_ability
+                        b_parameter = question.question_IRT_b_ability
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
                         u_vector.append(seq.studentAnswer)
@@ -1874,8 +1871,8 @@ _inst1_
                     nota = int(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
                     total_grades.append(nota)
 
-                if len(total_grades) > int(choice_adaptive_test):
-                    somaUtimos = sum(total_grades[-int(choice_adaptive_test):])
+                if len(total_grades) > int(choice_adaptive_test_number):
+                    somaUtimos = sum(total_grades[-int(choice_adaptive_test_number):])
                 else:
                     somaUtimos = sum(total_grades)
 
@@ -1913,10 +1910,9 @@ _inst1_
 
         return maxStudentsClassGrade
 
-
-
     @staticmethod
-    def createAdaptativeTest_SAT(request, exam, choice_adaptive_test, path_to_file_ADAPTIVE_TEST):
+    def createAdaptativeTest(request, exam, choice_adaptive_test_number, path_to_file_ADAPTIVE_TEST, adaptive_test):
+        bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
         # Inicializa um dicionário para armazenar as notas dos alunos para cada prova
         student_grades_by_exam = {}
@@ -1935,13 +1931,44 @@ _inst1_
 
             for exam0 in exams_aux_sorted:  ############ PARA CADA exam0
 
-                for s in room.students.all(): ### Laço para pegar a nota de cada aluno em exam0
+                for s in room.students.all():  ### Laço para pegar a nota de cada aluno em exam0
 
                     # Encontre a nota do aluno s em exam0
                     student_exam0 = StudentExam.objects.filter(exam=exam0, student=s).first()
 
+                    ################################################
+                    # Adaptado de Lucas Montagnani Calil Elias - 2/2/2024
+
+                    studExQt = StudentExamQuestion.objects.filter(studentExam=student_exam0)
+                    # Cria vetores vazios para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vertor u)
+                    b_vector = []
+                    # itera sobre todas as questões dos exames realizados anteriormente pelo aluno s (verifcar se não está pegando exames de disciplinas ou turmas anteriores)
+                    for seq in studExQt.all():
+                        # Recupera os dados da questão
+                        question = Question.objects.filter(id=seq.question.id, question_type='QM').first()
+
+                        # verifica se o aluno acertou a questão
+                        correto = seq.answersOrder.index('0')
+                        ss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        marcou = ss.index(seq.studentAnswer) if seq.studentAnswer in ss else -1
+                        if marcou != correto:
+                            continue
+
+                        b_parameter = 0
+                        if adaptive_test == 'SAT':  # Bloom
+                            b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
+                        elif adaptive_test == 'CTT':
+                            if question.question_correction_count:
+                                b_parameter += question.question_correct_count / question.question_correction_count
+                        elif adaptive_test == 'CAT':
+                                b_parameter = question.question_IRT_b_ability
+                        # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
+                        b_vector.append(b_parameter)
+                    # Calcula a habilidade do estudante
+
                     # Se não achou student_exam0, atribua None
-                    grade = student_exam0.grade if student_exam0 else None
+                    # grade = student_exam0.grade if student_exam0 else None
+                    grade = sum(b_vector)
 
                     # Inicialize um dicionário para o aluno atual, caso não exista
                     if s.id not in student_grades_by_exam:
@@ -1998,8 +2025,8 @@ _inst1_
                     nota = int(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
                     total_grades.append(nota)
 
-                if len(total_grades) > int(choice_adaptive_test):
-                    somaUtimos = sum(total_grades[-int(choice_adaptive_test):])
+                if len(total_grades) > int(choice_adaptive_test_number):
+                    somaUtimos = sum(total_grades[-int(choice_adaptive_test_number):])
                 else:
                     somaUtimos = sum(total_grades)
 
@@ -2038,49 +2065,53 @@ _inst1_
         return maxStudentsClassGrade
 
     @staticmethod
-    def createCariantExam_rankin_SAT_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations):
+    def createCariantExam_rankin_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations, adaptive_test):
 
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
-        #########################################
-        ### definir peso das variações pelo bloom
-        str1 = ''
-        id_variante = 0
-        variantExam_rankin_bloom = []
+        ###############################################
+        ### definir peso das variações pelo SAT (Bloom)
+        variantExam_rankin = []
         for variationsExam in exam.variationsExams2.all():
             vars = eval(variationsExam.variation)
-            sum_bloom = 0
+            sum_b = 0
             for var in vars['variations']:
                 for q in var['questions']:  # para cada questão
 
-                    # pego a questão no BD para saber a taxonomia de bloom
+                    # pego a questão no BD para saber a porcentagem de acertos
                     qBD = get_object_or_404(Question, pk=str(q['key']))
                     aBD = []
                     for a in qBD.answers2.all():
                         aBD.append(a.id)
 
-                    if q['type'] == 'QM':
-                        sum_bloom += bloom_array.index(qBD.question_bloom_taxonomy) + 1
-            variantExam_rankin_bloom.append([vars['variations'][0]['variant'], variationsExam.id, sum_bloom])
+                    if q['type'] == 'QM':  #### SOMA por:
+                        if adaptive_test == "SAT":  # Blom
+                            sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
+                        elif adaptive_test == "CTT":
+                            if qBD.question_correction_count:
+                                sum_b += qBD.question_correct_count / qBD.question_correction_count
+                        elif adaptive_test == 'CAT':
+                            sum_b += qBD.question_IRT_b_ability
+            variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, sum_b])
 
         # Convert the last column to integers
-        data = [[item[0], item[1], int(item[2])] for item in variantExam_rankin_bloom]
+        data = [[item[0], item[1], int(item[2])] for item in variantExam_rankin]
 
         # Sort the data by the converted last column
-        variantExam_rankin_bloom_sort = np.array(sorted(data, key=lambda x: x[2]))
+        variantExam_rankin_SAT_sort = np.array(sorted(data, key=lambda x: x[2]))
 
         # Create a CSV writer
         with open(path_to_file_ADAPTIVE_TEST_variations, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
 
             # Write header
-            header_row = ['Variation', 'VariationID', 'SumBloomQuestions']
+            header_row = ['Variation', 'VariationID', 'SumQuestions']
             csv_writer.writerow(header_row)
 
-            for v in variantExam_rankin_bloom_sort:
+            for v in variantExam_rankin_SAT_sort:
                 csv_writer.writerow(v)
 
-        return variantExam_rankin_bloom_sort
+        return variantExam_rankin_SAT_sort
 
     @staticmethod
     def getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort, student_name, maxStudentsClassGrade):

@@ -1043,27 +1043,24 @@ def generate_page(request, pk):
         ####################################
         ### PARA TESTE ADAPTATIVO 17/11/2023
 
+        maxStudentsClassGrade = 0
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
-            if choice_adaptive_test == 'SAT':
-                maxStudentsClassGrade = Utils.createAdaptativeTest_SAT(request, exam, choice_adaptive_test_number,
-                                                                       path_to_file_ADAPTIVE_TEST)
+            if choice_adaptive_test in ['CTT','SAT','CAT']:
+                maxStudentsClassGrade = Utils.createAdaptativeTest(request, exam, choice_adaptive_test_number,
+                                                                   path_to_file_ADAPTIVE_TEST, choice_adaptive_test)
 
-                variantExam_rankin_bloom_sort = Utils.createCariantExam_rankin_SAT_sort(
-                    request, exam, path_to_file_ADAPTIVE_TEST_variations)
+                variantExam_rankin_sort = Utils.createCariantExam_rankin_sort(
+                    request, exam, path_to_file_ADAPTIVE_TEST_variations, choice_adaptive_test)
 
                 df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
 
-            if choice_adaptive_test == 'CAT':
-                messages.error(request, _('CAT not yet implemented'))
-                return render(request, 'exam/exam_errors.html', {})
-
-                maxStudentsClassGrade = Utils.createAdaptativeTest_CAT(request, exam, choice_adaptive_test_number,
-                                                                       path_to_file_ADAPTIVE_TEST)
-
-            if choice_adaptive_test == 'CTT':
-                messages.error(request, _('CTT not yet implemented'))
-                return render(request, 'exam/exam_errors.html', {})
+            # if choice_adaptive_test == 'CAT':
+            #     messages.error(request, _('CAT not yet implemented'))
+            #     return render(request, 'exam/exam_errors.html', {})
+            #
+            #     maxStudentsClassGrade = Utils.createAdaptativeTest_CAT(request, exam, choice_adaptive_test_number,
+            #                                                            path_to_file_ADAPTIVE_TEST)
 
         ### PARA TESTE ADAPTATIVO 17/11/2023 - FIM
         ##########################################
@@ -1149,7 +1146,7 @@ def generate_page(request, pk):
                 if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(
                         exam) and maxStudentsClassGrade:  # novo var_hash somente se maxStudentsClassGrade>0
 
-                    var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort,
+                    var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
                                                                      s.student_name, maxStudentsClassGrade)
 
                 ################################### 18/11/2023 pega hash adaptativo - FIM
