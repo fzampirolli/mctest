@@ -1046,7 +1046,7 @@ def generate_page(request, pk):
         maxStudentsClassGrade = 0
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
-            if choice_adaptive_test in ['CTT','SAT','CAT']:
+            if choice_adaptive_test in ['CTT', 'WPC','SAT','CAT']:
                 maxStudentsClassGrade = Utils.createAdaptativeTest(request, exam, choice_adaptive_test_number,
                                                                    path_to_file_ADAPTIVE_TEST, choice_adaptive_test)
 

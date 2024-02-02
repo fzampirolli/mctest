@@ -1941,34 +1941,40 @@ _inst1_
 
                     studExQt = StudentExamQuestion.objects.filter(studentExam=student_exam0)
                     # Cria vetores vazios para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vertor u)
-                    b_vector = []
+                    b_vector, u_vector = [], []
                     # itera sobre todas as questões dos exames realizados anteriormente pelo aluno s (verifcar se não está pegando exames de disciplinas ou turmas anteriores)
                     for seq in studExQt.all():
                         # Recupera os dados da questão
                         question = Question.objects.filter(id=seq.question.id, question_type='QM').first()
 
                         # verifica se o aluno acertou a questão
-                        correto = seq.answersOrder.index('0')
                         ss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        correto = seq.answersOrder.index('0')
                         marcou = ss.index(seq.studentAnswer) if seq.studentAnswer in ss else -1
-                        if marcou != correto:
-                            continue
+                        acertou = 1 if marcou == correto else 0
 
+                        # Calcula o parâmetro b
                         b_parameter = 0
-                        if adaptive_test == 'SAT':  # Bloom
+                        if adaptive_test == 'SAT':  # Semi-Adaptive Testing - Bloom
                             b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
-                        elif adaptive_test == 'CTT':
+                        elif adaptive_test == 'CTT': # Classical Testing Theory
+                            b_parameter = acertou
+                        elif adaptive_test == 'WPC': # Weighted Percentage Correct
                             if question.question_correction_count:
-                                b_parameter += question.question_correct_count / question.question_correction_count
-                        elif adaptive_test == 'CAT':
+                                b_parameter = 1 - question.question_correct_count / question.question_correction_count
+                        elif adaptive_test == 'CAT': # Computerized Adaptive Testing
                                 b_parameter = question.question_IRT_b_ability
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
+                        u_vector.append(acertou)
+
                     # Calcula a habilidade do estudante
 
                     # Se não achou student_exam0, atribua None
                     # grade = student_exam0.grade if student_exam0 else None
-                    grade = sum(b_vector)
+
+                    # Calcula a habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
+                    grade = np.dot(b_vector, u_vector)
 
                     # Inicialize um dicionário para o aluno atual, caso não exista
                     if s.id not in student_grades_by_exam:
