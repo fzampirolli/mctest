@@ -969,7 +969,7 @@ def generate_page(request, pk):
     path_to_file_VARIATIONS_VPL = path_aux0 + "_students_variations.csv"
     path_to_file_VARIATIONS = path_aux0 + "_variations.csv"
     path_to_file_ADAPTIVE_TEST = path_aux0 + '_adaptive_test.csv'
-    path_to_file_ADAPTIVE_TEST_variations = path_aux0 + '_adaptive_test_variations_by_bloom.csv'
+    path_to_file_ADAPTIVE_TEST_variations = path_aux0 + '_adaptive_test_variations.csv'
 
     if request.POST:
         countStudentsAll = 0

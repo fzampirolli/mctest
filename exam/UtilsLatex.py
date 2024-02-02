@@ -1955,15 +1955,21 @@ _inst1_
 
                         # Calcula o parâmetro b
                         b_parameter = 0
-                        if adaptive_test == 'SAT':  # Semi-Adaptive Testing - Bloom
-                            b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
-                        elif adaptive_test == 'CTT': # Classical Testing Theory
+
+                        if adaptive_test == 'CTT':  # Classical Testing Theory
+                            # O parâmetro b é simplesmente 0 ou 1, dependendo se a resposta está correta
                             b_parameter = acertou
-                        elif adaptive_test == 'WPC': # Weighted Percentage Correct
+                        elif adaptive_test == 'WPC':  # Weighted Percentage Correct
+                            # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
                             if question.question_correction_count:
                                 b_parameter = 1 - question.question_correct_count / question.question_correction_count
-                        elif adaptive_test == 'CAT': # Computerized Adaptive Testing
-                                b_parameter = question.question_IRT_b_ability
+                        elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
+                            # O parâmetro b é a habilidade IRT da questão
+                            b_parameter = question.question_IRT_b_ability
+                        elif adaptive_test == 'SAT':  # Semi-Adaptive Testing - Bloom
+                            # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
+                            b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
+
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
                         u_vector.append(acertou)
@@ -2091,13 +2097,16 @@ _inst1_
                         aBD.append(a.id)
 
                     if q['type'] == 'QM':  #### SOMA por:
-                        if adaptive_test == "SAT":  # Blom
-                            sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
-                        elif adaptive_test == "CTT":
+                        if adaptive_test == "CTT": # Classical Testing Theory
+                            sum_b += 1
+                        elif adaptive_test == "WPC": # Weighted Percentage Correct
                             if qBD.question_correction_count:
                                 sum_b += qBD.question_correct_count / qBD.question_correction_count
-                        elif adaptive_test == 'CAT':
+                        elif adaptive_test == 'CAT': # Computerized Adaptive Testing
                             sum_b += qBD.question_IRT_b_ability
+                        elif adaptive_test == "SAT":  # Semi-Adaptive Testing - Bloom
+                            sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
+
             variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, sum_b])
 
         # Convert the last column to integers
