@@ -1029,7 +1029,7 @@ def generate_page(request, pk):
         except Exception as e:
             pass
 
-        listVariations = [['Room', 'ID', 'Name', 'Email', 'Variation', 'SumLatestGrades']]
+        listVariations = [['Room', 'ID', 'Name', 'Email', 'Variation', 'SumPreviousAbilities']]
         maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             if maxStudentsClass < len(room.students.all()):
@@ -1046,7 +1046,7 @@ def generate_page(request, pk):
         maxStudentsClassGrade = 0
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
-            if choice_adaptive_test in ['CTT', 'WPC','SAT','CAT']:
+            if choice_adaptive_test in ['WPC', 'CAT', 'SATB','SATD']:
                 maxStudentsClassGrade = Utils.createAdaptativeTest(request, exam, choice_adaptive_test_number,
                                                                    path_to_file_ADAPTIVE_TEST, choice_adaptive_test)
 

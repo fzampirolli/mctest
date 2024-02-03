@@ -1848,9 +1848,9 @@ _inst1_
             header_row = ['RoomID', 'RoomCode', 'NameStudent', 'EmailStudent']
             # Add exam information to the header
             for i in range(1, max_num_exams + 2):
-                header_row.append(f'IDExame{i}')
-                header_row.append(f'DataExame{i}')
-                header_row.append(f'GradeExame{i}')
+                header_row.append(f'ExamID{i}')
+                header_row.append(f'ExamDate{i}')
+                header_row.append(f'ExamAbilities{i}')
             csv_writer.writerow(header_row)
 
             # Write data
@@ -1901,7 +1901,7 @@ _inst1_
         ultimo_cabecalho = df.columns[-1]
 
         # Criar um dicionário de mapeamento para renomear o cabeçalho
-        novo_cabecalho = 'SumLatestGrades'
+        novo_cabecalho = 'SumPreviousAbilities'
         mapeamento = {ultimo_cabecalho: novo_cabecalho}
 
         # Renomear o cabeçalho da última coluna
@@ -1956,19 +1956,18 @@ _inst1_
                         # Calcula o parâmetro b
                         b_parameter = 0
 
-                        if adaptive_test == 'CTT':  # Classical Testing Theory
-                            # O parâmetro b é simplesmente 0 ou 1, dependendo se a resposta está correta
-                            b_parameter = acertou
-                        elif adaptive_test == 'WPC':  # Weighted Percentage Correct
+                        if adaptive_test == 'WPC':  # Weighted Percentage Correct
                             # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
                             if question.question_correction_count:
                                 b_parameter = 1 - question.question_correct_count / question.question_correction_count
                         elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
                             # O parâmetro b é a habilidade IRT da questão
                             b_parameter = question.question_IRT_b_ability
-                        elif adaptive_test == 'SAT':  # Semi-Adaptive Testing - Bloom
+                        elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
                             # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
                             b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
+                        elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
+                            b_parameter = int(question.question_difficulty)
 
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
@@ -2006,7 +2005,7 @@ _inst1_
         max_num_exams = len(all_exam_ids)
 
         # Create a CSV: 'RoomID', 'RoomCode', 'NameStudent', 'EmailStudent',
-        # 'IDExame{i}', 'DataExame{i}', 'GradeExame{i}', ...
+        # 'ExamID{i}', 'ExamDate{i}', 'ExamAbilities{i}', ...
         with open(path_to_file_ADAPTIVE_TEST, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
 
@@ -2014,9 +2013,9 @@ _inst1_
             header_row = ['RoomID', 'RoomCode', 'NameStudent', 'EmailStudent']
             # Add exam information to the header
             for i in range(1, max_num_exams + 2):
-                header_row.append(f'IDExame{i}')
-                header_row.append(f'DataExame{i}')
-                header_row.append(f'GradeExame{i}')
+                header_row.append(f'ExamID{i}')
+                header_row.append(f'ExamDate{i}')
+                header_row.append(f'ExamAbilities{i}')
             csv_writer.writerow(header_row)
 
             # Write data
@@ -2067,7 +2066,7 @@ _inst1_
         ultimo_cabecalho = df.columns[-1]
 
         # Criar um dicionário de mapeamento para renomear o cabeçalho
-        novo_cabecalho = 'SumLatestGrades'
+        novo_cabecalho = 'SumPreviousAbilities'
         mapeamento = {ultimo_cabecalho: novo_cabecalho}
 
         # Renomear o cabeçalho da última coluna
@@ -2097,15 +2096,16 @@ _inst1_
                         aBD.append(a.id)
 
                     if q['type'] == 'QM':  #### SOMA por:
-                        if adaptive_test == "CTT": # Classical Testing Theory
-                            sum_b += 1
-                        elif adaptive_test == "WPC": # Weighted Percentage Correct
+                        if adaptive_test == "WPC": # Weighted Percentage Correct
                             if qBD.question_correction_count:
                                 sum_b += qBD.question_correct_count / qBD.question_correction_count
                         elif adaptive_test == 'CAT': # Computerized Adaptive Testing
                             sum_b += qBD.question_IRT_b_ability
-                        elif adaptive_test == "SAT":  # Semi-Adaptive Testing - Bloom
+                        elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
                             sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
+                        elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
+                            sum_b += int(qBD.question_difficulty)
+
 
             variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, sum_b])
 
@@ -2120,7 +2120,7 @@ _inst1_
             csv_writer = csv.writer(csv_file, delimiter=',')
 
             # Write header
-            header_row = ['Variation', 'VariationID', 'SumQuestions']
+            header_row = ['Variation', 'VariationID', 'SumAbilities']
             csv_writer.writerow(header_row)
 
             for v in variantExam_rankin_SAT_sort:
