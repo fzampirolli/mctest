@@ -1746,6 +1746,7 @@ _inst1_
 
     @staticmethod
     def item_selection(student_ability, question_topic, num_questions):
+        bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
         # Recupera todas as questões do topico escolhido na tela de Criar-PDF
         questions = Question.objects.filter(topic=question_topic)
         # Cria uma matriz para armazenar o ganho de informação de cada item
@@ -1753,9 +1754,9 @@ _inst1_
         # Itera sobre todas as questões
         for q in questions.all():
             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
-            if (q.question_IRT_b_ability == null):
+            if (q.question_IRT_b_ability == -5):
                 # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
-                b_parameter = q.question_bloom_taxonomy - 3
+                b_parameter = bloom_array.index(q.question_bloom_taxonomy) - 3
             else:
                 b_parameter = q.question_IRT_b_ability
             # Calcula o ganho de informação com base no theta calculado anteriormente e na dificuldade de cada questão
@@ -1805,7 +1806,8 @@ _inst1_
                         # Recupera os dados da questão
                         question = Question.objects.filter(id=seq.question).first()
                         # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
-                        b_parameter = question.question_IRT_b_ability
+                        if (question.question_IRT_b_ability == -5):
+                            b_parameter = question.question_IRT_b_ability
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
                         u_vector.append(seq.studentAnswer)

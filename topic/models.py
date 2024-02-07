@@ -179,7 +179,7 @@ question_IRT_c_guessing = IFNULL(question_IRT_c_guessing, 0.0);
     question_correction_count = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name=_("Correction Count"))
     question_correct_count = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name=_("Correct Count"))
     question_IRT_a_discrimination = models.FloatField(default=0.0, null=True, blank=True, verbose_name=_("Discrimination"))
-    question_IRT_b_ability = models.FloatField(default=0.0, null=True, blank=True, verbose_name=_("Ability"))
+    question_IRT_b_ability = models.FloatField(default=-5.0, null=True, blank=True, verbose_name=_("Ability"))
     question_IRT_c_guessing = models.FloatField(default=0.0, null=True, blank=True, verbose_name=_("Guessing"))
 
     def display_Topic(self):
