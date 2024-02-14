@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-02 16:18-0300\n"
+"POT-Creation-Date: 2024-02-13 06:22-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -330,7 +330,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 #: exam/templates/exam/exam_detail.html:39
 #: exam/templates/exam/exam_list.html:109
 #: exam/templates/exam/exam_list_who_created_user.html:110
-#: exam/templates/exam/exam_update2.html:808
+#: exam/templates/exam/exam_update2.html:809
 #: topic/templates/question/question_confirm_delete.html:52
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:193
@@ -400,7 +400,7 @@ msgstr "Segure CTRL para marcar mais de um professor"
 #: course/templates/institute/institute_list.html:19
 #: course/templates/institute/institute_update.html:30
 #: exam/templates/exam/exam_create.html:82
-#: exam/templates/exam/exam_update2.html:297
+#: exam/templates/exam/exam_update2.html:298
 #: student/templates/student/student_create.html:22
 #: student/templates/student/student_list.html:18
 #: student/templates/student/student_update.html:22
@@ -410,7 +410,7 @@ msgstr "Código"
 #: course/templates/classroom/classroom_create.html:54
 #: course/templates/classroom/classroom_update.html:82 exam/UtilsLatex.py:1015
 #: exam/templates/exam/exam_create.html:84
-#: exam/templates/exam/exam_update2.html:299
+#: exam/templates/exam/exam_update2.html:300
 msgid "Room"
 msgstr "Sala"
 
@@ -421,7 +421,7 @@ msgstr "Sala"
 #: course/templates/classroom/classroom_update.html:90
 #: course/templates/discipline/discipline_detail.html:126
 #: exam/templates/exam/exam_create.html:85
-#: exam/templates/exam/exam_update2.html:300 main/templates/index.html:555
+#: exam/templates/exam/exam_update2.html:301 main/templates/index.html:555
 msgid "Period"
 msgstr "Período"
 
@@ -434,8 +434,8 @@ msgstr "Formatar"
 #: course/templates/classroom/classroom_detail.html:17
 #: course/templates/classroom/classroom_update.html:98
 #: exam/templates/exam/exam_create.html:83
-#: exam/templates/exam/exam_update2.html:298
-#: exam/templates/exam/exam_update2.html:540 topic/forms.py:110
+#: exam/templates/exam/exam_update2.html:299
+#: exam/templates/exam/exam_update2.html:541 topic/forms.py:110
 #: topic/models.py:105 topic/templates/question/question_create.html:56
 #: topic/templates/question/question_detail.html:58
 #: topic/templates/question/question_list.html:23
@@ -454,7 +454,7 @@ msgstr "Tipo"
 #: course/templates/institute/institute_create.html:79
 #: course/templates/institute/institute_update.html:78
 #: exam/templates/exam/exam_create.html:192
-#: exam/templates/exam/exam_update2.html:787
+#: exam/templates/exam/exam_update2.html:788
 #: student/templates/student/student_create.old.html:47
 #: topic/templates/question/question_create.html:89
 #: topic/templates/question/question_detail.html:30
@@ -473,7 +473,7 @@ msgstr "Voltar"
 #: course/templates/institute/institute_create.html:80
 #: course/templates/institute/institute_update.html:79
 #: exam/templates/exam/exam_create.html:193
-#: exam/templates/exam/exam_update2.html:788
+#: exam/templates/exam/exam_update2.html:789
 #: student/templates/student/student_create.html:48
 #: student/templates/student/student_create.old.html:48
 #: student/templates/student/student_update.html:48
@@ -503,7 +503,7 @@ msgstr "Detalhar Turma"
 #: course/templates/discipline/discipline_detail.html:127
 #: course/templates/discipline/discipline_update.html:54
 #: exam/templates/exam/exam_create.html:87
-#: exam/templates/exam/exam_update2.html:302
+#: exam/templates/exam/exam_update2.html:303
 msgid "Profs"
 msgstr ""
 
@@ -523,7 +523,7 @@ msgstr "ID"
 
 #: course/templates/classroom/classroom_detail.html:44
 #: course/templates/classroom/classroom_detail.html:112 exam/CVMCTest.py:1571
-#: exam/UtilsLatex.py:1024 exam/UtilsLatex.py:1103 exam/models.py:246
+#: exam/UtilsLatex.py:1024 exam/UtilsLatex.py:1106 exam/models.py:246
 #: exam/models.py:280
 msgid "Student"
 msgstr "Estudante"
@@ -629,7 +629,7 @@ msgstr "Sem permissão para acessar esse conteúdo!"
 #: course/templates/institute/institute_list.html:20
 #: course/templates/institute/institute_update.html:22
 #: exam/templates/exam/exam_create.html:34
-#: exam/templates/exam/exam_update2.html:234
+#: exam/templates/exam/exam_update2.html:235
 #: student/templates/student/student_create.html:30
 #: student/templates/student/student_create.old.html:31
 #: student/templates/student/student_detail.html:16
@@ -667,7 +667,7 @@ msgstr "Somente professores cadastrados na turma ou coordenador"
 #: course/templates/classroom/classroom_list.html:11
 #: course/templates/classroom/classroom_list_who_created_user.html:11
 #: exam/templates/exam/exam_create.html:43
-#: exam/templates/exam/exam_update2.html:243
+#: exam/templates/exam/exam_update2.html:244
 msgid "Classrooms List"
 msgstr "Listar Turmas"
 
@@ -684,7 +684,7 @@ msgstr "Código da Turma"
 #: exam/templates/exam/exam_create.html:81
 #: exam/templates/exam/exam_list.html:21
 #: exam/templates/exam/exam_list_who_created_user.html:25
-#: exam/templates/exam/exam_update2.html:296
+#: exam/templates/exam/exam_update2.html:297
 #: topic/templates/topic/topic_list.html:23
 msgid "Discipline"
 msgstr "Disciplina"
@@ -899,8 +899,8 @@ msgstr "Listar Tópicos"
 
 #: course/templates/discipline/discipline_detail.html:48
 #: course/templates/discipline/discipline_detail.html:94
-#: exam/templates/exam/exam_update2.html:439
-#: exam/templates/exam/exam_update2.html:538 topic/forms.py:95
+#: exam/templates/exam/exam_update2.html:440
+#: exam/templates/exam/exam_update2.html:539 topic/forms.py:95
 #: topic/models.py:47 topic/models.py:83
 #: topic/templates/question/question_detail.html:42
 #: topic/templates/question/question_list.html:22
@@ -1171,7 +1171,7 @@ msgstr "Retorno"
 msgid "Your answer"
 msgstr "Sua alternativa"
 
-#: exam/CVMCTest.py:1632 exam/UtilsLatex.py:1464 exam/UtilsLatex.py:1640
+#: exam/CVMCTest.py:1632 exam/UtilsLatex.py:1467 exam/UtilsLatex.py:1643
 msgid "Text Questions"
 msgstr "Questões Dissertativas"
 
@@ -1180,7 +1180,7 @@ msgid "ERROR in genTex"
 msgstr "ERRO em genTex"
 
 #: exam/UtilsLatex.py:966 exam/UtilsLatex.py:1017 exam/forms.py:182
-#: exam/models.py:197 exam/templates/exam/exam_update2.html:777
+#: exam/models.py:197 exam/templates/exam/exam_update2.html:778
 msgid "Instructions"
 msgstr "Instruções"
 
@@ -1189,7 +1189,7 @@ msgid "Prof."
 msgstr "Prof."
 
 #: exam/UtilsLatex.py:1019 exam/forms.py:166 exam/models.py:173
-#: exam/templates/exam/exam_update2.html:756
+#: exam/templates/exam/exam_update2.html:757
 msgid "Term"
 msgstr "Período"
 
@@ -1201,11 +1201,11 @@ msgstr "Período"
 msgid "Exam"
 msgstr "Exame"
 
-#: exam/UtilsLatex.py:1021 exam/templates/exam/exam_update2.html:749
+#: exam/UtilsLatex.py:1021 exam/templates/exam/exam_update2.html:750
 msgid "Date"
 msgstr "Data"
 
-#: exam/UtilsLatex.py:1023 exam/UtilsLatex.py:1102
+#: exam/UtilsLatex.py:1023 exam/UtilsLatex.py:1105
 msgid "ID/RA"
 msgstr ""
 
@@ -1213,7 +1213,7 @@ msgstr ""
 msgid "Sig."
 msgstr "Ass."
 
-#: exam/UtilsLatex.py:1133
+#: exam/UtilsLatex.py:1136
 msgid ""
 "validateNumQuestions: The number of selected multiple-choice questions is "
 "inconsistent"
@@ -1221,20 +1221,20 @@ msgstr ""
 "validateNumQuestions: o número de questões de múltipla-escolha escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:1137
+#: exam/UtilsLatex.py:1140
 msgid "validateNumQuestions: the number of Text questions is inconsistent"
 msgstr ""
 "validateNumQuestions: o número de questões dissertativa escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:1142
+#: exam/UtilsLatex.py:1145
 msgid ""
 "validateNumQuestions: You chose Both. Is it right? Number of QM questions >=3"
 msgstr ""
 "validateNumQuestions: você escolher Ambos. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:1147
+#: exam/UtilsLatex.py:1150
 msgid ""
 "validateNumQuestions: You chose Anwsers. Is it right? Number of QM questions "
 ">=3"
@@ -1242,7 +1242,7 @@ msgstr ""
 "validateNumQuestions: você escolhe Alternativas. Isto está correto? Número "
 "de questões QM >=3"
 
-#: exam/UtilsLatex.py:1152
+#: exam/UtilsLatex.py:1155
 msgid ""
 "validateNumQuestions: You chose Questions. Is it right? Number of QM "
 "questions >=3"
@@ -1250,31 +1250,31 @@ msgstr ""
 "validateNumQuestions: você escolher Questões. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:1163
+#: exam/UtilsLatex.py:1166
 msgid "validateNumQuestions: number of QM difficulty questions var1"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var1"
 
-#: exam/UtilsLatex.py:1166
+#: exam/UtilsLatex.py:1169
 msgid "validateNumQuestions: number of QM difficulty questions var2"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var2"
 
-#: exam/UtilsLatex.py:1169
+#: exam/UtilsLatex.py:1172
 msgid "validateNumQuestions: number of QM difficulty questions var3"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var3"
 
-#: exam/UtilsLatex.py:1172
+#: exam/UtilsLatex.py:1175
 msgid "validateNumQuestions: number of QM difficulty questions var4"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var4"
 
-#: exam/UtilsLatex.py:1175
+#: exam/UtilsLatex.py:1178
 msgid "validateNumQuestions: number of QM difficulty questions var5"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var5"
 
-#: exam/UtilsLatex.py:1213
+#: exam/UtilsLatex.py:1216
 msgid "ERROR: Each block must have at least 3 questions/answers"
 msgstr "ERRO: Cada bloco deve ter pelo menos 3 questões/respostas"
 
-#: exam/UtilsLatex.py:1376
+#: exam/UtilsLatex.py:1379
 msgid ""
 "drawQuestionsMCDifficulty: Topic of the chosen question does not belong to "
 "the discipline"
@@ -1282,22 +1282,22 @@ msgstr ""
 "drawQuestionsMCDifficulty: Tópico da questão escolhida não pertence à "
 "disciplina "
 
-#: exam/UtilsLatex.py:1412
+#: exam/UtilsLatex.py:1415
 msgid "drawQuestionsMCDifficulty: Error in parametric question"
 msgstr "drawQuestionsMCDifficulty: erro na questão paramétrica"
 
-#: exam/UtilsLatex.py:1420
+#: exam/UtilsLatex.py:1423
 msgid ""
 "drawQuestionsMCDifficulty: number of answers different: Exam; Question: "
 msgstr ""
 "drawQuestionsMCDifficulty: número de alternativas são diferentes: Exame; "
 "Questão"
 
-#: exam/UtilsLatex.py:1503
+#: exam/UtilsLatex.py:1506
 msgid "drawQuestionsTDifficulty: Error in compression textual questions"
 msgstr "drawQuestionsTDifficulty: erro na compressão da questão dissertativa"
 
-#: exam/UtilsLatex.py:1535
+#: exam/UtilsLatex.py:1538
 msgid ""
 "drawQuestionsTDifficultyVariations: Topic of the chosen question does not "
 "belong to the discipline"
@@ -1305,7 +1305,7 @@ msgstr ""
 "drawQuestionsTDifficultyVariations: tópico da questão escolhida não pertence "
 "à disciplina"
 
-#: exam/UtilsLatex.py:2137
+#: exam/UtilsLatex.py:2145
 msgid "ERROR - students with same name"
 msgstr "ERRO - estudante com o mesmo nome"
 
@@ -1347,22 +1347,22 @@ msgid "Number of questions with difficulty level x"
 msgstr ""
 "Número de questões com nível de dificuldade X (apenas Múltipla-Escolha)"
 
-#: exam/forms.py:98 exam/models.py:80 exam/templates/exam/exam_update2.html:646
+#: exam/forms.py:98 exam/models.py:80 exam/templates/exam/exam_update2.html:647
 msgid "Difficulty 1"
 msgstr "Dificuldade 1"
 
 #: exam/forms.py:102 exam/models.py:83
-#: exam/templates/exam/exam_update2.html:653
+#: exam/templates/exam/exam_update2.html:654
 msgid "Difficulty 2"
 msgstr "Dificuldade 2"
 
 #: exam/forms.py:106 exam/models.py:86
-#: exam/templates/exam/exam_update2.html:660
+#: exam/templates/exam/exam_update2.html:661
 msgid "Difficulty 3"
 msgstr "Dificuldade 3"
 
 #: exam/forms.py:110 exam/models.py:89
-#: exam/templates/exam/exam_update2.html:667
+#: exam/templates/exam/exam_update2.html:668
 msgid "Difficulty 4"
 msgstr "Dificuldade 4"
 
@@ -1371,7 +1371,7 @@ msgid "The system first draws the questions with difficulty 1, then 2, ..."
 msgstr "O sistema inclui primeiro as questões com dificuldade 1, então 2, ..."
 
 #: exam/forms.py:115 exam/models.py:92
-#: exam/templates/exam/exam_update2.html:674
+#: exam/templates/exam/exam_update2.html:675
 msgid "Difficulty 5"
 msgstr "Dificuldade 5"
 
@@ -1380,7 +1380,7 @@ msgid "Number of answers per question"
 msgstr "Número de alternativas por questão"
 
 #: exam/forms.py:119 exam/models.py:98
-#: exam/templates/exam/exam_update2.html:681
+#: exam/templates/exam/exam_update2.html:682
 msgid "Answers per question"
 msgstr "Alternativas por questão"
 
@@ -1389,7 +1389,7 @@ msgid "Number of textual questions"
 msgstr "Número de questões dissertativas"
 
 #: exam/forms.py:124 exam/models.py:102
-#: exam/templates/exam/exam_update2.html:688
+#: exam/templates/exam/exam_update2.html:689
 msgid "Textual"
 msgstr "Dissertativa"
 
@@ -1398,7 +1398,7 @@ msgid "Number of exam variations"
 msgstr "Número de variações de exames"
 
 #: exam/forms.py:129 exam/models.py:106
-#: exam/templates/exam/exam_update2.html:695
+#: exam/templates/exam/exam_update2.html:696
 msgid "Variations"
 msgstr "Variações"
 
@@ -1407,7 +1407,7 @@ msgid "Number of questions per block"
 msgstr "Número de questões por bloco"
 
 #: exam/forms.py:133 exam/models.py:111
-#: exam/templates/exam/exam_update2.html:707
+#: exam/templates/exam/exam_update2.html:708
 msgid "Questions by block"
 msgstr "Questões por bloco"
 
@@ -1416,7 +1416,7 @@ msgid "Maximum number of blocks horizontally"
 msgstr "Número máximo de blocos na horizontal"
 
 #: exam/forms.py:137 exam/models.py:116
-#: exam/templates/exam/exam_update2.html:714
+#: exam/templates/exam/exam_update2.html:715
 msgid "Max blocks horiz."
 msgstr "Max Blocos Horiz."
 
@@ -1427,7 +1427,7 @@ msgstr ""
 "está em desenvolvimento!)"
 
 #: exam/forms.py:141 exam/models.py:125
-#: exam/templates/exam/exam_update2.html:721
+#: exam/templates/exam/exam_update2.html:722
 msgid "Stylesheet"
 msgstr "Quadro de respostas"
 
@@ -1436,7 +1436,7 @@ msgid "Generate answersheets; questions; both"
 msgstr "Gerar folha de respostas ou folhas de questões ou ambas"
 
 #: exam/forms.py:145 exam/models.py:135
-#: exam/templates/exam/exam_update2.html:728
+#: exam/templates/exam/exam_update2.html:729
 msgid "Answersheets/Questions/Both"
 msgstr "Respostas/Questões/Ambos"
 
@@ -1445,7 +1445,7 @@ msgid "Ecological (reduce number of sheets)"
 msgstr "Ecológico (reduzir número de folhas em papel)"
 
 #: exam/forms.py:149 exam/models.py:144
-#: exam/templates/exam/exam_update2.html:735
+#: exam/templates/exam/exam_update2.html:736
 msgid "Ecological"
 msgstr "Ecológico"
 
@@ -1458,7 +1458,7 @@ msgstr ""
 "exame será enviado por e-mail para cada aluno depois de clicar em Criar-PDF."
 
 #: exam/forms.py:154 exam/models.py:156
-#: exam/templates/exam/exam_update2.html:742
+#: exam/templates/exam/exam_update2.html:743
 msgid "Student Feedback"
 msgstr "Retorno"
 
@@ -1479,7 +1479,7 @@ msgid "Who created this exam"
 msgstr "Quem criou este exame"
 
 #: exam/forms.py:174 exam/models.py:187
-#: exam/templates/exam/exam_update2.html:770
+#: exam/templates/exam/exam_update2.html:771
 msgid "Who created"
 msgstr "Quem criou"
 
@@ -1551,7 +1551,7 @@ msgstr ""
 "Aceita a descrição e parametrização do LaTeX usando a linguagem Python "
 "(consulte as publicações)."
 
-#: exam/models.py:234 exam/templates/exam/exam_update2.html:539
+#: exam/models.py:234 exam/templates/exam/exam_update2.html:540
 #: main/templates/index.html:578 topic/forms.py:104 topic/models.py:50
 #: topic/models.py:96 topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
@@ -1603,14 +1603,14 @@ msgid "Create a new Exam"
 msgstr "Criar um novo Exame"
 
 #: exam/templates/exam/exam_create.html:86
-#: exam/templates/exam/exam_update2.html:301
+#: exam/templates/exam/exam_update2.html:302
 msgid "N. Students"
 msgstr "N. Estudantes"
 
 #: exam/templates/exam/exam_create.html:88
-#: exam/templates/exam/exam_update2.html:303
-#: exam/templates/exam/exam_update2.html:441
-#: exam/templates/exam/exam_update2.html:544
+#: exam/templates/exam/exam_update2.html:304
+#: exam/templates/exam/exam_update2.html:442
+#: exam/templates/exam/exam_update2.html:545
 msgid "See"
 msgstr "Ver"
 
@@ -1629,7 +1629,7 @@ msgid "Exame Detail"
 msgstr "Detalhar Exame"
 
 #: exam/templates/exam/exam_detail.html:38
-#: exam/templates/exam/exam_update2.html:807
+#: exam/templates/exam/exam_update2.html:808
 msgid "Exam of the disciplines that I am enrolled"
 msgstr "Exame das disciplinas que eu participo"
 
@@ -1719,15 +1719,6 @@ msgstr "Tipo de estatística:"
 
 #: exam/templates/exam/exam_update2.html:72
 msgid ""
-"Classical Testing Theory (CTT): Traditional evaluation method. This method "
-"assesses your performance based on the total number of correct answers."
-msgstr ""
-"Classical Testing Theory (CTT) ou Teoria Clássica dos Testes: Método "
-"tradicional de avaliação. Este método avalia seu desempenho com base no "
-"número total de respostas corretas."
-
-#: exam/templates/exam/exam_update2.html:78
-msgid ""
 "Weighted Percentage Correct (WPC) is a method that enhances assessment by "
 "assigning weights to correct answers, taking into account the individual "
 "difficulty of each question. This difficulty is quantified by the ratio of "
@@ -1740,7 +1731,7 @@ msgstr ""
 "dificuldade é quantificada pela razão entre o número de respostas corretas e "
 "o total de correções específicas para aquela questão."
 
-#: exam/templates/exam/exam_update2.html:84
+#: exam/templates/exam/exam_update2.html:78
 msgid ""
 "Computerized Adaptive Testing (CAT): The system dynamically adjusts the "
 "difficulty of questions based on your previous responses, aiming for a more "
@@ -1750,14 +1741,22 @@ msgstr ""
 "O sistema ajusta dinamicamente a dificuldade das questões com base nas suas "
 "respostas anteriores, visando uma avaliação mais personalizada."
 
-#: exam/templates/exam/exam_update2.html:89
+#: exam/templates/exam/exam_update2.html:84
+#, fuzzy
+#| msgid ""
+#| "Semi-Adaptive Testing (SAT): Adaptive assessment method where the teacher "
+#| "manually sets the Bloom's Taxonomy level for each question. This method "
+#| "combines adaptability with personalized assessment, allowing the system "
+#| "to dynamically adjust the difficulty of questions based on students' "
+#| "answers in previous exams, while also considering cognitive levels pre-"
+#| "defined by the teacher."
 msgid ""
-"Semi-Adaptive Testing (SAT): Adaptive assessment method where the teacher "
-"manually sets the Bloom's Taxonomy level for each question. This method "
-"combines adaptability with personalized assessment, allowing the system to "
-"dynamically adjust the difficulty of questions based on students' answers in "
-"previous exams, while also considering cognitive levels pre-defined by the "
-"teacher."
+"Semi-Adaptive Testing by Bloom (SATB): Adaptive assessment method where the "
+"teacher manually sets the Bloom's Taxonomy level for each question. This "
+"method combines adaptability with personalized assessment, allowing the "
+"system to dynamically adjust the difficulty of questions based on students' "
+"answers in previous exams, while also considering cognitive levels pre-"
+"defined by the teacher."
 msgstr ""
 "Semi-Adaptive Testing (SAT) ou Avaliação Semi-Adaptativa: Método de "
 "avaliação adaptativa em que o professor define manualmente o nível da "
@@ -1767,15 +1766,15 @@ msgstr ""
 "anteriores, ao mesmo tempo em que considera os níveis cognitivos "
 "predefinidos pelo professor."
 
-#: exam/templates/exam/exam_update2.html:96
+#: exam/templates/exam/exam_update2.html:97
 msgid "Number of Exams with QM: "
 msgstr "Número de Exames com QM:"
 
-#: exam/templates/exam/exam_update2.html:102
+#: exam/templates/exam/exam_update2.html:103
 msgid "Adaptive exam: consider X exams performed"
 msgstr "Exame adaptativo: considera X exames realizados"
 
-#: exam/templates/exam/exam_update2.html:123
+#: exam/templates/exam/exam_update2.html:124
 msgid ""
 "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, "
 "if the circles are defective, the broker may not work correctly - we "
@@ -1789,19 +1788,19 @@ msgstr ""
 "Antes de aplicar o exame, recomenda-se fortemente imprimir uma folha, "
 "preencher, digitalizar e seguir o passo ao lado direito Upload-PDF >>>"
 
-#: exam/templates/exam/exam_update2.html:133
+#: exam/templates/exam/exam_update2.html:134
 msgid "Increase the contrast? Useful if the PDF is too white!"
 msgstr "Aumentar o contraste? Útil se o PDF estiver muito branco!"
 
-#: exam/templates/exam/exam_update2.html:137
+#: exam/templates/exam/exam_update2.html:138
 msgid "Upload-PDF"
 msgstr "Upload-PDF"
 
-#: exam/templates/exam/exam_update2.html:138
+#: exam/templates/exam/exam_update2.html:139
 msgid "Choose PDF file for correction of exams"
 msgstr "Escolher arquivo PDF para correções dos exames"
 
-#: exam/templates/exam/exam_update2.html:148
+#: exam/templates/exam/exam_update2.html:149
 msgid ""
 "If you choose to provide feedback to the students, also send the questions "
 "and the answer keys."
@@ -1809,7 +1808,7 @@ msgstr ""
 "Caso opte por dar feedback aos alunos, envie também as questões e os "
 "gabaritos."
 
-#: exam/templates/exam/exam_update2.html:154
+#: exam/templates/exam/exam_update2.html:155
 msgid ""
 "Caution: (1) Before scanning, make sure all circles have been filled "
 "correctly. If you to use correction fluid and erase part of the outline of "
@@ -1837,11 +1836,11 @@ msgstr ""
 "seguir o passo ao lado direito Enviar-Retornos-Estudantes, para cada aluno "
 "receber a correção do seu exame por email >>>"
 
-#: exam/templates/exam/exam_update2.html:165
+#: exam/templates/exam/exam_update2.html:166
 msgid "Send-Feedback-Students Text"
 msgstr "Enviar-Retornos-Estudantes Questões dissertativas"
 
-#: exam/templates/exam/exam_update2.html:167
+#: exam/templates/exam/exam_update2.html:168
 msgid ""
 "Caution: If you used exams with written questions and in non-ecological "
 "format, then one question was generated per sheet, right? If you want to "
@@ -1881,11 +1880,11 @@ msgstr ""
 "o PDF com as correções e também irá retornar um arquivo CSV com os conceitos "
 "de cada estudante."
 
-#: exam/templates/exam/exam_update2.html:176
+#: exam/templates/exam/exam_update2.html:177
 msgid "Send-Feedback-Students"
 msgstr "Enviar-Retornos-Estudantes"
 
-#: exam/templates/exam/exam_update2.html:178
+#: exam/templates/exam/exam_update2.html:179
 msgid ""
 "This option is to send feedback ONLY from multiple choice exams after "
 "successfully completing the step from the previous column."
@@ -1893,7 +1892,7 @@ msgstr ""
 "Esta opção é para enviar feedback APENAS dos exames de múltipla-escolha, "
 "após ter realizado o passo da coluna anterior com sucesso."
 
-#: exam/templates/exam/exam_update2.html:184
+#: exam/templates/exam/exam_update2.html:185
 msgid ""
 "Before creating the exams in the button above, first create the variations. "
 "It is necessary to create new variations of the exam each time you change "
@@ -1903,32 +1902,32 @@ msgstr ""
 "necessário criar novas variações do exame cada vez que você muda as questões "
 "e o número de variações nos atributos abaixo."
 
-#: exam/templates/exam/exam_update2.html:185
+#: exam/templates/exam/exam_update2.html:186
 msgid "The options marked below will be sent to your email."
 msgstr "As opções marcadas abaixo serão enviadas para o seu e-mail."
 
-#: exam/templates/exam/exam_update2.html:194
+#: exam/templates/exam/exam_update2.html:195
 #: main/templates/index-mctest.html:475
 msgid "Create-Variations"
 msgstr "Criar-Variações"
 
-#: exam/templates/exam/exam_update2.html:398
+#: exam/templates/exam/exam_update2.html:399
 msgid "Topics List"
 msgstr "Listar Tópicos"
 
-#: exam/templates/exam/exam_update2.html:484
+#: exam/templates/exam/exam_update2.html:485
 #: topic/templates/topic/topic_detail.html:55
 msgid "Questions List"
 msgstr "Listar Questões"
 
-#: exam/templates/exam/exam_update2.html:541
+#: exam/templates/exam/exam_update2.html:542
 #: topic/templates/question/question_list.html:25
 #: topic/templates/question/question_list_who_created_user.html:25
 #: topic/templates/topic/topic_detail.html:65
 msgid "Dif."
 msgstr ""
 
-#: exam/templates/exam/exam_update2.html:542 topic/forms.py:101
+#: exam/templates/exam/exam_update2.html:543 topic/forms.py:101
 #: topic/templates/question/question_create.html:40
 #: topic/templates/question/question_detail.html:50
 #: topic/templates/question/question_list.html:24
@@ -1938,24 +1937,24 @@ msgstr ""
 msgid "Group"
 msgstr "Grupo"
 
-#: exam/templates/exam/exam_update2.html:543
+#: exam/templates/exam/exam_update2.html:544
 #: topic/templates/question/question_list.html:26
 #: topic/templates/question/question_list_who_created_user.html:26
 #: topic/templates/topic/topic_detail.html:66
 msgid "Par."
 msgstr ""
 
-#: exam/templates/exam/exam_update2.html:635
+#: exam/templates/exam/exam_update2.html:636
 msgid "Number of questions per Exam"
 msgstr "Número de questões por Exame"
 
-#: exam/templates/exam/exam_update2.html:637
+#: exam/templates/exam/exam_update2.html:638
 #: main/templates/index-mctest.html:127 main/templates/index-mctest.html:159
 #: main/templates/index.html:137 main/templates/index.html:171
 msgid "Exam Style"
 msgstr "Estilo do Exame"
 
-#: exam/templates/exam/exam_update2.html:799
+#: exam/templates/exam/exam_update2.html:800
 msgid "Delete this Exam"
 msgstr "Apagar este Exame"
 
@@ -2405,8 +2404,8 @@ msgstr "Quem utiliza"
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:696 main/templates/readme.html:186
-#: main/templates/readme.html:196
+#: main/templates/base_generic.html:696 main/templates/readme.html:185
+#: main/templates/readme.html:195
 msgid "Book"
 msgstr "Livro"
 
@@ -3006,18 +3005,14 @@ msgstr "Acesse "
 msgid "for some "
 msgstr "e mais"
 
-#: main/templates/readme.html:26
-msgid "Final URL :8000 is for development"
-msgstr "URL final :8000 é para desenvolvimento"
-
-#: main/templates/readme.html:30
+#: main/templates/readme.html:29
 msgid ""
 "Help us spread MCTest. If more people use it, the faster the improvements"
 msgstr ""
 "Ajude-nos a divulgar o MCtest. Se mais pessoas utilizarem, mais rápidas "
 "serão as melhorias"
 
-#: main/templates/readme.html:31
+#: main/templates/readme.html:30
 msgid ""
 "MCTest must be installed on an Ubuntu 22.04 server through ports 3306 and "
 "8000"
@@ -3025,62 +3020,62 @@ msgstr ""
 "O MCtest deve ser instalado em um servidor Ubuntu 22.04 através das portas "
 "3306 e 8000"
 
-#: main/templates/readme.html:32
+#: main/templates/readme.html:31
 msgid "Define specific data in the file "
 msgstr "Definir dados específicos no arquivo "
 
-#: main/templates/readme.html:37
+#: main/templates/readme.html:36
 msgid "After downloading in "
 msgstr "Após baixar em"
 
-#: main/templates/readme.html:39
+#: main/templates/readme.html:38
 msgid "install MCTest with"
 msgstr "instalar MCTest com"
 
-#: main/templates/readme.html:47
+#: main/templates/readme.html:46
 msgid "Future Improvements"
 msgstr "Melhorias Futuras"
 
-#: main/templates/readme.html:50
+#: main/templates/readme.html:49
 msgid "Error messages and Graphical interfaces"
 msgstr "Mensagens de erro e interface gráfica"
 
-#: main/templates/readme.html:53
+#: main/templates/readme.html:52
 msgid "Install"
 msgstr "Instalador"
 
-#: main/templates/readme.html:55
+#: main/templates/readme.html:54
 msgid "including other operating systems"
 msgstr "incluindo outros sistemas operacionais"
 
-#: main/templates/readme.html:58
+#: main/templates/readme.html:57
 msgid "The time to generate PDF from an exam with many students"
 msgstr "Tempo para criar pdf de um exame com muitos estudantes"
 
-#: main/templates/readme.html:61
+#: main/templates/readme.html:60
 msgid "Site and DB in different languages. For example, edit the "
 msgstr "Portal e BD em diferentes idiomas. Por exemplo, edit "
 
-#: main/templates/readme.html:62
+#: main/templates/readme.html:61
 msgid "for Portuguese and use the commands"
 msgstr "para Português e use os comandos"
 
-#: main/templates/readme.html:68
+#: main/templates/readme.html:67
 msgid "Afterwards make the following changes in "
 msgstr "Em seguida, faça as seguintes alterações em "
 
-#: main/templates/readme.html:73
+#: main/templates/readme.html:72
 msgid "Please see 'locale' folder for other languages"
 msgstr "Ver pasta 'locale' para outros idiomas"
 
-#: main/templates/readme.html:77
+#: main/templates/readme.html:76
 msgid ""
 "AI Exams Module: individual exams based on the students and the class history"
 msgstr ""
 "Módulo de Exame utilizando IA: exames individuais com base no histórico do "
 "aluno e da turma"
 
-#: main/templates/readme.html:80
+#: main/templates/readme.html:79
 msgid ""
 "AI Students Module: evaluation of how the weigh questions in order to show "
 "the skills and abilities of each student"
@@ -3088,30 +3083,30 @@ msgstr ""
 "Módulo de Estudante utilizando IA: como as questões com diferentes pesos são "
 "escolhidas para mostrar as competências e habilidades de cada estudante"
 
-#: main/templates/readme.html:83
+#: main/templates/readme.html:82
 msgid "Use of blockchain to validate exams, history and other features"
 msgstr "Utilizar blockchain para validar exames, histórico e outros recursos"
 
-#: main/templates/readme.html:86
-msgid "Inclusion of facial recognition in the QR Code of the exams"
-msgstr "Incluir reconhecimento facial no exame QR Code"
+#: main/templates/readme.html:85
+msgid "Inclusion of facial recognition in the QRCode of the exams"
+msgstr "Incluir reconhecimento facial no QRCode do exame"
 
-#: main/templates/readme.html:89
+#: main/templates/readme.html:88
 msgid "Improve of Item Response Theory;  "
 msgstr "Melhorias em Teoria de Resposta ao Item"
 
-#: main/templates/readme.html:92
+#: main/templates/readme.html:91
 msgid ""
 "Use Markdown to describe questions and send exams or activities to students"
 msgstr ""
 "Usar Markdown para descrever questões e enviar exames ou atividades aos "
 "alunos"
 
-#: main/templates/readme.html:95
+#: main/templates/readme.html:94
 msgid "Adapt the Android application to this version of MCTest"
 msgstr "Adaptar o aplicativo Android a esta versão do MCTest"
 
-#: main/templates/readme.html:101
+#: main/templates/readme.html:100
 msgid ""
 "Study the integration of MCTest with other systems, for example, SIGAA and "
 "Moodle, sharing different databases"
@@ -3119,7 +3114,7 @@ msgstr ""
 "Estudar a integração do MCTest com outros sistemas, por exemplo, SIGAA e "
 "Moodle, compartilhando bancos de dados diferentes"
 
-#: main/templates/readme.html:104
+#: main/templates/readme.html:103
 msgid ""
 "Run the parametric question codes on other servers, similar to those used in "
 "the Moodle VPL plug-in"
@@ -3127,108 +3122,108 @@ msgstr ""
 "Executar os códigos de questões paramétricos em outros servidores, "
 "semelhante ao usado ​​no plug-in VPL do Moodle"
 
-#: main/templates/readme.html:107
+#: main/templates/readme.html:106
 msgid "Integrate with MakeTests"
 msgstr "Integrar com MakeTests"
 
-#: main/templates/readme.html:110
+#: main/templates/readme.html:109
 msgid "Write a complete tutorial to install and use MCTest"
 msgstr "Escrever um tutorial completo para instalar e usar o MCTest"
 
-#: main/templates/readme.html:113
+#: main/templates/readme.html:112
 msgid "Include generative networks to help create questions"
 msgstr "Incluir redes generativas para ajudar a criar questões"
 
-#: main/templates/readme.html:119
+#: main/templates/readme.html:118
 msgid ""
 "Collaboration proposal with experts to write articles or technical reports"
 msgstr ""
 "Propostas de colaborações com especialistas para escrever artigos ou "
 "relatórios técnicos"
 
-#: main/templates/readme.html:121
+#: main/templates/readme.html:120
 msgid "A maximum of 5 authors per article"
 msgstr "Máximo de 5 autores por artigo"
 
-#: main/templates/readme.html:122
+#: main/templates/readme.html:121
 msgid "Authors' order proportional to the number of pages written"
 msgstr "Ordem dos autores proporcional ao número de páginas escritas"
 
-#: main/templates/readme.html:123
+#: main/templates/readme.html:122
 msgid "I already have data/implementations for some topics"
 msgstr "Já tenho dados/implementações para alguns tópicos"
 
-#: main/templates/readme.html:128
+#: main/templates/readme.html:127
 msgid "Security in exams using QRcode"
 msgstr "Segurança em exames utilizando QRCode"
 
-#: main/templates/readme.html:131
+#: main/templates/readme.html:130
 msgid "Answer sheet design comparisons"
 msgstr "Comparações com diferentes folhas de respostas"
 
-#: main/templates/readme.html:134
+#: main/templates/readme.html:133
 msgid "A case study using Item Response Theory"
 msgstr "Um estudo de casos utilizando Teoria de Resposta ao Item"
 
-#: main/templates/readme.html:137
+#: main/templates/readme.html:136
 msgid "MCTest: Software Requirements Specification"
 msgstr "MCTest: Especificações de Requisitos de Software"
 
-#: main/templates/readme.html:140
+#: main/templates/readme.html:139
 msgid "MCTest: graphic interface"
 msgstr "MCTest: interfaces gráficas"
 
-#: main/templates/readme.html:143
+#: main/templates/readme.html:142
 msgid "MCTest: data base"
 msgstr "MCTest: banco de dados"
 
-#: main/templates/readme.html:146
+#: main/templates/readme.html:145
 msgid "MCTest: software architecture"
 msgstr "MCTest: arquitetura de software"
 
-#: main/templates/readme.html:149
+#: main/templates/readme.html:148
 msgid "MCTest: software deployment"
 msgstr "MCTest: implantação de software"
 
-#: main/templates/readme.html:152
+#: main/templates/readme.html:151
 msgid ""
 "New question categories screen (with NLP) before opening the exam screen."
 msgstr ""
 "Nova tela de categorias de questões (com PNL) antes de abrir a tela de exame."
 
-#: main/templates/readme.html:159
+#: main/templates/readme.html:158
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:166
+#: main/templates/readme.html:165
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:167
+#: main/templates/readme.html:166
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:174
+#: main/templates/readme.html:173
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:175
+#: main/templates/readme.html:174
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:176
+#: main/templates/readme.html:175
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:183
+#: main/templates/readme.html:182
 msgid "Grant: #2018/23561-1, São Paulo Research Foundation: "
 msgstr ""
 "Processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo: "
 
-#: main/templates/readme.html:184
+#: main/templates/readme.html:183
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
@@ -3236,29 +3231,29 @@ msgstr ""
 "Título: Um Sistema Universal para Geração e Correção Automática de Questões "
 "Parametrizadas"
 
-#: main/templates/readme.html:186
+#: main/templates/readme.html:185
 msgid "1st edition"
 msgstr "1ª edição"
 
-#: main/templates/readme.html:193
+#: main/templates/readme.html:192
 msgid "Grant: UFABC - Federal University of ABC"
 msgstr "Apoio: UFABC - Universidade Federal do ABC"
 
-#: main/templates/readme.html:194
+#: main/templates/readme.html:193
 msgid ""
 "Title: Modernization of the MCTest Test Generation and Correction System"
 msgstr ""
 "Título: Modernização do Sistema de Geração e Correção de Provas do MCTest"
 
-#: main/templates/readme.html:195
+#: main/templates/readme.html:194
 msgid "Current"
 msgstr "Atual"
 
-#: main/templates/readme.html:196
+#: main/templates/readme.html:195
 msgid "2st edition"
 msgstr "2ª edição"
 
-#: main/templates/readme.html:196
+#: main/templates/readme.html:195
 msgid "in construction"
 msgstr "Em construção"
 
@@ -3996,6 +3991,18 @@ msgstr "ExamUpdate: o professor não está registrado na disciplina"
 #: topic/views.py:1079
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid ""
+#~ "Classical Testing Theory (CTT): Traditional evaluation method. This "
+#~ "method assesses your performance based on the total number of correct "
+#~ "answers."
+#~ msgstr ""
+#~ "Classical Testing Theory (CTT) ou Teoria Clássica dos Testes: Método "
+#~ "tradicional de avaliação. Este método avalia seu desempenho com base no "
+#~ "número total de respostas corretas."
+
+#~ msgid "Final URL :8000 is for development"
+#~ msgstr "URL final :8000 é para desenvolvimento"
 
 #~ msgid "Adaptive exam with QM in the DB:"
 #~ msgstr "Exame adaptativo com QM do BD:"

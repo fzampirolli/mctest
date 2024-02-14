@@ -345,6 +345,11 @@ def see_question_PDF(request, pk):
             fileQuestion.write("\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update)
             fileQuestion.write("\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created)
             fileQuestion.write("\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper())
+            # if q.question_type == "QM" and q.question_correction_count:
+            #     Accuracy = (q.question_correct_count / q.question_correction_count) * 100
+            #     fileQuestion.write( "\\noindent\\textbf{Correct:} %s\\\\\n" % q.question_correct_count)
+            #     fileQuestion.write( "\\noindent\\textbf{Correction:} %s\\\\\n" % q.question_correction_count)
+            #     fileQuestion.write( "\\noindent\\textbf{Accuracy:} %.1f\\\\\n" % Accuracy)
 
             st = q.question_text
             a, b = st.find('begin{comment}'), st.find('end{comment}')
@@ -731,6 +736,11 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
         str1 += "\\noindent\\textbf{URL:} \\url{%stopic/question/%s/update/}\\\\\n" % (
             os.getenv('IP_HOST2'), q.id)
         str1 += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper()
+        if q.question_type == "QM" and q.question_correction_count:
+            Accuracy = (q.question_correct_count / q.question_correction_count) * 100
+            str1 +="\\noindent\\textbf{Correct:} %s\\\\\n" % q.question_correct_count
+            str1 +="\\noindent\\textbf{Correction:} %s\\\\\n" % q.question_correction_count
+            str1 +="\\noindent\\textbf{Accuracy:} %.1f\\\\\n" % Accuracy
 
         st = q.question_text
         a, b = st.find('begin{comment}'), st.find('end{comment}')

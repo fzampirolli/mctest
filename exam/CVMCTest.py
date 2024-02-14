@@ -63,7 +63,7 @@ from student.models import Student
 from topic.models import Question
 from .models import VariationExam
 
-circle_min = 650
+circle_min = 640  # 650
 circle_max = 940  # 895
 
 
@@ -668,7 +668,7 @@ class cvMCTest(object):
             ptSort.append([p1, p2])
 
             # pc =int(p1[0]/30)+H*np.int(p1[1]/30)
-            pc = int((p2[0] + p1[0]) / 30) + W * np.int((p2[1] + p1[1]) / 30)  # raster order
+            pc = int((p2[0] + p1[0]) / 30) + W * int((p2[1] + p1[1]) / 30)  # raster order
             pt.append(pc)
 
         pto = np.argsort(pt)

@@ -1003,11 +1003,11 @@ _inst1_
             prof.append(p.first_name + " " + p.last_name)
         prof = ', '.join(prof)
 
-        institute = Utils.format_size_text(institute, font_size)
-        discipline = Utils.format_size_text(discipline, font_size)
-        course = Utils.format_size_text(course, font_size)
-        classroom = Utils.format_size_text(classroom, font_size)
-        prof = Utils.format_size_text(prof, font_size)
+        # institute = Utils.format_size_text(institute, font_size)
+        # discipline = Utils.format_size_text(discipline, font_size)
+        # course = Utils.format_size_text(course, font_size)
+        # classroom = Utils.format_size_text(classroom, font_size)
+        # prof = Utils.format_size_text(prof, font_size)
         nameStudent = Utils.format_size_text(nameStudent, font_size)
 
         disc = "\\textbf{%s:} %s \\hfill" % (_("Discipline"), discipline)
@@ -1084,12 +1084,15 @@ _inst1_
     def format_size_text(text, font_size):
         if len(text) > 45:
             text = text[:45]
-        if int(font_size) == 11:
+        if int(font_size) == 10:
+            if len(text) > 35:
+                text = '{\\small ' + text + '}'
+        elif int(font_size) == 11:
             if len(text) > 35:
                 text = '{\\small ' + text + '}'
             elif len(text) > 28:
                 text = '{\\scriptsize ' + text + '}'
-        if int(font_size) == 12:
+        elif int(font_size) == 12:
             if len(text) > 35:
                 text = '{\\scriptsize ' + text + '}'
             elif len(text) > 28:
