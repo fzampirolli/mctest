@@ -1718,7 +1718,8 @@ _inst1_
     # Autor: Lucas Montagnani Calil Elias - 1/2/2024
     @staticmethod
     def pl1_rasch_model(skill, difficulty):
-        d = 1.702
+        #d = 1.702
+        d = 1
         p = 1 / (1 + np.exp(-d * (skill - difficulty)))
         return p
 
@@ -1726,12 +1727,15 @@ _inst1_
     def ability_estimation(th, b, r):
 
         if np.sum(r) / len(r) == 1:
-            return max(r)
+            # return max(b), 0, 0
+            return np.log(2 * len(b)), 0, 0
         if np.sum(r) == 0:
-            return min(r)
+            # return min(b), 0, 0
+            return -np.log(2 * len(b)), 0, 0
         # Calcula a habilidade atualizada do aluno
         numerador = np.sum(r - Utils.pl1_rasch_model(th, b))
         denominador = np.sum(Utils.pl1_rasch_model(th, b) * (1 - Utils.pl1_rasch_model(th, b)))
+
         result = th + (numerador / denominador)
         adjustment = numerador / denominador
         # Calulcala o Standard Error
@@ -1739,6 +1743,13 @@ _inst1_
 
         return result, se, adjustment
 
+    @staticmethod
+    def ability_estimation_aux(th, b, r):
+        adj = 1
+        while (adj >= 0.05 or adj <= -0.05):
+            th, se, adj = Utils.ability_estimation(th, b, r)
+        # devolver a habilidade do aluno (theta) e o erro padrão do calculo
+        return th  # , se
     @staticmethod
     def fisher_information(student_skill, question_difficulty):
         d = 1.702
@@ -1815,7 +1826,7 @@ _inst1_
                         b_vector.append(b_parameter)
                         u_vector.append(seq.studentAnswer)
                     # Calcula a habilidade do estudante
-                    student_ability = Utils.ability_estimation(b_vector, u_vector)
+                    student_ability = Utils.ability_estimation_aux(0, b_vector, u_vector)
 
                     Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
                     ################################################

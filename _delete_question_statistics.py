@@ -9,6 +9,6 @@ Question.objects.update(
     question_correction_count=0,
     question_correct_count=0,
     question_IRT_a_discrimination=0,
-    question_IRT_b_ability=0,
+    question_IRT_b_ability=-5,
     question_IRT_c_guessing=0
 )
