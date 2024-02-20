@@ -1744,7 +1744,7 @@ _inst1_
         return result, se, adjustment
 
     @staticmethod
-    def ability_estimation_aux(th, b, r):
+    def ability_estimation_aux(th, b, r):  # Lucas
         adj = 1
         while (adj >= 0.05 or adj <= -0.05):
             th, se, adj = Utils.ability_estimation(th, b, r)
@@ -1783,6 +1783,7 @@ _inst1_
         q_selected_ids = [row[0] for row in ord_desc_mtx[:num_questions]]
         return q_selected_ids
 
+    '''
     @staticmethod
     def createAdaptativeTest_CAT(request, exam, choice_adaptive_test_number, path_to_file_ADAPTIVE_TEST):
 
@@ -1819,7 +1820,7 @@ _inst1_
                     for seq in studExQt.all():
                         # Recupera os dados da questão
                         question = Question.objects.filter(id=seq.question).first()
-                        # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
+                        # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                         if (question.question_IRT_b_ability == -5):
                             b_parameter = question.question_IRT_b_ability
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
@@ -1925,6 +1926,7 @@ _inst1_
         df.to_csv(path_to_file_ADAPTIVE_TEST, index=False)
 
         return maxStudentsClassGrade
+    '''
 
     @staticmethod
     def createAdaptativeTest(request, exam, choice_adaptive_test_number, path_to_file_ADAPTIVE_TEST, adaptive_test):
@@ -1978,24 +1980,32 @@ _inst1_
                                 b_parameter = 1 - question.question_correct_count / question.question_correction_count
                         elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
                             # O parâmetro b é a habilidade IRT da questão
-                            b_parameter = question.question_IRT_b_ability
+                            # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
+                            if (question.question_IRT_b_ability == -5):
+                                b_parameter = question.question_bloom_taxonomy
+                            else:
+                                b_parameter = question.question_IRT_b_ability
                         elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
                             # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
                             b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
                         elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
-                            b_parameter = int(question.question_difficulty)
+                            b_parameter = int(question.question_difficulty) # BUG: todas as variações são iguais
 
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
                         u_vector.append(acertou)
 
                     # Calcula a habilidade do estudante
+                    if adaptive_test == 'CAT':
+                        if u_vector and b_vector:
+                            grade = Utils.ability_estimation_aux(0, b_vector, u_vector)
+                        else:
+                            grade = -5
 
-                    # Se não achou student_exam0, atribua None
-                    # grade = student_exam0.grade if student_exam0 else None
-
-                    # Calcula a habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
-                    grade = np.dot(b_vector, u_vector)
+                        #Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
+                    else:
+                        # Calcula a habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
+                        grade = np.dot(b_vector, u_vector)
 
                     # Inicialize um dicionário para o aluno atual, caso não exista
                     if s.id not in student_grades_by_exam:
