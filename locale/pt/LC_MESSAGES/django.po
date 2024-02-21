@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 06:22-0300\n"
+"POT-Creation-Date: 2024-02-21 08:54-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1305,7 +1305,7 @@ msgstr ""
 "drawQuestionsTDifficultyVariations: tópico da questão escolhida não pertence "
 "à disciplina"
 
-#: exam/UtilsLatex.py:2145
+#: exam/UtilsLatex.py:2166
 msgid "ERROR - students with same name"
 msgstr "ERRO - estudante com o mesmo nome"
 
@@ -1742,16 +1742,8 @@ msgstr ""
 "respostas anteriores, visando uma avaliação mais personalizada."
 
 #: exam/templates/exam/exam_update2.html:84
-#, fuzzy
-#| msgid ""
-#| "Semi-Adaptive Testing (SAT): Adaptive assessment method where the teacher "
-#| "manually sets the Bloom's Taxonomy level for each question. This method "
-#| "combines adaptability with personalized assessment, allowing the system "
-#| "to dynamically adjust the difficulty of questions based on students' "
-#| "answers in previous exams, while also considering cognitive levels pre-"
-#| "defined by the teacher."
 msgid ""
-"Semi-Adaptive Testing by Bloom (SATB): Adaptive assessment method where the "
+"Semi-Adaptive Testing by Bloom (SAT): Adaptive assessment method where the "
 "teacher manually sets the Bloom's Taxonomy level for each question. This "
 "method combines adaptability with personalized assessment, allowing the "
 "system to dynamically adjust the difficulty of questions based on students' "
@@ -3622,7 +3614,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:960
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:970
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -3922,7 +3914,7 @@ msgstr ""
 msgid "ImportQuestionsJson: choose a JSON following the model!"
 msgstr "ImportQuestionsJson: escolher um arquivo JSON seguindo o modelo"
 
-#: topic/views.py:372 topic/views.py:759
+#: topic/views.py:377 topic/views.py:769
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -3932,15 +3924,15 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:451
+#: topic/views.py:456
 msgid "ImportQuestions: choose a TXT following the model!"
 msgstr "ImportQuestions: escolher um arquivo TXT seguindo o modelo"
 
-#: topic/views.py:497
+#: topic/views.py:502
 msgid "ImportQuestions: topic does not exist - created before in Topic: "
 msgstr "ImportQuestions: tópico não existe - criar antes em Tópico: "
 
-#: topic/views.py:504
+#: topic/views.py:509
 msgid ""
 "ImportQuestions: teacher is not associated with any discipline with this "
 "topic: "
@@ -3948,23 +3940,23 @@ msgstr ""
 "ImportQuestions: professor não está associado a uma disciplina com este "
 "tópico: "
 
-#: topic/views.py:529
+#: topic/views.py:534
 msgid "Questions Created:"
 msgstr "Questões Criadas"
 
-#: topic/views.py:540
+#: topic/views.py:545
 msgid "Similar question(s) exist in the DB:"
 msgstr "Questões similares no BD:"
 
-#: topic/views.py:561
+#: topic/views.py:566
 msgid "ImportQuestionsImage: choose a PNG following the model!"
 msgstr "ImportQuestions: escolher um arquivo PNG seguindo o exemplo"
 
-#: topic/views.py:581
+#: topic/views.py:586
 msgid "Image imported successfully! "
 msgstr "Imagem importada com sucesso! "
 
-#: topic/views.py:631 topic/views.py:683
+#: topic/views.py:636 topic/views.py:688
 msgid ""
 "A topic with the same text already exists. Please consider using a unique "
 "name. Suggested name: {}"
@@ -3972,23 +3964,23 @@ msgstr ""
 "Já existe um tópico com o mesmo texto. Considere usar um nome exclusivo. "
 "Nome sugerido: {}"
 
-#: topic/views.py:639 topic/views.py:691
+#: topic/views.py:644 topic/views.py:696
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:766
+#: topic/views.py:776
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
 
-#: topic/views.py:805
+#: topic/views.py:815
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:1025
+#: topic/views.py:1035
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:1079
+#: topic/views.py:1089
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 

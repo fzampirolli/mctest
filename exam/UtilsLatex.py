@@ -1768,9 +1768,9 @@ _inst1_
         # Itera sobre todas as questões
         for q in questions.all():
             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
-            if (q.question_IRT_b_ability == -5):
+            if (q.question_IRT_b_ability == -5.0):
                 # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
-                b_parameter = bloom_array.index(q.question_bloom_taxonomy) - 3
+                b_parameter = bloom_array.index(q.question_bloom_taxonomy) - 3.0
             else:
                 b_parameter = q.question_IRT_b_ability
             # Calcula o ganho de informação com base no theta calculado anteriormente e na dificuldade de cada questão
@@ -1977,17 +1977,17 @@ _inst1_
                         if adaptive_test == 'WPC':  # Weighted Percentage Correct
                             # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
                             if question.question_correction_count:
-                                b_parameter = 1 - question.question_correct_count / question.question_correction_count
+                                b_parameter = 100*(1 - question.question_correct_count / question.question_correction_count)
                         elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
                             # O parâmetro b é a habilidade IRT da questão
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
-                            if (question.question_IRT_b_ability == -5):
-                                b_parameter = question.question_bloom_taxonomy
+                            if (question.question_IRT_b_ability == -5.0):
+                                b_parameter = bloom_array.index(question.question_bloom_taxonomy) - 2.0
                             else:
                                 b_parameter = question.question_IRT_b_ability
                         elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
                             # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
-                            b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
+                            b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1.0
                         elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
                             b_parameter = int(question.question_difficulty) # BUG: todas as variações são iguais
 
@@ -1998,9 +1998,9 @@ _inst1_
                     # Calcula a habilidade do estudante
                     if adaptive_test == 'CAT':
                         if u_vector and b_vector:
-                            grade = Utils.ability_estimation_aux(0, b_vector, u_vector)
+                            grade = Utils.ability_estimation_aux(0, np.array(b_vector), np.array(u_vector))
                         else:
-                            grade = -5
+                            grade = -5.0
 
                         #Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
                     else:
@@ -2045,7 +2045,7 @@ _inst1_
             csv_writer.writerow(header_row)
 
             # Write data
-            maxStudentsClassGrade = 0
+            maxStudentsClassGrade = -5000000.0
             for student_id, student_data in student_grades_by_exam.items():
                 row_data = [student_data['room_id'], student_data['room_code'], student_data['name'],
                             student_data['email']]
@@ -2124,11 +2124,16 @@ _inst1_
                     if q['type'] == 'QM':  #### SOMA por:
                         if adaptive_test == "WPC": # Weighted Percentage Correct
                             if qBD.question_correction_count:
-                                sum_b += qBD.question_correct_count / qBD.question_correction_count
+                                sum_b += 100*(qBD.question_correct_count / qBD.question_correction_count)
                         elif adaptive_test == 'CAT': # Computerized Adaptive Testing
-                            sum_b += qBD.question_IRT_b_ability
+                            # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
+                            if (qBD.question_IRT_b_ability == -5.0):
+                                sum_b += bloom_array.index(qBD.question_bloom_taxonomy) - 2.0
+                            else:
+                                sum_b += qBD.question_IRT_b_ability
+
                         elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
-                            sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
+                            sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1.0
                         elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
                             sum_b += int(qBD.question_difficulty)
 
