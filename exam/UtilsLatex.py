@@ -1944,6 +1944,8 @@ _inst1_
             exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
             exams_aux = list(exams_with_same_room)  # Convert queryset to list
 
+            exams_aux.remove(exam) # remove o exame correte
+
             # Sort exams_aux by the 'exam_data' attribute
             exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
 
@@ -2061,7 +2063,7 @@ _inst1_
                     row_data.extend(
                         [exam_grade['exam_id'], str(exam_grade['exam_hour'])[:10], exam_grade['grade']])
 
-                    nota = int(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
+                    nota = float(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
                     total_grades.append(nota)
 
                 if len(total_grades) > int(choice_adaptive_test_number):
