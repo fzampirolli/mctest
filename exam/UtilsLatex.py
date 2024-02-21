@@ -1978,6 +1978,8 @@ _inst1_
                             # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
                             if question.question_correction_count:
                                 b_parameter = 100*(1 - question.question_correct_count / question.question_correction_count)
+                            else:
+                                b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
                         elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
                             # O parâmetro b é a habilidade IRT da questão
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
@@ -2125,6 +2127,8 @@ _inst1_
                         if adaptive_test == "WPC": # Weighted Percentage Correct
                             if qBD.question_correction_count:
                                 sum_b += 100*(qBD.question_correct_count / qBD.question_correction_count)
+                            else:
+                                sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
                         elif adaptive_test == 'CAT': # Computerized Adaptive Testing
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                             if (qBD.question_IRT_b_ability == -5.0):
