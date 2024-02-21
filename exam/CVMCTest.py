@@ -1630,7 +1630,8 @@ class cvMCTest(object):
                                                 str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
 
                     titl = _("Text Questions")
-                    str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+                    if any(q['type'] == 'QT' for var in vars['variations'] for q in var['questions']):
+                        str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
 
                     for var in vars['variations']:
                         for q in var['questions']:  # para cada questão dissertativa
@@ -1657,7 +1658,7 @@ class cvMCTest(object):
             fileExam.write("\\end{document}")
             fileExam.close()
 
-        cmd = ['pdflatex', '-interaction', 'nonstopmode', fileExameName]
+        cmd = ['pdflatex', '-shell-escape', '-interaction', 'nonstopmode', fileExameName]
         proc = subprocess.Popen(cmd)
         proc.communicate()
 
