@@ -150,6 +150,7 @@ pip install pdf2image
 pip install pyzbar
 pip install arviz
 pip install pymc3
+pip install Pygments
 pip install mysqlclient
 pip install requests
 pip install autopep8
