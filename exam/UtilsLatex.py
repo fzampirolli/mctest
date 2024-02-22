@@ -1992,8 +1992,8 @@ _inst1_
                         elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
                             # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
                             b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1.0
-                        elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
-                            b_parameter = int(question.question_difficulty) # BUG: todas as variações são iguais
+                        # elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
+                        #     b_parameter = int(question.question_difficulty) # BUG: todas as variações são iguais
 
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
@@ -2111,11 +2111,11 @@ _inst1_
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
         ###############################################
-        ### definir peso das variações pelo SAT (Bloom)
+        ### definir peso das variações
         variantExam_rankin = []
         for variationsExam in exam.variationsExams2.all():
             vars = eval(variationsExam.variation)
-            sum_b = 0
+            sum_b = []
             for var in vars['variations']:
                 for q in var['questions']:  # para cada questão
 
@@ -2128,26 +2128,28 @@ _inst1_
                     if q['type'] == 'QM':  #### SOMA por:
                         if adaptive_test == "WPC": # Weighted Percentage Correct
                             if qBD.question_correction_count:
-                                sum_b += 100*(qBD.question_correct_count / qBD.question_correction_count)
+                                sum_b.append(100*(qBD.question_correct_count / qBD.question_correction_count))
                             else:
-                                sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1
+                                sum_b.append(bloom_array.index(qBD.question_bloom_taxonomy) + 1)
                         elif adaptive_test == 'CAT': # Computerized Adaptive Testing
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                             if (qBD.question_IRT_b_ability == -5.0):
-                                sum_b += bloom_array.index(qBD.question_bloom_taxonomy) - 2.0
+                                sum_b.append(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0)
                             else:
-                                sum_b += qBD.question_IRT_b_ability
+                                sum_b.append(qBD.question_IRT_b_ability)
 
                         elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
-                            sum_b += bloom_array.index(qBD.question_bloom_taxonomy) + 1.0
-                        elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
-                            sum_b += int(qBD.question_difficulty)
+                            sum_b.append(bloom_array.index(qBD.question_bloom_taxonomy) + 1.0)
+                        # elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
+                        #     sum_b.append(float(qBD.question_difficulty))
 
+            soma = np.sum(sum_b)
+            desvio_padrao = np.std(sum_b) # FAZ SENTIDO ???
+            sum_b_value = soma # + len(sum_b) * desvio_padrao # para penalizar exames com muita variação
+            variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, sum_b_value])
 
-            variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, sum_b])
-
-        # Convert the last column to integers
-        data = [[item[0], item[1], int(item[2])] for item in variantExam_rankin]
+        # Convert the last column to float
+        data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
 
         # Sort the data by the converted last column
         variantExam_rankin_SAT_sort = np.array(sorted(data, key=lambda x: x[2]))
