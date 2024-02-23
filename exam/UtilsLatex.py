@@ -1979,30 +1979,32 @@ _inst1_
                         if adaptive_test == 'WPC':  # Weighted Percentage Correct
                             # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
                             if question.question_correction_count:
-                                b_parameter = 100*(1 - question.question_correct_count / question.question_correction_count)
+                                b_parameter = float(100*(1 - question.question_correct_count / question.question_correction_count))
                             else:
-                                b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1
+                                b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) + 1)
                         elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
                             # O parâmetro b é a habilidade IRT da questão
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                             if (question.question_IRT_b_ability == -5.0):
                                 b_parameter = bloom_array.index(question.question_bloom_taxonomy) - 2.0
                             else:
-                                b_parameter = question.question_IRT_b_ability
+                                b_parameter = float(question.question_IRT_b_ability)
                         elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
                             # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
-                            b_parameter = bloom_array.index(question.question_bloom_taxonomy) + 1.0
+                            b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) + 1.0)
                         # elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
-                        #     b_parameter = int(question.question_difficulty) # BUG: todas as variações são iguais
+                        #    b_parameter = float(question.question_difficulty) # BUG: todas as variações são iguais
 
                         # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
                         b_vector.append(b_parameter)
                         u_vector.append(acertou)
 
+                    b_vector = np.array(b_vector)
+                    u_vector = np.array(u_vector)
                     # Calcula a habilidade do estudante
                     if adaptive_test == 'CAT':
-                        if u_vector and b_vector:
-                            grade = Utils.ability_estimation_aux(0, np.array(b_vector), np.array(u_vector))
+                        if np.any(u_vector!=[]) and np.any(b_vector!=[]):
+                            grade = Utils.ability_estimation_aux(0, b_vector, u_vector)
                         else:
                             grade = -5.0
 
@@ -2111,7 +2113,7 @@ _inst1_
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
         ###############################################
-        ### definir peso das variações
+        ### definir peso das variações pelo SAT (Bloom)
         variantExam_rankin = []
         for variationsExam in exam.variationsExams2.all():
             vars = eval(variationsExam.variation)
@@ -2128,25 +2130,27 @@ _inst1_
                     if q['type'] == 'QM':  #### SOMA por:
                         if adaptive_test == "WPC": # Weighted Percentage Correct
                             if qBD.question_correction_count:
-                                sum_b.append(100*(qBD.question_correct_count / qBD.question_correction_count))
+                                sum_b.append(float(100*(qBD.question_correct_count / qBD.question_correction_count)))
                             else:
-                                sum_b.append(bloom_array.index(qBD.question_bloom_taxonomy) + 1)
+                                sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) + 1))
                         elif adaptive_test == 'CAT': # Computerized Adaptive Testing
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                             if (qBD.question_IRT_b_ability == -5.0):
-                                sum_b.append(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0)
+                                sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0))
                             else:
-                                sum_b.append(qBD.question_IRT_b_ability)
+                                sum_b.append(float(qBD.question_IRT_b_ability))
 
                         elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
-                            sum_b.append(bloom_array.index(qBD.question_bloom_taxonomy) + 1.0)
-                        # elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
-                        #     sum_b.append(float(qBD.question_difficulty))
+                            sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) + 1.0))
+                        #elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
+                        #    sum_b += float(qBD.question_difficulty)
 
-            soma = np.sum(sum_b)
-            desvio_padrao = np.std(sum_b) # FAZ SENTIDO ???
-            sum_b_value = soma # + len(sum_b) * desvio_padrao # para penalizar exames com muita variação
-            variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, sum_b_value])
+
+            # 0+0+0+0+5=5
+            # 1+1+1+1+1=5
+            valor = sum(sum_b) + len(sum_b) * np.std(sum_b) # penalidade com std alto
+
+            variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor])
 
         # Convert the last column to float
         data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
@@ -2193,8 +2197,8 @@ _inst1_
             # Tratar caso não haja valores não nulos
             nota_student = 0
 
-        rmax = np.max(variantExam_rankin_bloom_sort[:, -1].astype(int))
-        rmin = np.min(variantExam_rankin_bloom_sort[:, -1].astype(int))
+        rmax = np.max(variantExam_rankin_bloom_sort[:, -1].astype(float))
+        rmin = np.min(variantExam_rankin_bloom_sort[:, -1].astype(float))
 
         nota_student_proportion = 0
         if maxStudentsClassGrade and (rmax - rmin):
