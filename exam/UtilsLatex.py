@@ -2148,7 +2148,7 @@ _inst1_
 
             # 0+0+0+0+5=5
             # 1+1+1+1+1=5
-            valor = sum(sum_b) + len(sum_b) * np.std(sum_b) # penalidade com std alto
+            valor = sum(sum_b) #+ len(sum_b) * np.std(sum_b) # penalidade com std alto
 
             variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor])
 

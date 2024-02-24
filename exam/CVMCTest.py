@@ -1514,7 +1514,7 @@ class cvMCTest(object):
             with open(f, 'w') as csvfile:
                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                 print(f + ' criado no HD')
-                L1 = ['Pag', 'ID', 'Resp', 'Quest', 'Inv', 'Grade']
+                L1 = ['Pag', 'ID', 'Student', 'Email', 'Resp', 'Quest', 'Inv', 'Grade']
 
                 try:  # add in 31/3/2023
                     i = int(qr['correct'][0])  # se for inteiro entao tem questoes no BD
@@ -1532,7 +1532,8 @@ class cvMCTest(object):
             with open(f, 'a') as csvfile:
                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                 try:
-                    s = [str(int(qr['page']) + 1), qr['idStudent'], qr['answer'], qr['numquest'], qr['invalid'],
+                    est = Student.objects.get(student_ID=qr['idStudent'])
+                    s = [str(int(qr['page']) + 1), qr['idStudent'], est.student_name, est.student_email, qr['answer'], qr['numquest'], qr['invalid'],
                          qr['grade']]
                     t = [','.join(str(x) for x in s)]
                 except:
