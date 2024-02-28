@@ -2003,7 +2003,7 @@ _inst1_
                     u_vector = np.array(u_vector)
                     # Calcula a habilidade do estudante
                     if adaptive_test == 'CAT':
-                        if np.any(u_vector!=[]) and np.any(b_vector!=[]):
+                        if not np.any(u_vector) and not np.any(b_vector):
                             grade = Utils.ability_estimation_aux(0, b_vector, u_vector)
                         else:
                             grade = -5.0
@@ -2051,7 +2051,7 @@ _inst1_
             csv_writer.writerow(header_row)
 
             # Write data
-            maxStudentsClassGrade = -5000000.0
+            maxStudentsClassGrade = -5000.0
             for student_id, student_data in student_grades_by_exam.items():
                 row_data = [student_data['room_id'], student_data['room_code'], student_data['name'],
                             student_data['email']]
@@ -2062,6 +2062,10 @@ _inst1_
                 # Populate exam information for each exam
                 for exam_grade in student_data['grades']:
                     # Make sure 'exam_id' is included in the dictionary, or use get method with a default value
+
+                    if np.isinf(float(exam_grade['grade'])): # não fez o exame
+                        exam_grade['grade'] = maxStudentsClassGrade
+
                     row_data.extend(
                         [exam_grade['exam_id'], str(exam_grade['exam_hour'])[:10], exam_grade['grade']])
 
@@ -2148,6 +2152,15 @@ _inst1_
 
             # 0+0+0+0+5=5
             # 1+1+1+1+1=5
+            # if not adaptive_test == "WPC":
+            #     if max(sum_b) - min(sum_b) > 3:
+            #         print(">>>>>>>***** ", *sum_b)
+            #         continue
+            # else:
+            #     if max(sum_b) - min(sum_b) > 50:
+            #         print(">>>>>>>***** ", *sum_b)
+            #         continue
+
             valor = sum(sum_b) #+ len(sum_b) * np.std(sum_b) # penalidade com std alto
 
             variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor])
@@ -2156,7 +2169,7 @@ _inst1_
         data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
 
         # Sort the data by the converted last column
-        variantExam_rankin_SAT_sort = np.array(sorted(data, key=lambda x: x[2]))
+        variantExam_rankin_sort = np.array(sorted(data, key=lambda x: x[2]))
 
         # Create a CSV writer
         with open(path_to_file_ADAPTIVE_TEST_variations, 'w', newline='') as csv_file:
@@ -2166,10 +2179,10 @@ _inst1_
             header_row = ['Variation', 'VariationID', 'SumAbilities']
             csv_writer.writerow(header_row)
 
-            for v in variantExam_rankin_SAT_sort:
+            for v in variantExam_rankin_sort:
                 csv_writer.writerow(v)
 
-        return variantExam_rankin_SAT_sort
+        return variantExam_rankin_sort
 
     @staticmethod
     def getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort, student_name, maxStudentsClassGrade):
@@ -2187,6 +2200,7 @@ _inst1_
         vet_aux = df_student.values[0]
         # Encontrar índices onde o valor é diferente de NaN
         indices_nao_nan = np.where(pd.notna(vet_aux))[0]
+
         # Verificar se há índices não nulos
         if indices_nao_nan.size > 0:
             # Obter o último índice diferente de NaN
