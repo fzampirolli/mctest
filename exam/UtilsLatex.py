@@ -2163,20 +2163,35 @@ _inst1_
 
             valor = sum(sum_b) #+ len(sum_b) * np.std(sum_b) # penalidade com std alto
 
-            variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor])
+            #variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor, *sum_b, *aBD])
+            variantExam_rankin.append([
+                vars['variations'][0]['variant'],
+                variationsExam.id,
+                float(valor),
+                float(np.std(sum_b)),
+                *[float(element) for element in sum_b],  # Convert each element of sum_b to float
+                *aBD
+            ])
 
-        # Convert the last column to float
-        data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
+        # Convert the last columns to float
+        #data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
+
+        # criando uma nova lista
+        #data = variantExam_rankin
 
         # Sort the data by the converted last column
-        variantExam_rankin_sort = np.array(sorted(data, key=lambda x: x[2]))
+        variantExam_rankin_sort = np.array(sorted(variantExam_rankin, key=lambda x: x[2]))
 
         # Create a CSV writer
         with open(path_to_file_ADAPTIVE_TEST_variations, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
 
             # Write header
-            header_row = ['Variation', 'VariationID', 'SumAbilities']
+            header_row = ['Variation', 'VariationID', 'SumAbilities', 'STD']
+            # Adicionar 'b1', 'b2', ... no início da lista
+            header_row += [f'b{i}' for i in range(1, len(sum_b) + 1)]
+            # Adicionar 'k1', 'k2', ... no início da lista
+            header_row += [f'k{i}' for i in range(1, len(aBD) + 1)]
             csv_writer.writerow(header_row)
 
             for v in variantExam_rankin_sort:

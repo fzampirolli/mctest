@@ -72,24 +72,6 @@ from topic.models import Topic
 
 @login_required
 def variationsExam(request, pk):
-    """
-    Summary line.
-
-    Extended description of function.
-
-    Parameters
-    ----------
-    arg1 : int
-        Description of arg1
-    arg2 : str
-        Description of arg2
-
-    Returns
-    -------
-    int
-        Description of return value
-
-    """
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
         if not 'exam.change_exam' in perm:
