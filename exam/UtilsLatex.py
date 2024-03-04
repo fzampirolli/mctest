@@ -1718,7 +1718,7 @@ _inst1_
     # Autor: Lucas Montagnani Calil Elias - 1/2/2024
     @staticmethod
     def pl1_rasch_model(skill, difficulty):
-        #d = 1.702
+        # d = 1.702
         d = 1
         p = 1 / (1 + np.exp(-d * (skill - difficulty)))
         return p
@@ -1750,6 +1750,7 @@ _inst1_
             th, se, adj = Utils.ability_estimation(th, b, r)
         # devolver a habilidade do aluno (theta) e o erro padrão do calculo
         return th  # , se
+
     @staticmethod
     def fisher_information(student_skill, question_difficulty):
         d = 1.702
@@ -1944,7 +1945,7 @@ _inst1_
             exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
             exams_aux = list(exams_with_same_room)  # Convert queryset to list
 
-            exams_aux.remove(exam) # remove o exame correte
+            exams_aux.remove(exam)  # remove o exame correte
 
             # Sort exams_aux by the 'exam_data' attribute
             exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
@@ -1979,7 +1980,8 @@ _inst1_
                         if adaptive_test == 'WPC':  # Weighted Percentage Correct
                             # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
                             if question.question_correction_count:
-                                b_parameter = float(100*(1 - question.question_correct_count / question.question_correction_count))
+                                b_parameter = float(
+                                    100 * (1 - question.question_correct_count / question.question_correction_count))
                             else:
                                 b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) + 1)
                         elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
@@ -2008,7 +2010,7 @@ _inst1_
                         else:
                             grade = -5.0
 
-                        #Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
+                        # Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
                     else:
                         # Calcula a habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
                         grade = np.dot(b_vector, u_vector)
@@ -2051,7 +2053,7 @@ _inst1_
             csv_writer.writerow(header_row)
 
             # Write data
-            maxStudentsClassGrade = -5000.0
+            maxStudentsClassGrade = -5
             for student_id, student_data in student_grades_by_exam.items():
                 row_data = [student_data['room_id'], student_data['room_code'], student_data['name'],
                             student_data['email']]
@@ -2063,7 +2065,7 @@ _inst1_
                 for exam_grade in student_data['grades']:
                     # Make sure 'exam_id' is included in the dictionary, or use get method with a default value
 
-                    if np.isinf(float(exam_grade['grade'])): # não fez o exame
+                    if np.isinf(float(exam_grade['grade'])):  # não fez o exame
                         exam_grade['grade'] = maxStudentsClassGrade
 
                     row_data.extend(
@@ -2107,7 +2109,7 @@ _inst1_
 
         # Renomear o cabeçalho da última coluna
         df = df.rename(columns=mapeamento)
-        df.to_csv(path_to_file_ADAPTIVE_TEST, index=False)
+        df.to_csv(path_to_file_ADAPTIVE_TEST, index=False, float_format='%.3f')
 
         return maxStudentsClassGrade
 
@@ -2116,8 +2118,8 @@ _inst1_
 
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
-        ###############################################
-        ### definir peso das variações pelo SAT (Bloom)
+        #####################################################
+        ### definir peso das variações pelo método adaptativo
         variantExam_rankin = []
         for variationsExam in exam.variationsExams2.all():
             vars = eval(variationsExam.variation)
@@ -2132,12 +2134,12 @@ _inst1_
                         aBD.append(a.id)
 
                     if q['type'] == 'QM':  #### SOMA por:
-                        if adaptive_test == "WPC": # Weighted Percentage Correct
+                        if adaptive_test == "WPC":  # Weighted Percentage Correct
                             if qBD.question_correction_count:
-                                sum_b.append(float(100*(qBD.question_correct_count / qBD.question_correction_count)))
+                                sum_b.append(float(100 * (qBD.question_correct_count / qBD.question_correction_count)))
                             else:
                                 sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) + 1))
-                        elif adaptive_test == 'CAT': # Computerized Adaptive Testing
+                        elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                             if (qBD.question_IRT_b_ability == -5.0):
                                 sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0))
@@ -2146,9 +2148,8 @@ _inst1_
 
                         elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
                             sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) + 1.0))
-                        #elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
+                        # elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
                         #    sum_b += float(qBD.question_difficulty)
-
 
             # 0+0+0+0+5=5
             # 1+1+1+1+1=5
@@ -2161,9 +2162,9 @@ _inst1_
             #         print(">>>>>>>***** ", *sum_b)
             #         continue
 
-            valor = sum(sum_b) #+ len(sum_b) * np.std(sum_b) # penalidade com std alto
+            valor = sum(sum_b)  # + len(sum_b) * np.std(sum_b) # penalidade com std alto
 
-            #variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor, *sum_b, *aBD])
+            # variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor, *sum_b, *aBD])
             variantExam_rankin.append([
                 vars['variations'][0]['variant'],
                 variationsExam.id,
@@ -2174,10 +2175,10 @@ _inst1_
             ])
 
         # Convert the last columns to float
-        #data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
+        # data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
 
         # criando uma nova lista
-        #data = variantExam_rankin
+        # data = variantExam_rankin
 
         # Sort the data by the converted last column
         variantExam_rankin_sort = np.array(sorted(variantExam_rankin, key=lambda x: x[2]))
@@ -2195,7 +2196,12 @@ _inst1_
             csv_writer.writerow(header_row)
 
             for v in variantExam_rankin_sort:
-                csv_writer.writerow(v)
+                row = [
+                    (format(float(val), '.3f') if '.' in val else val) if (
+                                val and val.replace('.', '').replace('-', '').isdigit()) else val
+                    for val in v
+                ]
+                csv_writer.writerow(row)
 
         return variantExam_rankin_sort
 
@@ -2226,20 +2232,25 @@ _inst1_
             # Tratar caso não haja valores não nulos
             nota_student = 0
 
-        rmax = np.max(variantExam_rankin_bloom_sort[:, -1].astype(float))
-        rmin = np.min(variantExam_rankin_bloom_sort[:, -1].astype(float))
+        # pegar max e min da coluna com SumPrevieusAbilities
+        rmax = np.max(variantExam_rankin_bloom_sort[:, 2].astype(float))
+        rmin = np.min(variantExam_rankin_bloom_sort[:, 2].astype(float))
 
         nota_student_proportion = 0
-        if maxStudentsClassGrade and (rmax - rmin):
-            proporcao = nota_student / maxStudentsClassGrade  # Valor relativo em relação ao maximo
-            nota_student_proportion = round(rmin + proporcao * (rmax - rmin))
+        if (rmax - rmin):
+            proporcao = nota_student / maxStudentsClassGrade if maxStudentsClassGrade != 0 else 0
+            #nota_student_proportion = float(rmin + proporcao * (rmax - rmin))
 
-        # Filtrar as linhas com valor igual a nota_student_porcent na última coluna
+            # Calcular a proporção relativa
+            nota_student_proportion = float(rmin + proporcao * (rmax - rmin))
+            #nota_student_proportion = float((nota_student-rmin) / (rmax - rmin))
+
+        # Filtrar as linhas com valor igual a nota_student_porcent na coluna 2
         linhas_hash_num = []
         nota_aux = nota_student_proportion
         while not linhas_hash_num:
             linhas_hash_num = [linha for linha in variantExam_rankin_bloom_sort if
-                               linha[-1] == str(nota_aux)]
+                                   float(linha[2]) - 0.5 < nota_aux < float(linha[2]) + 0.5]
             nota_aux += 1
             if nota_aux > 100:  # pega uma variante aleatória
                 linhas_hash_num = variantExam_rankin_bloom_sort

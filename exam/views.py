@@ -1126,7 +1126,7 @@ def generate_page(request, pk):
                 ################################### 18/11/2023 pega hash adaptativo
                 nota_student = 0
                 if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(
-                        exam) and maxStudentsClassGrade:  # novo var_hash somente se maxStudentsClassGrade>0
+                        exam):# and maxStudentsClassGrade:  # novo var_hash somente se maxStudentsClassGrade>0
 
                     var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
                                                                      s.student_name, maxStudentsClassGrade)
