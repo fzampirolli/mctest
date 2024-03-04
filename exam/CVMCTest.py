@@ -1380,6 +1380,11 @@ class cvMCTest(object):
                     question.question_correction_count += 1
                     question.question_correct_count += acertou
                     question.save()
+
+                    # question.question_IRT_a_discrimination =
+                    # question.question_IRT_b_ability =
+                    # question.question_IRT_c_ability =
+
                 except:
                     pass
 
