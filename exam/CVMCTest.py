@@ -1383,7 +1383,7 @@ class cvMCTest(object):
 
                     # question.question_IRT_a_discrimination =
                     # question.question_IRT_b_ability =
-                    # question.question_IRT_c_ability =
+                    # question.question_IRT_c_guessing =
 
                 except:
                     pass
@@ -1434,6 +1434,78 @@ class cvMCTest(object):
         # for q in StudentExamQuestion.objects.all(): print(q.studentAnswer,q.answersOrder)
         # print(qr)
         return qr
+
+    @staticmethod
+    def create_answer_dict(exam):
+        answer_dict = {}  # Dictionary to store answers (1 for correct, 0 for incorrect)
+
+        # Get all student exam questions for the given exam
+        for stEx in exam.studentExams2.all():
+            for StExQu in stEx.studentExamQuestions2.all():
+                # Verifica se o aluno acertou a questão
+                ss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                correto = StExQu.answersOrder.index('0')
+                marcou = ss.index(StExQu.studentAnswer) if StExQu.studentAnswer in ss else -1
+                acertou = 1 if marcou == correto else 0
+
+                # Update the dictionary with acertos and erros
+                question_id = StExQu.question.id
+                if question_id in answer_dict:
+                    answer_dict[question_id].append(acertou)
+                else:
+                    answer_dict[question_id] = [acertou]
+
+        return answer_dict
+
+    @staticmethod
+    def estimate_IRT_parameters(exam): # EM CONSTRUÇÃO!!!
+        from scipy.optimize import minimize
+        from scipy.stats import logistic
+
+        # Example usage:
+        # Assuming 'student_exam_instance' is an instance of StudentExam
+        answer_dict = cvMCTest.create_answer_dict(exam)
+
+        for question_id, responses in answer_dict.items():
+            # Convert the list of responses to a NumPy array
+            student_responses = np.array(responses)
+
+            # Logistic function
+            def logistic_function(theta, a, b):
+                return logistic.cdf(a * (theta - b))
+
+            # Negative log-likelihood function
+            def neg_log_likelihood(params, *args):
+                theta, a, b = params
+                student_responses = args[0]
+                prob_correct = logistic_function(theta, a, b)
+                return -np.sum(
+                    student_responses * np.log(prob_correct) + (1 - student_responses) * np.log(1 - prob_correct))
+
+            # Initial parameter estimates
+            question = Question.objects.get(pk=question_id)
+            if question.question_IRT_b_ability == -5:
+                # Initial parameter estimates
+                theta_initial = 0.0
+                a_initial = 1.0
+                b_initial = 0.0
+            else:
+                theta_initial = question.question_IRT_c_guessing
+                a_initial = question.question_IRT_a_discrimination
+                b_initial = question.question_IRT_b_ability
+
+            # Minimization of negative log-likelihood
+            optimization_result = minimize(neg_log_likelihood, [theta_initial, a_initial, b_initial],
+                                           args=(student_responses,), method='L-BFGS-B')
+
+            # Estimated parameters
+            theta_estimated, a_estimated, b_estimated = optimization_result.x
+
+            # Update the question model with IRT parameters
+            question.question_IRT_a_discrimination = a_estimated
+            question.question_IRT_b_ability = b_estimated
+            question.question_IRT_c_guessing = theta_estimated
+            question.save()
 
     @staticmethod
     def drawImageGAB(qr, strGAB, img):

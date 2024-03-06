@@ -1672,39 +1672,7 @@ _inst1_
         compressed = zlib.compress(s, 6)
         compressed_ALL = zlib.compress(s_ALL, 6)
         sbeforeQR = binascii.hexlify(id_hashed + compressed)
-        sbeforeQR_ALL = binascii.hexlify(id_hashed + compressed_ALL)
-
-        ''' OBSOLETO, OS GABARITOS ESTÃO NO BD EM VariantExam
-        # template of each exam is save on service mctest
-        if exam.exam_print == 'both':
-            fileGAB = 'tmpGAB/' + myqr[1] + '.txt'
-            with open(fileGAB, 'w') as myfile:
-                myfile = open(fileGAB, 'w')
-                myfile.write(sbeforeQR_ALL.decode('utf-8'))
-                myfile.close()
-
-            # for test
-            with open(fileGAB, 'r') as myfile:
-                mysbeforeQR_ALL = myfile.read()
-                myfile.close()
-
-            # for test
-            safterScanmy = binascii.unhexlify(mysbeforeQR_ALL)
-            safterScan = binascii.unhexlify(sbeforeQR_ALL)
-            if safterScanmy != safterScan:
-                return HttpResponse("ERRO in safterScanmy != safterScan !!!!")
-            un_hashed = safterScan[:53]
-            safterScan = safterScan[53:]
-            decompressed = zlib.decompress(safterScan)
-
-            pre = '$2b$06$' + un_hashed.decode('utf-8')
-
-            if hashed == bcrypt.hashpw(stud, pre.encode('utf-8')):
-                print("passou19 = ok", pre)
-
-            if s_ALL != decompressed:
-                return HttpResponse("ERROR: in compression")
-        '''
+        #sbeforeQR_ALL = binascii.hexlify(id_hashed + compressed_ALL)
 
         # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
         qr = pyqrcode.create(sbeforeQR, error='M')
@@ -1715,9 +1683,9 @@ _inst1_
 
         return str1
 
-    # Autor: Lucas Montagnani Calil Elias - 1/2/2024
     @staticmethod
     def pl1_rasch_model(skill, difficulty):
+        # Autor: Lucas Montagnani Calil Elias
         # d = 1.702
         d = 1
         p = 1 / (1 + np.exp(-d * (skill - difficulty)))
@@ -1725,7 +1693,7 @@ _inst1_
 
     @staticmethod
     def ability_estimation(th, b, r):
-
+        # Autor: Lucas Montagnani Calil Elias
         if np.sum(r) / len(r) == 1:
             # return max(b), 0, 0
             return np.log(2 * len(b)), 0, 0
@@ -1744,7 +1712,8 @@ _inst1_
         return result, se, adjustment
 
     @staticmethod
-    def ability_estimation_aux(th, b, r):  # Lucas
+    def ability_estimation_aux(th, b, r):
+        # Autor: Lucas Montagnani Calil Elias
         adj = 1
         while (adj >= 0.05 or adj <= -0.05):
             th, se, adj = Utils.ability_estimation(th, b, r)
@@ -1753,6 +1722,7 @@ _inst1_
 
     @staticmethod
     def fisher_information(student_skill, question_difficulty):
+        # Autor: Lucas Montagnani Calil Elias
         d = 1.702
         p = Utils.pl1_rasch_model(student_skill, question_difficulty)
         q = 1 - p
@@ -1761,6 +1731,7 @@ _inst1_
 
     @staticmethod
     def item_selection(student_ability, question_topic, num_questions):
+        # Autor: Lucas Montagnani Calil Elias
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
         # Recupera todas as questões do topico escolhido na tela de Criar-PDF
         questions = Question.objects.filter(topic=question_topic)

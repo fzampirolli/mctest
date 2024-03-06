@@ -828,6 +828,9 @@ def correctStudentsExam(request, pk):
                 except:
                     messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
 
+                # método para calcular a,b e c da TRI
+                cvMCTest.estimate_IRT_parameters(exam)
+
             else:  # exames sem chaves - primeira página é o gabarito
                 try:
                     M = int(Utils.getNumMCQuestions(exam))  # Number of questions
