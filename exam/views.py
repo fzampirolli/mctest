@@ -830,6 +830,8 @@ def correctStudentsExam(request, pk):
 
                 # método para calcular a,b e c da TRI
                 cvMCTest.estimate_IRT_parameters(exam)
+                #cvMCTest.estimate_IRT_parameters_R(exam)
+
 
             else:  # exames sem chaves - primeira página é o gabarito
                 try:

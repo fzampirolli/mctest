@@ -1458,7 +1458,7 @@ class cvMCTest(object):
         return answer_dict
 
     @staticmethod
-    def estimate_IRT_parameters(exam): # EM CONSTRUÇÃO!!!
+    def estimate_IRT_parameters(exam):
         from scipy.optimize import minimize
         from scipy.stats import logistic
 
