@@ -1462,6 +1462,25 @@ class cvMCTest(object):
         from scipy.optimize import minimize
         from scipy.stats import logistic
 
+        # Função logística com o parâmetro adicional c
+        def logistica(theta, a, b, c):
+            return c + (1 - c) * logistic.cdf(a * (theta - b))
+
+        # Função de verossimilhança negativa com o parâmetro adicional c
+        def neg_log_verossimilhanca(params, respostas_alunos):
+            theta, a, b, c = params
+
+            # Garante que as probabilidades estejam no intervalo (0, 1)
+            prob_acerto = np.clip(logistica(theta, a, b, c), 1e-15, 1 - 1e-15)
+
+            return -np.sum(respostas_alunos * np.log(prob_acerto) + (1 - respostas_alunos) * np.log(1 - prob_acerto))
+
+        # Limites para os parâmetros
+        limite_theta = (-5, 5)
+        limite_a = (-np.inf, np.inf)
+        limite_b = limite_theta
+        limite_c = (0, 1)
+
         # Example usage:
         # Assuming 'student_exam_instance' is an instance of StudentExam
         answer_dict = cvMCTest.create_answer_dict(exam)
@@ -1470,41 +1489,32 @@ class cvMCTest(object):
             # Convert the list of responses to a NumPy array
             student_responses = np.array(responses)
 
-            # Logistic function
-            def logistic_function(theta, a, b):
-                return logistic.cdf(a * (theta - b))
-
-            # Negative log-likelihood function
-            def neg_log_likelihood(params, *args):
-                theta, a, b = params
-                student_responses = args[0]
-                prob_correct = logistic_function(theta, a, b)
-                return -np.sum(
-                    student_responses * np.log(prob_correct) + (1 - student_responses) * np.log(1 - prob_correct))
-
             # Initial parameter estimates
             question = Question.objects.get(pk=question_id)
             if question.question_IRT_b_ability == -5:
                 # Initial parameter estimates
-                theta_initial = 0.0
-                a_initial = 1.0
-                b_initial = 0.0
+                theta_inicial = 0.0
+                a_inicial = 1.0
+                b_inicial = 0.0
+                c_inicial = 0.0  # Valor inicial para a probabilidade de acerto pelo chute
             else:
-                theta_initial = question.question_IRT_c_guessing
-                a_initial = question.question_IRT_a_discrimination
-                b_initial = question.question_IRT_b_ability
+                theta_inicial = -question.question_IRT_b_ability
+                a_inicial = question.question_IRT_a_discrimination
+                b_inicial = question.question_IRT_b_ability
+                c_inicial = question.question_IRT_c_guessing
 
             # Minimization of negative log-likelihood
-            optimization_result = minimize(neg_log_likelihood, [theta_initial, a_initial, b_initial],
-                                           args=(student_responses,), method='L-BFGS-B')
+            resultado_minimizacao = minimize(neg_log_verossimilhanca, [theta_inicial, a_inicial, b_inicial, c_inicial],
+                                             args=(student_responses,), method='L-BFGS-B',
+                                             bounds=[limite_theta, limite_a, limite_b, limite_c])
 
             # Estimated parameters
-            theta_estimated, a_estimated, b_estimated = optimization_result.x
+            theta_estimated, a_estimated, b_estimated, c_estimated = resultado_minimizacao.x
 
             # Update the question model with IRT parameters
             question.question_IRT_a_discrimination = a_estimated
             question.question_IRT_b_ability = b_estimated
-            question.question_IRT_c_guessing = theta_estimated
+            question.question_IRT_c_guessing = c_estimated
             question.save()
 
     @staticmethod
