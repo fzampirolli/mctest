@@ -154,6 +154,7 @@ pip install Pygments
 pip install mysqlclient
 pip install requests
 pip install autopep8
+pip install pymysql==2.2.4
 pip install language_tool_python
 pip install --upgrade pip setuptools
 
