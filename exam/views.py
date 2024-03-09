@@ -562,7 +562,7 @@ def correctStudentsExam(request, pk):
             img = cv2.imread(myfile0)
             # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 
-            DEBUG = True
+            DEBUG = False
 
             img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

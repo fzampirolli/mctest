@@ -80,7 +80,7 @@ class cvMCTest(object):
     ################ para manipular PDF #################
     @staticmethod
     def getQRCode(img, countPage):
-        DEBUG = True
+        DEBUG = Fa
 
         myFlagArea = True
         qr = []
@@ -306,7 +306,7 @@ class cvMCTest(object):
 
     @staticmethod
     def get_circles(img, countPage):
-        DEBUG = True
+        DEBUG = False
 
         if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
 
@@ -361,7 +361,7 @@ class cvMCTest(object):
 
     @staticmethod
     def getAnswerArea(img, countPage):
-        DEBUG = True
+        DEBUG = False
 
         if DEBUG: cv2.imwrite("_getAnswerArea.png", img)
         H, W = img.shape

@@ -114,6 +114,9 @@ user = '"$DB_USER"'
 password = '"$DB_PASS"'
 default-character-set = utf8' >>/etc/mysql/my.cnf
 
+# comentar linhas:
+sed -i -e '/import pymysql/s/^/# /' -e '/pymysql.version_info = (2, 2, 4, '\''final'\'', 0)/s/^/# /' -e '/pymysql.install_as_MySQLdb()/s/^/# /' mctest/settings.py
+
 # Re-inicia o serviço do MySQL
 sudo systemctl daemon-reload
 sudo systemctl restart mysql
