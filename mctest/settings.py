@@ -136,6 +136,11 @@ WSGI_APPLICATION = 'mctest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
+
+import pymysql
+pymysql.version_info = (2, 2, 4, 'final', 0)
+pymysql.install_as_MySQLdb()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

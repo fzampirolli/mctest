@@ -131,7 +131,7 @@ pip install -r requirements-titan256GB.txt
 # se ocorrer algum erro no comando anterior (no ubuntu 23.04):
 pip install --upgrade pip setuptools
 pip install --upgrade scipy
-pip install scikit-image==0.20.0
+pip install scikit-image==0.18.1
 pip install django
 pip install python-dotenv
 pip install django-widget-tweaks
@@ -156,6 +156,16 @@ pip install requests
 pip install autopep8
 pip install language_tool_python
 pip install --upgrade pip setuptools
+
+# para instalar bibliotecas estatísticas do R
+# brew install r # para macos
+sudo apt install r-base
+sudo apt install r-base-dev
+pip install rpy2
+export R_HOME=/usr/lib/R
+export RPY2_CFFI_MODE=ABI
+# python -m rpy2.situation
+
 
 # instala mais alguns pacotes com apt
 #sudo snap install emacs --classic

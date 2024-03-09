@@ -178,21 +178,26 @@ source ../_settings.env
 ## pip freeze > requirements.txt
 #pip install -r requirements.txt
 
+"""
 ## mac
-#brew tap homebrew/services
-#brew services restart mysql
-#brew services list
-#mysql -V
-#sudo mysql -u root -p
-#ifconfig
-#sudo mysql -u root -p -h 192.168.100.106  # muda sempre
-#
-#mysql -u root -p
-#use DB_MCTest;
-#ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '2008ufabc2018';
-#ALTER USER 'fz'@'localhost' IDENTIFIED WITH mysql_native_password BY '2008ufabc2018';
-#FLUSH PRIVILEGES;
-#
+brew tap homebrew/services
+brew services restart mysql
+brew reinstall mysql
+brew reinstall mysql-client
+mysql_secure_installation
+brew services list
+mysql -V
+sudo mysql -u root -p
+ifconfig
+sudo mysql -u root -p -h 192.168.0.13  # muda sempre
+
+mysql -u root -p
+use DB_MCTest;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '2008ufabc2018';
+ALTER USER 'fz'@'localhost' IDENTIFIED WITH mysql_native_password BY '2008ufabc2018';
+FLUSH PRIVILEGES;
+"""
+
 ##recuperar senha
 #mysql_upgrade -u root -p
 
