@@ -829,8 +829,17 @@ def correctStudentsExam(request, pk):
                     messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
 
                 # método para calcular a,b e c da TRI
-                cvMCTest.estimate_IRT_parameters(exam)
-                #cvMCTest.estimate_IRT_parameters_R(exam)
+                try:
+                    cvMCTest.estimate_IRT_parameters(exam)
+                    pass
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in CAT by scipy.optimize"))
+
+                try:
+                    #cvMCTest.estimate_IRT_parameters_R(exam)
+                    pass
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in CAT by R"))
 
 
             else:  # exames sem chaves - primeira página é o gabarito

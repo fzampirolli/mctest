@@ -80,7 +80,7 @@ class cvMCTest(object):
     ################ para manipular PDF #################
     @staticmethod
     def getQRCode(img, countPage):
-        DEBUG = Fa
+        DEBUG = False
 
         myFlagArea = True
         qr = []
@@ -1436,7 +1436,8 @@ class cvMCTest(object):
         return qr
 
     @staticmethod
-    def create_answer_dict(exam):
+    def create_answer(exam, type="dict"):
+        import pandas as pd
         answer_dict = {}  # Dictionary to store answers (1 for correct, 0 for incorrect)
 
         # Get all student exam questions for the given exam
@@ -1454,8 +1455,13 @@ class cvMCTest(object):
                     answer_dict[question_id].append(acertou)
                 else:
                     answer_dict[question_id] = [acertou]
+        if type == "dict":
+            return answer_dict
+        else:  # matrix
+            # Convert the dictionary to a DataFrame
+            df = pd.DataFrame.from_dict(answer_dict, orient="index")
 
-        return answer_dict
+            return df
 
     @staticmethod
     def estimate_IRT_parameters(exam):
@@ -1483,7 +1489,7 @@ class cvMCTest(object):
 
         # Example usage:
         # Assuming 'student_exam_instance' is an instance of StudentExam
-        answer_dict = cvMCTest.create_answer_dict(exam)
+        answer_dict = cvMCTest.create_answer(exam, 'dict')
 
         for question_id, responses in answer_dict.items():
             # Convert the list of responses to a NumPy array
@@ -1519,66 +1525,86 @@ class cvMCTest(object):
 
     @staticmethod
     def estimate_IRT_parameters_R(exam):
-        from scipy.optimize import minimize
-        from scipy.stats import logistic
+        import pandas as pd
 
-        import rpy2.robjects as ro
-        from rpy2.robjects.packages import importr
+        # !pip install rpy2
 
-        psyirt = importr('psyirt')
-        # Função logística com o parâmetro adicional c
-        def logistica(theta, a, b, c):
-            return c + (1 - c) * logistic.cdf(a * (theta - b))
+        import rpy2.robjects as robjects
+        from rpy2.robjects import pandas2ri
 
-        # Função de verossimilhança negativa com o parâmetro adicional c
-        def neg_log_verossimilhanca(params, respostas_alunos):
-            theta, a, b, c = params
+        # Activate automatic conversion of pandas data frames to R data frames
+        pandas2ri.activate()
 
-            # Garante que as probabilidades estejam no intervalo (0, 1)
-            prob_acerto = np.clip(logistica(theta, a, b, c), 1e-15, 1 - 1e-15)
+        # Instalar somente uma vez:
+        # robjects.r('install.packages("mirt")')
 
-            return -np.sum(respostas_alunos * np.log(prob_acerto) + (1 - respostas_alunos) * np.log(1 - prob_acerto))
-
-        # Limites para os parâmetros
-        limite_theta = (-5, 5)
-        limite_a = (-np.inf, np.inf)
-        limite_b = limite_theta
-        limite_c = (0, 1)
+        # Load the mirt library
+        robjects.r('library(mirt)')
 
         # Example usage:
         # Assuming 'student_exam_instance' is an instance of StudentExam
-        answer_dict = cvMCTest.create_answer_dict(exam)
+        df_answer_matrix = cvMCTest.create_answer(exam, 'matrix')
 
-        for question_id, responses in answer_dict.items():
-            # Convert the list of responses to a NumPy array
-            student_responses = np.array(responses)
+        # Obtém as chaves das perguntas como um array NumPy
+        questions_keys = df_answer_matrix.index.to_numpy()
 
+        df_answer_matrix = df_answer_matrix.transpose()
+
+        df_answer_matrix.to_csv('arquivo.csv')
+
+        # Convert the pandas DataFrame to an R DataFrame
+        dados = robjects.conversion.py2rpy(df_answer_matrix)
+
+        # Assign the R DataFrame to an R variable 'dados'
+        robjects.r.assign('dados', dados)
+
+        # Modelo 1PL (Rasch)
+        # Fit the mirt model
+        #robjects.r('mod1 <- mirt(dados, 1, itemtype = "Rasch")')
+        # Extract and print the coefficients
+        #coefficients = robjects.r('coef(mod1, simplify=TRUE, IRTpars=TRUE)')
+
+        # Modelo 2PL
+        #robjects.r('mod2 <- mirt(dados, 1, itemtype = "2PL")')
+        #coefficients = robjects.r('coef(mod2, simplify=TRUE, IRTpars=TRUE)')
+
+        # Modelo 3PL
+        robjects.r('mod3 <- mirt(dados, 1, itemtype = "3PL")')
+        coefficients = robjects.r('coef(mod3, simplify=TRUE, IRTpars=TRUE)')
+
+        # Criando um dataframe para extair os resultados da calibração
+        column_names = ['a', 'b', 'g', 'u']
+        df = pd.DataFrame(coefficients[0], columns=column_names)
+        df.to_csv('arquivo2.csv')
+
+        column_names = ['question', 'a', 'b', 'g', 'u']
+        df_output = pd.DataFrame(columns=column_names)
+
+        df_output['question'] = questions_keys
+        for i in range(0, 4):
+            df_output[df_output.columns[i + 1]] = df[df.columns[i]].values
+        df_output.to_csv('arquivo3.csv')
+
+        for index, row in df_output.iterrows():
             # Initial parameter estimates
-            question = Question.objects.get(pk=question_id)
-            if question.question_IRT_b_ability == -5:
-                # Initial parameter estimates
-                theta_inicial = 0.0
-                a_inicial = 1.0
-                b_inicial = 0.0
-                c_inicial = 0.0  # Valor inicial para a probabilidade de acerto pelo chute
-            else:
-                theta_inicial = -question.question_IRT_b_ability
-                a_inicial = question.question_IRT_a_discrimination
-                b_inicial = question.question_IRT_b_ability
-                c_inicial = question.question_IRT_c_guessing
+            question = Question.objects.get(pk=row['question'])
 
-            # Minimization of negative log-likelihood
-            resultado_minimizacao = minimize(neg_log_verossimilhanca, [theta_inicial, a_inicial, b_inicial, c_inicial],
-                                             args=(student_responses,), method='L-BFGS-B',
-                                             bounds=[limite_theta, limite_a, limite_b, limite_c])
-
-            # Estimated parameters
-            theta_estimated, a_estimated, b_estimated, c_estimated = resultado_minimizacao.x
+            # if question.question_IRT_b_ability == -5:
+            #     # Initial parameter estimates
+            #     theta_inicial = 0.0
+            #     a_inicial = 1.0
+            #     b_inicial = 0.0
+            #     c_inicial = 0.0  # Valor inicial para a probabilidade de acerto pelo chute
+            # else:
+            #     theta_inicial = -question.question_IRT_b_ability
+            #     a_inicial = question.question_IRT_a_discrimination
+            #     b_inicial = question.question_IRT_b_ability
+            #     c_inicial = question.question_IRT_c_guessing
 
             # Update the question model with IRT parameters
-            question.question_IRT_a_discrimination = a_estimated
-            question.question_IRT_b_ability = b_estimated
-            question.question_IRT_c_guessing = c_estimated
+            question.question_IRT_a_discrimination = row['a']
+            question.question_IRT_b_ability = row['b']
+            question.question_IRT_c_guessing = row['g']
             question.save()
 
     @staticmethod
@@ -1608,10 +1634,10 @@ class cvMCTest(object):
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    lin = int(p1[0] + 15 + 22.3 * q) ######################## 22.1 SENSIVEL
+                    lin = int(p1[0] + 15 + 22.3 * q)  ######################## 22.1 SENSIVEL
                     if lin < p2[0]:
                         try:
-                            if len(respostas[countQuestions]) == 3: ######################## 30.0 SENSIVEL
+                            if len(respostas[countQuestions]) == 3:  ######################## 30.0 SENSIVEL
                                 col = int(p1[1] + 31 * (notas.index(respostas[countQuestions][2]) + 1) - 14)
                                 if col < p2[1]:
                                     cv2.circle(img, (col, lin), 11, (255, 0, 255), 2)
@@ -1684,7 +1710,8 @@ class cvMCTest(object):
                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
                 try:
                     est = Student.objects.get(student_ID=qr['idStudent'])
-                    s = [str(int(qr['page']) + 1), qr['idStudent'], est.student_name, est.student_email, qr['answer'], qr['numquest'], qr['invalid'],
+                    s = [str(int(qr['page']) + 1), qr['idStudent'], est.student_name, est.student_email, qr['answer'],
+                         qr['numquest'], qr['invalid'],
                          qr['grade']]
                     t = [','.join(str(x) for x in s)]
                 except:
@@ -1776,7 +1803,7 @@ class cvMCTest(object):
                                     for a in q['answers']:
                                         if aa0 == notas[a['answer']]:
                                             str1 += "\\textbf{%s:} \hspace{5.5mm} (%s) %s \n\n" % (
-                                            _("Your answer"), aa0, a['text'])
+                                                _("Your answer"), aa0, a['text'])
 
                                             if a['feedback'] != '\n':
                                                 str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
@@ -1796,7 +1823,7 @@ class cvMCTest(object):
         strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr[
             'idStudent'] + '_GAB.png'
 
-        if not os.path.exists(strGAB): # se não existe arquivo, aborta
+        if not os.path.exists(strGAB):  # se não existe arquivo, aborta
             return ''
 
         with open(fileExameName, 'w') as fileExam:
@@ -1920,4 +1947,3 @@ automática e está sendo desenvolvido com apoio das instituições públicas:
                                     assunto,
                                     mensagem,
                                     [arquivo])
-

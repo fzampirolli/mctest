@@ -165,6 +165,7 @@ pip install --upgrade pip setuptools
 # brew install r # para macos
 sudo apt install r-base
 sudo apt install r-base-dev
+sudo apt install r-base-core
 pip install rpy2
 export R_HOME=/usr/lib/R
 export RPY2_CFFI_MODE=ABI
