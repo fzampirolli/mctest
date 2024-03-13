@@ -36,6 +36,7 @@ import time
 import unicodedata
 import zlib
 import requests
+import math
 
 import bcrypt
 import numpy as np
@@ -1694,7 +1695,7 @@ _inst1_
     @staticmethod
     def ability_estimation(th, b, r):
         # Autor: Lucas Montagnani Calil Elias
-        if np.sum(r) / len(r) == 1:
+        if np.mean(r) == 1:
             # return max(b), 0, 0
             return np.log(2 * len(b)), 0, 0
         if np.sum(r) == 0:
@@ -1890,7 +1891,7 @@ _inst1_
         ultimo_cabecalho = df.columns[-1]
 
         # Criar um dicionário de mapeamento para renomear o cabeçalho
-        novo_cabecalho = 'SumPreviousAbilities'
+        novo_cabecalho = 'MeanPreviousAbilities'
         mapeamento = {ultimo_cabecalho: novo_cabecalho}
 
         # Renomear o cabeçalho da última coluna
@@ -1914,6 +1915,11 @@ _inst1_
 
             # Encontre todos os exames já aplicadados na turma
             exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
+            # exams_with_same_room = Exam.objects.filter(
+            #     classrooms__id=room.id,
+            #     exam_hour__date__lte=exam.exam_hour.date(),
+            # )
+
             exams_aux = list(exams_with_same_room)  # Convert queryset to list
 
             exams_aux.remove(exam)  # remove o exame correte
@@ -1922,6 +1928,9 @@ _inst1_
             exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
 
             for exam0 in exams_aux_sorted:  ############ PARA CADA exam0
+
+                if exam.exam_hour < exam0.exam_hour: # descarta exames que ainda não foram aplicados
+                    continue
 
                 for s in room.students.all():  ### Laço para pegar a nota de cada aluno em exam0
 
@@ -1976,15 +1985,15 @@ _inst1_
                     u_vector = np.array(u_vector)
                     # Calcula a habilidade do estudante
                     if adaptive_test == 'CAT':
-                        if not np.any(u_vector) and not np.any(b_vector):
+                        if np.any(u_vector) and np.any(b_vector):
                             grade = Utils.ability_estimation_aux(0, b_vector, u_vector)
                         else:
                             grade = -5.0
 
                         # Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
                     else:
-                        # Calcula a habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
-                        grade = np.dot(b_vector, u_vector)
+                        # Calcula a média da habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
+                        grade = np.dot(b_vector, u_vector)/len(b_vector)
 
                     # Inicialize um dicionário para o aluno atual, caso não exista
                     if s.id not in student_grades_by_exam:
@@ -2042,18 +2051,21 @@ _inst1_
                     row_data.extend(
                         [exam_grade['exam_id'], str(exam_grade['exam_hour'])[:10], exam_grade['grade']])
 
-                    nota = float(exam_grade['grade']) if exam_grade.get('grade') is not None else 0
+                    nota = float(exam_grade.get('grade'))
+                    if math.isnan(nota):
+                        nota = 0.0
+
                     total_grades.append(nota)
 
                 if len(total_grades) > int(choice_adaptive_test_number):
-                    somaUtimos = sum(total_grades[-int(choice_adaptive_test_number):])
+                    mediaUltimos = np.mean(total_grades[-int(choice_adaptive_test_number):])
                 else:
-                    somaUtimos = sum(total_grades)
+                    mediaUltimos = np.mean(total_grades)
 
-                if maxStudentsClassGrade < somaUtimos:
-                    maxStudentsClassGrade = somaUtimos
+                if maxStudentsClassGrade < mediaUltimos:
+                    maxStudentsClassGrade = mediaUltimos
 
-                row_data.extend([float(somaUtimos)])
+                row_data.extend([float(mediaUltimos)])
 
                 csv_writer.writerow(row_data)
 
@@ -2075,11 +2087,12 @@ _inst1_
         ultimo_cabecalho = df.columns[-1]
 
         # Criar um dicionário de mapeamento para renomear o cabeçalho
-        novo_cabecalho = 'SumPreviousAbilities'
+        novo_cabecalho = 'MeanPreviousAbilities'
         mapeamento = {ultimo_cabecalho: novo_cabecalho}
 
         # Renomear o cabeçalho da última coluna
         df = df.rename(columns=mapeamento)
+
         df.to_csv(path_to_file_ADAPTIVE_TEST, index=False, float_format='%.3f')
 
         return maxStudentsClassGrade
@@ -2133,7 +2146,7 @@ _inst1_
             #         print(">>>>>>>***** ", *sum_b)
             #         continue
 
-            valor = sum(sum_b)  # + len(sum_b) * np.std(sum_b) # penalidade com std alto
+            valor = np.mean(sum_b)  # + len(sum_b) * np.std(sum_b) # penalidade com std alto
 
             # variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor, *sum_b, *aBD])
             variantExam_rankin.append([
@@ -2159,7 +2172,7 @@ _inst1_
             csv_writer = csv.writer(csv_file, delimiter=',')
 
             # Write header
-            header_row = ['Variation', 'VariationID', 'SumAbilities', 'STD']
+            header_row = ['Variation', 'VariationID', 'MeanAbilities', 'STD']
             # Adicionar 'b1', 'b2', ... no início da lista
             header_row += [f'b{i}' for i in range(1, len(sum_b) + 1)]
             # Adicionar 'k1', 'k2', ... no início da lista
@@ -2182,9 +2195,8 @@ _inst1_
 
         # Filtre as linhas com 'NomeAluno' igual ao nome do aluno
         df_student = df[df['NameStudent'] == student_name]
-        aluno_escolhido_students_same_name = df_student.shape[0]
 
-        if aluno_escolhido_students_same_name > 1:
+        if df_student.shape[0] > 1:
             messages.error(request, _('ERROR - students with same name') + student_name)
             return render(request, 'exam/exam_errors.html', {})
 
@@ -2208,8 +2220,8 @@ _inst1_
         rmin = np.min(variantExam_rankin_bloom_sort[:, 2].astype(float))
 
         nota_student_proportion = 0
-        if (rmax - rmin):
-            proporcao = nota_student / maxStudentsClassGrade if maxStudentsClassGrade != 0 else 0
+        if maxStudentsClassGrade != 0:
+            proporcao = float(nota_student) / maxStudentsClassGrade
             #nota_student_proportion = float(rmin + proporcao * (rmax - rmin))
 
             # Calcular a proporção relativa
@@ -2221,9 +2233,9 @@ _inst1_
         nota_aux = nota_student_proportion
         while not linhas_hash_num:
             linhas_hash_num = [linha for linha in variantExam_rankin_bloom_sort if
-                                   float(linha[2]) - 0.5 < nota_aux < float(linha[2]) + 0.5]
-            nota_aux += 1
-            if nota_aux > 100:  # pega uma variante aleatória
+                                   float(linha[2]) - 0.05 < nota_aux < float(linha[2]) + 0.05]
+            nota_aux += 0.1
+            if nota_aux > 1000:  # pega uma variante aleatória
                 linhas_hash_num = variantExam_rankin_bloom_sort
                 break
         # Selecionar uma linha aleatória

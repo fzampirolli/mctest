@@ -69,6 +69,7 @@ from topic.models import Question
 from topic.models import Answer
 from topic.models import Topic
 
+import requests
 
 @login_required
 def variationsExam(request, pk):
@@ -937,6 +938,57 @@ def correctStudentsExam(request, pk):
 # print(Utils.distro_table(nome),end="\n")
 ####################### HASH
 
+
+def generate_moodle_question(exam, id):
+    data ={
+        'wstoken':'1d6040a8333e399a7740442024e7eb2d',
+        'wsfunction':'local_wstemplate_create_question',
+        'moodlewsrestformat':'json',
+        'json':'{}'
+    }
+    url = "http://localhost/moodle/webservice/rest/server.php"
+    question_data = {
+        "nomeDoCurso": "teste 1",
+        "nomDaQuestao": "",
+        "textoDaQuestao": "",
+        "categoria": "",
+        "feedbackCorreto": "Sua resposta está correta.",
+        "feedbackParcialmenteCorreto": "Sua resposta está parcialmente correta.",
+        "feedbackIncorreto": "Sua resposta está incorreta.",
+        "alternativaA": "",
+        "fracaoA": "",
+        "alternativaB": "",
+        "fracaoB": "",
+        "alternativaC": "",
+        "fracaoC": "",
+        "alternativaD": "",
+        "fracaoD": "",
+        "alternativaE": "",
+        "fracaoE": ""
+    }
+    answer_data='ABCDE'
+    d = exam.variationsExams2.all()[0]
+    s = eval(d.variation)
+    for var in s['variations']:
+            for q in var['questions']:
+                if q['type'] == 'QM':
+                    question_data['nomeDaQuestao'] = q['number']
+                    question_data['textoDaQuestao'] = q['text']
+                    qBD = get_object_or_404(Question, pk=str(q['key']))
+                    question_data['categoria'] = qBD.topic.topic_text
+                    if len(q['answers']):
+                        count = 0
+                        for a in q['answers']:
+                            if a['sort'] == 0:
+                                    question_data['alternativa'+answer_data[count]] = a['text']
+                                    question_data['fracao'+answer_data[count]] = "1.0"
+                            else:
+                                    question_data['alternativa'+answer_data[count]] = a['text']
+                                    question_data['fracao'+answer_data[count]] = "0.0"
+                            count+=1
+                data['json'] = json.dumps(question_data)
+                request = requests.post(url, data)
+
 @login_required
 def generate_page(request, pk):
     print("generate_page-00-" + str(datetime.datetime.now()))
@@ -991,6 +1043,8 @@ def generate_page(request, pk):
         numVariations = exam.variationsExams2.all().count()
         qr_answers = Utils.getQRanswers(exam.variationsExams2.all())
 
+        #generate_moodle_question(exam, 5)
+
         if exam.exam_print != 'answ':
             d = exam.variationsExams2.all().first()
             exam0dict = eval(d.variation)
@@ -1025,7 +1079,7 @@ def generate_page(request, pk):
         except Exception as e:
             pass
 
-        listVariations = [['Room', 'ID', 'Name', 'Email', 'Variation', 'SumPreviousAbilities']]
+        listVariations = [['Room', 'ID', 'Name', 'Email', 'Variation', 'MeanPreviousAbilities']]
         maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
             if maxStudentsClass < len(room.students.all()):
