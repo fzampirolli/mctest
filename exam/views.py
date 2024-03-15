@@ -71,6 +71,7 @@ from topic.models import Topic
 
 import requests
 
+
 @login_required
 def variationsExam(request, pk):
     if request.user.get_group_permissions():
@@ -837,7 +838,7 @@ def correctStudentsExam(request, pk):
                     messages.error(request, _("correctStudentsExam: Error in CAT by scipy.optimize"))
 
                 try:
-                    #cvMCTest.estimate_IRT_parameters_R(exam)
+                    # cvMCTest.estimate_IRT_parameters_R(exam)
                     pass
                 except:
                     messages.error(request, _("correctStudentsExam: Error in CAT by R"))
@@ -940,11 +941,14 @@ def correctStudentsExam(request, pk):
 
 
 def generate_moodle_question(exam, id):
-    data ={
-        'wstoken':'1d6040a8333e399a7740442024e7eb2d',
-        'wsfunction':'local_wstemplate_create_question',
-        'moodlewsrestformat':'json',
-        'json':'{}'
+    """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
+    como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+    da Universidade Federal do ABC, em 2023-2024"""
+    data = {
+        'wstoken': '1d6040a8333e399a7740442024e7eb2d',
+        'wsfunction': 'local_wstemplate_create_question',
+        'moodlewsrestformat': 'json',
+        'json': '{}'
     }
     url = "http://localhost/moodle/webservice/rest/server.php"
     question_data = {
@@ -966,28 +970,29 @@ def generate_moodle_question(exam, id):
         "alternativaE": "",
         "fracaoE": ""
     }
-    answer_data='ABCDE'
+    answer_data = 'ABCDE'
     d = exam.variationsExams2.all()[0]
     s = eval(d.variation)
     for var in s['variations']:
-            for q in var['questions']:
-                if q['type'] == 'QM':
-                    question_data['nomeDaQuestao'] = q['number']
-                    question_data['textoDaQuestao'] = q['text']
-                    qBD = get_object_or_404(Question, pk=str(q['key']))
-                    question_data['categoria'] = qBD.topic.topic_text
-                    if len(q['answers']):
-                        count = 0
-                        for a in q['answers']:
-                            if a['sort'] == 0:
-                                    question_data['alternativa'+answer_data[count]] = a['text']
-                                    question_data['fracao'+answer_data[count]] = "1.0"
-                            else:
-                                    question_data['alternativa'+answer_data[count]] = a['text']
-                                    question_data['fracao'+answer_data[count]] = "0.0"
-                            count+=1
-                data['json'] = json.dumps(question_data)
-                request = requests.post(url, data)
+        for q in var['questions']:
+            if q['type'] == 'QM':
+                question_data['nomeDaQuestao'] = q['number']
+                question_data['textoDaQuestao'] = q['text']
+                qBD = get_object_or_404(Question, pk=str(q['key']))
+                question_data['categoria'] = qBD.topic.topic_text
+                if len(q['answers']):
+                    count = 0
+                    for a in q['answers']:
+                        if a['sort'] == 0:
+                            question_data['alternativa' + answer_data[count]] = a['text']
+                            question_data['fracao' + answer_data[count]] = "1.0"
+                        else:
+                            question_data['alternativa' + answer_data[count]] = a['text']
+                            question_data['fracao' + answer_data[count]] = "0.0"
+                        count += 1
+            data['json'] = json.dumps(question_data)
+            request = requests.post(url, data)
+
 
 @login_required
 def generate_page(request, pk):
@@ -1043,7 +1048,7 @@ def generate_page(request, pk):
         numVariations = exam.variationsExams2.all().count()
         qr_answers = Utils.getQRanswers(exam.variationsExams2.all())
 
-        #generate_moodle_question(exam, 5)
+        # generate_moodle_question(exam, 5) # para teste de integração com o Moodle
 
         if exam.exam_print != 'answ':
             d = exam.variationsExams2.all().first()
@@ -1093,24 +1098,21 @@ def generate_page(request, pk):
         ####################################
         ### PARA TESTE ADAPTATIVO 17/11/2023
 
-        maxStudentsClassGrade = 0
+        maxStudentsClassesGrade = -5
+        minStudentsClassesGrade = 100
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
             if choice_adaptive_test in ['WPC', 'CAT', 'SATB']:
-                maxStudentsClassGrade = Utils.createAdaptativeTest(request, exam, choice_adaptive_test_number,
-                                                                   path_to_file_ADAPTIVE_TEST, choice_adaptive_test)
+                # pega todas as notas de provas anteriores de todos os alunos nas mesmas turmas deste exame
+                minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams = Utils.createAdaptativeTest(request, exam,
+                                                                                          choice_adaptive_test_number,
+                                                                                          path_to_file_ADAPTIVE_TEST,
+                                                                                          choice_adaptive_test)
 
                 variantExam_rankin_sort = Utils.createCariantExam_rankin_sort(
                     request, exam, path_to_file_ADAPTIVE_TEST_variations, choice_adaptive_test)
 
                 df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
-
-            # if choice_adaptive_test == 'CAT':
-            #     messages.error(request, _('CAT not yet implemented'))
-            #     return render(request, 'exam/exam_errors.html', {})
-            #
-            #     maxStudentsClassGrade = Utils.createAdaptativeTest_CAT(request, exam, choice_adaptive_test_number,
-            #                                                            path_to_file_ADAPTIVE_TEST)
 
         ### PARA TESTE ADAPTATIVO 17/11/2023 - FIM
         ##########################################
@@ -1194,10 +1196,14 @@ def generate_page(request, pk):
                 ################################### 18/11/2023 pega hash adaptativo
                 nota_student = 0
                 if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(
-                        exam):# and maxStudentsClassGrade:  # novo var_hash somente se maxStudentsClassGrade>0
+                        exam):
 
-                    var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
-                                                                     s.student_name, maxStudentsClassGrade)
+                    if choice_adaptive_test == 'CAT':
+                        var_hash, nota_student = Utils.getHashVariationByCat(request, student_u_b_all_exams, variantExam_rankin_sort,
+                                                                             s.id)
+                    else:
+                        var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
+                                                                         s.student_name, minStudentsClassesGrade, maxStudentsClassesGrade)
 
                 ################################### 18/11/2023 pega hash adaptativo - FIM
 
@@ -1336,10 +1342,15 @@ def generate_page(request, pk):
 
         # send file by email with variation of each student
         if int(exam.exam_variations) > 0 and exam.exam_print != 'answ':
+            # ordena pela coluna MeanPreviousAbilities
+            aux_sort = np.array(listVariations[1:])
+            aux_sort = np.array(sorted(aux_sort, key=lambda x: float(x[5])))
+            aux_sort = np.concatenate(([listVariations[0]], aux_sort))
+
             with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
                 writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
                                     lineterminator='\n')
-                writer.writerows(listVariations)
+                writer.writerows(aux_sort)
             anexos.append(path_to_file_VARIATIONS)  # util para quando tem várias turmas
 
             aux = np.array(listVariations)
