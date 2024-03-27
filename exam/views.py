@@ -62,12 +62,13 @@ from mctest.settings import webMCTest_FROM
 from mctest.settings import webMCTest_PASS
 from mctest.settings import webMCTest_SERVER
 from .forms import UpdateExamForm, ExamCreateForm
-from .models import Exam
+from .models import Exam, StudentExam, StudentExamQuestion
 from .models import VariationExam
 from .models import StudentExam
 from topic.models import Question
 from topic.models import Answer
 from topic.models import Topic
+from student.models import Student
 
 import requests
 
@@ -982,7 +983,7 @@ def moodle_question(request, pk):
 def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
     resposta = '''{
     "sumgrades": "2.00000",
-    "email": "adm@localhost.com",
+    "email": "fzampirolli@gmail.com",
     "name": "Administrador",
     "questions": [
         {
@@ -1011,6 +1012,24 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
     # Transforma a string JSON em um dicionário Python
     dicionario_resposta = json.loads(resposta)
 
+    #  StudentExam
+    try:
+        email = dicionario_resposta['email']
+        student = Student.objects.filter(student_email=email)
+
+        # apaga estudante de StudentExam
+        for s in StudentExam.objects.filter(exam=exam.id).filter(student=student[0]): s.delete()
+
+        studentExam = StudentExam.objects.create(
+            exam=exam,
+            student=student[0],
+            grade=dicionario_resposta["sumgrades"]
+        )
+        # apaga questões antigas de StudentExamQuestion
+        for q in StudentExamQuestion.objects.filter(studentExam=studentExam): q.delete()
+    except:
+        pass
+
     # Acessando a lista de questões dentro do dicionário
     questions = dicionario_resposta['questions']
 
@@ -1027,9 +1046,26 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
         if questao_existe:
             question = get_object_or_404(Question, pk=mctestid)
             question.question_correction_count += 1
+            acertou, ordem = 'B', '10' # errou FORMATO INCOMPATÍVEL
             if q["rightanswer"] == q["responsesummary"]:
                 question.question_correct_count += 1
+                acertou, ordem = 'A', '01'  # acertou FORMATO INCOMPATÍVEL
             question.save()
+
+            try:
+                if not len(StudentExamQuestion.objects.filter(studentExam=studentExam).filter(question=question)):
+                    StudentExamQuestion.objects.create(
+                        studentExam=studentExam,
+                        question=question,
+                        studentAnswer=acertou,
+                        answersOrder=ordem,
+                    ) # CONSIDERO, quando acerta, por exemplo:
+                    # studentAnswer: A
+                    # answersOrder: 03142 << ordem embaralhada no BD
+                    #               ABCDE
+            except:
+                pass
+
         else:
             # A questão não existe no banco de dados
             pass
