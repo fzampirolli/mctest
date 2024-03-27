@@ -43,4 +43,5 @@ urlpatterns = [
     path('exam/<int:pk>/variation/', views.variationsExam, name='exam-variation'),
     path('exam/<int:pk>/sendFeedbackStudents/', views.feedbackStudentsExam, name='exam-feedback'),
     path('exam/<int:pk>/sendFeedbackStudentsText/', views.feedbackStudentsExamText, name='exam-feedback'),
+    path('exam/<int:pk>/moodle/', views.moodle_question, name='exam_moodle'),
 ]

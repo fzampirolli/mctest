@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title">{% trans "Formulário para Integração com o Moodle" %}</h5>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button type="submit" name="enviar_questoes_moodle">Enviar Questões para o Moodle</button>
+                    <button type="submit" name="pegar_respostas_moodle">Pegar Respostas do Moodle</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

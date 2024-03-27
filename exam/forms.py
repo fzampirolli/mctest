@@ -33,6 +33,9 @@ from course.models import Classroom, Discipline
 from topic.models import Question, User, Topic
 from .models import Exam
 
+class QuizForm(forms.Form):
+    nome_quiz_moodle = forms.CharField(label='Nome do Quiz no Moodle')
+    nome_disciplina_moodle = forms.CharField(label='Nome da Disciplina no Moodle')
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)

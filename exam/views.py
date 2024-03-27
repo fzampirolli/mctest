@@ -939,59 +939,176 @@ def correctStudentsExam(request, pk):
 # print(Utils.distro_table(nome),end="\n")
 ####################### HASH
 
+from django.shortcuts import render
+from .forms import QuizForm
 
-def generate_moodle_question(exam, id):
+def moodle_question(request, pk):
     """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
     como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
-    da Universidade Federal do ABC, em 2023-2024"""
-    data = {
-        'wstoken': '1d6040a8333e399a7740442024e7eb2d',
-        'wsfunction': 'local_wstemplate_create_question',
-        'moodlewsrestformat': 'json',
-        'json': '{}'
-    }
-    url = "http://localhost/moodle/webservice/rest/server.php"
-    question_data = {
-        "nomeDoCurso": "teste 1",
-        "nomDaQuestao": "",
-        "textoDaQuestao": "",
-        "categoria": "",
-        "feedbackCorreto": "Sua resposta está correta.",
-        "feedbackParcialmenteCorreto": "Sua resposta está parcialmente correta.",
-        "feedbackIncorreto": "Sua resposta está incorreta.",
-        "alternativaA": "",
-        "fracaoA": "",
-        "alternativaB": "",
-        "fracaoB": "",
-        "alternativaC": "",
-        "fracaoC": "",
-        "alternativaD": "",
-        "fracaoD": "",
-        "alternativaE": "",
-        "fracaoE": ""
-    }
-    answer_data = 'ABCDE'
-    d = exam.variationsExams2.all()[0]
-    s = eval(d.variation)
-    for var in s['variations']:
-        for q in var['questions']:
-            if q['type'] == 'QM':
-                question_data['nomeDaQuestao'] = q['number']
-                question_data['textoDaQuestao'] = q['text']
-                qBD = get_object_or_404(Question, pk=str(q['key']))
-                question_data['categoria'] = qBD.topic.topic_text
-                if len(q['answers']):
-                    count = 0
-                    for a in q['answers']:
-                        if a['sort'] == 0:
-                            question_data['alternativa' + answer_data[count]] = a['text']
-                            question_data['fracao' + answer_data[count]] = "1.0"
-                        else:
-                            question_data['alternativa' + answer_data[count]] = a['text']
-                            question_data['fracao' + answer_data[count]] = "0.0"
-                        count += 1
-            data['json'] = json.dumps(question_data)
-            request = requests.post(url, data)
+    pela Universidade Federal do ABC, no período de 2023-2024.
+
+    Este método é responsável por enviar as questões do exame para o Moodle
+    (que deve ter apenas uma variação), criando as questões em um Quiz já
+    existente no Moodle, o qual deve ser incluído no formulário do Exame no
+    MCTest com o nome do Quiz e o nome do Curso.
+
+    As respostas dos alunos são recebidas pelo método get_moodle_question()
+    """
+    if request.method == 'POST':
+        form = QuizForm(request.POST)
+        if form.is_valid():
+            print("moodle_question-00-" + str(datetime.datetime.now()))
+
+            nome_quiz_moodle = request.POST.get('nome_quiz_moodle')
+            nome_disciplina_moodle = request.POST.get('nome_disciplina_moodle')
+
+            exam = get_object_or_404(Exam, pk=pk)
+
+            if 'enviar_questoes_moodle' in request.POST:
+                generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle)
+            elif 'pegar_respostas_moodle' in request.POST:
+                get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle)
+            else:
+                # Caso nenhum botão seja pressionado
+                return HttpResponse('Nenhum botão pressionado')
+
+            print("moodle_question-01-" + str(datetime.datetime.now()))
+
+    else:
+        form = QuizForm()
+
+    return render(request, 'exam/exam_moodle.html', {'form': form})
+
+def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
+    resposta = '''{
+    "sumgrades": "2.00000",
+    "email": "adm@localhost.com",
+    "name": "Administrador",
+    "questions": [
+        {
+            "moodleid": "99",
+            "questionsummary": "Terceira questao: 1a alternativa criada; 2a alternativa criada; 3a alternativa criada; 5a alternativa criada; 4a alternativa criada",
+            "rightanswer": "1a alternativa criada",
+            "responsesummary": "1a alternativa criada",
+            "mctestid": "2445"
+        },
+        {
+            "moodleid": "100",
+            "questionsummary": "Segunda Questao: 2a alternativa criada; 4a alternativa criada; 3a alternativa criada; 5a alternativa criada; 1a alternativa criada",
+            "rightanswer": "1a alternativa criada",
+            "responsesummary": "3a alternativa criada",
+            "mctestid": "2444"
+        },
+        {
+            "moodleid": "101",
+            "questionsummary": "Primeira Questao - Sempre a primeira alternativa criada eh a correta.: 4a alternativa criada; 2a alternativa criada; 3a alternativa criada; 5a alternativa criada; 1a alternativa criada",
+            "rightanswer": "Teclado          % alternativa correta - sempre a primeira",
+            "responsesummary": "Teclado          % alternativa correta - sempre a primeira",
+            "mctestid": "2455"
+        }
+    ]
+}'''
+    # Transforma a string JSON em um dicionário Python
+    dicionario_resposta = json.loads(resposta)
+
+    # Acessando a lista de questões dentro do dicionário
+    questions = dicionario_resposta['questions']
+
+    # Iterando sobre cada questão na lista de questões
+    for q in questions:
+        mctestid = q["mctestid"]
+
+        # questão está presente na lista de questões do exame
+        #questao_existe = Exam.objects.filter(questions__pk=mctestid).exists()
+
+        # Verifica se a questão com o MCTest ID especificado está presente em alguma variação do exame
+        questao_existe = exam.variationsExams2.filter(variation__contains=mctestid).exists()
+
+        if questao_existe:
+            question = get_object_or_404(Question, pk=mctestid)
+            question.question_correction_count += 1
+            if q["rightanswer"] == q["responsesummary"]:
+                question.question_correct_count += 1
+            question.save()
+        else:
+            # A questão não existe no banco de dados
+            pass
+
+def generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
+    """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
+    como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+    pela Universidade Federal do ABC, no período de 2023-2024.
+
+    Este método é responsável por enviar as questões do exame para o Moodle
+    (que deve ter apenas uma variação), criando as questões em um Quiz já
+    existente no Moodle, o qual deve ser incluído no formulário do Exame no
+    MCTest com o nome do Quiz e o nome do Curso.
+
+    As respostas dos alunos são recebidas pelo método get_moodle_question()
+    """
+
+    try:
+        data = {
+            'username': 'webservice',
+            'password': 'Ab1234@@',
+            'service': 'test_service'
+        }
+        url = "http://localhost/moodle/login/token.php"
+        token_request = requests.get(url, params=data)
+
+        data = {
+            'wstoken': token_request.json()['token'],
+            'wsfunction': 'local_wstemplate_create_link_question',
+            'moodlewsrestformat': 'json',
+            'json': '{}'
+        }
+        url = "http://localhost/moodle/webservice/rest/server.php"
+        question_data = {
+            "nomeDoQuiz": nome_quiz_moodle,
+            "nomeDoCurso": nome_disciplina_moodle,
+            "nomeDaQuestao": "",
+            "textoDaQuestao": "",
+            "categoria": "",
+            "feedbackCorreto": "Sua resposta esta correta.",
+            "feedbackParcialmenteCorreto": "Sua resposta esta parcialmente correta.",
+            "feedbackIncorreto": "Sua resposta esta incorreta.",
+            "alternativaA": "",
+            "fracaoA": "",
+            "alternativaB": "",
+            "fracaoB": "",
+            "alternativaC": "",
+            "fracaoC": "",
+            "alternativaD": "",
+            "fracaoD": "",
+            "alternativaE": "",
+            "fracaoE": ""
+        }
+        answer_data = 'ABCDE'
+        d = exam.variationsExams2.all()[0]
+        s = eval(d.variation)
+        for var in s['variations']:
+            for q in var['questions']:
+                if q['type'] == 'QM':
+                    question_data['nomeDaQuestao'] = q['key']
+                    question_data['textoDaQuestao'] = q['text']
+                    qBD = get_object_or_404(Question, pk=str(q['key']))
+                    question_data['categoria'] = qBD.topic.topic_text
+                    if len(q['answers']):
+                        count = 0
+                        for a in q['answers']:
+                            if int(a['sort']) == 0:
+                                question_data['alternativa' + answer_data[count]] = a['text']
+                                question_data['fracao' + answer_data[count]] = "1.0"
+                            else:
+                                question_data['alternativa' + answer_data[count]] = a['text']
+                                question_data['fracao' + answer_data[count]] = "0.0"
+                            count += 1
+                data['json'] = json.dumps(question_data)
+                print(data)
+                request = requests.post(url, data)
+                print("acha request", request)
+    except:
+        pass
 
 
 @login_required
@@ -1104,10 +1221,11 @@ def generate_page(request, pk):
 
             if choice_adaptive_test in ['WPC', 'CAT', 'SATB']:
                 # pega todas as notas de provas anteriores de todos os alunos nas mesmas turmas deste exame
-                minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams = Utils.createAdaptativeTest(request, exam,
-                                                                                          choice_adaptive_test_number,
-                                                                                          path_to_file_ADAPTIVE_TEST,
-                                                                                          choice_adaptive_test)
+                minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams = Utils.createAdaptativeTest(
+                    request, exam,
+                    choice_adaptive_test_number,
+                    path_to_file_ADAPTIVE_TEST,
+                    choice_adaptive_test)
 
                 variantExam_rankin_sort = Utils.createCariantExam_rankin_sort(
                     request, exam, path_to_file_ADAPTIVE_TEST_variations, choice_adaptive_test)
@@ -1199,11 +1317,13 @@ def generate_page(request, pk):
                         exam):
 
                     if choice_adaptive_test == 'CAT':
-                        var_hash, nota_student = Utils.getHashVariationByCat(request, student_u_b_all_exams, variantExam_rankin_sort,
+                        var_hash, nota_student = Utils.getHashVariationByCat(request, student_u_b_all_exams,
+                                                                             variantExam_rankin_sort,
                                                                              s.id)
                     else:
                         var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
-                                                                         s.student_name, minStudentsClassesGrade, maxStudentsClassesGrade)
+                                                                         s.student_name, minStudentsClassesGrade,
+                                                                         maxStudentsClassesGrade)
 
                 ################################### 18/11/2023 pega hash adaptativo - FIM
 
