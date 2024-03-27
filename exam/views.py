@@ -1046,10 +1046,10 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
         if questao_existe:
             question = get_object_or_404(Question, pk=mctestid)
             question.question_correction_count += 1
-            acertou, ordem = 'B', '10' # errou FORMATO INCOMPATÍVEL
+            acertou, ordem = 'B', '10' # errou - PROVISÓRIO, POIS FORMATO INCOMPATÍVEL
             if q["rightanswer"] == q["responsesummary"]:
                 question.question_correct_count += 1
-                acertou, ordem = 'A', '01'  # acertou FORMATO INCOMPATÍVEL
+                acertou, ordem = 'A', '01'  # acertou - PROVISÓRIO
             question.save()
 
             try:
@@ -1060,9 +1060,11 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
                         studentAnswer=acertou,
                         answersOrder=ordem,
                     ) # CONSIDERO, quando acerta, por exemplo:
-                    # studentAnswer: A
+                    # studentAnswer: A << aluno acertou, pois
                     # answersOrder: 03142 << ordem embaralhada no BD
                     #               ABCDE
+                    # studentAnswer: E << aluno errou
+
             except:
                 pass
 
