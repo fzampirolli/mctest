@@ -1257,7 +1257,7 @@ def generate_page(request, pk):
         minStudentsClassesGrade = 100
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
-            if choice_adaptive_test in ['WPC', 'CAT', 'SATB']:
+            if choice_adaptive_test in ['CTT', 'CAT', 'SATB']:
                 # pega todas as notas de provas anteriores de todos os alunos nas mesmas turmas deste exame
                 minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams = Utils.createAdaptativeTest(
                     request, exam,

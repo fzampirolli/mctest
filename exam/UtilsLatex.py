@@ -1685,79 +1685,121 @@ _inst1_
         return str1
 
     @staticmethod
-    def pl1_rasch_model(skill, difficulty):
+    def ability_estimation(th, a, b, r):
         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
         como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
         da Universidade Federal do ABC, em 2023-2024"""
-        # d = 1.702
-        d = 1
-        p = 1 / (1 + np.exp(-d * (skill - difficulty)))
-        return p
 
-    @staticmethod
-    def ability_estimation(th, b, r):
-        """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
-        como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
-        da Universidade Federal do ABC, em 2023-2024"""
-        if np.mean(r) == 1:
-            # return max(b), 0, 0
+        def pl2(skill, b, a):
+            # Calcula a probabilidade usando a função logística 2PL
+            p = 1 / (1 + np.exp(-a * (skill - b)))
+            return p
+
+        # Verifica se todas as respostas são corretas
+        if np.sum(r) / len(r) == 1:
+            # Retorna um valor máximo se todas as respostas forem corretas
             return np.log(2 * len(b)), 0, 0
+        # Verifica se todas as respostas são incorretas
         if np.sum(r) == 0:
-            # return min(b), 0, 0
+            # Retorna um valor mínimo se todas as respostas forem incorretas
             return -np.log(2 * len(b)), 0, 0
-        # Calcula a habilidade atualizada do aluno
-        numerador = np.sum(r - Utils.pl1_rasch_model(th, b))
-        denominador = np.sum(Utils.pl1_rasch_model(th, b) * (1 - Utils.pl1_rasch_model(th, b)))
 
+        # Calcula a soma do numerador e denominador da equação de habilidade
+        numerador = np.sum(a * (r - pl2(th, b, a)))
+        denominador = np.sum((a ** 2) * pl2(th, b, a) * (1 - pl2(th, b, a)))
+
+        # Calcula a habilidade estimada, o erro padrão e o ajuste
         result = th + (numerador / denominador)
         adjustment = numerador / denominador
-        # Calulcala o Standard Error
         se = 1 / np.sqrt(denominador)
 
         return result, se, adjustment
 
     @staticmethod
-    def ability_estimation_aux(th, b, r):
+    def ability_estimation_aux(th, a, b, r):
         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
         como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
         da Universidade Federal do ABC, em 2023-2024"""
+        if not (np.any(a) and np.any(b) and np.any(r)):
+            return 0
         adj = 1
         while (adj >= 0.05 or adj <= -0.05):
-            th, se, adj = Utils.ability_estimation(th, b, r)
+            th, se, adj = Utils.ability_estimation(th, a, b, r)
         # devolver a habilidade do aluno (theta) e o erro padrão do calculo
         return th  # , se
 
-    @staticmethod
-    def fisher_information(student_skill, question_difficulty):
-        """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
-        como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
-        da Universidade Federal do ABC, em 2023-2024"""
-        d = 1.702
-        p = Utils.pl1_rasch_model(student_skill, question_difficulty)
-        q = 1 - p
-        I = d ** 2 * p * q
-        return I
+    # @staticmethod
+    # def fisher_information(student_skill, question_difficulty):
+    #     """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
+    #     como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+    #     da Universidade Federal do ABC, em 2023-2024"""
+    #
+    #     def pl1_rasch_model(skill, difficulty):
+    #         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
+    #         como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+    #         da Universidade Federal do ABC, em 2023-2024"""
+    #         d = 1.702
+    #         p = 1 / (1 + np.exp(-d * (skill - difficulty)))
+    #         return p
+    #
+    #     d = 1.702
+    #     p = pl1_rasch_model(student_skill, question_difficulty)
+    #     q = 1 - p
+    #     I = d ** 2 * p * q
+    #     return I
+
 
     @staticmethod
-    def item_selection(student_ability, question_topic, num_questions):
+    def fisher_information_2pl(student_skill, a, b):
+        """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
+                como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+                da Universidade Federal do ABC, em 2023-2024"""
+
+        def pl2(skill, a, b):
+            # Calcula a probabilidade usando a função logística 2PL
+            p = 1 / (1 + np.exp(-a * (skill - b)))
+            return p
+
+        p = pl2(student_skill, a, b)
+        q = 1 - p
+        I = (a ** 2) * p * q
+        return I
+    @staticmethod
+    def test_information(student_skill, a_list, b_list):
+        """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
+                como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+                da Universidade Federal do ABC, em 2023-2024"""
+
+        total_information = 0
+        # Iterate over each item's parameters
+        for a, b in zip(a_list, b_list):
+            # Sum up the item information
+            total_information += Utils.fisher_information_2pl(student_skill, a, b)
+        return total_information
+
+    @staticmethod
+    def item_selection(student_ability, questions_topic, num_questions):
         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
         como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
         da Universidade Federal do ABC, em 2023-2024"""
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
         # Recupera todas as questões do topico escolhido na tela de Criar-PDF
-        questions = Question.objects.filter(topic=question_topic)
+        # questions = Question.objects.filter(topic=question_topic)
         # Cria uma matriz para armazenar o ganho de informação de cada item
         fi_matrix = []
         # Itera sobre todas as questões
-        for q in questions.all():
+        for q_stud in questions_topic.all():
+            q = Question.objects.filter(id=q_stud.question.id).first()
             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de null)
             if (q.question_IRT_b_ability == -5.0):
                 # Caso B sejá nulo realiza uma conversão da taxinomia de Bloom para a escala TRi (-2, 2)
                 b_parameter = bloom_array.index(q.question_bloom_taxonomy) - 3.0
+                a_parameter = 1
             else:
+                a_parameter = q.question_IRT_a_discrimination
                 b_parameter = q.question_IRT_b_ability
             # Calcula o ganho de informação com base no theta calculado anteriormente e na dificuldade de cada questão
-            fi = Utils.fisher_information(student_ability, b_parameter)
+            fi = Utils.fisher_information_2pl(student_ability, a_parameter, b_parameter)
             # Adiciona uma tupla (vetor binario) contendo respectivamente o id e o ganho de informação da questão na matriz
             fi_matrix.append([q.id, fi])
         # Ordena a matrix de forma decrescente com base no ganho de informação, ou seja, as questões com maior ganho ficam no topo
@@ -1765,6 +1807,51 @@ _inst1_
         # Seleciona as n (num_questions) questões com mais ganho de informação, sendo n a quantidade de questões requisitadas para o exame
         q_selected_ids = [row[0] for row in ord_desc_mtx[:num_questions]]
         return q_selected_ids
+
+    def getAnswersStudentExamVector(student_exam0, studExQt, adaptive_test):
+        bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
+
+        # Cria vetores vazios para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vertor u)
+        a_vector, b_vector, u_vector = [], [], []
+        # itera sobre todas as questões dos exames realizados anteriormente pelo aluno s (verifcar se não está pegando exames de disciplinas ou turmas anteriores)
+        for seq in studExQt.all():
+            # Recupera os dados da questão
+            question = Question.objects.filter(id=seq.question.id).first()
+
+            # verifica se o aluno acertou a questão
+            ss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            correto = seq.answersOrder.index('0')
+            marcou = ss.index(seq.studentAnswer) if seq.studentAnswer in ss else -1
+            acertou = 1 if marcou == correto else 0
+
+            # Calcula parâmetros a e b
+            a_parameter, b_parameter = 1, 0
+
+            if adaptive_test == 'CTT':  # Classical Testing Teory
+                # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
+                if question.question_correction_count:
+                    b_parameter = float(
+                        10 * (1 - question.question_correct_count / question.question_correction_count))
+                else:
+                    b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) + 1)
+            elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
+                # O parâmetro b é a habilidade IRT da questão
+                # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
+                if (question.question_IRT_b_ability == -5.0):
+                    b_parameter = bloom_array.index(question.question_bloom_taxonomy) - 2.0
+                else:
+                    b_parameter = float(question.question_IRT_b_ability)
+                    a_parameter = float(question.question_IRT_a_discrimination)
+            elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
+                # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
+                b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) - 2.0)
+
+            # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
+            a_vector.append(a_parameter)  # Converte junto dos outros paramêtros
+            b_vector.append(b_parameter)
+            u_vector.append(acertou)
+
+        return np.array(a_vector), np.array(b_vector), np.array(u_vector)
 
     @staticmethod
     def createAdaptativeTest(request, exam, choice_adaptive_test_number, path_to_file_ADAPTIVE_TEST, adaptive_test):
@@ -1782,14 +1869,10 @@ _inst1_
 
             # Encontre todos os exames já aplicadados na turma
             exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
-            # exams_with_same_room = Exam.objects.filter(
-            #     classrooms__id=room.id,
-            #     exam_hour__date__lte=exam.exam_hour.date(),
-            # )
 
             exams_aux = list(exams_with_same_room)  # Convert queryset to list
 
-            exams_aux.remove(exam)  # remove o exame correte
+            exams_aux.remove(exam)  # remove o exame corrente
 
             # Sort exams_aux by the 'exam_data' attribute
             exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
@@ -1798,66 +1881,28 @@ _inst1_
 
                 if exam.exam_hour < exam0.exam_hour:  # descarta exames que ainda não foram aplicados
                     continue
+                if Utils.getNumMCQuestions(exam0) == 0:  # descarta se não tem QM
+                    continue
 
                 for s in room.students.all():  ### Laço para pegar a nota de cada aluno em exam0
 
                     # Encontre a nota do aluno s em exam0
                     student_exam0 = StudentExam.objects.filter(exam=exam0, student=s).first()
+                    studExQt = StudentExamQuestion.objects.filter(studentExam=student_exam0,
+                                                                  question__question_type='QM')
 
-                    ################################################
-                    # Adaptado de Lucas Montagnani Calil Elias - 2/2/2024
+                    a_vector, b_vector, u_vector = Utils.getAnswersStudentExamVector(student_exam0, studExQt,
+                                                                                     adaptive_test)
 
-                    studExQt = StudentExamQuestion.objects.filter(studentExam=student_exam0)
-                    # Cria vetores vazios para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vertor u)
-                    b_vector, u_vector = [], []
-                    # itera sobre todas as questões dos exames realizados anteriormente pelo aluno s (verifcar se não está pegando exames de disciplinas ou turmas anteriores)
-                    for seq in studExQt.all():
-                        # Recupera os dados da questão
-                        question = Question.objects.filter(id=seq.question.id, question_type='QM').first()
-
-                        # verifica se o aluno acertou a questão
-                        ss = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                        correto = seq.answersOrder.index('0')
-                        marcou = ss.index(seq.studentAnswer) if seq.studentAnswer in ss else -1
-                        acertou = 1 if marcou == correto else 0
-
-                        # Calcula o parâmetro b
-                        b_parameter = 0
-
-                        if adaptive_test == 'WPC':  # Weighted Percentage Correct
-                            # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
-                            if question.question_correction_count:
-                                b_parameter = float(
-                                    10 * (1 - question.question_correct_count / question.question_correction_count))
-                            else:
-                                b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) + 1)
-                        elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
-                            # O parâmetro b é a habilidade IRT da questão
-                            # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
-                            if (question.question_IRT_b_ability == -5.0):
-                                b_parameter = bloom_array.index(question.question_bloom_taxonomy) - 2.0
-                            else:
-                                b_parameter = float(question.question_IRT_b_ability)
-                        elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
-                            # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
-                            b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) - 2.0)
-                        # elif adaptive_test == "SATD": # Semi-Adaptive Testing by Difficulty
-                        #    b_parameter = float(question.question_difficulty) # BUG: todas as variações são iguais
-
-                        # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
-                        b_vector.append(b_parameter)
-                        u_vector.append(acertou)
-
-                    b_vector = np.array(b_vector)
-                    u_vector = np.array(u_vector)
                     # Calcula a habilidade do estudante
                     if adaptive_test == 'CAT':
                         if np.any(u_vector) and np.any(b_vector):
-                            grade = Utils.ability_estimation_aux(0, b_vector, u_vector)
+                            grade = Utils.ability_estimation(0, a_vector, b_vector, u_vector)
+                            grade = float(grade[0])
+                            Selected_questions = Utils.item_selection(grade, studExQt, Utils.getNumMCQuestions(exam0))
+                            #####
                         else:
                             grade = -5.0
-
-                        # Selected_questions = Utils.item_selection(student_ability, question_topic, num_questions)
                     else:
                         # Calcula a média da habilidade do estudante multiplicando elemento a elemento os vetores b_vector e u_vector
                         grade = np.dot(b_vector, u_vector) / len(b_vector)
@@ -1872,6 +1917,7 @@ _inst1_
                             'grades': [],
                         }
                         student_u_b_all_exams[s.id] = {
+                            'a_vector': [],  # INSERE VETOR DE PARAMETROS A
                             'b_vector': [],
                             'u_vector': [],
                         }
@@ -1884,6 +1930,7 @@ _inst1_
                         'grade': grade,
                     })
 
+                    student_u_b_all_exams[s.id]['a_vector'].extend(a_vector)  # INSERE VETOR DE PARAMETROS A
                     student_u_b_all_exams[s.id]['b_vector'].extend(b_vector)
                     student_u_b_all_exams[s.id]['u_vector'].extend(u_vector)
 
@@ -1934,16 +1981,6 @@ _inst1_
 
                     total_grades.append(nota)
 
-                # if len(total_grades) > int(choice_adaptive_test_number):
-                #     mediaUltimos = np.mean(total_grades[-int(choice_adaptive_test_number):])
-                # else:
-                #     mediaUltimos = np.mean(total_grades)
-                #
-                # if maxStudentsClassesGrade < mediaUltimos:
-                #     maxStudentsClassesGrade = mediaUltimos
-                #
-                # row_data.extend([float(mediaUltimos)])
-
                 csv_writer.writerow(row_data)
 
         # limpeza do df
@@ -1987,6 +2024,7 @@ _inst1_
         for variationsExam in exam.variationsExams2.all():
             vars = eval(variationsExam.variation)
             sum_b = []
+            sum_a = []  # <------------------------ add parameter A
             for var in vars['variations']:
                 for q in var['questions']:  # para cada questão
 
@@ -1997,7 +2035,7 @@ _inst1_
                         aBD.append(a.id)
 
                     if q['type'] == 'QM':  #### ESCADA DE HABILIDADE FICA ENTRE -2 ATÉ 2, EM GERAL
-                        if adaptive_test == "WPC":  # Weighted Percentage Correct
+                        if adaptive_test == "CTT":  # Classical Testing Teory
                             if qBD.question_correction_count:
                                 sum_b.append(float(10 * (qBD.question_correct_count / qBD.question_correction_count)))
                             else:
@@ -2012,9 +2050,15 @@ _inst1_
                         elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
                             sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0))
 
+                        # Verifica se a questão já passou pelo processo de calibração
+                        if (qBD.question_IRT_b_ability != -5.0):
+                            sum_a.append(float(qBD.question_IRT_a_discrimination))
+                        else:
+                            sum_a.append(1)
+
             # 0+0+0+0+5=5
             # 1+1+1+1+1=5
-            # if not adaptive_test == "WPC":
+            # if not adaptive_test == "CTT":
             #     if max(sum_b) - min(sum_b) > 3:
             #         print(">>>>>>>***** ", *sum_b)
             #         continue
@@ -2031,6 +2075,7 @@ _inst1_
                 variationsExam.id,
                 float(valor),
                 float(np.std(sum_b)),
+                *[float(element) for element in sum_a],  # Convert each element of sum_b to float ##### ADD vetor A
                 *[float(element) for element in sum_b],  # Convert each element of sum_b to float
                 *aBD
             ])
@@ -2050,6 +2095,8 @@ _inst1_
 
             # Write header
             header_row = ['Variation', 'VariationID', 'MeanAbilities', 'STD']
+            # Adicionar 'a1', 'a2', ... no início da lista
+            header_row += [f'a{i}' for i in range(1, len(sum_a) + 1)]
             # Adicionar 'b1', 'b2', ... no início da lista
             header_row += [f'b{i}' for i in range(1, len(sum_b) + 1)]
             # Adicionar 'k1', 'k2', ... no início da lista
@@ -2070,24 +2117,37 @@ _inst1_
     def getHashVariationByCat(request, student_u_b_all_exams, variantExam_rankin_bloom_sort, id_student):
         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
         como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
-        da Universidade Federal do ABC, em 2023-2024"""
+        da Universidade Federal do ABC, em 2023-2024.
+
+        A função getHashVariationByCat() recebe como parâmetros obrigatorios a variantExam_rankin_sort e
+        id_student, para que seja possível calcular a nota do aluno e retornar a variação mais adequada para ele de
+        acordo com os calculos do CAT.
+        Está função funciona como um hub para as principais funções criadas anteriormente como:
+            student_prev_questios_answers: para recuperar os vetores das questões respondidas pelo aluno;
+            ability_estimation_aux: para calcular a nota do aluno;
+            fisher_information: para calcular a FI de uma variação com base na nota do aluno."""
         # Recupera os vetores de respostas e de paramêtros das questões respondidas pelo estudante
         # u, b, a, c = Utils.student_prev_questios_answers(exam, id_student)
-        u = student_u_b_all_exams[id_student]['u_vector']
+        a = student_u_b_all_exams[id_student]['a_vector']  # --------------> Extrai vetor A <----------------
         b = student_u_b_all_exams[id_student]['b_vector']
+        u = student_u_b_all_exams[id_student]['u_vector']
         # Calcula a nota do estudante com a TRI do CAT
-        nota_student = Utils.ability_estimation_aux(0, np.array(b), np.array(u))
+        nota_student = Utils.ability_estimation_aux(0, np.array(a), np.array(b), np.array(u))
         # Inicia variaveis auxiliares para seleção da melhor variação
-        best_fi = -1.0
+        best_ti = -1.0
         best_variation = 0
         # Itera sobre cadas variação de variantExam_rankin_sort
         for variation in variantExam_rankin_bloom_sort:
             # Calcula FI daquela variação, passando como parâmetros a nota do estudante a difuculdade ("SumAbilities") da variação
-            fi = Utils.fisher_information(float(nota_student), float(variation[2]))
+            # fi = Utils.fisher_information(float(nota_student), float(variation[2]))
+            num_questions = (len(variation)-4)//3
+            a_vector = np.array(variation[4:4+num_questions], dtype=float)
+            b_vector = np.array(variation[4+num_questions:4+2*num_questions], dtype=float)
+            ti = Utils.test_information(float(nota_student), a_vector, b_vector)
             # Verifica se a FI desta variação é maior que a melhor até o momento
-            if (fi > best_fi):
+            if (ti > best_ti):
                 # Caso seja maior, atuzaliza ela como a melhor e salva o identificador daquela variação
-                best_fi = fi
+                best_ti = ti
                 best_variation = variation[0]
         # Retorna o identificador da variação escolhida para aquele aluno, junto da nota do aluno
         return int(best_variation), nota_student
@@ -2137,7 +2197,7 @@ _inst1_
         if maxStudentsClassesGrade != minStudentsClassesGrade:
             # Calcular a proporção relativa
             nota_student_proportion = rmin + ((nota_student - minStudentsClassesGrade) / (
-                        maxStudentsClassesGrade - minStudentsClassesGrade)) * (rmax - rmin)
+                    maxStudentsClassesGrade - minStudentsClassesGrade)) * (rmax - rmin)
 
         # Filtrar as linhas com valor igual a nota_student_porcent na coluna 2
         linhas_hash_num = []
