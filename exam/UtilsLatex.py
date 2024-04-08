@@ -2136,6 +2136,7 @@ _inst1_
         # Inicia variaveis auxiliares para seleção da melhor variação
         best_ti = -1.0
         best_variation = 0
+        a_variations, a_variations = [], []
         # Itera sobre cadas variação de variantExam_rankin_sort
         for variation in variantExam_rankin_bloom_sort:
             # Calcula FI daquela variação, passando como parâmetros a nota do estudante a difuculdade ("SumAbilities") da variação
@@ -2146,11 +2147,16 @@ _inst1_
             ti = Utils.test_information(float(nota_student), a_vector, b_vector)
             # Verifica se a FI desta variação é maior que a melhor até o momento
             if (ti > best_ti):
-                # Caso seja maior, atuzaliza ela como a melhor e salva o identificador daquela variação
+                # Caso seja maior, atualiza como a melhor e salva o identificador daquela variação
                 best_ti = ti
                 best_variation = variation[0]
+                a_variations = a_vector
+                b_variations = b_vector
         # Retorna o identificador da variação escolhida para aquele aluno, junto da nota do aluno
 
+        student_u_b_all_exams[id_student]['a_variations'] = list(a_variations)
+        student_u_b_all_exams[id_student]['b_variations'] = list(b_variations)
+        student_u_b_all_exams[id_student]['best_ti'] = best_ti
         student_u_b_all_exams[id_student]['b_ability'] = nota_student
         student_u_b_all_exams[id_student]['best_variation'] = int(best_variation)
 
