@@ -1897,9 +1897,9 @@ _inst1_
                     # Calcula a habilidade do estudante
                     if adaptive_test == 'CAT':
                         if np.any(u_vector) and np.any(b_vector):
-                            grade = Utils.ability_estimation(0, a_vector, b_vector, u_vector)
-                            grade = float(grade[0])
-                            Selected_questions = Utils.item_selection(grade, studExQt, Utils.getNumMCQuestions(exam0))
+                            grade = Utils.ability_estimation_aux(0, a_vector, b_vector, u_vector)
+                            #grade = float(grade[0])
+                            #Selected_questions = Utils.item_selection(grade, studExQt, Utils.getNumMCQuestions(exam0))
                             #####
                         else:
                             grade = -5.0
@@ -2150,7 +2150,12 @@ _inst1_
                 best_ti = ti
                 best_variation = variation[0]
         # Retorna o identificador da variação escolhida para aquele aluno, junto da nota do aluno
-        return int(best_variation), nota_student
+
+        student_u_b_all_exams[id_student]['b_ability'] = nota_student
+        student_u_b_all_exams[id_student]['best_variation'] = int(best_variation)
+
+        #return int(best_variation), nota_student, student_u_b_all_exams
+        return student_u_b_all_exams
 
     @staticmethod
     def getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort, student_name, minStudentsClassesGrade,

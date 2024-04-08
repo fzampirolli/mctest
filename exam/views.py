@@ -943,6 +943,7 @@ def correctStudentsExam(request, pk):
 from django.shortcuts import render
 from .forms import QuizForm
 
+
 def moodle_question(request, pk):
     """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
     como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
@@ -979,6 +980,7 @@ def moodle_question(request, pk):
         form = QuizForm()
 
     return render(request, 'exam/exam_moodle.html', {'form': form})
+
 
 def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
     resposta = '''{
@@ -1038,7 +1040,7 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
         mctestid = q["mctestid"]
 
         # questão está presente na lista de questões do exame
-        #questao_existe = Exam.objects.filter(questions__pk=mctestid).exists()
+        # questao_existe = Exam.objects.filter(questions__pk=mctestid).exists()
 
         # Verifica se a questão com o MCTest ID especificado está presente em alguma variação do exame
         questao_existe = exam.variationsExams2.filter(variation__contains=mctestid).exists()
@@ -1046,7 +1048,7 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
         if questao_existe:
             question = get_object_or_404(Question, pk=mctestid)
             question.question_correction_count += 1
-            acertou, ordem = 'B', '10' # errou - PROVISÓRIO, POIS FORMATO INCOMPATÍVEL
+            acertou, ordem = 'B', '10'  # errou - PROVISÓRIO, POIS FORMATO INCOMPATÍVEL
             if q["rightanswer"] == q["responsesummary"]:
                 question.question_correct_count += 1
                 acertou, ordem = 'A', '01'  # acertou - PROVISÓRIO
@@ -1059,7 +1061,7 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
                         question=question,
                         studentAnswer=acertou,
                         answersOrder=ordem,
-                    ) # CONSIDERO, quando acerta, por exemplo:
+                    )  # CONSIDERO, quando acerta, por exemplo:
                     # studentAnswer: A << aluno acertou, pois
                     # answersOrder: 03142 << ordem embaralhada no BD
                     #               ABCDE
@@ -1071,6 +1073,7 @@ def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
         else:
             # A questão não existe no banco de dados
             pass
+
 
 def generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
     """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
@@ -1177,6 +1180,7 @@ def generate_page(request, pk):
     path_to_file_VARIATIONS_VPL = path_aux0 + "_students_variations.csv"
     path_to_file_VARIATIONS = path_aux0 + "_variations.csv"
     path_to_file_ADAPTIVE_TEST = path_aux0 + '_adaptive_test.csv'
+    path_to_file_ADAPTIVE_TEST_CAT = path_aux0 + '_adaptive_test_cat.json'
     path_to_file_ADAPTIVE_TEST_variations = path_aux0 + '_adaptive_test_variations.csv'
 
     if request.POST:
@@ -1355,9 +1359,13 @@ def generate_page(request, pk):
                         exam):
 
                     if choice_adaptive_test == 'CAT':
-                        var_hash, nota_student = Utils.getHashVariationByCat(request, student_u_b_all_exams,
-                                                                             variantExam_rankin_sort,
-                                                                             s.id)
+                        student_u_b_all_exams = Utils.getHashVariationByCat(request,
+                                                                            student_u_b_all_exams,
+                                                                            variantExam_rankin_sort,
+                                                                            s.id)
+                        student_u_b_all_exams[s.id]['student'] = s.student_name
+                        nota_student = student_u_b_all_exams[s.id]['b_ability']
+                        var_hash = student_u_b_all_exams[s.id]['best_variation']
                     else:
                         var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
                                                                          s.student_name, minStudentsClassesGrade,
@@ -1536,6 +1544,28 @@ def generate_page(request, pk):
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
             anexos.append(path_to_file_ADAPTIVE_TEST)
             anexos.append(path_to_file_ADAPTIVE_TEST_variations)
+
+            if choice_adaptive_test == 'CAT':
+                # Convertendo os dados antes de serializar
+                for key, value in student_u_b_all_exams.items():
+                    if isinstance(value, dict):
+                        # Se o valor for um dicionário, iteramos sobre as chaves e valores internos
+                        for k, v in value.items():
+                            if isinstance(v, list):
+                                # Se o valor for uma lista, convertemos cada elemento para float
+                                value[k] = [float(item) for item in v]
+                            elif isinstance(v, np.float64):
+                                # Se o valor for float64, convertemos para float
+                                value[k] = float(v)
+                    elif isinstance(value, np.float64):
+                        # Se o valor for float64, convertemos para float
+                        student_u_b_all_exams[key] = float(value)
+
+                # Salva o dicionário como arquivo JSON
+                with open(path_to_file_ADAPTIVE_TEST_CAT, 'w') as json_file:
+                    json.dump(student_u_b_all_exams, json_file, indent=4)
+
+                anexos.append(path_to_file_ADAPTIVE_TEST_CAT)
 
         try:
             enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
