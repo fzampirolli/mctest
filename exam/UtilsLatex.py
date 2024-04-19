@@ -1995,6 +1995,7 @@ _inst1_
         # criar última coluna com a média das últimas X colunas ou ate a coluna StudentEmail
         X = int(choice_adaptive_test_number)
         num_cols = min(X, len(df.columns)) - 4
+        df.fillna(-5, inplace=True)
         if num_cols > 0:
             cols = df.columns[-num_cols:]
             cols1 = df.columns[:-num_cols]

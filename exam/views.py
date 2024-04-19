@@ -1527,24 +1527,10 @@ def generate_page(request, pk):
                 writer.writerows(aux)  # return name; variation
             anexos.append([path_to_file_VARIATIONS_VPL])
 
-        message_cases = 'Following all variations of each student and pdf/tex\n\n'
-        if exam.classrooms.all().count() == 1:
-            path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
-            anexos.append(path_to_file)
-            anexos.append(path_to_file[:-3] + "tex")
-        else:
-            fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
-            # zipar todos os exames das turmas
-            os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
-
-            os.system('rm -rf ' + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*.tex")
-            path_to_zip = os.path.dirname(fzip) + "/" + os.path.basename(fzip)
-            anexos.append(path_to_zip)
-
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
             anexos.append(path_to_file_ADAPTIVE_TEST)
             anexos.append(path_to_file_ADAPTIVE_TEST_variations)
-
+            
             if choice_adaptive_test == 'CAT':
                 # Convertendo os dados antes de serializar
                 for key, value in student_u_b_all_exams.items():
@@ -1566,6 +1552,20 @@ def generate_page(request, pk):
                     json.dump(student_u_b_all_exams, json_file, indent=4)
 
                 anexos.append(path_to_file_ADAPTIVE_TEST_CAT)
+
+        message_cases = 'Following all variations of each student and pdf/tex\n\n'
+        if exam.classrooms.all().count() == 1:
+            path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
+            anexos.append(path_to_file)
+            anexos.append(path_to_file[:-3] + "tex")
+        else:
+            fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
+            # zipar todos os exames das turmas
+            os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
+
+            os.system('rm -rf ' + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*.tex")
+            path_to_zip = os.path.dirname(fzip) + "/" + os.path.basename(fzip)
+            anexos.append(path_to_zip)
 
         try:
             enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
