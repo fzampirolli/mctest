@@ -836,13 +836,13 @@ def correctStudentsExam(request, pk):
                     cvMCTest.estimate_IRT_parameters(exam)
                     pass
                 except:
-                    messages.error(request, _("correctStudentsExam: Error in CAT by scipy.optimize"))
+                    messages.error(request, _("correctStudentsExam: Error in MLE by scipy.optimize"))
 
                 try:
                     # cvMCTest.estimate_IRT_parameters_R(exam)
                     pass
                 except:
-                    messages.error(request, _("correctStudentsExam: Error in CAT by R"))
+                    messages.error(request, _("correctStudentsExam: Error in MLE by R"))
 
 
             else:  # exames sem chaves - primeira página é o gabarito
@@ -1261,7 +1261,7 @@ def generate_page(request, pk):
         minStudentsClassesGrade = 100
         if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
 
-            if choice_adaptive_test in ['CTT', 'CAT', 'SATB']:
+            if choice_adaptive_test in ['WPC', 'MLE', 'SAT']:
                 # pega todas as notas de provas anteriores de todos os alunos nas mesmas turmas deste exame
                 minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams = Utils.createAdaptativeTest(
                     request, exam,
@@ -1269,7 +1269,7 @@ def generate_page(request, pk):
                     path_to_file_ADAPTIVE_TEST,
                     choice_adaptive_test)
 
-                variantExam_rankin_sort = Utils.createCariantExam_rankin_sort(
+                variantExam_rankin_sort = Utils.createVariantExam_rankin_sort(
                     request, exam, path_to_file_ADAPTIVE_TEST_variations, choice_adaptive_test)
 
                 df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
@@ -1358,7 +1358,7 @@ def generate_page(request, pk):
                 if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(
                         exam):
 
-                    if choice_adaptive_test == 'CAT':
+                    if choice_adaptive_test == 'MLE':
                         student_u_b_all_exams = Utils.getHashVariationByCat(request,
                                                                             student_u_b_all_exams,
                                                                             variantExam_rankin_sort,
@@ -1531,7 +1531,7 @@ def generate_page(request, pk):
             anexos.append(path_to_file_ADAPTIVE_TEST)
             anexos.append(path_to_file_ADAPTIVE_TEST_variations)
             
-            if choice_adaptive_test == 'CAT':
+            if choice_adaptive_test == 'MLE':
                 # Convertendo os dados antes de serializar
                 for key, value in student_u_b_all_exams.items():
                     if isinstance(value, dict):

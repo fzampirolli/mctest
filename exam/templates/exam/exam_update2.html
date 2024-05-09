@@ -69,30 +69,31 @@
                                                             {% trans "Type of statistic:" %}
                                                             <div style="display: flex; margin-top:0px;">
                                                                 <label style="margin-right: 20px; width: 32px; height: 32px;"
-                                                                       title="{% trans "Classical Testing Teory (CTT) is a method that enhances assessment by assigning weights to correct answers, taking into account the individual difficulty of each question. This difficulty is quantified by the ratio of the number of correct answers to the total corrections for that specific question." %}">
+                                                                       title="{% trans "Weighted Probability of Correctness (WPC) is a method that enhances assessment by assigning weights to correct answers, taking into account the individual difficulty of each question. This difficulty is quantified by the ratio of the number of correct answers to the total corrections for that specific question." %}">
                                                                     <input type="radio" class="form-control"
-                                                                           name="adaptative_test" value="CTT">
-                                                                    CTT
+                                                                           name="adaptative_test" value="WPC">
+                                                                    WPC
                                                                 </label>
                                                                 <label style="margin-right: 20px; width: 32px; height: 32px;"
-                                                                       title="{% trans "Computerized Adaptive Testing (CAT): The system dynamically adjusts the difficulty of questions based on your previous responses, aiming for a more personalized assessment." %}">
+                                                                       title="{% trans "Maximum Likelihood Estimation (MLE) is a method used to determine the values of the parameters of a statistical model that maximize the likelihood of observing the data. This method dynamically adjusts the difficulty of the questions based on your previous responses, following the theory presented in Item Response Theory (IRT)." %}">
                                                                     <input type="radio" class="form-control"
-                                                                           name="adaptative_test" value="CAT">
-                                                                    CAT
+                                                                           name="adaptative_test" value="MLE">
+                                                                    MLE
                                                                 </label>
                                                                 <label style="margin-right: 20px; width: 32px; height: 32px;"
                                                                        title="{% trans "Semi-Adaptive Testing by Bloom (SAT): Adaptive assessment method where the teacher manually sets the Bloom's Taxonomy level for each question. This method combines adaptability with personalized assessment, allowing the system to dynamically adjust the difficulty of questions based on students' answers in previous exams, while also considering cognitive levels pre-defined by the teacher." %}">
                                                                     <input type="radio" class="form-control"
-                                                                           name="adaptative_test" value="SATB">
+                                                                           name="adaptative_test" value="SAT">
                                                                     SAT
                                                                 </label>
-{#                                                                <label style="width: 32px; height: 32px;"#}
-{#                                                                       title="{% trans "Semi-Adaptive Testing by Difficulty (SATD): Adaptive assessment method where the teacher manually the Difficulty level for each question. This method combines adaptability with personalized assessment, allowing the system to dynamically adjust the difficulty of questions based on students' answers in previous exams, while also considering cognitive levels pre-defined by the teacher." %}">#}
-{#                                                                    <input type="radio" class="form-control"#}
-{#                                                                           name="adaptative_test" value="SATD">#}
-{#                                                                    SATD#}
-{#                                                                </label>#}
-                                                            </div><br>
+                                                                {#                                                                <label style="width: 32px; height: 32px;"#}
+                                                                {#                                                                       title="{% trans "Semi-Adaptive Testing by Difficulty (SATD): Adaptive assessment method where the teacher manually the Difficulty level for each question. This method combines adaptability with personalized assessment, allowing the system to dynamically adjust the difficulty of questions based on students' answers in previous exams, while also considering cognitive levels pre-defined by the teacher." %}">#}
+                                                                {#                                                                    <input type="radio" class="form-control"#}
+                                                                {#                                                                           name="adaptative_test" value="SATD">#}
+                                                                {#                                                                    SATD#}
+                                                                {#                                                                </label>#}
+                                                            </div>
+                                                            <br>
 
                                                             {% trans "Number of Exams with QM: " %}
                                                             <span id="rangeValue" style="font-size: 1.2em;">∞</span>

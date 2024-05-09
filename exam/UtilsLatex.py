@@ -37,6 +37,7 @@ import unicodedata
 import zlib
 import requests
 import math
+import pandas as pd
 
 import bcrypt
 import numpy as np
@@ -1748,7 +1749,6 @@ _inst1_
     #     I = d ** 2 * p * q
     #     return I
 
-
     @staticmethod
     def fisher_information_2pl(student_skill, a, b):
         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
@@ -1764,6 +1764,7 @@ _inst1_
         q = 1 - p
         I = (a ** 2) * p * q
         return I
+
     @staticmethod
     def test_information(student_skill, a_list, b_list):
         """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
@@ -1809,11 +1810,27 @@ _inst1_
         return q_selected_ids
 
     def getAnswersStudentExamVector(student_exam0, studExQt, adaptive_test):
+        """
+        Obtém os vetores de dificuldade e respostas do aluno para um exame.
+
+        Args:
+            student_exam0: O objeto de exame do aluno.
+            studExQt: QuerySet contendo as questões respondidas pelo aluno.
+            adaptive_test: O tipo de teste adaptativo.
+
+        Returns:
+            numpy.ndarray: Vetor de parâmetros 'a'.
+            numpy.ndarray: Vetor de parâmetros 'b'.
+            numpy.ndarray: Vetor de respostas do aluno.
+        """
+
+        # Array da Taxonomia de Bloom
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
-        # Cria vetores vazios para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vertor u)
+        # Vetores para armazenar a dificuldade das questões respondidas (vetor b) e se o aluno acertou ou errou elas (vetor u)
         a_vector, b_vector, u_vector = [], [], []
-        # itera sobre todas as questões dos exames realizados anteriormente pelo aluno s (verifcar se não está pegando exames de disciplinas ou turmas anteriores)
+
+        # Itera sobre todas as questões respondidas pelo aluno
         for seq in studExQt.all():
             # Recupera os dados da questão
             question = Question.objects.filter(id=seq.question.id).first()
@@ -1824,30 +1841,31 @@ _inst1_
             marcou = ss.index(seq.studentAnswer) if seq.studentAnswer in ss else -1
             acertou = 1 if marcou == correto else 0
 
-            # Calcula parâmetros a e b
+            # Calcula os parâmetros 'a' e 'b' da questão
             a_parameter, b_parameter = 1, 0
 
-            if adaptive_test == 'CTT':  # Classical Testing Teory
-                # O parâmetro b é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
+            if adaptive_test == 'WPC':  # Classical Testing Teory
+                # O parâmetro 'b' é calculado como a diferença entre 1 e a porcentagem ponderada de respostas corretas
+                # normalizando entre -5 e 5
                 if question.question_correction_count:
                     b_parameter = float(
-                        10 * (1 - question.question_correct_count / question.question_correction_count))
+                        10 * (question.question_correct_count / question.question_correction_count) - 5.0)
                 else:
-                    b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) + 1)
-            elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
-                # O parâmetro b é a habilidade IRT da questão
-                # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
+                    b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) - 2)
+            elif adaptive_test == 'MLE':  # Computerized Adaptive Testing
+                # O parâmetro 'b' é a habilidade IRT da questão
+                # Valida se a questão já foi calibrada (se o parâmetro B do TRI é diferente de -5)
                 if (question.question_IRT_b_ability == -5.0):
                     b_parameter = bloom_array.index(question.question_bloom_taxonomy) - 2.0
                 else:
                     b_parameter = float(question.question_IRT_b_ability)
                     a_parameter = float(question.question_IRT_a_discrimination)
-            elif adaptive_test == 'SATB':  # Semi-Adaptive Testing by Bloom
-                # O parâmetro b é o índice da taxonomia de Bloom da questão entre 1 e 6
+            elif adaptive_test == 'SAT':  # Semi-Adaptive Testing by Bloom
+                # O parâmetro 'b' é o índice da taxonomia de Bloom da questão entre 1 e 6
                 b_parameter = float(bloom_array.index(question.question_bloom_taxonomy) - 2.0)
 
-            # Insere a dificuldade e se o estudante acertou ou erro nos respecitvos vetores em ordem
-            a_vector.append(a_parameter)  # Converte junto dos outros paramêtros
+            # Insere a dificuldade e se o estudante acertou ou errou nos respectivos vetores
+            a_vector.append(a_parameter)
             b_vector.append(b_parameter)
             u_vector.append(acertou)
 
@@ -1855,51 +1873,87 @@ _inst1_
 
     @staticmethod
     def createAdaptativeTest(request, exam, choice_adaptive_test_number, path_to_file_ADAPTIVE_TEST, adaptive_test):
-        bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
+        '''
+        Este método cria um teste adaptativo para cada turma, utilizando exames anteriores.
+        Calcula o vetor de acertos/erros (u_vector) de cada questão para cada aluno,
+        somando a multiplicação de u_vector com b_vector, exceto para o CAT
+        (Computerized Adaptive Testing), onde é usado o método Utils.ability_estimation_aux.
+
+        Args:
+            request: requisição HTTP recebida.
+            exam: exame atual para o qual o teste adaptativo está sendo criado.
+            choice_adaptive_test_number: número de exames anteriores a serem considerados para a média das habilidades.
+            path_to_file_ADAPTIVE_TEST: caminho para o arquivo CSV onde os resultados do teste adaptativo serão salvos.
+            adaptive_test: tipo de teste adaptativo sendo realizado (por exemplo, CAT).
+
+        Returns:
+            minStudentsClassesGrade: nota mínima entre todas as notas calculadas para os alunos.
+            maxStudentsClassesGrade: nota máxima entre todas as notas calculadas para os alunos.
+            student_u_b_all_exams: dicionário contendo os vetores a_vector, b_vector e u_vector de cada aluno em todos os
+            exames anteriores.
+
+        Observações:
+        Este método itera sobre cada turma e para cada turma, obtém todos os exames anteriores aplicados.
+        É fundamental deixar todas as turmas habilidadas nesses exames anteriores.
+        Para cada exame anterior, calcula a nota de cada aluno, considerando os seus acertos/erros e habilidades.
+        Os resultados são salvos num arquivo CSV, onde cada linha representa um aluno e suas notas em cada exame.
+        Além disso, é calculada a média das habilidades dos alunos com base nos exames anteriores, considerando o número
+        especificado de exames para trás, exceto para o CAT, que usa Utils.ability_estimation_aux.
+        Os resultados são ordenados pela média das habilidades dos alunos e salvos no arquivo CSV especificado.
+        '''
 
         # Inicializa um dicionário para armazenar as notas dos alunos para cada prova
         student_grades_by_exam = {}
 
+        # Inicializa um dicionário para armazenar os vetores a_vector, b_vector e u_vector de cada aluno em todos os exames anteriores
         student_u_b_all_exams = {}
 
         # Inicializa um conjunto para armazenar todos os IDs de exames
         all_exam_ids = set()
 
+        # Itera sobre cada turma
         for room in exam.classrooms.all():  ############## PARA CADA TURMA
 
             # Encontre todos os exames já aplicadados na turma
             exams_with_same_room = Exam.objects.filter(classrooms__id=room.id)
 
-            exams_aux = list(exams_with_same_room)  # Convert queryset to list
+            # Converte o queryset para uma lista
+            exams_aux = list(exams_with_same_room)
 
-            exams_aux.remove(exam)  # remove o exame corrente
+            # Remove o exame atual da lista de exames anteriores
+            exams_aux.remove(exam)
 
-            # Sort exams_aux by the 'exam_data' attribute
+            # Ordena os exames anteriores por data de aplicação
             exams_aux_sorted = sorted(exams_aux, key=lambda ex: ex.exam_hour)
 
+            # Itera sobre cada exame anterior
             for exam0 in exams_aux_sorted:  ############ PARA CADA exam0
 
-                if exam.exam_hour < exam0.exam_hour:  # descarta exames que ainda não foram aplicados
-                    continue
-                if Utils.getNumMCQuestions(exam0) == 0:  # descarta se não tem QM
+                # Descarta exames que ainda não foram aplicados
+                if exam.exam_hour < exam0.exam_hour:
                     continue
 
-                for s in room.students.all():  ### Laço para pegar a nota de cada aluno em exam0
+                # Descarta exames que não contêm questões de múltipla escolha
+                if Utils.getNumMCQuestions(exam0) == 0:
+                    continue
+
+                # Itera sobre cada aluno na turma
+                for s in room.students.all():
 
                     # Encontre a nota do aluno s em exam0
                     student_exam0 = StudentExam.objects.filter(exam=exam0, student=s).first()
                     studExQt = StudentExamQuestion.objects.filter(studentExam=student_exam0,
                                                                   question__question_type='QM')
 
+                    # Calcula os vetores a_vector, b_vector e u_vector do aluno
                     a_vector, b_vector, u_vector = Utils.getAnswersStudentExamVector(student_exam0, studExQt,
                                                                                      adaptive_test)
-
                     # Calcula a habilidade do estudante
-                    if adaptive_test == 'CAT':
+                    if adaptive_test == 'MLE':
                         if np.any(u_vector) and np.any(b_vector):
                             grade = Utils.ability_estimation_aux(0, a_vector, b_vector, u_vector)
-                            #grade = float(grade[0])
-                            #Selected_questions = Utils.item_selection(grade, studExQt, Utils.getNumMCQuestions(exam0))
+                            # grade = float(grade[0])
+                            # Selected_questions = Utils.item_selection(grade, studExQt, Utils.getNumMCQuestions(exam0))
                             #####
                         else:
                             grade = -5.0
@@ -1930,125 +1984,120 @@ _inst1_
                         'grade': grade,
                     })
 
-                    student_u_b_all_exams[s.id]['a_vector'].extend(a_vector)  # INSERE VETOR DE PARAMETROS A
+                    # Armazena os vetores a_vector, b_vector e u_vector do aluno
+                    student_u_b_all_exams[s.id]['a_vector'].extend(a_vector)
                     student_u_b_all_exams[s.id]['b_vector'].extend(b_vector)
                     student_u_b_all_exams[s.id]['u_vector'].extend(u_vector)
 
                 # Adicione o ID do exame ao conjunto
                 all_exam_ids.add(exam0.id)
 
-        # Calcule o número máximo de exames
-        max_num_exams = len(all_exam_ids)
-
-        # Create a CSV: 'RoomID', 'RoomCode', 'NameStudent', 'EmailStudent',
-        # 'ExamID{i}', 'ExamDate{i}', 'ExamAbilities{i}', ...
+        # Cria um arquivo CSV para armazenar os resultados do teste adaptativo
         with open(path_to_file_ADAPTIVE_TEST, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
 
-            # Write header
+            # Escreve o cabeçalho do arquivo CSV
             header_row = ['RoomID', 'RoomCode', 'NameStudent', 'EmailStudent']
-            # Add exam information to the header
             for i, (exam_name, exam_data) in enumerate(student_grades_by_exam.items()):
-                # header_row.append(f'ExamID{i}')  # Uncomment if needed
-                # header_row.append(f'ExamDate{i}')  # Uncomment if needed
                 for ex in exam_data['grades']:
                     header_row.append(f"{str(ex['exam_hour'])[:10]}:{ex['exam_id']}:{ex['exam_name']} ")
-            # header_row.append('MeanPreviousAbilities')
             csv_writer.writerow(header_row)
 
-            # exam_grade['exam_id'], str(exam_grade['exam_hour'])[:10],
-
-            # Write data
+            # Escreve os dados dos alunos no arquivo CSV
             for student_id, student_data in student_grades_by_exam.items():
                 row_data = [student_data['room_id'], student_data['room_code'], student_data['name'],
                             student_data['email']]
 
-                # Lista para armazenar a soma das últimas X notas
-                total_grades = []
-
                 # Populate exam information for each exam
                 for exam_grade in student_data['grades']:
-                    # Make sure 'exam_id' is included in the dictionary, or use get method with a default value
-
                     if np.isinf(float(exam_grade['grade'])):  # não fez o exame
                         exam_grade['grade'] = -5
 
                     row_data.extend([exam_grade['grade']])
 
-                    nota = float(exam_grade.get('grade'))
-                    if math.isnan(nota):
-                        nota = 0.0
-
-                    total_grades.append(nota)
-
                 csv_writer.writerow(row_data)
 
-        # limpeza do df
+        # Realiza a limpeza do dataframe
         import pandas as pd
         df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
 
-        # Iterar pelas colunas do final para o começom removendo as vazias
+        # Remove colunas vazias do final
         columns_to_remove = [col for col in reversed(df.columns) if df[col].isna().all()]
         for col in columns_to_remove:
             del df[col]
 
-        # criar última coluna com a média das últimas X colunas ou ate a coluna StudentEmail
+        # Calcula a média das últimas X notas ou até a coluna StudentEmail
         X = int(choice_adaptive_test_number)
         num_cols = min(X, len(df.columns)) - 4
         df.fillna(-5, inplace=True)
         if num_cols > 0:
             cols = df.columns[-num_cols:]
-            cols1 = df.columns[:-num_cols]
             df['MeanPreviousAbilities'] = df[cols].replace(np.nan, 0).mean(axis=1)
         else:
-            df = df.assign(MeanPreviousAbilities=0)
+            df = df.assign(MeanPreviousAbilities=-5)
 
-        # Ordenar última coluna
+        # Ordena os alunos pela média das habilidades
         df = df.sort_values(by='MeanPreviousAbilities')
-        # Pega o valor máximo
+
+        # Obtém a nota máxima e mínima das médias das habilidades dos alunos
         maxStudentsClassesGrade = df['MeanPreviousAbilities'].max()
-        # Pega o valor mínimo
         minStudentsClassesGrade = df['MeanPreviousAbilities'].min()
 
+        # Salva os resultados no arquivo CSV
         df.to_csv(path_to_file_ADAPTIVE_TEST, index=False, float_format='%.3f')
 
         return minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams
 
     @staticmethod
-    def createCariantExam_rankin_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations, adaptive_test):
+    def createVariantExam_rankin_sort(request, exam, path_to_file_ADAPTIVE_TEST_variations, adaptive_test):
+        """
+        Cria e ordena um arquivo CSV com a classificação das variações do exame.
 
+        Args:
+            request: O objeto de requisição.
+            exam: O objeto do exame.
+            path_to_file_ADAPTIVE_TEST_variations: O caminho para o arquivo CSV de saída.
+            adaptive_test: O tipo de teste adaptativo.
+
+        Returns:
+            numpy.ndarray: Array classificado de classificação de exame variante.
+        """
+
+        # Array da Taxonomia de Bloom
         bloom_array = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create']
 
-        #####################################################
-        ### definir peso das variações pelo método adaptativo
+        # Inicializa a lista de classificação do exame variante
         variantExam_rankin = []
+
+        # Itera pelas variações do exame
         for variationsExam in exam.variationsExams2.all():
             vars = eval(variationsExam.variation)
-            sum_b = []
-            sum_a = []  # <------------------------ add parameter A
+            sum_a = []  # Inicializa a lista sum_a
+            sum_b = []  # Inicializa a lista sum_b
+            qBDid = []  # Inicializa a lista IDs das questões
             for var in vars['variations']:
                 for q in var['questions']:  # para cada questão
+                    qBDid.append(q['key'])
 
-                    # pego a questão no BD para saber a porcentagem de acertos
+                    # Obtém a questão do banco de dados
                     qBD = get_object_or_404(Question, pk=str(q['key']))
-                    aBD = []
-                    for a in qBD.answers2.all():
-                        aBD.append(a.id)
 
+                    # Calcula a habilidade da questão com base no tipo de teste adaptativo
                     if q['type'] == 'QM':  #### ESCADA DE HABILIDADE FICA ENTRE -2 ATÉ 2, EM GERAL
-                        if adaptive_test == "CTT":  # Classical Testing Teory
+                        if adaptive_test == "WPC":  # Classical Testing Teory
                             if qBD.question_correction_count:
-                                sum_b.append(float(10 * (qBD.question_correct_count / qBD.question_correction_count)))
+                                sum_b.append(
+                                    float(10 * (qBD.question_correct_count / qBD.question_correction_count) - 5.0))
                             else:
-                                sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy)))
-                        elif adaptive_test == 'CAT':  # Computerized Adaptive Testing
+                                sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0))
+                        elif adaptive_test == 'MLE':  # Computerized Adaptive Testing
                             # Valida se a questão já foi calibrada (se o parametro B do TRI é diferente de -5)
                             if (qBD.question_IRT_b_ability == -5.0):
                                 sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0))
                             else:
                                 sum_b.append(float(qBD.question_IRT_b_ability))
 
-                        elif adaptive_test == "SATB":  # Semi-Adaptive Testing by Bloom
+                        elif adaptive_test == "SAT":  # Semi-Adaptive Testing by Bloom
                             sum_b.append(float(bloom_array.index(qBD.question_bloom_taxonomy) - 2.0))
 
                         # Verifica se a questão já passou pelo processo de calibração
@@ -2057,20 +2106,10 @@ _inst1_
                         else:
                             sum_a.append(1)
 
-            # 0+0+0+0+5=5
-            # 1+1+1+1+1=5
-            # if not adaptive_test == "CTT":
-            #     if max(sum_b) - min(sum_b) > 3:
-            #         print(">>>>>>>***** ", *sum_b)
-            #         continue
-            # else:
-            #     if max(sum_b) - min(sum_b) > 50:
-            #         print(">>>>>>>***** ", *sum_b)
-            #         continue
-
+            # Calcula a média de sum_b
             valor = np.mean(sum_b)  # + len(sum_b) * np.std(sum_b) # penalidade com std alto
 
-            # variantExam_rankin.append([vars['variations'][0]['variant'], variationsExam.id, valor, *sum_b, *aBD])
+            # Adiciona dados à lista variantExam_rankin
             variantExam_rankin.append([
                 vars['variations'][0]['variant'],
                 variationsExam.id,
@@ -2078,32 +2117,24 @@ _inst1_
                 float(np.std(sum_b)),
                 *[float(element) for element in sum_a],  # Convert each element of sum_b to float ##### ADD vetor A
                 *[float(element) for element in sum_b],  # Convert each element of sum_b to float
-                *aBD
+                *qBDid
             ])
 
-        # Convert the last columns to float
-        # data = [[item[0], item[1], float(item[2])] for item in variantExam_rankin]
-
-        # criando uma nova lista
-        # data = variantExam_rankin
-
-        # Sort the data by the converted last column
+        # Ordena a lista variantExam_rankin pela média de habilidades
         variantExam_rankin_sort = np.array(sorted(variantExam_rankin, key=lambda x: x[2]))
 
-        # Create a CSV writer
+        # Escreve dados no arquivo CSV
         with open(path_to_file_ADAPTIVE_TEST_variations, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
 
-            # Write header
+            # Escreve linha de cabeçalho
             header_row = ['Variation', 'VariationID', 'MeanAbilities', 'STD']
-            # Adicionar 'a1', 'a2', ... no início da lista
-            header_row += [f'a{i}' for i in range(1, len(sum_a) + 1)]
-            # Adicionar 'b1', 'b2', ... no início da lista
-            header_row += [f'b{i}' for i in range(1, len(sum_b) + 1)]
-            # Adicionar 'k1', 'k2', ... no início da lista
-            header_row += [f'k{i}' for i in range(1, len(aBD) + 1)]
+            header_row += [f'a{i}' for i in range(1, len(sum_a) + 1)]  # Adiciona 'a1', 'a2', ... ao cabeçalho
+            header_row += [f'b{i}' for i in range(1, len(sum_b) + 1)]  # Adiciona 'b1', 'b2', ... ao cabeçalho
+            header_row += [f'k{i}' for i in range(1, len(qBDid) + 1)]  # Adiciona 'k1', 'l2', ... ao cabeçalho
             csv_writer.writerow(header_row)
 
+            # Escreve linhas de dados
             for v in variantExam_rankin_sort:
                 row = [
                     (format(float(val), '.3f') if '.' in val else val) if (
@@ -2116,7 +2147,7 @@ _inst1_
 
     @staticmethod
     def getHashVariationByCat(request, student_u_b_all_exams, variantExam_rankin_bloom_sort, id_student):
-        """Código desenvolvido por Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
+        """Código adapado de Lucas Montagnani Calil Elias para criar testes adaptativos com CAT,
         como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
         da Universidade Federal do ABC, em 2023-2024.
 
@@ -2135,54 +2166,77 @@ _inst1_
         # Calcula a nota do estudante com a TRI do CAT
         nota_student = Utils.ability_estimation_aux(0, np.array(a), np.array(b), np.array(u))
         # Inicia variaveis auxiliares para seleção da melhor variação
-        best_ti = -1.0
-        best_variation = 0
-        a_variations, a_variations = [], []
+        list_variations_ti = []
         # Itera sobre cadas variação de variantExam_rankin_sort
         for variation in variantExam_rankin_bloom_sort:
             # Calcula FI daquela variação, passando como parâmetros a nota do estudante a difuculdade ("SumAbilities") da variação
             # fi = Utils.fisher_information(float(nota_student), float(variation[2]))
-            num_questions = (len(variation)-4)//3
-            a_vector = np.array(variation[4:4+num_questions], dtype=float)
-            b_vector = np.array(variation[4+num_questions:4+2*num_questions], dtype=float)
+            num_questions = (len(variation) - 4) // 3
+            a_vector = np.array(variation[4:4 + num_questions], dtype=float)
+            b_vector = np.array(variation[4 + num_questions:4 + 2 * num_questions], dtype=float)
             ti = Utils.test_information(float(nota_student), a_vector, b_vector)
-            # Verifica se a FI desta variação é maior que a melhor até o momento
-            if (ti > best_ti):
-                # Caso seja maior, atualiza como a melhor e salva o identificador daquela variação
-                best_ti = ti
-                best_variation = variation[0]
-                a_variations = a_vector
-                b_variations = b_vector
-        # Retorna o identificador da variação escolhida para aquele aluno, junto da nota do aluno
+            list_variations_ti.append([ti, variation[0]])
 
+        # Ordena a lista de variações por TI em ordem decrescente
+        arr_variations_ti = np.array(sorted(list_variations_ti, key=lambda x: x[0], reverse=True))
+
+        # Seleciona aleatoriamente uma variação com o maior valor de TI
+        max_ti = arr_variations_ti[0, 0]
+        variations_with_max_ti = arr_variations_ti[arr_variations_ti[:, 0] == max_ti, 1]
+        selected_variation = random.choice(variations_with_max_ti)
+
+        # buscar em variantExam_rankin_bloom_sort a variação que valor selected_variation na coluna 0
+        variation = next(v for v in variantExam_rankin_bloom_sort if v[0] == selected_variation)
+
+        # Atualiza as variáveis de saída
+        num_questions = (len(variation) - 4) // 3
+        a_variations = np.array(variation[4:4 + num_questions], dtype=float)
+        b_variations = np.array(variation[4 + num_questions:4 + 2 * num_questions], dtype=float)
+
+        # Retorna o identificador da variação escolhida para aquele aluno, junto da nota do aluno
         student_u_b_all_exams[id_student]['a_variations'] = list(a_variations)
         student_u_b_all_exams[id_student]['b_variations'] = list(b_variations)
-        student_u_b_all_exams[id_student]['best_ti'] = best_ti
+        student_u_b_all_exams[id_student]['best_ti'] = max_ti
         student_u_b_all_exams[id_student]['b_ability'] = nota_student
-        student_u_b_all_exams[id_student]['best_variation'] = int(best_variation)
+        student_u_b_all_exams[id_student]['best_variation'] = int(selected_variation)
 
-        #return int(best_variation), nota_student, student_u_b_all_exams
         return student_u_b_all_exams
 
     @staticmethod
-    def getHashAdaptative(request, exam, df, variantExam_rankin_bloom_sort, student_name, minStudentsClassesGrade,
+    def getHashAdaptative(request, exam, df, variantExam_rankin_sort, student_name, minStudentsClassesGrade,
                           maxStudentsClassesGrade):
-        import pandas as pd
+        """
+            Obtém o hash adaptativo para um determinado aluno em um exame.
 
-        # Filtre as linhas com 'NomeAluno' igual ao nome do aluno
+            Args:
+                request: O objeto de requisição.
+                exam: O objeto do exame.
+                df: O DataFrame contendo os dados dos alunos.
+                variantExam_rankin_sort: O array numpy ordenado das classificações das variações do exame.
+                student_name: O nome do aluno.
+                minStudentsClassesGrade: A nota mínima dos alunos nas classes.
+                maxStudentsClassesGrade: A nota máxima dos alunos nas classes.
+
+            Returns:
+                int: O hash adaptativo.
+                float: A nota do aluno no exame.
+        """
+
+        # Filtre as linhas com 'NameStudent' igual ao student_name
         df_student = df[df['NameStudent'] == student_name]
 
+        # Verifica se há mais de um aluno com o mesmo nome
         if df_student.shape[0] > 1:
             messages.error(request, _('ERROR - students with same name') + student_name)
             return render(request, 'exam/exam_errors.html', {})
 
+        nota_student = -5
         try:
             # Encontre o último elemento que não seja NaN
             vet_aux = df_student.values[0]
             # Encontrar índices onde o valor é diferente de NaN
             indices_nao_nan = np.where(pd.notna(vet_aux))[0]
         except:
-            nota_student = 0
             indices_nao_nan = np.array([])
 
         # Verificar se há índices não nulos
@@ -2191,13 +2245,10 @@ _inst1_
             ultimo_indice = indices_nao_nan[-1]
             # Obter o último valor diferente de NaN
             nota_student = vet_aux[ultimo_indice]
-        else:
-            # Tratar caso não haja valores não nulos
-            nota_student = 0
 
-        # pegar max e min da coluna com SumPrevieusAbilities
-        rmax = np.max(variantExam_rankin_bloom_sort[:, 2].astype(float))
-        rmin = np.min(variantExam_rankin_bloom_sort[:, 2].astype(float))
+        # pegar max e min da coluna com MeanPrevieusAbilities
+        rmax = np.max(variantExam_rankin_sort[:, 2].astype(float))
+        rmin = np.min(variantExam_rankin_sort[:, 2].astype(float))
 
         '''
         Se nota_student = minStudentsClassesGrade => nota_student_proportion = rmin
@@ -2205,6 +2256,7 @@ _inst1_
         Se minStudentsClassesGrade < nota_student < maxStudentsClassesGrade =>
         achar nota_student_proportion proporcional entre rmin e rmax
         '''
+        # Calcula a nota proporcional do aluno
         nota_student_proportion = rmin
         if maxStudentsClassesGrade != minStudentsClassesGrade:
             # Calcular a proporção relativa
@@ -2215,13 +2267,14 @@ _inst1_
         linhas_hash_num = []
         nota_aux = nota_student_proportion
         while not linhas_hash_num:
-            linhas_hash_num = [linha for linha in variantExam_rankin_bloom_sort if
-                               float(linha[2]) - 0.1 < nota_aux < float(linha[2]) + 0.1]
-            nota_aux += 0.01
-            if nota_aux > 10:  # pega uma variante aleatória
-                linhas_hash_num = variantExam_rankin_bloom_sort
+            linhas_hash_num = [linha for linha in variantExam_rankin_sort if
+                               float(linha[2]) - 0.05 < nota_aux < float(linha[2]) + 0.05]
+            nota_aux += 0.001
+            if nota_aux > 5:  # Se não encontrar, escolhe uma variante aleatória
+                linhas_hash_num = variantExam_rankin_sort
                 break
-        # Selecionar uma linha aleatória
+
+        # Seleciona uma linha aleatória das selecionadas e calcula o hash adaptativo
         var_hash = int(random.choice(linhas_hash_num)[0]) % int(exam.exam_variations)
 
         return var_hash, nota_student
