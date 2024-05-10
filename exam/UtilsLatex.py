@@ -2181,8 +2181,12 @@ _inst1_
         arr_variations_ti = np.array(sorted(list_variations_ti, key=lambda x: x[0], reverse=True))
 
         # Seleciona aleatoriamente uma variação com o maior valor de TI
-        max_ti = arr_variations_ti[0, 0]
-        variations_with_max_ti = arr_variations_ti[arr_variations_ti[:, 0] == max_ti, 1]
+        max_ti = float(arr_variations_ti[0, 0])
+        #variations_with_max_ti = arr_variations_ti[arr_variations_ti[:, 0] == max_ti, 1]
+        variations_with_max_ti = []
+        for variation_ti, variation_value in arr_variations_ti:
+            if max_ti - 0.05 <= float(variation_ti) <= max_ti + 0.05:
+                variations_with_max_ti.append(variation_value)
         selected_variation = random.choice(variations_with_max_ti)
 
         # buscar em variantExam_rankin_bloom_sort a variação que valor selected_variation na coluna 0
