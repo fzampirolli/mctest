@@ -1,5 +1,7 @@
 \documentclass[10pt,brazil,a4paper]{exam}
 
+\usepackage{shellesc}
+
 \usepackage[utf8]{inputenc}
 %\usepackage[portuguese]{babel}
 \usepackage[brazilian]{babel}

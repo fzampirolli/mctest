@@ -448,9 +448,7 @@ class Utils(object):
                 strQuestions = Utils.drawCircles()
                 strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
                                                 data_hora, font_size)
-                if not Utils.drawAnswerSheet(request, exam):
-                    return False
-                else:
+                if (exam.exam_print in ['answ', 'both']):
                     strQuestions += Utils.drawAnswerSheet(request, exam)
                 strQuestions += Utils.drawCircles()
                 strQuestions += Utils.drawInstructions(exam)
