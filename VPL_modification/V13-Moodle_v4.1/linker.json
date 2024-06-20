@@ -4,76 +4,63 @@
       "variant": "1",
       "questions": [
         {
-          "key": "1968",
+          "key": "2463",
           "number": "1",
           "file": "Q1",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "table test"
-          ],
-          "description": [
-            {
-              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
-              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "[9, 12]"
+                "4 6 7 8 1 2\n7 9 6 3 5 1\n1 1 5 4 1 2\n5 9 4 6 8 6\n\n"
               ],
               "output": [
-                " Linha     a       b      tmp   \n   2       9       12      ?    \n   3       9       12      9    \n   4       12      12      9    \n   5       12      9       9    \n   2       12      9       9    \n   3       12      9       12   \n   4       9       9       12   \n   5       9       3       12   \n   2       9       3       12   \n   3       9       3       9    \n   4       3       3       9    \n   5       3       0       9    \n   2       3       0       9    \n   6       3    \n"
+                "soma = 111"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "7 5 9 9 1 3\n5 6 3 3 1 2\n6 6 7 5 5 9\n5 3 3 6 6 2\n\n"
+              ],
+              "output": [
+                "soma = 117"
               ]
             }
           ]
         },
         {
-          "key": "1652",
+          "key": "2454",
           "number": "2",
           "file": "Q2",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "operators"
-          ],
-          "description": [
-            {
-              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $12$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "599.55\n"
+                "5002.3\n"
               ],
               "output": [
-                "49.96"
+                "357.31"
               ]
             },
             {
               "case": "test_2",
               "input": [
-                "685.86\n"
+                "5007.9\n"
               ],
               "output": [
-                "57.16"
-              ]
-            },
-            {
-              "case": "test_3",
-              "input": [
-                "618.74\n"
-              ],
-              "output": [
-                "51.56"
+                "357.71"
               ]
             }
           ]
@@ -84,76 +71,63 @@
       "variant": "2",
       "questions": [
         {
-          "key": "1968",
+          "key": "2454",
           "number": "1",
           "file": "Q1",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "table test"
-          ],
-          "description": [
-            {
-              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
-              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "[8, 12]"
+                "5003.3\n"
               ],
               "output": [
-                " Linha     a       b      tmp   \n   2       8       12      ?    \n   3       8       12      8    \n   4       12      12      8    \n   5       12      8       8    \n   2       12      8       8    \n   3       12      8       12   \n   4       8       8       12   \n   5       8       4       12   \n   2       8       4       12   \n   3       8       4       8    \n   4       4       4       8    \n   5       4       0       8    \n   2       4       0       8    \n   6       4    \n"
+                "277.96"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5010.0\n"
+              ],
+              "output": [
+                "278.33"
               ]
             }
           ]
         },
         {
-          "key": "1652",
+          "key": "2463",
           "number": "2",
           "file": "Q2",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "operators"
-          ],
-          "description": [
-            {
-              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $23$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "662.39\n"
+                "4 1 9 4\n5 4 6 1\n9 4 9 3\n2 2 5 4\n\n"
               ],
               "output": [
-                "28.80"
+                "soma = 72"
               ]
             },
             {
               "case": "test_2",
               "input": [
-                "761.49\n"
+                "9 7 3 5\n9 5 0 4\n8 7 2 4\n4 2 8 8\n\n"
               ],
               "output": [
-                "33.11"
-              ]
-            },
-            {
-              "case": "test_3",
-              "input": [
-                "766.43\n"
-              ],
-              "output": [
-                "33.32"
+                "soma = 85"
               ]
             }
           ]
@@ -164,76 +138,63 @@
       "variant": "3",
       "questions": [
         {
-          "key": "1968",
+          "key": "2454",
           "number": "1",
           "file": "Q1",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "table test"
-          ],
-          "description": [
-            {
-              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
-              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "[3, 12]"
+                "5004.0\n"
               ],
               "output": [
-                " Linha     a       b      tmp   \n   2       3       12      ?    \n   3       3       12      3    \n   4       12      12      3    \n   5       12      3       3    \n   2       12      3       3    \n   3       12      3       12   \n   4       3       3       12   \n   5       3       0       12   \n   2       3       0       12   \n   6       3    \n"
+                "263.37"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5003.1\n"
+              ],
+              "output": [
+                "263.32"
               ]
             }
           ]
         },
         {
-          "key": "1652",
+          "key": "2463",
           "number": "2",
           "file": "Q2",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "operators"
-          ],
-          "description": [
-            {
-              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $21$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "654.16\n"
+                "6 9 4 3 4 5 1\n2 2 3 6 2 5 9\n5 4 7 1 8 3 9\n5 7 8 5 8 0 3\n\n"
               ],
               "output": [
-                "31.15"
+                "soma = 134"
               ]
             },
             {
               "case": "test_2",
               "input": [
-                "732.8\n"
+                "8 7 1 6 7 4 0\n2 4 4 1 2 3 9\n1 8 6 9 5 5 4\n0 8 7 3 8 1 6\n\n"
               ],
               "output": [
-                "34.90"
-              ]
-            },
-            {
-              "case": "test_3",
-              "input": [
-                "712.91\n"
-              ],
-              "output": [
-                "33.95"
+                "soma = 129"
               ]
             }
           ]
@@ -244,76 +205,63 @@
       "variant": "4",
       "questions": [
         {
-          "key": "1652",
+          "key": "2463",
           "number": "1",
           "file": "Q1",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "operators"
-          ],
-          "description": [
-            {
-              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $13$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "716.45\n"
+                "9 3 8 5 9 1\n7 8 1 5 9 6\n6 4 9 9 9 5\n8 4 5 9 7 1\n9 3 7 2 1 1\n6 9 6 7 5 8\n\n"
               ],
               "output": [
-                "55.11"
+                "soma = 211"
               ]
             },
             {
               "case": "test_2",
               "input": [
-                "641.58\n"
+                "2 9 1 3 3 9\n7 6 1 8 9 8\n5 0 2 6 4 4\n0 2 4 4 6 7\n9 7 6 7 9 8\n2 3 8 4 3 9\n\n"
               ],
               "output": [
-                "49.35"
-              ]
-            },
-            {
-              "case": "test_3",
-              "input": [
-                "557.08\n"
-              ],
-              "output": [
-                "42.85"
+                "soma = 185"
               ]
             }
           ]
         },
         {
-          "key": "1968",
+          "key": "2454",
           "number": "2",
           "file": "Q2",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "table test"
-          ],
-          "description": [
-            {
-              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
-              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "[4, 16]"
+                "5005.2\n"
               ],
               "output": [
-                " Linha     a       b      tmp   \n   2       4       16      ?    \n   3       4       16      4    \n   4       16      16      4    \n   5       16      4       4    \n   2       16      4       4    \n   3       16      4       16   \n   4       4       4       16   \n   5       4       0       16   \n   2       4       0       16   \n   6       4    \n"
+                "385.02"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5010.6\n"
+              ],
+              "output": [
+                "385.43"
               ]
             }
           ]
@@ -324,76 +272,63 @@
       "variant": "5",
       "questions": [
         {
-          "key": "1652",
+          "key": "2463",
           "number": "1",
           "file": "Q1",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "operators"
-          ],
-          "description": [
-            {
-              "text": "Write a program that helps a store make a sale. Your program should: Ask the product price; Consider that the store divides this price in just $15$ installments (without addition); and show how much it will cost each month (rounding to two decimal places only). "
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "643.51\n"
+                "2 0 4 0 0 2 4\n1 0 3 6 6 7 2\n4 9 2 4 2 5 0\n5 2 7 6 5 7 4\n\n"
               ],
               "output": [
-                "42.90"
+                "soma = 99"
               ]
             },
             {
               "case": "test_2",
               "input": [
-                "776.06\n"
+                "6 7 8 3 6 9 2\n8 0 4 8 9 0 1\n3 0 5 7 8 7 7\n9 1 4 9 9 9 5\n\n"
               ],
               "output": [
-                "51.74"
-              ]
-            },
-            {
-              "case": "test_3",
-              "input": [
-                "575.45\n"
-              ],
-              "output": [
-                "38.36"
+                "soma = 154"
               ]
             }
           ]
         },
         {
-          "key": "1968",
+          "key": "2454",
           "number": "2",
           "file": "Q2",
           "weight": "1",
           "language": [
             "all"
           ],
-          "skills": [
-            "table test"
-          ],
-          "description": [
-            {
-              "text": "Fazer o Teste de Mesa com o pseudo-c\u00f3digo abaixo.\n\u00c9 preciso simular todas as linhas at\u00e9 encontrar o retorno da fun\u00e7\u00e3o.\nA \u00faltima linha da simula\u00e7\u00e3o (do retorno) deve conter apenas o n\u00famero da linha e o valor retornado.\nPara cada linha, voc\u00ea precisa repetir o valor de todas as vari\u00e1veis atualizados. Utilize '?' se o valor ainda n\u00e3o for conhecido.",
-              "func": "def MDC(a, b):\n    while (b != 0):\n        tmp = a\n        a = b\n        b = tmp % b\n    return a"
-            }
-          ],
+          "skills": [],
+          "description": [],
           "cases": [
             {
               "case": "test_1",
               "input": [
-                "[4, 19]"
+                "5001.7\n"
               ],
               "output": [
-                " Linha     a       b      tmp   \n   2       4       19      ?    \n   3       4       19      4    \n   4       19      19      4    \n   5       19      4       4    \n   2       19      4       4    \n   3       19      4       19   \n   4       4       4       19   \n   5       4       3       19   \n   2       4       3       19   \n   3       4       3       4    \n   4       3       3       4    \n   5       3       1       4    \n   2       3       1       4    \n   3       3       1       3    \n   4       1       1       3    \n   5       1       0       3    \n   2       1       0       3    \n   6       1    \n"
+                "333.45"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5007.9\n"
+              ],
+              "output": [
+                "333.86"
               ]
             }
           ]

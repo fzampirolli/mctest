@@ -1271,7 +1271,8 @@ string TestCase::getComment() {
 			if(output.size()>0){
 				ret += "\n --- Expected output ("+output[0]->type()+")---\n";
 				ret += Tools::caseFormat(output[0]->studentOutputExpected());
-				//ret += Tools::caseFormat("Omitido!!");			}
+				//ret += Tools::caseFormat("Omitido!!");
+			}
 		}
 	}
 	return ret;

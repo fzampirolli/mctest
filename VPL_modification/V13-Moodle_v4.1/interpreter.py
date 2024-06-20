@@ -158,7 +158,7 @@ def get_student_hash(name, max_v = int(1e10), min_v = int(1e9), factor=[113, 397
     name = unicodedata.normalize('NFKD', name).encode('ascii','ignore').decode('ascii').split()
     name = name[0]+name[-1]
     # fz add
-    #name = name.replace('@','').replace('.','').replace('-','').replace('_','')
+    # name = name.replace('@','').replace('.','').replace('-','').replace('_','')
     name = re.sub('[^a-zA-Z]', '', name)
     # fz end
 

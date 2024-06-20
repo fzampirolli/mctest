@@ -1,4 +1,4 @@
-# python3.8 manage.py shell < _delete_exams_classrooms_students.py
+# python3 manage.py shell < _delete_exams_classrooms_students.py
 
 from student.models import Student
 from topic.models import Question, Topic
