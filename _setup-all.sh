@@ -49,9 +49,7 @@ cd mctest
 # git checkout 8ad0d60055a35fdb5f0e821601a6129ea15ab28a
 
 mkdir tmp
-mkdir /var/www/html/tmp/imgs180days
-ln -s /var/www/html/tmp/imgs180days
-#mkdir tmpGAB
+mkdir tmp/imgs180days
 mkdir pdfExam
 mkdir pdfQuestion
 mkdir pdfTopic
@@ -60,6 +58,9 @@ mkdir /backup
 mkdir /backup/json
 mkdir /backup/mysql
 #mkdir /backup/tmpGAB
+mkdir /var/www/html/tmp/imgs180days
+ln -s /var/www/html/tmp/imgs180days
+#mkdir tmpGAB
 
 # NÃO MUDAR O USER 'root' DO BD
 cp _settings.env ../
