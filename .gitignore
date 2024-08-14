@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 pdf*/
 tmp/
+__init__.py
