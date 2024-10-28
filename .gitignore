@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+pdf*/*
+tmp/*
+.DS_Store
+__init__.py
