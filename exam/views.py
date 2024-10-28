@@ -1418,6 +1418,7 @@ def generate_page(request, pk):
                 if exam.exam_print in ['ques']:
                     if int(exam.exam_number_of_questions_text):
                         if exam.exam_print_eco == 'yes':
+                            strSTUDENT += Utils.drawJumpPage()
                             strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
                                                           data_hora, font_size)
                             strSTUDENT += strInstructions
