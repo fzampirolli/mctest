@@ -365,7 +365,7 @@ class Utils(object):
     <templateparams></templateparams>
     <answer><![CDATA[____answer____]]></answer>\n\n'''
 
-                    q_str = q_str.replace('____answer____', case.get('answer', ''))
+                    q_str = q_str.replace('____answer____', ', '.join(case.get('answer', [])))
 
                     q_str += '<testcases>\n\n'
                     for k in range(len(case['output'])):
