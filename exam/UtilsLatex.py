@@ -172,6 +172,29 @@ class Utils(object):
         # str1 = str1.replace('python', 'p$$ $$ython')
         return str1
 
+    @staticmethod
+    def latex_to_html(text):
+        """
+        Converte um trecho de texto em LaTeX para HTML.
+        """
+        import subprocess
+        # Salva o texto LaTeX em um arquivo temporário
+        with open('temp.tex', 'w') as f:
+            f.write(text)
+
+        try:
+            # Converte o arquivo LaTeX para HTML usando o Pandoc
+            html = subprocess.check_output(['pandoc', 'temp.tex', '-f', 'latex', '-t', 'html'])
+            html = html.decode('utf-8')
+        except:
+            html = text
+
+        # Remove o arquivo temporário
+        subprocess.call(['rm', 'temp.tex'])
+
+        # Retorna o HTML gerado
+        return html
+
     # create file DB with all variations in aiken format
     @staticmethod
     def createFileDB_xml(exam, path_to_file_VARIATIONS_DB):
@@ -253,17 +276,28 @@ class Utils(object):
             q_text = Utils.convertWordsMoodle(q[7])
             answers = q[8]
 
+            q_str += question_model
+
             # remove all occurance singleline comments (%%COMMENT\n ) from string
             q_text = re.sub(re.compile("%%.*?\n"), "", q_text)
+            q_text_html = q_text
+
+            # se VPL, converte para html
+            a, b = q_text.find('begin{comment}'), q_text.find('end{comment}')
+            flag_vpl = False
+            if a < b:
+                flag_vpl = True
+                q_text_html = Utils.latex_to_html(q_text)
+                q_str = q_str.replace('___question_text___', str(q_text_html))
+            else:
+                q_str = q_str.replace('___question_text___', str(q_text))
 
             myflag = False  # criar nova categoria ao mudar de questao
             if question_ID_before != int(q_id):
                 myflag = True
                 question_ID_before = int(q_id)
 
-            q_str += question_model
             q_str = q_str.replace('___question_db_id___', str(q_id))
-            q_str = q_str.replace('___question_text___', str(q_text))
             q_str = q_str.replace('___question_diff___', str(q_diff))
             q_str = q_str.replace('___question_id___', str(q_count))
             q_str = q_str.replace('___question_topic___', str(q_topic))
@@ -282,7 +316,81 @@ class Utils(object):
                     q_str += Utils.convertWordsMoodle(a_str)
 
             else:  # QT
-                if len(answers) == 1:
+                # Text question with test cases for Moodel+VPL
+                st = q_text
+                a, b = st.find('begin{comment}'), st.find('end{comment}')
+                if a < b:
+                    st = st[a + len('begin{comment}'):b]
+                    st = st[st.find("{"):len(st) - 2]
+                    st = st.replace('\\\\', '\\')
+                    case = json.loads(st)
+                    case['input'] = [[c] for c in case['input']]
+                    case['output'] = [[c] for c in case['output']]
+                    #case['key'] = [str(question['key'])]
+                    #question['testcases'] = case
+                    q_str = q_str.replace('___question_type___', 'coderunner')
+                    q_type = 'coderunner'
+
+                    q_str += '''
+    <coderunnertype>python3</coderunnertype>
+    <prototypetype>0</prototypetype>
+    <allornothing>1</allornothing>
+    <penaltyregime>10, 20, ...</penaltyregime>
+    <precheck>1</precheck>
+    <showsource>0</showsource>
+    <answerboxlines>18</answerboxlines>
+    <answerboxcolumns>100</answerboxcolumns>
+    <answerpreload></answerpreload>
+    <useace>1</useace>
+    <resultcolumns></resultcolumns>
+    <template></template>
+    <iscombinatortemplate></iscombinatortemplate>
+    <validateonsave>1</validateonsave>
+    <testsplitterre></testsplitterre>
+    <language></language>
+    <acelang></acelang>
+    <sandbox></sandbox>
+    <grader></grader>
+    <cputimelimitsecs></cputimelimitsecs>
+    <memlimitmb></memlimitmb>
+    <sandboxparams></sandboxparams>
+    <templateparams></templateparams>
+    <answer><![CDATA[____answer____]]></answer>\n\n'''
+
+                    q_str = q_str.replace('____answer____', case.get('answer', ''))
+
+                    q_str += '<testcases>\n\n'
+                    for k in range(len(case['output'])):
+                        if k==0:
+                            q_str += '<testcase testtype="0" useasexample="1" hiderestiffail="0" mark="1.0000000" >\n'
+                        else:
+                            q_str += '<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0000000" >\n'
+
+                        q_aux = '''
+      <testcode>
+                <text></text>
+      </testcode>
+      <stdin>
+                <text>____input____</text>
+      </stdin>
+      <expected>
+                <text>____output____</text>
+      </expected>
+      <extra>
+                <text></text>
+      </extra>
+      <display>
+                <text>SHOW</text>
+      </display>
+    </testcase>\n\n'''
+                        q_aux = q_aux.replace('____input____', case['input'][k][0])
+                        q_aux = q_aux.replace('____output____',  case['output'][k][0])
+
+                        q_str += q_aux
+
+                    q_str += '</testcases>\n\n'
+
+                elif len(answers) == 1:
                     q_str = q_str.replace('___question_type___', 'shortanswer')
                     q_type = 'shortanswer'
                     answerCorrect = answers[0]['text']
@@ -298,11 +406,14 @@ class Utils(object):
             q_str = q_str.replace('___question_comments___', "#c:" + str(q_count) + mystr + " #var:" + str(q_var))
             q_str += '</question>'
 
-            if myflag:
+            if myflag: # criar nova categoria ao mudar de questão
                 q_str = question_category + q_str
                 q_str = q_str.replace('___category_comments___', mystr)
                 q_str = q_str.replace('___question_db_id___', str(q_id))
-                q_str = q_str.replace('___question_text___', str(q_text))
+                # if flag_vpl:
+                #     q_str = q_str.replace('___question_text___', str(q_text_html))
+                # else:
+                #     q_str = q_str.replace('___question_text___', str(q_text))
                 q_str = q_str.replace('___question_diff___', str(q_diff))
                 q_str = q_str.replace('___question_id___', str(q_count))
                 q_str = q_str.replace('___question_topic___', str(q_topic))
