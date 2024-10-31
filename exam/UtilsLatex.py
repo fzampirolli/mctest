@@ -195,6 +195,14 @@ class Utils(object):
         # Retorna o HTML gerado
         return html
 
+
+    @staticmethod
+    def format_xml(xml_str):
+        from xml.dom.minidom import parseString
+        dom = parseString(xml_str)
+
+        return dom.toprettyxml(indent=" ")
+
     # create file DB with all variations in aiken format
     @staticmethod
     def createFileDB_xml(exam, path_to_file_VARIATIONS_DB):
@@ -425,16 +433,19 @@ class Utils(object):
 
         if varia_gab_all:
             with open(path_to_file_VARIATIONS_DB, 'w') as f:
-                c = 0
-                str_begin = '''
-<?xml version="1.0" encoding="UTF-8"?>
-<quiz>
-'''
-                f.write(str_begin)
-                for q in varia_gab_all:
-                    f.write(str(q) + '\n')
+                # Inicializa a string XML
+                xml_content = '''<?xml version="1.0" encoding="UTF-8"?><quiz>\n'''
 
-                f.write('</quiz>')
+                for q in varia_gab_all:
+                    xml_content += str(q) + '\n'
+
+                xml_content += '</quiz>'
+
+                # Formata a string XML
+                formatted_xml = Utils.format_xml(xml_content)
+
+                # Escreve o XML formatado no arquivo
+                f.write(formatted_xml)
 
     # create file DB with all variations in aiken format
     @staticmethod
