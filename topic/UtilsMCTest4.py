@@ -195,7 +195,6 @@ class UtilsMC(object):
         if myDef is not None:
             import requests
             url = f'http://localhost:8080/mctest/validator/question/{pk}'
-            url = f'http://mctest.ufabc.edu.br:8001/mctest/validator/question/{pk}'
             files = {'file': '\n'.join(myDef)}
             r = requests.post(url, files=files)
             res = r.json()

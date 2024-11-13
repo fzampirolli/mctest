@@ -208,6 +208,7 @@ go run main.go > logfile.txt 2>&1 &
 # r.Run(":8080")
 # sudo lsof -i :8001
 
+cd ..
 cp crontabDjango.sh ../
 cp runDjango.sh ../
 
