@@ -193,7 +193,8 @@ pip install bandit
 # instalar Go usando PPA - https://go.dev/wiki/Ubuntu
 wget https://golang.org/dl/go1.23.3.linux-amd64.tar.gz
 sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
+sudo sed -i '$ a export PATH=$PATH:/usr/local/go/bin' ~/.bashrc
+sudo source ~/.bashrc
 git clone https://github.com/leirbagseravat/mctest-validator-api.git
 cd mctest-validator-api
 go mod tidy # baixar e instalar as dependências

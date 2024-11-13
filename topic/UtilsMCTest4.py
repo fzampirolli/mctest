@@ -195,6 +195,7 @@ class UtilsMC(object):
         if myDef is not None:
             import requests
             url = f'http://localhost:8080/mctest/validator/question/{pk}'
+            url = f'http://mctest.ufabc.edu.br:8001/mctest/validator/question/{pk}'
             files = {'file': '\n'.join(myDef)}
             r = requests.post(url, files=files)
             res = r.json()
@@ -203,7 +204,8 @@ class UtilsMC(object):
             # Em caso de erro, formata e exibe a resposta JSON na página de erro
             if 'ERROR' == res['result']['status']:
                 error_message = json.dumps(res, indent=4, sort_keys=True)
-                return render(request, 'exam/exam_errors.html', {'error_json': error_message})
+                return render(request, 'exam/exam_errors.html',
+                              {'error_json': error_message})
 
             # if 'ERROR' == res['result']['status']:
             #     messages.error(request, _('ERROR: Question validator failed \n' + str(res['result'])));
