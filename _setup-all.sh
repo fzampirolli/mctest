@@ -186,6 +186,26 @@ sudo apt install -y texlive-science
 sudo apt install -y libzbar-dev
 sudo texhash
 
+# Instalar o servidor se segurança mctest-validator para rodar código de questões paramétricas
+# Criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
+# Em um servidor com Linux (este script vai instalar no próprio servidor do MCTest)
+pip install bandit
+# instalar Go usando PPA - https://go.dev/wiki/Ubuntu
+wget https://golang.org/dl/go1.23.3.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+git clone https://github.com/leirbagseravat/mctest-validator-api.git
+cd mctest-validator-api
+go mod tidy # baixar e instalar as dependências
+#go run main.go & # executar a aplicação mctest-validator-api.git
+go run main.go > logfile.txt 2>&1 &
+# Se estiver utilizando outro servidor, alterar localhost na variável url em UtilsMCTest4.py:
+# url = f'http://localhost:8080/mctest/validator/question/{pk}'
+# A porta 8080 tem que estar liberada. Se estiver utilizando outra porta, mudar em
+# mctest-validator-api/internal/http/app.go
+# r.Run(":8080")
+# sudo lsof -i :8001
+
 cp crontabDjango.sh ../
 cp runDjango.sh ../
 

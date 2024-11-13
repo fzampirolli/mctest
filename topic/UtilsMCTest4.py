@@ -31,6 +31,7 @@ import datetime
 import random
 import subprocess
 import os
+import json
 
 import matplotlib
 
@@ -43,6 +44,7 @@ matplotlib.use('Agg')
 
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import render
 
 try:
     from topic.Utils import *
@@ -127,6 +129,85 @@ class UtilsMC(object):
                 eq.append(s2[0])
                 s1 = s2[2].partition(eq_str)
         return eq
+
+    def generateCode(request, question, pk):
+        '''
+        Método criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
+
+        Descrição:
+        Este método processa o código-fonte contido na string `question`, executa uma validação
+        enviando o código a uma API externa e retorna um template de erro, caso haja algum problema
+        na validação.
+
+        Para rodar esse método é necessário instalar https://go.dev/dl/ e executar:
+
+        git clone https://github.com/leirbagseravat/mctest-validator-api.git
+        cd mctest-validator-api
+        go mod tidy # baixar e instalar as dependências
+        go run main.go # executar a aplicação
+
+        A porta 8080 tem que estar liberada.
+        Se estiver utilizando outro servidor, alterar localhost na variável url:
+        url = f'http://localhost:8080/mctest/validator/question/{pk}'
+        Se estiver utilizando outra porta, mudar em
+        mctest-validator-api/internal/http/app.go
+        r.Run(":8080")
+
+        Parâmetros:
+        - request: Objeto `HttpRequest` do Django que contém dados da requisição.
+        - question: String contendo o código-fonte que será processado e validado.
+        - pk: Identificador único (ID) da questão no banco de dados.
+
+        Funcionamento:
+        1. O código-fonte em `question` é dividido em linhas e cada linha é normalizada, mantendo
+           quebras de linha e removendo linhas em branco.
+        2. O código processado é então passado para a função `UtilsMC.get_code`, que extrai instruções
+           definidas `[[def:` e `]]`.
+        3. Caso a extração de instruções seja bem-sucedida (`myDef` não é `None`), o código extraído é
+           enviado para validação via uma API REST localizada em `http://localhost:8080/mctest/validator/question/<ID>`.
+        4. O retorno da API (`res`) é verificado para o campo `'status'`.
+           - Em caso de erro (`status` é `'ERROR'`), o método formata a resposta JSON como string,
+             e renderiza a página `exam_errors.html` com o JSON de erro, sem adicionar o erro nos `messages` do Django.
+
+        Retorno:
+        - Retorna um render para `exam/exam_errors.html` contendo detalhes de erro no caso de falha de validação.
+        - Caso não haja erro, o retorno padrão é `None`.
+
+        Exemplo de uso:
+        generateCode(request, 'def example():\n    pass', 123)
+
+        Observação:
+        Este método depende de `UtilsMC.get_code` para a extração de funções e da API externa para
+        validação da questão.
+        '''
+
+        AllLines = question.splitlines()
+        for i in range(len(AllLines)):
+            if AllLines[i].replace(" ", "") == "":
+                AllLines[i] = AllLines[i][1:] + '\n'
+            else:
+                AllLines[i] = AllLines[i] + '\n'
+
+        # Concatena as linhas em uma única string sem caracteres de retorno de carro (\r)
+        mystr = ''.join(AllLines).replace("\r", "")
+        myDef = UtilsMC.get_code(mystr, 'def')
+
+        if myDef is not None:
+            import requests
+            url = f'http://localhost:8080/mctest/validator/question/{pk}'
+            files = {'file': '\n'.join(myDef)}
+            r = requests.post(url, files=files)
+            res = r.json()
+            print(res)
+
+            # Em caso de erro, formata e exibe a resposta JSON na página de erro
+            if 'ERROR' == res['result']['status']:
+                error_message = json.dumps(res, indent=4, sort_keys=True)
+                return render(request, 'exam/exam_errors.html', {'error_json': error_message})
+
+            # if 'ERROR' == res['result']['status']:
+            #     messages.error(request, _('ERROR: Question validator failed \n' + str(res['result'])));
+            #     return render(request, 'exam/exam_errors.html', {})
 
     @staticmethod
     def get_code(s, str):

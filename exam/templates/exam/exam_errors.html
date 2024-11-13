@@ -18,6 +18,20 @@
                     </ul>
                 {% endif %}
 
+                <!-- Display JSON formatted error details -->
+                {% if error_json %}
+                    <!-- Actions buttons -->
+                    <div class="text-right mt-4">
+                        <button onclick="window.history.back()" class="btn btn-outline-primary">
+                            {% trans "Back" %}
+                        </button>
+                        <hr>
+                    </div>
+                    <h4>{% trans "Code between [[def: and ]] contains instructions not permitted" %}</h4>
+                    <h4>{% trans "Report:" %}</h4>
+                    <pre>{{ error_json }}</pre>
+                {% endif %}
+
             </div>
         </div>
     </div>

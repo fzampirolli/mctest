@@ -1013,7 +1013,12 @@ def UpdateQuestion(request, pk):
 
         formset = AnswerInlineFormSet(request.POST, request.FILES,
                                       instance=question_inst)
-        if formset.is_valid():  # Check if the forms are valid:
+        if formset.is_valid():
+            #  Método criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
+            validation = UtilsMC.generateCode(request, question_inst.question_text, pk)
+            if validation is not None:
+                return validation
+
             formset.save()
             return HttpResponseRedirect('/topic/question/' + str(pk) + '/update/')
 
@@ -1092,6 +1097,13 @@ class QuestionCreate(LoginRequiredMixin, generic.CreateView):
         form.instance.question_who_created = self.request.user
         t = datetime.date.today()
         form.instance.question_last_update = str(t.year) + "-" + str(t.month) + "-" + str(t.day)
+
+        if form.is_valid():
+            #  Método criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
+            code_validation = UtilsMC.generateCode(self.request, form.instance.question_text, form.instance.pk)
+            if code_validation is not None:
+                return code_validation
+            form.save()
 
         return super(QuestionCreate, self).form_valid(form)
 
