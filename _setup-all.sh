@@ -195,7 +195,8 @@ wget https://golang.org/dl/go1.23.3.linux-amd64.tar.gz
 sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
 sudo sed -i '$ a export PATH=$PATH:/usr/local/go/bin' ~/.bashrc
 sudo source ~/.bashrc
-git clone https://github.com/leirbagseravat/mctest-validator-api.git
+#git clone https://github.com/leirbagseravat/mctest-validator-api.git
+sudo unzip mctest-validator-api.zip
 cd mctest-validator-api
 go mod tidy # baixar e instalar as dependências
 #go run main.go & # executar a aplicação mctest-validator-api.git
