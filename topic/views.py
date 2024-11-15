@@ -1009,16 +1009,16 @@ def UpdateQuestion(request, pk):
             question_inst.question_IRT_b_ability = form.cleaned_data['question_IRT_b_ability']
             question_inst.question_IRT_c_guessing = form.cleaned_data['question_IRT_c_guessing']
 
-            question_inst.save()
-
-        formset = AnswerInlineFormSet(request.POST, request.FILES,
-                                      instance=question_inst)
-        if formset.is_valid():
             #  Método criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
             validation = UtilsMC.generateCode(request, question_inst.question_text, pk)
             if validation is not None:
                 return validation
 
+            question_inst.save()
+
+        formset = AnswerInlineFormSet(request.POST, request.FILES,
+                                      instance=question_inst)
+        if formset.is_valid():
             formset.save()
             return HttpResponseRedirect('/topic/question/' + str(pk) + '/update/')
 
