@@ -238,6 +238,16 @@ EMAIL_USE_TLS = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+import ssl
+
+# Desabilita SSL para desenvolvimento local
+ssl._create_default_https_context = ssl._create_unverified_context
+
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
+
 # pip install django-session-timeout
 # Configurar expirar seção por usuário
 # Após logout, zerar contator

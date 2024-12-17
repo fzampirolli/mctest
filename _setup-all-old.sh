@@ -182,14 +182,14 @@ source ../_settings.env
 ## mac
 brew tap homebrew/services
 brew services restart mysql
-brew reinstall mysql
+brew reinstall mysql@8.0
 brew reinstall mysql-client
 mysql_secure_installation
 brew services list
 mysql -V
 sudo mysql -u root -p
 ifconfig
-sudo mysql -u root -p -h 192.168.0.13  # muda sempre
+sudo mysql -u root -p -h 192.168.0.11  # muda sempre
 
 mysql -u root -p
 use DB_MCTest;
