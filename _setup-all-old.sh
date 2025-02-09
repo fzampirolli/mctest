@@ -480,6 +480,9 @@ macos:
 mysql -u fz DB_MCTest < "mysql-2022-06-02.sql"
 mysqldump --no-defaults -u root DB_MCTest > mctestLivro.sql
 
+brew reinstall mysql-client
+brew services restart mysql
+
 # write code documentation
 pip3 install Sphinx
 sphinx-quickstart

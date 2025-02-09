@@ -1,5 +1,194 @@
 # coding=UTF-8
 
+
+"""
+Gera questão paramátrica como no exemplo:
+Quais itens têm apenas números ímpares
+Itens:
+\item I. 2; 3
+\item II. 2; 5
+\item III. 1; 3
+\item IV. 1; 5
+\item V. 2; 4
+
+Alternativas:
+A. III; IV
+B. III; V
+C. IV; V
+D. I; V
+E. II; IV
+F. I; II
+G. I; III
+H. II; III
+I. II; V
+J. I; IV
+
+# Exemplo de chamada da função
+#gerar_QM_itens(setTrue, setFalse, num_itens, num_alternativas, num_itens_corretos, num_afirmacoes_corretas_por_item):
+
+itens_format, descricoes = gerar_QM_itens(['1', '3', '5'], ['2', '4'], 5, 10, 2, 2)
+
+"""
+
+
+def gerar_QM_itens(setTrue=['1', '3', '5'],
+                   setFalse=['2', '4'],
+                   num_itens=5,  # N. itens na questão (máximo: 10)
+                   num_alternativas=10,  # N. alternativas (máximo: 15)
+                   num_itens_corretos=3,  # N. itens corretos na questão (máximo: num_itens)
+                   num_afirmacoes_corretas_por_item=3):  # N. afirmacoes em cada item (menor que quant. de setTrue)
+
+    global itens_format, itens_str
+
+    itens_str = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+
+    # Parte 2 - Método verifica_parametros
+
+    # Verifica parâmetros para criar variações
+    def verifica_parametros(T, F, N, P, C, A):
+        from scipy.special import comb
+        output, pode_gerar = [], True
+        T, F = len(T), len(F)
+        if N * C < A or C >= N or P > T:
+            output.append(f"ERRO: Não é possível gerar variações com {A} alternativas,"
+                          f" {N} itens e {C} item(ns) correto(s)")
+            pode_gerar = False
+        if comb(T, P) < C:
+            output.append(f"ERRO: Não é possível gerar {C} itens distintos com {P} "
+                          "afirmações corretas por item.")
+            pode_gerar = False
+        if comb(T + F, P) < N:
+            output.append(f"ERRO: Não é possível gerar {N} itens")
+            pode_gerar = False
+        if comb(N, P) < A:
+            output.append(f"ERRO: Não é possível gerar {A} alternativas")
+            pode_gerar = False
+        variacoes = (f'Número de variações possíveis: '
+                     f'comb({comb(T + F, P):.0f},{N}) = {comb(comb(T + F, P), N):.0f}')
+        itens_format = ''
+        if not pode_gerar:
+            output.extend([f'Itens distintos com {P} afirmações verdadeiras: '
+                           f'comb({T},{P}) = {comb(T, P):.0f}',
+                           f'Itens distintos com afirmações V+F: '
+                           f'comb({T + F},{P}) = {comb(T + F, P):.0f}', variacoes])
+            itens_format = "\item " + "\n\item ".join(output)
+            itens_format += (f'\n\item T = {T}\n\item F = {F}\n\item N = {N}'
+                             f'\n\item A = {A}\n\item C = {C}\n\item P = {P}')
+            itens_format = itens_format.replace('_', '\_')
+        return pode_gerar, itens_format
+
+    pode_gerar, itens_format = verifica_parametros(
+        setTrue, setFalse, num_itens, num_afirmacoes_corretas_por_item,
+        num_itens_corretos, num_alternativas)
+    if not pode_gerar:
+        print(itens_format)
+        descricoes = ['' for _ in range(num_alternativas)]
+
+    # Parte 3 - Definições dos Métodos
+
+    def gerar_itens(setTrue, setFalse, num_itens, num_afirmacoes):
+        todas_afirmacoes = setTrue + setFalse  # Junta todas as afirmações
+        random.shuffle(todas_afirmacoes)  # Embaralha a lista para aleatoriedade
+
+        # Gerar combinações únicas usando um conjunto para evitar duplicatas
+        itens = set()
+        while len(itens) < num_itens:
+            item = tuple(sorted(random.sample(todas_afirmacoes, num_afirmacoes)))
+            itens.add(item)
+
+        return list(itens)  # Converte para lista antes de retornar
+
+    def gerar_itens_corretos(setTrue, setFalse, num_itens, num_afirmacoes, itens):
+        # Lista para armazenar os itens que atendem aos critérios
+        itens_corretos = []
+        for item in itens:
+            # Contar a quantidade de afirmações verdadeiras presentes no item
+            cont = 0
+            for op in item:
+                if op in setTrue:
+                    cont += 1
+            # Se o número de afirmações verdadeiras for igual ao número desejado
+            if cont == num_afirmacoes:
+                itens_corretos.append(item)
+        return itens_corretos
+
+    def gerar_indices_itens_corretos(itens, itens_corretos):
+        # Gerar índices dos itens corretos e criar itens_format
+
+        # formatar itens e declarar como variável global
+        global itens_format, itens_str
+        itens_format = ''
+
+        corretos = []
+        for i, item in enumerate(itens):
+            s = f"{'; '.join(item)}"
+            # itens_format += f"\item {itens_str[i]}. {s}\n"
+            itens_format += f"\item {s}\n"
+
+            # Adicionar o índice do item à lista de itens corretos
+            for c in itens_corretos:
+                if c == item:
+                    corretos.append(i)
+
+        return sorted(corretos)  # Ordenar os índices dos itens corretos
+
+    # Parte 4 - Bloco principal
+
+    import random
+
+    while pode_gerar:
+        itens = gerar_itens(setTrue, setFalse, num_itens, num_afirmacoes_corretas_por_item)
+
+        itens_corretos = gerar_itens_corretos(setTrue, setFalse, num_itens,
+                                              num_afirmacoes_corretas_por_item, itens)
+
+        # Se o número de itens corretos não for igual ao desejado, gerar uma nova questão
+        if len(itens_corretos) != num_itens_corretos:
+            continue
+
+        corretos = gerar_indices_itens_corretos(itens, itens_corretos)
+
+        # Alternativa correta
+        aux = []
+        for corr in range(num_itens_corretos):
+            aux.append(itens_str[corretos[corr]])
+        itens_comb = [aux]
+
+        # Gerar alternativas erradas
+        for i in range(num_alternativas):
+            aux = sorted(random.sample(itens_str[:num_itens], num_itens_corretos))
+            # Incluir apenas alternativas diferentes
+            if not aux in itens_comb:
+                itens_comb.append(aux)
+
+        # Montar as descrições das alternativas
+        descricoes = []
+        for letra in itens_comb:
+            descricoes.append(f"{'; '.join(letra)}")
+
+        # Se o número de descrições não for igual ao número de alternativas,
+        # gerar uma nova questão
+        if len(descricoes) != num_alternativas:
+            continue
+
+        # Encerrar o loop, pois a questão foi gerada com sucesso
+        break
+
+    if pode_gerar:
+        print('Quais itens têm apenas números ímpares')
+        print('Itens:')
+        print(itens_format)
+
+        print("Alternativas:")
+        opcoes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        for idx, alt in enumerate(descricoes):
+            print(f"{opcoes[idx]}. {alt}")
+
+    return itens_format, descricoes
+
+#############################################
+
+
 import numpy as np
 
 def generate_unique_temp_file(extension=''):
