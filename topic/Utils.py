@@ -1,6 +1,7 @@
 # coding=UTF-8
 
 
+
 """
 Gera questão paramátrica como no exemplo:
 Quais itens têm apenas números ímpares
@@ -24,7 +25,7 @@ I. II; V
 J. I; IV
 
 # Exemplo de chamada da função
-#gerar_QM_itens(setTrue, setFalse, num_itens, num_alternativas, num_itens_corretos, num_afirmacoes_corretas_por_item):
+#gerar_QM_itens(setTrue, setFalse, num_itens, num_alternativas, num_itens_corretos, num_afirmacoes_por_item):
 
 itens_format, descricoes = gerar_QM_itens(['1', '3', '5'], ['2', '4'], 5, 10, 2, 2)
 
@@ -36,7 +37,7 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
                    num_itens=5,  # N. itens na questão (máximo: 10)
                    num_alternativas=10,  # N. alternativas (máximo: 15)
                    num_itens_corretos=3,  # N. itens corretos na questão (máximo: num_itens)
-                   num_afirmacoes_corretas_por_item=3):  # N. afirmacoes em cada item (menor que quant. de setTrue)
+                   num_afirmacoes_por_item=3):  # N. afirmacoes em cada item (menor que quant. de setTrue)
 
     global itens_format, itens_str
 
@@ -72,13 +73,15 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
                            f'Itens distintos com afirmações V+F: '
                            f'comb({T + F},{P}) = {comb(T + F, P):.0f}', variacoes])
             itens_format = "\item " + "\n\item ".join(output)
-            itens_format += (f'\n\item T = {T}\n\item F = {F}\n\item N = {N}'
-                             f'\n\item A = {A}\n\item C = {C}\n\item P = {P}')
+            itens_format += (f'\n\item setTrue = {T}\n\item setFalse = {F}'
+                             f'\n\item num_itens = {N}\n\item num_alternativas = {A}'
+                             f'\n\item num_itens_corretos = {C}'
+                             f'\n\item num_afirmacoes_por_item = {P}')
             itens_format = itens_format.replace('_', '\_')
         return pode_gerar, itens_format
 
     pode_gerar, itens_format = verifica_parametros(
-        setTrue, setFalse, num_itens, num_afirmacoes_corretas_por_item,
+        setTrue, setFalse, num_itens, num_afirmacoes_por_item,
         num_itens_corretos, num_alternativas)
     if not pode_gerar:
         print(itens_format)
@@ -137,10 +140,10 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
     import random
 
     while pode_gerar:
-        itens = gerar_itens(setTrue, setFalse, num_itens, num_afirmacoes_corretas_por_item)
+        itens = gerar_itens(setTrue, setFalse, num_itens, num_afirmacoes_por_item)
 
         itens_corretos = gerar_itens_corretos(setTrue, setFalse, num_itens,
-                                              num_afirmacoes_corretas_por_item, itens)
+                                              num_afirmacoes_por_item, itens)
 
         # Se o número de itens corretos não for igual ao desejado, gerar uma nova questão
         if len(itens_corretos) != num_itens_corretos:
