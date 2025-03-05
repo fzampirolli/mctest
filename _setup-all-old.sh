@@ -480,6 +480,8 @@ macos: FUNCIONA!!!!
 mysql -u fz DB_MCTest < "mysql-2022-06-02.sql"
 mysqldump --no-defaults -u fz DB_MCTest > mctestLivro.sql
 
+sudo mysql -u root -p mysql
+
 brew reinstall mysql-client
 brew services restart mysql
 

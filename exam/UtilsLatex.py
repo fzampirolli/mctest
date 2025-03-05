@@ -177,20 +177,77 @@ class Utils(object):
         """
         Converte um trecho de texto em LaTeX para HTML.
         """
-        import subprocess
-        # Salva o texto LaTeX em um arquivo temporário
-        with open('temp.tex', 'w') as f:
-            f.write(text)
+        import tempfile
+
+        # def preprocess_latex(latex_content):
+        #     # Adicionar pacotes necessários
+        #     preamble = r"""
+        #     \documentclass{article}
+        #     \usepackage[utf8]{inputenc}
+        #     \usepackage{amsmath}
+        #     \usepackage{amssymb}
+        #     \usepackage{graphicx}
+        #     \usepackage{color}
+        #     \usepackage{colortbl}
+        #     \usepackage{multirow}
+        #     \usepackage{array}
+        #     \usepackage{enumitem}
+        #     \usepackage{xcolor}
+        #     \usepackage{booktabs}
+        #     """
+        #
+        #     # Adicionar ambiente de documento
+        #     full_latex_doc = f"{preamble}\n\\begin{{document}}\n{latex_content}\n\\end{{document}}"
+        #
+        #     return full_latex_doc
+        #
+        # # Pré-processar o conteúdo LaTeX
+        # full_latex_doc = preprocess_latex(text)
+
+        # Criar arquivo temporário .tex
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.tex', encoding='utf-8') as temp_tex:
+            temp_tex_path = temp_tex.name
+            temp_tex.write(text)
+            temp_tex.close()
+
+        # Caminho para o arquivo HTML de saída
+        temp_html_path = temp_tex_path.replace('.tex', '.html')
 
         try:
-            # Converte o arquivo LaTeX para HTML usando o Pandoc
-            html = subprocess.check_output(['pandoc', 'temp.tex', '-f', 'latex', '-t', 'html'])
-            html = html.decode('utf-8')
+            # Comando Pandoc para conversão
+            comando = [
+                'pandoc',
+                '-f', 'latex',          # Formato de entrada: LaTeX
+                '-t', 'html5',          # Formato de saída: HTML5
+                '--mathjax',            # Suporte para equações matemáticas
+                '--standalone',         # Documento completo
+                '--no-highlight',       # Desabilitar syntax highlighting
+                '--wrap=none',          # Evitar quebra de linha
+                temp_tex_path,          # Arquivo de entrada
+                '-o', temp_html_path    # Arquivo de saída
+            ]
+            # Executar o comando
+            resultado = subprocess.run(comando, capture_output=True, text=True)
+
+            # Verificar se houve erros
+            if resultado.returncode != 0:
+                print("Erro na conversão:")
+                print(resultado.stderr)
+                return None
+
+            # Ler o conteúdo HTML
+            with open(temp_html_path, 'r', encoding='utf-8') as temp_html:
+                html_content = temp_html.read()
+
+            # Limpar arquivos temporários
+            os.unlink(temp_tex_path)
+            os.unlink(temp_html_path)
+
+            #html_content = html_content.decode('utf-8')
+            return html_content
+
         except:
             html = text
-
-        # Remove o arquivo temporário
-        subprocess.call(['rm', 'temp.tex'])
 
         # Retorna o HTML gerado
         return html
