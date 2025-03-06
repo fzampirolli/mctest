@@ -98,12 +98,11 @@ sudo mysql -u root << EOF
 GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost' WITH GRANT OPTION;
 CREATE DATABASE $DB_NAME;
 FLUSH PRIVILEGES;
-exit
-EOF
-
 SET GLOBAL validate_password_policy=LOW;
 SHOW VARIABLES LIKE 'validate_password%';
 SET GLOBAL validate_password.policy = 0;
+exit
+EOF
 
 # Configura arquivos do mysql
 sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
