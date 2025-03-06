@@ -105,8 +105,6 @@ SET GLOBAL validate_password_policy=LOW;
 SHOW VARIABLES LIKE 'validate_password%';
 SET GLOBAL validate_password.policy = 0;
 
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'177.104.62.5' IDENTIFIED BY 'ZAQ!@#$%678***' WITH GRANT OPTION;
-
 # Configura arquivos do mysql
 sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 echo '[client]
