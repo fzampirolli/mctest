@@ -328,9 +328,9 @@ default-character-set = utf8' >>/etc/mysql/my.cnf
 systemctl daemon-reload
 systemctl restart mysql
 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py makemigrations
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py makemigrations
 
 #python manage.py createsuperuser
 #Endereço de email: fzampirolli@ufabc.edu.br

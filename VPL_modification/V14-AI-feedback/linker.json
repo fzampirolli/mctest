@@ -1,0 +1,339 @@
+{
+  "variations": [
+    {
+      "variant": "1",
+      "questions": [
+        {
+          "key": "2463",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "4 6 7 8 1 2\n7 9 6 3 5 1\n1 1 5 4 1 2\n5 9 4 6 8 6\n\n"
+              ],
+              "output": [
+                "soma = 111"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "7 5 9 9 1 3\n5 6 3 3 1 2\n6 6 7 5 5 9\n5 3 3 6 6 2\n\n"
+              ],
+              "output": [
+                "soma = 117"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "2454",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "5002.3\n"
+              ],
+              "output": [
+                "357.31"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5007.9\n"
+              ],
+              "output": [
+                "357.71"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "2",
+      "questions": [
+        {
+          "key": "2454",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "5003.3\n"
+              ],
+              "output": [
+                "277.96"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5010.0\n"
+              ],
+              "output": [
+                "278.33"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "2463",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "4 1 9 4\n5 4 6 1\n9 4 9 3\n2 2 5 4\n\n"
+              ],
+              "output": [
+                "soma = 72"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "9 7 3 5\n9 5 0 4\n8 7 2 4\n4 2 8 8\n\n"
+              ],
+              "output": [
+                "soma = 85"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "3",
+      "questions": [
+        {
+          "key": "2454",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "5004.0\n"
+              ],
+              "output": [
+                "263.37"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5003.1\n"
+              ],
+              "output": [
+                "263.32"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "2463",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "6 9 4 3 4 5 1\n2 2 3 6 2 5 9\n5 4 7 1 8 3 9\n5 7 8 5 8 0 3\n\n"
+              ],
+              "output": [
+                "soma = 134"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "8 7 1 6 7 4 0\n2 4 4 1 2 3 9\n1 8 6 9 5 5 4\n0 8 7 3 8 1 6\n\n"
+              ],
+              "output": [
+                "soma = 129"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "4",
+      "questions": [
+        {
+          "key": "2463",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "9 3 8 5 9 1\n7 8 1 5 9 6\n6 4 9 9 9 5\n8 4 5 9 7 1\n9 3 7 2 1 1\n6 9 6 7 5 8\n\n"
+              ],
+              "output": [
+                "soma = 211"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "2 9 1 3 3 9\n7 6 1 8 9 8\n5 0 2 6 4 4\n0 2 4 4 6 7\n9 7 6 7 9 8\n2 3 8 4 3 9\n\n"
+              ],
+              "output": [
+                "soma = 185"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "2454",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "5005.2\n"
+              ],
+              "output": [
+                "385.02"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5010.6\n"
+              ],
+              "output": [
+                "385.43"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "5",
+      "questions": [
+        {
+          "key": "2463",
+          "number": "1",
+          "file": "Q1",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "2 0 4 0 0 2 4\n1 0 3 6 6 7 2\n4 9 2 4 2 5 0\n5 2 7 6 5 7 4\n\n"
+              ],
+              "output": [
+                "soma = 99"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "6 7 8 3 6 9 2\n8 0 4 8 9 0 1\n3 0 5 7 8 7 7\n9 1 4 9 9 9 5\n\n"
+              ],
+              "output": [
+                "soma = 154"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "2454",
+          "number": "2",
+          "file": "Q2",
+          "weight": "1",
+          "language": [
+            "all"
+          ],
+          "skills": [],
+          "description": [],
+          "cases": [
+            {
+              "case": "test_1",
+              "input": [
+                "5001.7\n"
+              ],
+              "output": [
+                "333.45"
+              ]
+            },
+            {
+              "case": "test_2",
+              "input": [
+                "5007.9\n"
+              ],
+              "output": [
+                "333.86"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
