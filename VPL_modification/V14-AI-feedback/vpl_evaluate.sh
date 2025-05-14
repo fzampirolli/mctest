@@ -207,7 +207,7 @@ chmod +x vpl_execution
 # exit 0 ## Descomente esta linha para ignorar o Feedback por IA !
 cat >> vpl_execution <<'EOF'
 
-    GROQ_KEY="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" # https://console.groq.com/keys
+    GROQ_KEY="xxx"  # Obtain your key from https://console.groq.com/keys
     AI_REMOVE_COMMENTS=0
     AI_MIN_CHARS=5
     AI_MAX_CHARS=2000

@@ -20,7 +20,7 @@ e forneça sugestões numeradas de correção, em português (Brasil), concisas 
 
 
 # GROQ
-API_KEY="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" ##########  CRIE SUA PRÓPRIA `API_KEY` 
+API_KEY="XXX" ##########  CRIE SUA PRÓPRIA `API_KEY`
 API_URL="https://api.groq.com/openai/v1/chat/completions"
 # ver console.groq.com/docs/rate-limits
 
