@@ -48,6 +48,11 @@ from django.views import generic
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.static import serve
 from tablib import Dataset
+# ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from language_tool_python import LanguageTool
+import autopep8
 
 ###################################################################
 from account.models import User
@@ -56,7 +61,6 @@ from exam.UtilsLatex import Utils
 from mctest.settings import BASE_DIR
 from topic.UtilsMCTest4 import UtilsMC
 from .forms import UpdateQuestionForm, QuestionCreateForm, TopicCreateForm, TopicUpdateForm
-# from django.contrib.auth.models import User
 from .models import Topic, Question, Answer
 from .resources import QuestionResource
 from django.utils.html import format_html
@@ -69,12 +73,6 @@ from django.urls import reverse
 
 from copy import copy
 
-
-# ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from language_tool_python import LanguageTool
-import autopep8
 
 @csrf_exempt
 def ai_assist(request):
@@ -314,6 +312,7 @@ def ImportQuestionsJson(request):
 ##################################################################
 
 @login_required
+@csrf_exempt
 def see_question_PDF(request, pk):
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
@@ -429,7 +428,6 @@ def see_question_PDF(request, pk):
 
         path_to_file = BASE_DIR + "/pdfQuestion/" + file_name + ".pdf"
         return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
-
 
 from decouple import config
 
@@ -800,6 +798,7 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
 
 
 @login_required
+@csrf_exempt
 def see_topic_PDF(request, pk):
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
@@ -1010,10 +1009,10 @@ def UpdateQuestion(request, pk):
             question_inst.question_IRT_c_guessing = form.cleaned_data['question_IRT_c_guessing']
 
             #  Método criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
-            validation = UtilsMC.generateCode(request, question_inst.question_text, pk)
-            if validation is not None:
-                return validation
-
+            # validation = UtilsMC.generateCode(request, question_inst.question_text, pk)
+            # if validation is not None:
+            #    return validation
+            
             question_inst.save()
 
         formset = AnswerInlineFormSet(request.POST, request.FILES,
@@ -1100,9 +1099,9 @@ class QuestionCreate(LoginRequiredMixin, generic.CreateView):
 
         if form.is_valid():
             #  Método criado por Gabriel Tavares Frota de Azevedo para o TCC do BCC/UFABC.
-            code_validation = UtilsMC.generateCode(self.request, form.instance.question_text, form.instance.pk)
-            if code_validation is not None:
-                return code_validation
+            # code_validation = UtilsMC.generateCode(self.request, form.instance.question_text, form.instance.pk)
+            # if code_validation is not None:
+            #     return code_validation
             form.save()
 
         return super(QuestionCreate, self).form_valid(form)

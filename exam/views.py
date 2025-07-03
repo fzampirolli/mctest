@@ -51,6 +51,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.static import serve
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse_lazy
 from pdf2image import convert_from_path
 from tablib import Dataset
@@ -1153,6 +1154,7 @@ def generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
 
 
 @login_required
+@csrf_exempt
 def generate_page(request, pk):
     print("generate_page-00-" + str(datetime.datetime.now()))
     if request.user.get_group_permissions():
