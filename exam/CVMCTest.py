@@ -1400,8 +1400,11 @@ class cvMCTest(object):
             if not qr['correct'] and int(qr['page']):  # comparar com o gabarito da primeira pagina
 
                 str2 = ''
-                ss0 = qr0['answers'].split(',')
-                ss1 = qr['answers'].split(',')
+                try:
+                    ss0 = qr0['answers'].split(',')
+                    ss1 = qr['answers'].split(',')
+                except:
+                    ss1 = ''
 
                 if len(ss0) != len(ss1):
                     str2 = 'ERRO'
