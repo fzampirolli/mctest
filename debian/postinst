@@ -1,0 +1,151 @@
+#!/bin/bash
+
+echo "🔹 Starting post-install setup..."
+
+# Navigate to the project directory
+echo "📂 Changing directory to /usr/local/lib/PycharmProjects"
+cd "/usr/local/lib/PycharmProjects" || { echo "❌ Failed to change directory"; exit 1; }
+
+# Create necessary directories for temporary files and backups
+echo "📁 Creating required directories..."
+mkdir -p tmp/imgs180days pdfExam pdfQuestion pdfTopic pdfStudentEmail
+mkdir -p /backup/json /backup/mysql
+mkdir -p /var/www/html/tmp/imgs180days  # Creates a directory for storing images in the web root
+
+# Create a symbolic link to the imgs180days directory
+echo "🔗 Creating symbolic link for image storage..."
+ln -sf /var/www/html/tmp/imgs180days
+
+echo "🔹 Starting MySQL setup..."
+# Load environment variables (DB_NAME, DB_USER, DB_PASS)
+cp _settings.env ../
+source _settings.env
+
+# Ensure MySQL is installed
+if ! command -v mysql &> /dev/null; then
+    echo "🔍 MySQL is not installed. Installing now..."
+    sudo apt update
+    sudo apt install -y mysql-server mysql-client-core-8.0
+fi
+
+# Ensure MySQL service is running
+if ! systemctl is-active --quiet mysql; then
+    echo "🔄 Starting MySQL service..."
+    sudo systemctl start mysql
+fi
+
+# Capture the current Linux user dynamically
+LOCAL_LINUX_USER=$(logname 2>/dev/null || echo $USER)
+
+# Check if the database exists
+DB_EXISTS=$(sudo mysql -u root -se "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME';")
+
+if [[ -z "$DB_EXISTS" ]]; then
+    echo "🛢️ Database does not exist. Creating database '$DB_NAME'..."
+    sudo mysql -u root << EOF
+    CREATE DATABASE $DB_NAME;
+    FLUSH PRIVILEGES;
+EOF
+    echo "✅ Database '$DB_NAME' created."
+else
+    echo "✅ Database '$DB_NAME' already exists. Skipping creation."
+fi
+
+# Function to create a MySQL user if it doesn't exist
+create_mysql_user() {
+    local user=$1
+    local password=$2
+    local user_exists=$(sudo mysql -u root -se "SELECT user FROM mysql.user WHERE user='$user';")
+
+    if [[ -z "$user_exists" ]]; then
+        echo "👤 Creating MySQL user '$user'..."
+        sudo mysql -u root << EOF
+        CREATE USER '$user'@'localhost' IDENTIFIED BY '$password';
+        GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$user'@'localhost' WITH GRANT OPTION;
+        FLUSH PRIVILEGES;
+EOF
+        echo "✅ User '$user' created and granted privileges."
+    else
+        echo "✅ User '$user' already exists. Updating privileges..."
+        sudo mysql -u root << EOF
+        GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$user'@'localhost' WITH GRANT OPTION;
+        FLUSH PRIVILEGES;
+EOF
+        echo "✅ Privileges updated for user '$user'."
+    fi
+}
+
+# Create or update users
+create_mysql_user "$DB_USER" "$DB_PASS"
+create_mysql_user "$LOCAL_LINUX_USER" "$DB_PASS"
+
+# Modify MySQL configuration to allow remote access (if needed)
+echo "🔧 Updating MySQL configuration for remote access..."
+if ! grep -q "bind-address.*= 0.0.0.0" /etc/mysql/mysql.conf.d/mysqld.cnf; then
+    sudo sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+    echo "✅ MySQL configured for remote access."
+else
+    echo "✅ Remote access already enabled."
+fi
+
+# Append MySQL client configuration for the project
+echo "🔑 Adding database credentials to /etc/mysql/my.cnf..."
+sudo tee /etc/mysql/my.cnf > /dev/null <<EOF
+[client]
+user=$DB_USER
+password=$DB_PASS
+database=$DB_NAME
+EOF
+
+echo "✅ MySQL client configuration updated."
+
+# Restart MySQL service
+echo "🔄 Restarting MySQL service..."
+sudo systemctl daemon-reload
+sudo systemctl restart mysql
+echo "✅ MySQL service restarted."
+
+# Move to the specific project directory
+echo "📂 Navigating to /usr/local/lib/PycharmProjects/mctest"
+cd "/usr/local/lib/PycharmProjects/mctest" || { echo "❌ Failed to change directory"; exit 1; }
+
+# Load the database schema into MySQL
+if [[ -f "book/2ed-br/mctest.sql" ]]; then
+    echo "📥 Importing database schema from book/2ed-br/mctest.sql..."
+    sudo mysql -u root "$DB_NAME" < book/2ed-br/mctest.sql
+    echo "✅ Database schema imported."
+else
+    echo "⚠️ Warning: mctest.sql file not found. Skipping schema import."
+fi
+
+# Restart MySQL service
+echo "🔄 Restarting MySQL service..."
+sudo systemctl daemon-reload
+sudo systemctl restart mysql
+echo "✅ MySQL service restarted."
+
+echo "✅ MySQL database setup completed."
+
+# Move back to the project directory
+echo "📂 Returning to project directory..."
+cd "/usr/local/lib/PycharmProjects" || { echo "❌ Failed to change directory"; exit 1; }
+
+# Activate the virtual environment
+echo "🖥️ Activating virtual environment..."
+source AmbientePython3/bin/activate || { echo "❌ Failed to activate virtual environment"; exit 1; }
+echo "✅ Virtual environment activated."
+
+# Set environment variables for R integration
+echo "🧬 Configuring R integration..."
+export R_HOME=/usr/lib/R
+export RPY2_CFFI_MODE=ABI
+
+# Update TeX system database (used for document processing)
+echo "📄 Running texhash to update TeX system..."
+sudo texhash
+
+# Final step: Create a desktop shortcut for launching the application
+echo "🎯 Creating application shortcut..."
+bash /usr/local/lib/PycharmProjects/debian/CreateShortcut.sh
+
+echo "✅ Installation completed successfully!"

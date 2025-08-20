@@ -1,0 +1,63 @@
+#!/bin/sh
+
+TARGET="/usr/local/lib/PycharmProjects"
+PORT=8000
+FORCE=0
+
+# Verifica argumento --force
+if [ "$1" = "--force" ]; then
+    FORCE=1
+fi
+
+echo "🧼 Preparando para remover o projeto mctest..."
+
+confirm() {
+    if [ "$FORCE" -eq 1 ]; then
+        return 0
+    fi
+
+    read -r -p "$1 [s/N]: " response
+    case "$response" in
+        [sS][iI]|[sS])
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+# Verifica se há processo na porta 8000
+PID=$(lsof -ti tcp:$PORT)
+
+if [ -n "$PID" ]; then
+    echo "⛔ Servidor detectado rodando na porta $PORT (PID: $PID)."
+
+    if confirm "Deseja encerrar o servidor?"; then
+        kill "$PID"
+        sleep 2
+        if ps -p "$PID" > /dev/null; then
+            echo "⚠️ Processo ainda ativo. Forçando encerramento..."
+            kill -9 "$PID"
+        fi
+        echo "✅ Servidor encerrado."
+    else
+        echo "❌ Servidor mantido em execução. Interrompendo o script por segurança."
+        exit 1
+    fi
+else
+    echo "ℹ️ Nenhum servidor ativo detectado na porta $PORT."
+fi
+
+# Confirmação para remover diretório
+if [ -d "$TARGET" ]; then
+    if confirm "Deseja remover o diretório do projeto em $TARGET?"; then
+        rm -rf "$TARGET"
+        echo "✅ Diretório removido com sucesso."
+    else
+        echo "❌ Diretório mantido. Encerrando script."
+        exit 0
+    fi
+else
+    echo "⚠️ Diretório $TARGET não encontrado."
+fi
