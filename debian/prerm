@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Define the path of the desktop shortcut
+DESKTOP_FILE="/usr/share/applications/Mctest.desktop"
+
+# Remove the desktop shortcut if it exists
+if [ -f "$DESKTOP_FILE" ]; then
+    echo "Removing desktop shortcut..."
+    sudo rm -f "$DESKTOP_FILE"
+fi
+
+# Update desktop database (if the command exists)
+if [ -x "$(command -v update-desktop-database)" ]; then
+    sudo update-desktop-database
+fi
+
+echo "Uninstallation cleanup completed."

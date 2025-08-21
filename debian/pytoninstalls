@@ -1,0 +1,6 @@
+#!/bin/bash
+
+pip install -r requirements-titan256GB.txt
+pip install pymysql==2.2.4
+pip install --upgrade pip setuptools
+pip install --upgrade scipy
