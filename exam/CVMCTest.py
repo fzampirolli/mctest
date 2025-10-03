@@ -1625,13 +1625,16 @@ class cvMCTest(object):
             cv2.imwrite(strGAB, img)
             return 0
 
-        if int(qr['stylesheet']) == 1:  # and flagQuestions: # quadro vertical
-            if flagQuestions:
-                respostas = qr['respgrade']  # exame com questoes
-            else:
-                respostas = qr['correct'].split(',')  # somente respostas
+        if flagQuestions:
+            respostas = qr['respgrade']  # exame com questoes
+        else:
+            respostas = qr['correct'].split(',')  # somente respostas
 
-            countQuestions = 0
+        num_alternativas = int(qr['answer'])
+
+        countQuestions = 0
+        if int(qr['stylesheet']) == 1:  # and flagQuestions: # quadro vertical
+
             for squa in qr['squares']:
                 p1, p2 = squa
                 myFlag = True
@@ -1651,23 +1654,35 @@ class cvMCTest(object):
                         myFlag = False
 
         elif int(qr['stylesheet']) == 0:  # and not flagQuestions: # quadro horizontal e somente respostas
-            if flagQuestions:
-                respostas = qr['respgrade']  # exame com questoes
-            else:
-                respostas = qr['correct'].split(',')  # somente respostas
-            countQuestions = 0
+
             for squa in qr['squares']:
                 p1, p2 = squa
+
+                # Calcular espaçamento dinâmico
+                altura_quadro = p2[0] - p1[0]
+                largura_quadro = p2[1] - p1[1]
+
+                espaco_horizontal = largura_quadro / int(qr['max_questions_square']) - 0.7
+                espaco_vertical = altura_quadro / (num_alternativas + 1) + 2.0
+
                 myFlag = True
                 while myFlag and countQuestions < int(qr['numquest']):
                     q = countQuestions % int(qr['max_questions_square'])
-                    col = int(p1[1] + 20 + 31.6 * q)  ######################## 30.3 SENSIVEL
+                    # col = int(p1[1] + 20 + 31.6 * q)  ######################## 30.3 SENSIVEL
+                    # Centro horizontal da questão q
+                    col = int(p1[1] + 5 + espaco_horizontal * (q + 0.5))
+
                     if col < p2[1]:
                         try:
                             if len(respostas[countQuestions]) == 3:
-                                lin = int(p1[0] - 12 + 28.8 * (notas.index(respostas[countQuestions][2]) + 1))
+                                idx_alternativa = notas.index(respostas[countQuestions][2])
+                                # Centro vertical da alternativa
+                                #lin = int(p1[0] - 12 + 28.8 * (idx_alternativa + 1))
+                                lin = int(p1[0] - 6 + espaco_vertical * (idx_alternativa + 1))
+
                                 if lin < p2[0]:  ######################## 28.2 SENSIVEL
-                                    cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
+                                    #cv2.circle(img, (col, lin + 5), 11, (255, 0, 255), 2)
+                                    cv2.circle(img, (col, lin), 11, (255, 0, 255), 2)
                         except:
                             pass
                     countQuestions += 1
