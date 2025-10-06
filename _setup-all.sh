@@ -188,16 +188,16 @@ sudo texhash
 # Em um servidor com Linux (este script vai instalar no próprio servidor do MCTest)
 pip install bandit
 # instalar Go usando PPA - https://go.dev/wiki/Ubuntu
-wget https://golang.org/dl/go1.23.3.linux-amd64.tar.gz
-sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
-sudo sed -i '$ a export PATH=$PATH:/usr/local/go/bin' ~/.bashrc
-sudo source ~/.bashrc
-#git clone https://github.com/leirbagseravat/mctest-validator-api.git
-sudo unzip mctest-validator-api.zip
-cd mctest-validator-api
-go mod tidy # baixar e instalar as dependências
-#go run main.go & # executar a aplicação mctest-validator-api.git
-go run main.go > logfile.txt 2>&1 &
+#wget https://golang.org/dl/go1.23.3.linux-amd64.tar.gz
+#sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+#sudo sed -i '$ a export PATH=$PATH:/usr/local/go/bin' ~/.bashrc
+#sudo source ~/.bashrc
+##git clone https://github.com/leirbagseravat/mctest-validator-api.git
+#sudo unzip mctest-validator-api.zip
+#cd mctest-validator-api
+#go mod tidy # baixar e instalar as dependências
+##go run main.go & # executar a aplicação mctest-validator-api.git
+#go run main.go > logfile.txt 2>&1 &
 # Se estiver utilizando outro servidor, alterar localhost na variável url em UtilsMCTest4.py:
 # url = f'http://localhost:8080/mctest/validator/question/{pk}'
 # A porta 8080 tem que estar liberada. Se estiver utilizando outra porta, mudar em

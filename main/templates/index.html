@@ -6,20 +6,30 @@
 {% block content %}
 
     <div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
+        <div class="card">
+            <div class="card-body">
 
-            <!-- title -->
-            <div class="container">
+                <!-- title -->
                 <div class="text-center">
-                    <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
-                        <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.6s">
-                            <h1>{% trans "MCTest" %} v.5.3 - versão em produção</h1>
-                            Ver versão para divulgação e backup diário: <a
-                                href="http://vision.ufabc.edu.br:80">vision</a> (BACKUP 12/12/2023). <br>
-                        </div>
+                    <div class="wow bounceInDown" data-wow-offset="0" data-wow-delay="0.4s">
+                        <h1 class="text-3xl font-extrabold text-indigo-700 mb-2">
+                            {% trans "MCTest" %} <span class="text-gray-700">v.5.3</span>
+                        </h1>
+                        <p class="text-lg text-red-600 font-semibold mb-1">
+                            Versão de produção
+                        </p>
+
+                        <p class="text-base">
+                            🔗 Ver versão para divulgação e backup diário:
+                            <a href="http://vision.ufabc.edu.br"
+                               class="text-indigo-700 font-semibold hover:underline hover:text-indigo-900 transition">
+                                vision.ufabc.edu.br
+                            </a>
+                        </p>
                     </div>
                 </div>
+
+
 
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="50000">
                     <ol class="carousel-indicators">
@@ -452,9 +462,9 @@
                             <p>{% trans "Attendance offered to the community to facilitate the process of automatic elaboration and correction of the exams, with generation and correction of many exams." %}</p>
                         </div>
 
-                        <div class="alert alert-warning mt-4" role="alert">
-                            <strong>Atenção:</strong> No Chrome, clique em "Abrir no leitor" e depois em "Continuar" para visualizar o PDF. Pedimos desculpas pelo transtorno temporário.
-                        </div>
+                        <!--                        <div class="alert alert-warning mt-4" role="alert">-->
+                        <!--                            <strong>Atenção:</strong> No Chrome, clique em "Abrir no leitor" e depois em "Continuar" para visualizar o PDF. Pedimos desculpas pelo transtorno temporário.-->
+                        <!--                        </div>-->
                     </div>
                 </div>
 
@@ -656,18 +666,18 @@
 
                 <ol>
 
-<li><a href="https://journals-sol.sbc.org.br/index.php/rbie/article/view/5009/">ref25</a> -
-    Zampirolli, F.A., Josko, J.M.B., Teubl, F., Kurashima, C.S., Lopes, R.A.
-    "Teaching Hands-On Digital Image Processing with morph.py: Methods and Comprehensive Results".
-    Revista Brasileira de Informática na Educação – RBIE, 2025.
-</li>
+                    <li><a href="https://journals-sol.sbc.org.br/index.php/rbie/article/view/5009/">ref25</a> -
+                        Zampirolli, F.A., Josko, J.M.B., Teubl, F., Kurashima, C.S., Lopes, R.A.
+                        "Teaching Hands-On Digital Image Processing with morph.py: Methods and Comprehensive Results".
+                        Revista Brasileira de Informática na Educação – RBIE, 2025.
+                    </li>
 
-<li><a href="https://doi.org/10.5753/educomp.2024.237274">ref24</a> -
-    Zampirolli, F.A., Josko, J.M.B., Teubl, F., Kurashima, C.S.
-    "A Practical Digital Image Processing Course with morph.py".
-    Simpósio Brasileiro de Educação em Computação (EduComp), 2024.
-    <strong>Prêmio de melhor artigo na trilha de Recursos e Ambientes Educacionais. <a href="https://mapify.so/pt/share-link/GQQCiXGQyw">Veja mapa mental desse artigo!</a></strong>
-</li>
+                    <li><a href="https://doi.org/10.5753/educomp.2024.237274">ref24</a> -
+                        Zampirolli, F.A., Josko, J.M.B., Teubl, F., Kurashima, C.S.
+                        "A Practical Digital Image Processing Course with morph.py".
+                        Simpósio Brasileiro de Educação em Computação (EduComp), 2024.
+                        <strong>Prêmio de melhor artigo na trilha de Recursos e Ambientes Educacionais. <a href="https://mapify.so/pt/share-link/GQQCiXGQyw">Veja mapa mental desse artigo!</a></strong>
+                    </li>
 
 
                     <li><a href="https://github.com/fzampirolli/mctest/tree/master/book">ref23a</a> -

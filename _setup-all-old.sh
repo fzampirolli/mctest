@@ -124,6 +124,7 @@ source ../_settings.env
 #sudo systemctl daemon-reload
 #sudo systemctl restart mysql
 
+# pip install cryptography
 
 ######check----- TABELAS do django
 #sudo mysql -u root -p
@@ -443,7 +444,7 @@ cd mctest
 source ../runDjango.sh &
 
 >> cat runDjango.sh
-python3 manage.py runserver 177.104.60.16:8000 --noreload
+python3 manage.py runserver 177.104.60.18:8000 --noreload
 
 sudo service cron restart
 
