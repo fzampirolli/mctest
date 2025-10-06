@@ -162,13 +162,32 @@ def similar_question_ai(request, pk):
         new_question.pk = None
         new_question.question_short_description = text
         new_question.question_who_created = request.user
+        # vai para o prompt da llm: question_to_copy.question_text
+        # retorno_llm deve ser validado
+        # new_question.question_text = retorno_llm
         new_question.save()
 
         # Copiar as respostas relacionadas
+        lista_respostas = []
+        for answer in question_to_copy.answers2.all():
+            lista_respostas.append("A: "+ answer.answer_text)
+
+        if lista_respostas:
+            # concatenar com retorno_llm + lista_respostas
+            pass
+
+        # pede para gerar questao similar com AI para qq caso:
+        # QM
+        # QM paramétrico (com código python na descrição)
+        # QT
+        # QT paramétrico
+
+        lista_respostas = []
         for answer in question_to_copy.answers2.all():
             copied_answer = copy(answer)
             copied_answer.pk = None  # Limpar a chave primária
             copied_answer.question = new_question
+            # copied_answer.answer = answer_ai
             copied_answer.save()
 
         messages.error(request, format_html(
