@@ -147,6 +147,37 @@ def ai_assist(request):
     else:
         return JsonResponse({'error': 'Método não permitido'}, status=405)
 
+def similar_question_ai(request, pk):
+    question_to_copy = get_object_or_404(Question, pk=pk)
+
+    if request.method == 'POST':
+        text = question_to_copy.question_short_description
+        if len(text) > 47:
+            text = text[:47] + '-cp'
+        else:
+            text += '-cp'
+
+        # Copiar a questão
+        new_question = copy(question_to_copy)
+        new_question.pk = None
+        new_question.question_short_description = text
+        new_question.question_who_created = request.user
+        new_question.save()
+
+        # Copiar as respostas relacionadas
+        for answer in question_to_copy.answers2.all():
+            copied_answer = copy(answer)
+            copied_answer.pk = None  # Limpar a chave primária
+            copied_answer.question = new_question
+            copied_answer.save()
+
+        messages.error(request, format_html(
+            _('The question has been successfully duplicated! You can <a href="../../{}/update/">view and edit the duplicated question here</a>.'),
+            new_question.id))
+
+    return render(request, 'exam/exam_msg.html', {})
+
+
 def copy_question(request, pk):
     question_to_copy = get_object_or_404(Question, pk=pk)
 
