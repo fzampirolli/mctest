@@ -808,10 +808,13 @@ def correctStudentsExam(request, pk):
                         f.write(f' id,  key, corr, fail, %corr, %fail\n')
                         for i, k in enumerate(sorted(acertos.keys())):
                             a, e = acertos[k], erros[k]
-                            f.write(f'{i + 1:3d},{k:5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                            try:
+                                f.write(f'{i + 1:3d},{int(k):5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                            except:
+                                continue
                         f.close()
 
-                    # irt - questoes ordenadas pelas chaves
+        # irt - questoes ordenadas pelas chaves
                     chaves = sorted(acertos.keys())
                     dados = np.zeros((len(X), len(chaves)), dtype=int)
                     X0 = X.to_numpy()
