@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-19 07:40-0300\n"
+"POT-Creation-Date: 2025-10-19 08:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1955,8 +1955,8 @@ msgid "Par."
 msgstr ""
 
 #: exam/templates/exam/exam_update2.html:638
-msgid "Number of GROUP questions per Exam"
-msgstr "Número de GRUPO de questões por Exame"
+msgid "Number of [GROUP, if defined or] Questions per Exam"
+msgstr "Número de [GRUPOS, se definido ou] Questões por Exame"
 
 #: exam/templates/exam/exam_update2.html:640
 #: main/templates/index-mctest.html:127 main/templates/index-mctest.html:159
