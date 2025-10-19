@@ -635,7 +635,7 @@
                                 <!-- header -->
                                 <tr>
                                     <th scope="col"
-                                        style="width: 50%;">{% trans "Number of questions per Exam" %}</th>
+                                        style="width: 50%;">{% trans "Number of GROUP questions per Exam" %} <small>(∑ Dif. 1–5 → QM)</small></th>
                                     <th scope="col" style="width: 50%;"
                                         class="text-left">{% trans "Exam Style" %}</th>
                                 </tr>
@@ -688,7 +688,7 @@
                                             <!-- exam_number_of_questions_text -->
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text">{% trans "Textual" %}</span>
+                                                    <span class="input-group-text">{% trans "Textual" %} (∑ QT)</span>
                                                 </div>
                                                 {% render_field form.exam_number_of_questions_text class+="form-control" placeholder=form.exam_number_of_questions_text.help_text %}
                                             </div>
