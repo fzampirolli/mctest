@@ -814,7 +814,7 @@ def correctStudentsExam(request, pk):
                                 continue
                         f.close()
 
-        # irt - questoes ordenadas pelas chaves
+                    # irt - questoes ordenadas pelas chaves
                     chaves = sorted(acertos.keys())
                     dados = np.zeros((len(X), len(chaves)), dtype=int)
                     X0 = X.to_numpy()

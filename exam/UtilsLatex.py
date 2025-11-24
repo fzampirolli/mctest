@@ -233,7 +233,7 @@ class Utils(object):
             if resultado.returncode != 0:
                 print("Erro na conversão:")
                 print(resultado.stderr)
-                return text
+                return None
 
             # Ler o conteúdo HTML
             with open(temp_html_path, 'r', encoding='utf-8') as temp_html:
@@ -278,54 +278,54 @@ class Utils(object):
         db_questions = sorted(db_questions, key=lambda x: x[4])  # by type
 
         question_category = '''
-<!-- category: ___category_comments___  -->
-<question type="category">
-<category>
-<text>$course$/top/___question_type___/___question_topic___/diff___question_diff___/___question_short___</text>
-</category>
-<info format="moodle_auto_format">
-<text></text>
-</info>
-<idnumber></idnumber>
-</question>
+        <!-- category: ___category_comments___  -->
+        <question type="category">
+        <category>
+        <text>$course$/top/___question_type___/___question_topic___/diff___question_diff___/___question_short___</text>
+        </category>
+        <info format="moodle_auto_format">
+        <text></text>
+        </info>
+        <idnumber></idnumber>
+        </question>
         '''
         question_model = '''
-<!-- question: ___question_comments___  -->
-  <question type="___question_type___">
-    <name>
-      <text>Topico: ___question_topic___ Dificuldade: ___question_diff___ </text>
-    </name>
-    <questiontext format="moodle_auto_format">
-      <text><![CDATA[<p> ___question_text___ <br></p>]]></text>
-    </questiontext>
-    <generalfeedback format="moodle_auto_format">
-      <text></text>
-    </generalfeedback>
-    <defaultgrade>1.0000000</defaultgrade>
-    <penalty>0.3333333</penalty>
-    <hidden>0</hidden>
-    <idnumber></idnumber>
-    <single>true</single>
-    <shuffleanswers>true</shuffleanswers>
-    <answernumbering>abc</answernumbering>
-    <correctfeedback format="moodle_auto_format">
-      <text>Sua resposta está correta.</text>
-    </correctfeedback>
-    <partiallycorrectfeedback format="moodle_auto_format">
-      <text>Sua resposta está parcialmente correta.</text>
-    </partiallycorrectfeedback>
-    <incorrectfeedback format="moodle_auto_format">
-      <text>Sua resposta está incorreta.</text>
-    </incorrectfeedback>
-    <shownumcorrect/>        
+        <!-- question: ___question_comments___  -->
+          <question type="___question_type___">
+            <name>
+              <text>Topico: ___question_topic___ Dificuldade: ___question_diff___ </text>
+            </name>
+            <questiontext format="moodle_auto_format">
+              <text><![CDATA[<p> ___question_text___ <br></p>]]></text>
+            </questiontext>
+            <generalfeedback format="moodle_auto_format">
+              <text></text>
+            </generalfeedback>
+            <defaultgrade>1.0000000</defaultgrade>
+            <penalty>0.3333333</penalty>
+            <hidden>0</hidden>
+            <idnumber></idnumber>
+            <single>true</single>
+            <shuffleanswers>true</shuffleanswers>
+            <answernumbering>abc</answernumbering>
+            <correctfeedback format="moodle_auto_format">
+              <text>Sua resposta está correta.</text>
+            </correctfeedback>
+            <partiallycorrectfeedback format="moodle_auto_format">
+              <text>Sua resposta está parcialmente correta.</text>
+            </partiallycorrectfeedback>
+            <incorrectfeedback format="moodle_auto_format">
+              <text>Sua resposta está incorreta.</text>
+            </incorrectfeedback>
+            <shownumcorrect/>        
         '''
         answers_model = '''
-<answer fraction="___answer_value___" format="moodle_auto_format">
-  <text><![CDATA[<p> ___answer_text___ <br></p>]]></text>
-  <feedback format="moodle_auto_format">
-    <text></text>
-  </feedback>
-</answer>
+            <answer fraction="___answer_value___" format="moodle_auto_format">
+              <text><![CDATA[<p> ___answer_text___ <br></p>]]></text>
+              <feedback format="moodle_auto_format">
+                <text></text>
+              </feedback>
+            </answer>
         '''
         question_ID_before = -1
         varia_gab_all = []
@@ -345,10 +345,13 @@ class Utils(object):
 
             # remove all occurance singleline comments (%%COMMENT\n ) from string
             q_text = re.sub(re.compile("%%.*?\n"), "", q_text)
+            q_text_html = q_text
 
             # se VPL, converte para html
             a, b = q_text.find('begin{comment}'), q_text.find('end{comment}')
+            flag_vpl = False
             if a < b:
+                flag_vpl = True
                 q_text_html = Utils.latex_to_html(q_text)
                 q_str = q_str.replace('___question_text___', str(q_text_html))
             else:
@@ -394,30 +397,30 @@ class Utils(object):
                     q_type = 'coderunner'
 
                     q_str += '''
-<coderunnertype>python3</coderunnertype>
-<prototypetype>0</prototypetype>
-<allornothing>1</allornothing>
-<penaltyregime>10, 20, ...</penaltyregime>
-<precheck>1</precheck>
-<showsource>0</showsource>
-<answerboxlines>18</answerboxlines>
-<answerboxcolumns>100</answerboxcolumns>
-<answerpreload></answerpreload>
-<useace>1</useace>
-<resultcolumns></resultcolumns>
-<template></template>
-<iscombinatortemplate></iscombinatortemplate>
-<validateonsave>1</validateonsave>
-<testsplitterre></testsplitterre>
-<language></language>
-<acelang></acelang>
-<sandbox></sandbox>
-<grader></grader>
-<cputimelimitsecs></cputimelimitsecs>
-<memlimitmb></memlimitmb>
-<sandboxparams></sandboxparams>
-<templateparams></templateparams>
-<answer><![CDATA[____answer____]]></answer>\n\n'''
+    <coderunnertype>python3</coderunnertype>
+    <prototypetype>0</prototypetype>
+    <allornothing>1</allornothing>
+    <penaltyregime>10, 20, ...</penaltyregime>
+    <precheck>1</precheck>
+    <showsource>0</showsource>
+    <answerboxlines>18</answerboxlines>
+    <answerboxcolumns>100</answerboxcolumns>
+    <answerpreload></answerpreload>
+    <useace>1</useace>
+    <resultcolumns></resultcolumns>
+    <template></template>
+    <iscombinatortemplate></iscombinatortemplate>
+    <validateonsave>1</validateonsave>
+    <testsplitterre></testsplitterre>
+    <language></language>
+    <acelang></acelang>
+    <sandbox></sandbox>
+    <grader></grader>
+    <cputimelimitsecs></cputimelimitsecs>
+    <memlimitmb></memlimitmb>
+    <sandboxparams></sandboxparams>
+    <templateparams></templateparams>
+    <answer><![CDATA[____answer____]]></answer>\n\n'''
 
                     q_str = q_str.replace('____answer____', ', '.join(case.get('answer', [])))
 
@@ -429,22 +432,22 @@ class Utils(object):
                             q_str += '<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0000000" >\n'
 
                         q_aux = '''
-  <testcode>
-            <text></text>
-  </testcode>
-  <stdin>
-            <text>____input____</text>
-  </stdin>
-  <expected>
-            <text>____output____</text>
-  </expected>
-  <extra>
-            <text></text>
-  </extra>
-  <display>
-            <text>SHOW</text>
-  </display>
-</testcase>\n\n'''
+      <testcode>
+                <text></text>
+      </testcode>
+      <stdin>
+                <text>____input____</text>
+      </stdin>
+      <expected>
+                <text>____output____</text>
+      </expected>
+      <extra>
+                <text></text>
+      </extra>
+      <display>
+                <text>SHOW</text>
+      </display>
+    </testcase>\n\n'''
                         q_aux = q_aux.replace('____input____', case['input'][k][0])
                         q_aux = q_aux.replace('____output____',  case['output'][k][0])
 
@@ -472,6 +475,10 @@ class Utils(object):
                 q_str = question_category + q_str
                 q_str = q_str.replace('___category_comments___', mystr)
                 q_str = q_str.replace('___question_db_id___', str(q_id))
+                # if flag_vpl:
+                #     q_str = q_str.replace('___question_text___', str(q_text_html))
+                # else:
+                #     q_str = q_str.replace('___question_text___', str(q_text))
                 q_str = q_str.replace('___question_diff___', str(q_diff))
                 q_str = q_str.replace('___question_id___', str(q_count))
                 q_str = q_str.replace('___question_topic___', str(q_topic))

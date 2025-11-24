@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-19 08:17-0300\n"
+"POT-Creation-Date: 2025-11-24 08:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,7 +236,7 @@ msgstr "Apagar Turma"
 #: course/templates/classroom/classroom_list.html:78
 #: course/templates/classroom/classroom_list_who_created_user.html:78
 #: course/templates/discipline/discipline_detail.html:179 course/views.py:209
-#: exam/UtilsLatex.py:1186
+#: exam/UtilsLatex.py:1193
 msgid "Classroom"
 msgstr "Turma"
 
@@ -334,7 +334,7 @@ msgstr "Somente professores cadastrados em disciplinas"
 #: topic/templates/question/question_confirm_delete.html:52
 #: topic/templates/question/question_create.html:101
 #: topic/templates/question/question_list_who_created_user.html:193
-#: topic/templates/question/question_update.html:306
+#: topic/templates/question/question_update.html:323
 #: topic/templates/topic/topic_create.html:61
 #: topic/templates/topic/topic_update.html:71
 msgid "Contact your discipline coordinator"
@@ -408,7 +408,7 @@ msgid "Code"
 msgstr "Código"
 
 #: course/templates/classroom/classroom_create.html:54
-#: course/templates/classroom/classroom_update.html:82 exam/UtilsLatex.py:1187
+#: course/templates/classroom/classroom_update.html:82 exam/UtilsLatex.py:1194
 #: exam/templates/exam/exam_create.html:84
 #: exam/templates/exam/exam_update2.html:302
 msgid "Room"
@@ -459,7 +459,7 @@ msgstr "Tipo"
 #: student/templates/student/student_create.old.html:47
 #: topic/templates/question/question_create.html:89
 #: topic/templates/question/question_detail.html:30
-#: topic/templates/question/question_update.html:247
+#: topic/templates/question/question_update.html:264
 #: topic/templates/topic/topic_create.html:48
 #: topic/templates/topic/topic_update.html:52
 msgid "Back"
@@ -479,7 +479,7 @@ msgstr "Voltar"
 #: student/templates/student/student_create.old.html:48
 #: student/templates/student/student_update.html:48
 #: topic/templates/question/question_create.html:92
-#: topic/templates/question/question_update.html:250
+#: topic/templates/question/question_update.html:267
 #: topic/templates/topic/topic_create.html:49
 #: topic/templates/topic/topic_update.html:53
 #, fuzzy
@@ -524,7 +524,7 @@ msgstr "ID"
 
 #: course/templates/classroom/classroom_detail.html:44
 #: course/templates/classroom/classroom_detail.html:112 exam/CVMCTest.py:1768
-#: exam/UtilsLatex.py:1196 exam/UtilsLatex.py:1278 exam/models.py:246
+#: exam/UtilsLatex.py:1203 exam/UtilsLatex.py:1285 exam/models.py:246
 #: exam/models.py:280
 msgid "Student"
 msgstr "Estudante"
@@ -681,7 +681,7 @@ msgstr "Código da Turma"
 #: course/templates/classroom/classroom_list_who_created_user.html:21
 #: course/templates/course/course_detail.html:75
 #: course/templates/discipline/discipline_detail.html:16
-#: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:1185
+#: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:1192
 #: exam/templates/exam/exam_create.html:81
 #: exam/templates/exam/exam_list.html:21
 #: exam/templates/exam/exam_list_who_created_user.html:25
@@ -1172,29 +1172,29 @@ msgstr "Retorno"
 msgid "Your answer"
 msgstr "Sua alternativa"
 
-#: exam/CVMCTest.py:1829 exam/UtilsLatex.py:1639 exam/UtilsLatex.py:1815
+#: exam/CVMCTest.py:1829 exam/UtilsLatex.py:1646 exam/UtilsLatex.py:1822
 msgid "Text Questions"
 msgstr "Questões Dissertativas"
 
-#: exam/UtilsLatex.py:657 exam/views.py:1450 exam/views.py:1491
+#: exam/UtilsLatex.py:664 exam/views.py:1450 exam/views.py:1491
 msgid "ERROR in genTex"
 msgstr "ERRO em genTex"
 
-#: exam/UtilsLatex.py:1138 exam/UtilsLatex.py:1189 exam/forms.py:185
+#: exam/UtilsLatex.py:1145 exam/UtilsLatex.py:1196 exam/forms.py:185
 #: exam/models.py:197 exam/templates/exam/exam_update2.html:780
 msgid "Instructions"
 msgstr "Instruções"
 
-#: exam/UtilsLatex.py:1190
+#: exam/UtilsLatex.py:1197
 msgid "Prof."
 msgstr "Prof."
 
-#: exam/UtilsLatex.py:1191 exam/forms.py:169 exam/models.py:173
+#: exam/UtilsLatex.py:1198 exam/forms.py:169 exam/models.py:173
 #: exam/templates/exam/exam_update2.html:759
 msgid "Term"
 msgstr "Período"
 
-#: exam/UtilsLatex.py:1192 exam/models.py:229 exam/models.py:241
+#: exam/UtilsLatex.py:1199 exam/models.py:229 exam/models.py:241
 #: exam/models.py:275 exam/templates/exam/exam_detail.html:15
 #: exam/templates/exam/exam_list.html:23 exam/templates/exam/exam_list.html:86
 #: exam/templates/exam/exam_list_who_created_user.html:27
@@ -1202,19 +1202,19 @@ msgstr "Período"
 msgid "Exam"
 msgstr "Exame"
 
-#: exam/UtilsLatex.py:1193 exam/templates/exam/exam_update2.html:752
+#: exam/UtilsLatex.py:1200 exam/templates/exam/exam_update2.html:752
 msgid "Date"
 msgstr "Data"
 
-#: exam/UtilsLatex.py:1195 exam/UtilsLatex.py:1277
+#: exam/UtilsLatex.py:1202 exam/UtilsLatex.py:1284
 msgid "ID/RA"
 msgstr ""
 
-#: exam/UtilsLatex.py:1231
+#: exam/UtilsLatex.py:1238
 msgid "Sig."
 msgstr "Ass."
 
-#: exam/UtilsLatex.py:1308
+#: exam/UtilsLatex.py:1315
 msgid ""
 "validateNumQuestions: The number of selected multiple-choice questions is "
 "inconsistent"
@@ -1222,20 +1222,20 @@ msgstr ""
 "validateNumQuestions: o número de questões de múltipla-escolha escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:1312
+#: exam/UtilsLatex.py:1319
 msgid "validateNumQuestions: the number of Text questions is inconsistent"
 msgstr ""
 "validateNumQuestions: o número de questões dissertativa escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:1317
+#: exam/UtilsLatex.py:1324
 msgid ""
 "validateNumQuestions: You chose Both. Is it right? Number of QM questions >=3"
 msgstr ""
 "validateNumQuestions: você escolher Ambos. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:1322
+#: exam/UtilsLatex.py:1329
 msgid ""
 "validateNumQuestions: You chose Anwsers. Is it right? Number of QM questions "
 ">=3"
@@ -1243,7 +1243,7 @@ msgstr ""
 "validateNumQuestions: você escolhe Alternativas. Isto está correto? Número "
 "de questões QM >=3"
 
-#: exam/UtilsLatex.py:1327
+#: exam/UtilsLatex.py:1334
 msgid ""
 "validateNumQuestions: You chose Questions. Is it right? Number of QM "
 "questions >=3"
@@ -1251,31 +1251,31 @@ msgstr ""
 "validateNumQuestions: você escolher Questões. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:1338
+#: exam/UtilsLatex.py:1345
 msgid "validateNumQuestions: number of QM difficulty questions var1"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var1"
 
-#: exam/UtilsLatex.py:1341
+#: exam/UtilsLatex.py:1348
 msgid "validateNumQuestions: number of QM difficulty questions var2"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var2"
 
-#: exam/UtilsLatex.py:1344
+#: exam/UtilsLatex.py:1351
 msgid "validateNumQuestions: number of QM difficulty questions var3"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var3"
 
-#: exam/UtilsLatex.py:1347
+#: exam/UtilsLatex.py:1354
 msgid "validateNumQuestions: number of QM difficulty questions var4"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var4"
 
-#: exam/UtilsLatex.py:1350
+#: exam/UtilsLatex.py:1357
 msgid "validateNumQuestions: number of QM difficulty questions var5"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var5"
 
-#: exam/UtilsLatex.py:1388
+#: exam/UtilsLatex.py:1395
 msgid "ERROR: Each block must have at least 3 questions/answers"
 msgstr "ERRO: Cada bloco deve ter pelo menos 3 questões/respostas"
 
-#: exam/UtilsLatex.py:1551
+#: exam/UtilsLatex.py:1558
 msgid ""
 "drawQuestionsMCDifficulty: Topic of the chosen question does not belong to "
 "the discipline"
@@ -1283,22 +1283,22 @@ msgstr ""
 "drawQuestionsMCDifficulty: Tópico da questão escolhida não pertence à "
 "disciplina "
 
-#: exam/UtilsLatex.py:1587
+#: exam/UtilsLatex.py:1594
 msgid "drawQuestionsMCDifficulty: Error in parametric question"
 msgstr "drawQuestionsMCDifficulty: erro na questão paramétrica"
 
-#: exam/UtilsLatex.py:1595
+#: exam/UtilsLatex.py:1602
 msgid ""
 "drawQuestionsMCDifficulty: number of answers different: Exam; Question: "
 msgstr ""
 "drawQuestionsMCDifficulty: número de alternativas são diferentes: Exame; "
 "Questão"
 
-#: exam/UtilsLatex.py:1678
+#: exam/UtilsLatex.py:1685
 msgid "drawQuestionsTDifficulty: Error in compression textual questions"
 msgstr "drawQuestionsTDifficulty: erro na compressão da questão dissertativa"
 
-#: exam/UtilsLatex.py:1710
+#: exam/UtilsLatex.py:1717
 msgid ""
 "drawQuestionsTDifficultyVariations: Topic of the chosen question does not "
 "belong to the discipline"
@@ -1306,7 +1306,7 @@ msgstr ""
 "drawQuestionsTDifficultyVariations: tópico da questão escolhida não pertence "
 "à disciplina"
 
-#: exam/UtilsLatex.py:2404
+#: exam/UtilsLatex.py:2411
 msgid "ERROR - students with same name"
 msgstr "ERRO - estudante com o mesmo nome"
 
@@ -2571,7 +2571,7 @@ msgstr[1] ""
 #: main/templates/According.html:10 main/templates/signup.html:36
 #: topic/templates/question/question_confirm_delete.html:32
 #: topic/templates/question/question_create.html:91
-#: topic/templates/question/question_update.html:249
+#: topic/templates/question/question_update.html:266
 msgid "According"
 msgstr "De Acordo"
 
@@ -3998,7 +3998,7 @@ msgstr ""
 #: topic/templates/question/question_create.html:100
 #: topic/templates/question/question_list.html:134
 #: topic/templates/question/question_list_who_created_user.html:192
-#: topic/templates/question/question_update.html:305
+#: topic/templates/question/question_update.html:322
 msgid "Questions of the disciplines that I am enrolled"
 msgstr "Questões das disciplinas em que participo"
 
@@ -4162,19 +4162,28 @@ msgstr "Habilidade (b)"
 msgid "Guessing (c)"
 msgstr "Chute (c)"
 
-#: topic/templates/question/question_update.html:259
+#: topic/templates/question/question_update.html:247
+msgid ""
+"For details, see Appendix B of the book (2nd Edition - Under Construction)"
+msgstr "Para detalhes, ver Apêndice B do livro (segunda edição em construção)"
+
+#: topic/templates/question/question_update.html:253
+msgid "To test these values (a, b, c), see Google Colab"
+msgstr "Para testar esses valores (a, b, c), ver Google Colab"
+
+#: topic/templates/question/question_update.html:276
 msgid "Duplicate This Question"
 msgstr "Duplicar esta Questão"
 
-#: topic/templates/question/question_update.html:268
+#: topic/templates/question/question_update.html:285
 msgid "Upload-Image"
 msgstr "Upload-Image"
 
-#: topic/templates/question/question_update.html:270
+#: topic/templates/question/question_update.html:287
 msgid "Choose a PNG file for import."
 msgstr "Escolha um arquivo PNG para importação."
 
-#: topic/templates/question/question_update.html:271
+#: topic/templates/question/question_update.html:288
 msgid ""
 "Be cautious with the file name to avoid overwriting another file with the "
 "same name."
@@ -4182,29 +4191,29 @@ msgstr ""
 "Tenha cuidado com o nome do arquivo para evitar sobrescrever outro arquivo "
 "com o mesmo nome."
 
-#: topic/templates/question/question_update.html:272
+#: topic/templates/question/question_update.html:289
 msgid "One suggestion is to include a prefix in the file name like "
 msgstr "Uma sugestão é incluir um prefixo no nome do arquivo, como "
 
-#: topic/templates/question/question_update.html:275
+#: topic/templates/question/question_update.html:292
 msgid "Do not include special characters and spaces in the file name."
 msgstr "Não inclua caracteres especiais e espaços no nome do arquivo."
 
-#: topic/templates/question/question_update.html:276
+#: topic/templates/question/question_update.html:293
 msgid "This file will be retained for 180 days in server."
 msgstr "Este arquivo será mantido por 180 dias no servidor."
 
-#: topic/templates/question/question_update.html:277
+#: topic/templates/question/question_update.html:294
 msgid "Remember that images in LaTeX make PDF generation extremely slow!"
 msgstr ""
 "Lembre-se de que as imagens em LaTeX tornam a geração do PDF extremamente "
 "lenta!"
 
-#: topic/templates/question/question_update.html:278
+#: topic/templates/question/question_update.html:295
 msgid "See below how to include this image in a question."
 msgstr "Veja abaixo como incluir esta imagem em uma questão."
 
-#: topic/templates/question/question_update.html:296
+#: topic/templates/question/question_update.html:313
 msgid "Delete this Question"
 msgstr "Apagar esta Questão"
 
