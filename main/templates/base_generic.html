@@ -24,6 +24,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
+
     {% block styles %}{% endblock %}
 
     <style>
@@ -121,6 +122,10 @@
                         }
 
                         document.getElementById("total-time-left").innerHTML = "[" + hors + ":" + minutes + ":" + seconds + "]";
+                        var timerElement = document.getElementById("total-time-left");
+                        if (timerElement) {
+                            timerElement.innerHTML = "[" + hors + ":" + minutes + ":" + seconds + "]";
+                        }
                         if (count_timer <= 0) {
                             localStorage.clear("count_timer");
                             document.location.reload(true);
@@ -352,9 +357,9 @@
             }],
             dom: "Bfrtip",
             scrollY: "550px",
+            scrollCollapse: true,  // <--- ADICIONE ESTA LINHA (Permite altura variável)
             scrollX: true,
             paging: false,
-            bInfo: true,
             buttons: [
                 {
                     extend: 'copy',
@@ -439,9 +444,9 @@
             }],
             dom: "Bfrtip",
             scrollY: "550px",
+            scrollCollapse: true,  // <--- ADICIONE ESTA LINHA (Permite altura variável)
             scrollX: true,
             paging: false,
-            bInfo: true,
             buttons: [
                 {
                     extend: 'copy',
@@ -527,9 +532,9 @@
             }],
             dom: "Bfrtip",
             scrollY: "550px",
+            scrollCollapse: true,  // <--- ADICIONE ESTA LINHA (Permite altura variável)
             scrollX: true,
             paging: false,
-            bInfo: true,
             buttons: [
                 {
                     extend: 'copy',

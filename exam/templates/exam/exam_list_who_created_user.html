@@ -35,10 +35,14 @@
                                             <tr>
                                                 <!-- discipline -->
                                                 <td>
-                                                    <a href="{% url 'course:discipline-detail' pk=exam.classrooms.all.0.discipline.pk %}"
-                                                       class="btn btn-outline-secondary text-dark btn-sm">
-                                                        {{ exam.classrooms.all.0.discipline }}
-                                                    </a>
+                                                    {% if exam.classrooms.all.0 %}
+                                                        <a href="{% url 'course:discipline-detail' pk=exam.classrooms.all.0.discipline.pk %}"
+                                                           class="btn btn-outline-secondary text-dark btn-sm">
+                                                            {{ exam.classrooms.all.0.discipline }}
+                                                        </a>
+                                                    {% else %}
+                                                        <span class="badge badge-warning text-dark">{% trans "No Class/Disc" %}</span>
+                                                    {% endif %}
                                                 </td>
                                                 <!-- topic -->
                                                 <td>

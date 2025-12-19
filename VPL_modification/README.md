@@ -2,7 +2,7 @@
 ## Author of the VPL modifications: Heitor Savegnago
 ## Orientation: Paulo Pisani
 
-###Implementations to allow the integration of MCTest and VPL + Moodle.
+### Implementations to allow the integration of MCTest and VPL + Moodle.
 
 MCTest creates activities to be answered by the 
 student during an exercise, sends a set of test 

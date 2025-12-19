@@ -1,12 +1,12 @@
 '''
 =====================================================================
-Copyright (C) 2018-2024 Francisco de Assis Zampirolli
+Copyright (C) 2018-2026 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.3.
+This file is part of MCTest 5.4.
 
-Languages: Python 3.8.5, Django 2.2.4 and many libraries described at
+Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest
 
 You should cite some references included in vision.ufabc.edu.br
@@ -25,53 +25,174 @@ GNU General Public License for more details.
 
 =====================================================================
 '''
-import datetime
 ###################################################################
 import json
 import os, re
 import random
-import subprocess
 
-from django.contrib import messages
 # Create your views here.
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.serializers import serialize
 from django.core.files.storage import FileSystemStorage
 from django.forms import Textarea
 from django.forms.models import inlineformset_factory
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.static import serve
-from tablib import Dataset
 # ai_assist: comentado uso em question_update.html - incluir na versão MCTest 5.4
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from language_tool_python import LanguageTool
 import autopep8
+from django.contrib import messages
+import datetime
+
 
 ###################################################################
-from account.models import User
-from course.models import Discipline
 from exam.UtilsLatex import Utils
-from mctest.settings import BASE_DIR
-from topic.UtilsMCTest4 import UtilsMC
 from .forms import UpdateQuestionForm, QuestionCreateForm, TopicCreateForm, TopicUpdateForm
-from .models import Topic, Question, Answer
-from .resources import QuestionResource
 from django.utils.html import format_html
 
-# from sympy import *
+from topic.utils_pdf import PDFGenerator
 
-from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import render, HttpResponseRedirect
+# Certifique-se de importar seus models e utils corretamente
+from .models import Question, Answer, Topic, Discipline
+from topic.UtilsMCTest4 import UtilsMC
 
-from django.urls import reverse
+User = get_user_model()
 
 from copy import copy
+
+from course.models import Discipline  # Certifique-se de importar Discipline
+from django.db.models import Count, Q
+
+@login_required
+@csrf_exempt
+def see_question_PDF(request, pk):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if 'exam.change_exam' not in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    question = get_object_or_404(Question, pk=pk)
+    context = {"questions": question}
+
+    if request.POST:
+        Utils.validateProfByQuestion(question, request.user)
+
+        # --- CONSTRUÇÃO DO CONTEÚDO LATEX ---
+        q = question
+        latex_content = ""
+
+        # Cabeçalho e Metadados
+        latex_content += Utils.getBegin()
+        latex_content += "\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n"
+        latex_content += "\\noindent\\textbf{Topic:} %s\\\\\n" % q.topic.topic_text
+        latex_content += "\\noindent\\textbf{Group:} %s\\\\\n" % q.question_group
+        latex_content += "\\noindent\\textbf{Short Description:} %s\\\\\n" % q.question_short_description
+        latex_content += "\\noindent\\textbf{Type:} %s\\\\\n" % q.question_type
+        latex_content += "\\noindent\\textbf{Difficulty:} %s\\\\\n" % q.question_difficulty
+        latex_content += "\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy
+        latex_content += "\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update
+        latex_content += "\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created
+        latex_content += "\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper()
+
+        # Integração VPL
+        st = q.question_text
+        a, b = st.find('begin{comment}'), st.find('end{comment}')
+        if a < b and a != -1:
+            latex_content += "\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL'
+
+        # ID da Questão
+        ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
+        ss = ss1 % str(q.id).zfill(4)
+        latex_content += "%s %s." % (ss, 1)
+
+        # Lógica Paramétrica
+        quest = ""
+        ans = []
+        feedback_ans = []
+
+        if q.question_parametric == 'no':
+            quest = q.question_text + '\n'
+            if q.question_type == "QM":
+                # Garante lista
+                ans = [a.answer_text + '\n' for a in q.answers()]
+        else:
+            # Paramétrica
+            try:
+                answers_input = list(q.answers()) if q.question_type == "QM" else []
+                [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, answers_input, [])
+
+                if quest == "":
+                    messages.error(request, _('UtilsMC.questionParametric: forbidden words found.'))
+                    return render(request, 'exam/exam_errors.html', {})
+            except Exception as e:
+                messages.error(request, f"Error generating parametric question: {e}")
+                return render(request, 'exam/exam_errors.html', {})
+
+        # Adiciona enunciado
+        if isinstance(quest, list):
+            quest = ''.join(quest)
+        latex_content += r' %s' % quest
+
+        # Adiciona Alternativas (Múltipla Escolha)
+        latex_content += "\n\n\\vspace{2mm}\\begin{oneparchoices}\\hspace{-3mm}\n"
+
+        if ans:
+            import random
+            # Copia para não alterar a lista original caso seja reutilizada
+            ans_copy = list(ans)
+            random.shuffle(ans_copy)
+
+            for idx, a in enumerate(ans_copy):
+                # Lógica original assume que ans[0] é a correta antes do shuffle
+                # Se ans vier do BD, a correta é a que tem sort=0 ou similar, mas aqui estamos seguindo a lógica
+                # de que a lista 'ans' gerada pelo UtilsMC coloca a certa no index 0.
+                is_correct = (a == ans[0])
+
+                if is_correct:
+                    latex_content += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (idx, a)
+                else:
+                    latex_content += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (idx, a)
+
+                try:
+                    # Tenta recuperar feedback
+                    original_idx = ans.index(a)
+                    if feedback_ans and len(feedback_ans) > original_idx:
+                        fb = feedback_ans[original_idx]
+                        if fb and fb != '\n':
+                            latex_content += '[' + fb + ']'
+                except:
+                    pass
+
+        latex_content += "\\end{oneparchoices}\\vspace{0mm}\n"
+        latex_content += "\\end{document}"
+
+        # --- GERAÇÃO DO PDF (USANDO CLASSE SEGURA) ---
+        generator = PDFGenerator()
+
+        final_path = generator.generate(
+            latex_content=latex_content,
+            filename_base=request.user.username,
+            destination_folder_name='pdfQuestion'
+        )
+
+        if final_path and os.path.exists(final_path):
+            return serve(request, os.path.basename(final_path), os.path.dirname(final_path))
+        else:
+            messages.error(request, "Error generating PDF file.")
+            return render(request, 'exam/exam_errors.html', {})
+
+    return render(request, 'template_da_questao.html', context)
+
 
 
 @csrf_exempt
@@ -227,375 +348,357 @@ def copy_question(request, pk):
 
     return render(request, 'exam/exam_msg.html', {})
 
+from django.http import JsonResponse
+import json
 
 @login_required
 def save_question_Json(request, pk):
-    if request.user.get_group_permissions():
-        perm = [p for p in request.user.get_group_permissions()]
-        if not 'topic.change_question' in perm:
-            return HttpResponseRedirect("/")
-    else:
-        return HttpResponseRedirect("/")
+    """
+    Exporta apenas os dados essenciais das questões do professor logado.
+    Formato 'Slim': Sem IDs de banco, sem dados de usuário, apenas conteúdo.
+    """
+    # 1. Filtra questões criadas pelo usuário
+    questions_qs = Question.objects.filter(question_who_created=request.user).select_related('topic')
 
-    if request.POST:
-        question_inst = get_object_or_404(Question, pk=pk)  # questao corrente
+    export_data = []
 
-        questions = []
-        topics = []
-        disciplines = []
-        answers = []
-        for q in Question.objects.filter(question_who_created=request.user):
+    for q in questions_qs:
+        # 2. Constrói o objeto da questão (apenas dados conteudistas)
+        q_data = {
+            "topic_text": q.topic.topic_text, # Usa o TEXTO do tópico, não o ID
+            "type": q.question_type,
+            "difficulty": q.question_difficulty,
+            "group": q.question_group,
+            "short_desc": q.question_short_description,
+            "text": q.question_text,
+            "parametric": q.question_parametric,
+            "answers": []
+        }
 
-            # salvo questoes da disciplina corrente, SEM tratar mesmo topico em varias disciplinas
-            if (q.topic.discipline.all()[0].id == question_inst.topic.discipline.all()[0].id):
-                questions.append(q)
-                if not q.topic in topics:
-                    topics.append(q.topic)
-                    for d in q.topic.discipline.all():
-                        if not d in disciplines:
-                            disciplines.append(d)
+        # 3. Adiciona as respostas
+        for ans in q.answers2.all(): # ou Answer.objects.filter(question=q)
+            q_data["answers"].append({
+                "text": ans.answer_text,
+                "feedback": ans.answer_feedback
+            })
 
-                if Answer.objects.filter(question__pk=q.pk):
-                    for a in Answer.objects.filter(question__pk=q.pk):
-                        questions.append(a)
+        export_data.append(q_data)
 
-        file_name = request.user.username
-        fileQuestionName = "./tmp/" + file_name + "_q_ALL" + ".json"
-
-        with open(fileQuestionName, "w") as out:
-            questions_str = serialize('json', questions)
-            topics_str = serialize('json', topics)
-            disciplines_str = serialize('json', disciplines)
-            data_q = json.loads(questions_str)
-            data_t = json.loads(topics_str)
-            data_d = json.loads(disciplines_str)
-            data_all = list(data_d) + list(data_t) + list(data_q)
-
-            json.dump(data_all, out, indent=2)
-
-        return serve(request, os.path.basename(fileQuestionName), os.path.dirname(fileQuestionName))
-
+    # 4. Retorna o arquivo JSON para download
+    response = HttpResponse(
+        json.dumps(export_data, indent=2, ensure_ascii=False),
+        content_type='application/json'
+    )
+    response['Content-Disposition'] = f'attachment; filename="{request.user.username}_questions_slim.json"'
+    return response
 
 @login_required
+@permission_required('exam.change_exam', raise_exception=True)
 def ImportQuestionsJson(request):
-    if request.user.get_group_permissions():
-        perm = [p for p in request.user.get_group_permissions()]
-        if not 'topic.change_question' in perm:
-            return HttpResponseRedirect("/")
-    else:
-        return HttpResponseRedirect("/")
-
     if request.method == 'POST':
-        file_questions = ""
-
-        # try:
-        if True:
-            try:
-                file_questions = request.FILES['myfile']
-            except:
-                messages.error(request, _('ImportQuestionsJson: choose a JSON following the model!'))
-                return render(request, 'exam/exam_errors.html', {})
-
-            data = file_questions.read().decode('utf-8')
-            objs = serializers.json.Deserializer(data)  # .next().object
-
-            count = 0
-            topics = []
-            disciplines = []
-            questions = []
-            answers = []
-            for o in objs:
-                if type(o.object) == Discipline:
-                    d = o.object
-                    disciplines.append(d)
-                elif type(o.object) == Topic:
-                    t = o.object
-                    topics.append(t)
-                elif type(o.object) == Question:
-                    q = o.object
-                    questions.append(q)
-                elif type(o.object) == Answer:
-                    a = o.object
-                    answers.append(a)
-
-            for q in questions:  # pega todas as questoes do json
-                for t0 in topics:  # pega todos os topicos do json
-                    if t0.topic_text == q.topic.topic_text:  # se topico da questao for igual a do json
-                        t1 = get_object_or_404(Topic, topic_text=t0.topic_text)
-                        for d1 in t1.discipline.all():  # pega todas as disciplinas do BD
-                            if Discipline.objects.filter(discipline_code=d1.discipline_code):  # se existe disciplina
-                                if request.user in d1.discipline_profs.all() or request.user in d1.discipline_coords.all():  # se prof esta em disc
-                                    if Topic.objects.filter(topic_text=t0.topic_text):  # se existe topico
-                                        if not Question.objects.filter(
-                                                question_text=q.question_text):  # se nao tem questao igual no BD
-                                            a1 = []
-                                            for a0 in answers:  # pega todas as respostas da questao do json
-                                                if a0.question == q:
-                                                    a1.append(a0)
-
-                                            raise Http404("Are you sure? Contact your admin")
-
-                                            newQ = Question.objects.create(
-                                                topic=t1,
-                                                question_group=q.question_group,
-                                                question_short_description=q.question_short_description,
-                                                question_text=q.question_text,
-                                                question_type=q.question_type,
-                                                question_difficulty=q.question_difficulty,
-                                                question_bloom_taxonomy=q.question_bloom_taxonomy,
-                                                question_last_update=q.question_last_update,
-                                                question_who_created=q.question_who_created,
-                                                # User.objects.get(username=request.user.username),
-                                            )
-                                            for a in a1:
-                                                Answer.objects.create(
-                                                    question=newQ,
-                                                    answer_text=a.answer_text,
-                                                    answer_feedback=a.answer_feedback,
-                                                )
-        # except:
-        #    return HttpResponse("ERROR: in serializers.json.Deserializer ")
-
-    return HttpResponseRedirect("../")
-
-
-##################################################################
-
-@login_required
-@csrf_exempt
-def see_question_PDF(request, pk):
-    if request.user.get_group_permissions():
-        perm = [p for p in request.user.get_group_permissions()]
-        if not 'exam.change_exam' in perm:
-            return HttpResponseRedirect("/")
-    else:
-        return HttpResponseRedirect("/")
-
-    question = get_object_or_404(Question, pk=pk)
-    context = {"questions": question}
-
-    if request.POST:
-
-        Utils.validateProfByQuestion(question, request.user)
-
-        file_name = request.user.username
-        fileQuestionName = file_name + ".tex"
-        with open(fileQuestionName, 'w') as fileExam:
-            q = question
-            fileQuestion = open(fileQuestionName, 'w')
-            fileQuestion.write(Utils.getBegin())
-            fileQuestion.write("\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n")
-            fileQuestion.write("\\noindent\\textbf{Topic:} %s\\\\\n" % q.topic.topic_text)
-            fileQuestion.write("\\noindent\\textbf{Group:} %s\\\\\n" % q.question_group)
-            fileQuestion.write("\\noindent\\textbf{Short Description:} %s\\\\\n" % q.question_short_description)
-            fileQuestion.write("\\noindent\\textbf{Type:} %s\\\\\n" % q.question_type)
-            fileQuestion.write("\\noindent\\textbf{Difficulty:} %s\\\\\n" % q.question_difficulty)
-            fileQuestion.write("\\noindent\\textbf{Bloom taxonomy:} %s\\\\\n" % q.question_bloom_taxonomy)
-            fileQuestion.write("\\noindent\\textbf{Last update:} %s\\\\\n" % q.question_last_update)
-            fileQuestion.write("\\noindent\\textbf{Who created:} %s\\\\\n" % q.question_who_created)
-            fileQuestion.write("\\noindent\\textbf{Parametric:} %s\\\\\n" % q.question_parametric.upper())
-            # if q.question_type == "QM" and q.question_correction_count:
-            #     Accuracy = (q.question_correct_count / q.question_correction_count) * 100
-            #     fileQuestion.write( "\\noindent\\textbf{Correct:} %s\\\\\n" % q.question_correct_count)
-            #     fileQuestion.write( "\\noindent\\textbf{Correction:} %s\\\\\n" % q.question_correction_count)
-            #     fileQuestion.write( "\\noindent\\textbf{Accuracy:} %.1f\\\\\n" % Accuracy)
-
-            st = q.question_text
-            a, b = st.find('begin{comment}'), st.find('end{comment}')
-            if a < b:
-                fileQuestion.write("\\noindent\\textbf{Integration:} %s\\\\\n" % 'Moodle+VPL')
-
-            ss1 = "\n\\hspace{-15mm}{\\small {\\color{green}\\#%s}} \\hspace{-1mm}"
-            # Renomear a variável str para evitar conflito
-            ss = ss1 % str(q.id).zfill(4)
-            str1 = "%s %s." % (ss, 1)
-
-            if q.question_parametric == 'no':
-                quest = q.question_text + '\n'
-                ans = []
-                if q.question_type == "QM":
-                    for a in q.answers():
-                        ans.append(a.answer_text + '\n')
-            else:  # QUESTOES PARAMETRICAS
-                if q.question_type == "QM":
-                    [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
-                else:  # se for dissertativa, não colocar alternativas
-                    [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], [])
-                if quest == "":
-                    messages.error(request,
-                                   _('UtilsMC.questionParametric: do not use some words in the code, '
-                                     'for ex. exec, cmd, open, import os, remove, mkdir, sys, gnureadline, '
-                                     'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
-                    return render(request, 'exam/exam_errors.html', {})
-
-            str1 += r' %s' % ''.join(quest)
-            str1 += "\n\n\\vspace{2mm}\\begin{oneparchoices}\\hspace{-3mm}\n"
-            for a in random.sample(ans, len(ans)):
-                if ans.index(a) == 0:
-                    str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{blue}\#%s}}%s" % (str(ans.index(a)), a)
-                else:
-                    str1 += "\\choice \\hspace{-2.0mm}{\\tiny{\\color{red}*%s}}%s" % (str(ans.index(a)), a)
-
-                try:
-                    if feedback_ans[ans.index(a)] != '\n':
-                        str1 += '[' + feedback_ans[ans.index(a)] + ']'  ############# NOVO
-                except:  # quando cria alternativas automáticas, não tem feedback
-                    pass
-
-            str1 += "\\end{oneparchoices}\\vspace{0mm}\n"
-
-            fileQuestion.write(str1)
-
-            fileQuestion.write("\\end{document}")
-            fileQuestion.close()
-
-        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode',
-               fileQuestionName]
-        proc = subprocess.Popen(cmd)
-        proc.communicate()
-        proc = subprocess.Popen(cmd)
-        proc.communicate()
-
-        path = os.getcwd()
-        os.system("cp " + file_name + ".pdf " + path + "/pdfQuestion/")
-
-        getuser = path.split('/')
-        getuser = getuser[2]
-        getuser = getuser + ':' + getuser
-        os.system('chown -R ' + getuser + ' ' + path)
-        #os.system('chgrp -R ' + getuser + ' ' + path)
-
         try:
-            os.remove("{}.aux".format(file_name))
-            os.remove("{}.log".format(file_name))
-            os.remove("{}.tex".format(file_name))
-            os.remove("{}.pdf".format(file_name))
-            os.remove("{}.out".format(file_name))
-            os.remove("temp.txt")
-            pass
+            uploaded_file = request.FILES['myfile']
+            data = json.load(uploaded_file)
         except Exception as e:
-            pass
-
-        path_to_file = BASE_DIR + "/pdfQuestion/" + file_name + ".pdf"
-        return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
-
-from decouple import config
-
-
-@login_required
-def ImportQuestions(request):
-    if request.user.get_group_permissions():
-        perm = [p for p in request.user.get_group_permissions()]
-        if not 'exam.change_exam' in perm:
-            return HttpResponseRedirect("/")
-    else:
-        return HttpResponseRedirect("/")
-
-    # topic = get_object_or_404(Topic, pk=pk)
-
-    if request.method == 'POST':
-        teste2 = config('webMCTest_PASS')
-
-        person_resource = QuestionResource()
-        dataset = Dataset()
-        try:
-            new_persons = request.FILES['myfile']
-        except:
-            messages.error(request, _('ImportQuestions: choose a TXT following the model!'))
+            messages.error(request, _('Error reading JSON: ') + str(e))
             return render(request, 'exam/exam_errors.html', {})
 
-        # mystr4 = '/topic/topic/' + str(pk) + '/update'
-        # messages.info(request, _('Return to: ') + '<a href="' + mystr4 + '">link</a>', extra_tags='safe')
-        # messages.info(request, _('Topic name') + ' >> ' + topic.topic_text, extra_tags='upper')
-
-        listao = UtilsMC.questionsReadFiles(request, new_persons)
-        if listao == '':
+        if not data:
+            messages.error(request, _('JSON file is empty.'))
             return render(request, 'exam/exam_errors.html', {})
 
-        count = 0
         questions_created = []
         questions_equal = []
-        for qq in listao:
-            flagIncludeQuestion = False
+        topic_cache = {}
 
-            myquestions = Question.objects.filter(topic__topic_text=qq['c']).filter(
-                topic__discipline__discipline_profs=request.user)
+        for item in data:
+            topic_text = item.get('topic_text', '').strip()
+            question_text = item.get('text', '').strip()
 
-            flagIncludeQuestion = True
-            for q in myquestions:
-                if qq['q'] == q.question_text:  # if there is the same question on DB
-                    if len(qq['a']):
-                        a = Answer.objects.filter(question=q)
-                        if a[0].answer_text == qq['a'][0]:  # if also the first answers is equal
-                            flagIncludeQuestion = False
-                            questions_equal.append(str(q.pk))
-                            break
+            if not topic_text or not question_text:
+                continue
 
-            if flagIncludeQuestion:
-                tp = 'QM'  # multiple-choice questions
-                df = 1  # default QE == Easy
-                if qq['t'] == 'QM':
-                    df = 3
-                elif qq['t'] == 'QH':
-                    df = 5
-                elif qq['t'] == 'QT':
-                    df = 5
-                    tp = 'QT'
-                if tp:  # se existe topico, cria questao
-                    today = datetime.date.today
+            # Prepara snippet
+            txt_snippet = (question_text[:100] + '...') if len(question_text) > 100 else question_text
+            txt_snippet = txt_snippet.replace('\n', ' ').replace('\r', '')
 
-                    try:
-                        topic = Topic.objects.get(topic_text=qq['c'])
-                    except:
-                        messages.error(request, _("ImportQuestions: topic does not exist - created before in Topic: ")
-                                       + qq['c'])
-                        return render(request, 'exam/exam_errors.html', {})
-
+            # 1. Validação do Tópico
+            if topic_text in topic_cache:
+                topic = topic_cache[topic_text]
+            else:
+                try:
+                    topic = Topic.objects.get(topic_text=topic_text)
+                    has_permission = False
                     for d in topic.discipline.all():
-                        if not (request.user in d.discipline_profs.all() or request.user in d.discipline_coords.all()):
-                            messages.error(request, _(
-                                "ImportQuestions: teacher is not associated with any discipline with this topic: ")
-                                           + qq['c'])
-                            return render(request, 'exam/exam_errors.html', {})
+                        if request.user in d.discipline_profs.all() or request.user in d.discipline_coords.all():
+                            has_permission = True
+                            break
+                    if not has_permission:
+                        print(f"Skipped: No permission for topic {topic_text}")
+                        continue
+                    topic_cache[topic_text] = topic
+                except Topic.DoesNotExist:
+                    continue
 
-                    newQ = Question.objects.create(
-                        topic=topic,
-                        question_group=qq['st'],
-                        question_short_description=qq['c'] + str(qq['n']).zfill(3),
-                        question_text=qq['q'],
-                        question_type=tp,
-                        question_difficulty=df,
-                        question_bloom_taxonomy='remember',
-                        question_last_update=datetime.date.today(),
-                        question_who_created=User.objects.get(username=request.user.username),
+            # 2. Verificação de Duplicatas
+            existing_q = Question.objects.filter(
+                topic=topic,
+                question_text=question_text,
+                topic__discipline__discipline_profs=request.user
+            ).first()
+
+            if existing_q:
+                answers_data = item.get('answers', [])
+                if answers_data:
+                    first_ans_text = answers_data[0].get('text', '')
+                    first_ans_db = existing_q.answers2.first() or Answer.objects.filter(question=existing_q).first()
+
+                    if first_ans_db and first_ans_db.answer_text == first_ans_text:
+                        # Salva ID e Texto
+                        questions_equal.append({'id': str(existing_q.pk), 'text': txt_snippet})
+                        continue
+
+            # 3. Criação da Questão
+            try:
+                is_parametric = 'yes' if '[[def:' in question_text else 'no'
+
+                new_q = Question.objects.create(
+                    topic=topic,
+                    question_who_created=request.user,
+                    question_text=question_text,
+                    question_type=item.get('type', 'QM'),
+                    question_difficulty=item.get('difficulty', 1),
+                    question_group=item.get('group', ''),
+                    question_short_description=item.get('short_desc', '')[:50],
+                    question_parametric=is_parametric,
+                    question_last_update=datetime.date.today(),
+                    question_bloom_taxonomy='remember'
+                )
+
+                for ans in item.get('answers', []):
+                    Answer.objects.create(
+                        question=new_q,
+                        answer_text=ans.get('text', ''),
+                        answer_feedback=ans.get('feedback', '')
                     )
 
-                    questions_created.append([str(newQ.pk), topic])
+                questions_created.append({
+                    'id': str(new_q.pk),
+                    'topic': topic.topic_text,
+                    'parametric': is_parametric,
+                    'text': txt_snippet
+                })
 
-                    for a in qq['a']:
-                        Answer.objects.create(
-                            question=newQ,
-                            answer_text=a,
-                            answer_feedback='',
-                        )
+            except Exception as e:
+                print(f"Error creating question JSON: {e}")
+                continue
 
-        messages.info(request, _('Questions Created:'))
-        for q in questions_created:
-            str_d = ''
-            for d in Discipline.objects.all():
-                for t in d.topics2.all():
-                    if t.topic_text == q[1].topic_text:
-                        str_d += d.discipline_name + '; '
-                        break
-            messages.info(request, str(q[0]) + ' - ' + str(q[1].topic_text) + ' - ' + str_d)
+        # 4. Relatório Final Melhorado
 
+        # --- NOVAS ---
+        if questions_created:
+            messages.success(request, '<br>', extra_tags='safe')
+            messages.success(request, _('Questions Created Successfully:'))
+
+            for item in questions_created[:20]:
+                url = f"/topic/question/{item['id']}/update/"
+                link_html = f"<a href='{url}' target='_blank' style='text-decoration: underline; font-weight: bold;'>{item['id']}</a>"
+
+                msg = f"ID: {link_html} - Topic: {item['topic']} - Parametric: {item['parametric']}<br>" \
+                      f"<small style='color: #555; font-style: italic; margin-left: 15px;'>\"{item['text']}\"</small>"
+                messages.info(request, msg, extra_tags='safe')
+
+            if len(questions_created) > 20:
+                messages.info(request, f"... and {len(questions_created) - 20} more.")
+
+        # --- DUPLICADAS ---
         if questions_equal:
-            messages.info(request, _('Similar question(s) exist in the DB:'))
-            messages.info(request, '; '.join([k for k in questions_equal]))
+            messages.warning(request, '<br>', extra_tags='safe')
+            messages.warning(request, _('Skipped similar question(s) already in DB:'))
 
-    # return HttpResponseRedirect("../")
+            for item in questions_equal[:20]:
+                qid = item['id']
+                url = f"/topic/question/{qid}/update/"
+                link_html = f"<a href='{url}' target='_blank' style='text-decoration: underline; color: #856404;'>{qid}</a>"
+
+                msg = f"ID: {link_html} <br>" \
+                      f"<small style='margin-left: 15px;'>\"{item['text']}\"</small>"
+                messages.warning(request, msg, extra_tags='safe')
+
+            if len(questions_equal) > 20:
+                messages.warning(request, f"... and {len(questions_equal) - 20} more.", extra_tags='safe')
+
+        if not questions_created and not questions_equal:
+            messages.warning(request, '<br>', extra_tags='safe')
+            messages.warning(request, _('No questions were processed or permissions denied.'))
+
     return render(request, 'exam/exam_msg.html', {})
 
+@login_required
+@permission_required('exam.change_exam', raise_exception=True)
+def ImportQuestions(request):
+    if request.method == 'POST':
+        try:
+            uploaded_file = request.FILES['myfile']
+        except KeyError:
+            messages.error(request, _('ImportQuestions: choose a TXT file following the model!'))
+            return render(request, 'exam/exam_errors.html', {})
+
+        try:
+            listao = UtilsMC.questionsReadFiles(request, uploaded_file)
+        except Exception as e:
+            messages.error(request, _('Error reading file: ') + str(e))
+            return render(request, 'exam/exam_errors.html', {})
+
+        if not listao:
+            if not messages.get_messages(request):
+                messages.error(request, _('No questions found or invalid format.'))
+            return render(request, 'exam/exam_errors.html', {})
+
+        questions_created = []
+        questions_equal = []
+        topic_cache = {}
+
+        for qq in listao:
+            topic_text = qq.get('c', '').strip()
+            question_text = qq.get('q', '').strip()
+            answers_text = qq.get('a', [])
+
+            if not topic_text:
+                continue
+
+            # Prepara um snippet (trecho) do texto para exibição (ex: primeiros 100 chars)
+            txt_snippet = (question_text[:100] + '...') if len(question_text) > 100 else question_text
+            # Remove quebras de linha para não quebrar o layout da mensagem
+            txt_snippet = txt_snippet.replace('\n', ' ').replace('\r', '')
+
+            # 2. Verificação de Duplicatas
+            is_duplicate = False
+            existing_questions = Question.objects.filter(
+                topic__topic_text=topic_text,
+                question_text=question_text,
+                topic__discipline__discipline_profs=request.user
+            )
+
+            for q in existing_questions:
+                if answers_text:
+                    first_answer_db = q.answers2.first() or Answer.objects.filter(question=q).first()
+                    if first_answer_db and first_answer_db.answer_text == answers_text[0]:
+                        is_duplicate = True
+                        # Salva ID e o Texto para mostrar no log
+                        questions_equal.append({'id': str(q.pk), 'text': txt_snippet})
+                        break
+
+            if is_duplicate:
+                continue
+
+            # 3. Validação do Tópico (Cache)
+            if topic_text in topic_cache:
+                topic = topic_cache[topic_text]
+            else:
+                try:
+                    topic = Topic.objects.get(topic_text=topic_text)
+                    has_permission = False
+                    for d in topic.discipline.all():
+                        if request.user in d.discipline_profs.all() or request.user in d.discipline_coords.all():
+                            has_permission = True
+                            break
+                    if not has_permission:
+                        messages.error(request, _("ImportQuestions: Teacher is not associated with any discipline for topic: ") + topic_text)
+                        return render(request, 'exam/exam_errors.html', {})
+                    topic_cache[topic_text] = topic
+                except Topic.DoesNotExist:
+                    messages.error(request, "\n" +  _("ImportQuestions: Topic does not exist (Create it first): ") + topic_text)
+                    return render(request, 'exam/exam_errors.html', {})
+
+            # 4. Definição de Parametros
+            q_type = 'QM'
+            difficulty = 1
+            type_code = qq.get('t', 'QM')
+            if type_code == 'QM': difficulty = 3
+            elif type_code == 'QH': difficulty = 5
+            elif type_code == 'QT':
+                difficulty = 5
+                q_type = 'QT'
+
+            # 5. Criação
+            try:
+                is_parametric = 'yes' if '[[def:' in question_text else 'no'
+
+                new_q = Question.objects.create(
+                    topic=topic,
+                    question_group=qq.get('st', ''),
+                    question_short_description=f"{topic_text}{str(qq.get('n', 0)).zfill(3)}",
+                    question_text=question_text,
+                    question_type=q_type,
+                    question_difficulty=difficulty,
+                    question_bloom_taxonomy='remember',
+                    question_last_update=datetime.date.today(),
+                    question_who_created=request.user,
+                    question_parametric=is_parametric,
+                )
+
+                # Salva dados completos para o relatório
+                questions_created.append({
+                    'id': str(new_q.pk),
+                    'topic': topic.topic_text,
+                    'parametric': is_parametric,
+                    'text': txt_snippet
+                })
+
+                for ans_text in answers_text:
+                    Answer.objects.create(question=new_q, answer_text=ans_text, answer_feedback='')
+
+            except Exception as e:
+                messages.error(request, f"Error creating question: {str(e)}")
+                return render(request, 'exam/exam_errors.html', {})
+
+        # 6. Relatório Final Melhorado
+
+        # --- QUESTÕES NOVAS ---
+        if questions_created:
+            messages.success(request, '<br>', extra_tags='safe')
+            messages.success(request, _('Questions Created Successfully:'))
+
+            for item in questions_created[:20]:
+                qid = item['id']
+                url = f"/topic/question/{qid}/update/"
+                link_html = f"<a href='{url}' target='_blank' style='text-decoration: underline; font-weight: bold;'>{qid}</a>"
+
+                # Layout: ID (Link) - Topic - Parametric
+                #         "Texto da questão..."
+                msg = f"ID: {link_html} - Topic: {item['topic']} - Parametric: {item['parametric']}<br>" \
+                      f"<small style='color: #555; font-style: italic; margin-left: 15px;'>\"{item['text']}\"</small>"
+
+                messages.info(request, msg, extra_tags='safe')
+
+            if len(questions_created) > 20:
+                messages.info(request, f"... and {len(questions_created) - 20} more.")
+
+        # --- QUESTÕES EXISTENTES (PULADAS) ---
+        if questions_equal:
+            messages.warning(request, '<br>', extra_tags='safe')
+            messages.warning(request, _('Skipped similar question(s) already in DB:'))
+
+            # Mostra detalhes das primeiras 20 duplicadas
+            for item in questions_equal[:20]:
+                qid = item['id']
+                url = f"/topic/question/{qid}/update/"
+                link_html = f"<a href='{url}' target='_blank' style='text-decoration: underline; color: #856404;'>{qid}</a>"
+
+                msg = f"ID: {link_html} <br>" \
+                      f"<small style='margin-left: 15px;'>\"{item['text']}\"</small>"
+
+                messages.warning(request, msg, extra_tags='safe')
+
+            if len(questions_equal) > 20:
+                messages.warning(request, f"... and {len(questions_equal) - 20} more.", extra_tags='safe')
+
+        if not questions_created and not questions_equal:
+            messages.warning(request, '<br>', extra_tags='safe')
+            messages.warning(request, _('No questions were processed.'))
+
+    return render(request, 'exam/exam_msg.html', {})
 
 @login_required
 def ImportQuestionsImage(request):
@@ -849,115 +952,236 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
 
 @login_required
 @csrf_exempt
+@login_required
+@csrf_exempt
 def see_topic_PDF(request, pk):
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
-        if not 'exam.change_exam' in perm:
+        if 'exam.change_exam' not in perm:
             return HttpResponseRedirect("/")
     else:
         return HttpResponseRedirect("/")
 
     topic = get_object_or_404(Topic, pk=pk)
 
-    if not len(Topic.objects.filter(discipline__discipline_profs=request.user)):
-        messages.error(request,
-                       _('The professor does not have permission!'))
+    # Verifica se o professor tem acesso à disciplina deste tópico
+    # Otimizado para .exists()
+    if not Topic.objects.filter(pk=pk, discipline__discipline_profs=request.user).exists():
+        messages.error(request, _('The professor does not have permission!'))
         return render(request, 'exam/exam_errors.html', {})
 
-    if request.POST:
-        file_name = request.user.username
-        fileQuestionName = file_name + ".tex"
-        fileQuestion = open(fileQuestionName, 'w')
-        fileQuestion.write(Utils.getBegin())
+    if request.method == 'POST':
+        # --- CONSTRUÇÃO DO CONTEÚDO LATEX ---
+        latex_content = ""
+        latex_content += Utils.getBegin()
+        latex_content += "\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n"
+        latex_content += "\\noindent\\textbf{Topic:} %s\\\\\n" % topic.topic_text
 
-        with open(fileQuestionName, 'w') as fileExam:
+        allQuestionsStr = []
+        countQuestions = 0
 
-            allQuestionsStr = []
-            countQuestions = 0
+        # 1. Questões de Múltipla Escolha (QM)
+        # Filtra direto no banco para evitar loops desnecessários
+        qs_qm = topic.questions2.filter(question_type='QM').order_by('question_text')
+        if qs_qm.exists():
+            questions_id = [q.id for q in qs_qm]
+            questions_text = [q.question_text for q in qs_qm]
 
-            questions_id, questions_text = [], []
-            for q in topic.questions2.all().order_by('question_text'):
-                if q.question_type == 'QM':
-                    questions_id.append(q.id)
-                    questions_text.append(q.question_text)
             new_order = UtilsMC.sortedBySimilarity2(questions_text)
-            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr,
-                                                                countQuestions)
 
-            if countQuestions:
-                allQuestionsStr.append("\\newpage\\\\\n")
+            # Chama a função auxiliar existente (que retorna strings prontas na lista)
+            countQuestions, allQuestionsStr = see_topic_PDF_aux(
+                request, new_order, questions_id, allQuestionsStr, countQuestions
+            )
 
-            questions_id, questions_text = [], []
-            for q in topic.questions2.all().order_by('question_text'):
-                if q.question_type == 'QT':
-                    questions_id.append(q.id)
-                    questions_text.append(q.question_text)
+        if countQuestions > 0:
+            allQuestionsStr.append("\\newpage\\\\\n")
+
+        # 2. Questões de Texto (QT)
+        qs_qt = topic.questions2.filter(question_type='QT').order_by('question_text')
+        if qs_qt.exists():
+            questions_id = [q.id for q in qs_qt]
+            questions_text = [q.question_text for q in qs_qt]
+
             new_order = UtilsMC.sortedBySimilarity2(questions_text)
-            countQuestions, allQuestionsStr = see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr,
-                                                                countQuestions)
 
-            fileQuestion.write("\\noindent\\Huge{MCTest}\\normalsize\\vspace{5mm}\\\\\n")
-            fileQuestion.write("\\noindent\\textbf{Topic:} %s\\\\\n" % topic.topic_text)
-            for st in allQuestionsStr:
-                fileQuestion.write(st)
+            countQuestions, allQuestionsStr = see_topic_PDF_aux(
+                request, new_order, questions_id, allQuestionsStr, countQuestions
+            )
 
-            fileQuestion.write("\\end{document}")
-            fileQuestion.close()
+        # Junta todas as partes
+        for st in allQuestionsStr:
+            latex_content += st
 
-        cmd = ['pdflatex', '--shell-escape', '-interaction', 'nonstopmode',
-               fileQuestionName]
-        proc = subprocess.Popen(cmd)
-        proc.communicate()
-        proc = subprocess.Popen(cmd)
-        proc.communicate()
+        latex_content += "\\end{document}"
 
-        path = os.getcwd()
-        os.system("cp " + file_name + ".pdf " + path + "/pdfTopic/")
+        # --- GERAÇÃO DO PDF ---
+        generator = PDFGenerator()
 
-        getuser = path.split('/')
-        getuser = getuser[2]
-        getuser = getuser + ':' + getuser
-        os.system('chown -R ' + getuser + ' ' + path)
-        #os.system('chgrp -R ' + getuser + ' ' + path)
+        final_path = generator.generate(
+            latex_content=latex_content,
+            filename_base=request.user.username,
+            destination_folder_name='pdfTopic'
+        )
 
-        try:
-            os.remove("{}.aux".format(file_name))
-            os.remove("{}.log".format(file_name))
-            # os.remove("{}.tex".format(file_name))
-            os.remove("{}.pdf".format(file_name))
-            os.remove("{}.out".format(file_name))
-            os.remove("temp.txt")
-            pass
-        except Exception as e:
-            pass
+        if final_path and os.path.exists(final_path):
+            return serve(request, os.path.basename(final_path), os.path.dirname(final_path))
+        else:
+            messages.error(request, "Error generating PDF Topic file.")
+            return render(request, 'exam/exam_errors.html', {})
 
-        path_to_file = BASE_DIR + "/pdfTopic/" + file_name + ".pdf"
-        return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
+    # Se não for POST, provavelmente deveria renderizar algo ou redirecionar
+    # Assumindo um retorno padrão caso não seja POST
+    return HttpResponseRedirect("/")
 
 
 ###################################################################
+# views.py
+
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     model = Question
     template_name = 'question/question_list.html'
 
-    # paginate_by = 100
+    # Sem paginação (paginate_by removido)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 1. Carrega disciplinas onde o usuário é Prof ou Coord para o filtro
+        context['filter_disciplines'] = Discipline.objects.filter(
+            Q(discipline_profs=self.request.user) |
+            Q(discipline_coords=self.request.user)
+        ).distinct().order_by('discipline_name')
+
+        # Mantém a seleção
+        if self.request.GET.get('discipline'):
+            try:
+                context['selected_discipline'] = int(self.request.GET.get('discipline'))
+            except ValueError:
+                pass
+
+        return context
 
     def get_queryset(self):
-        q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
-        q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
-        return (q1 | q2).order_by('question_short_description').distinct()
+        # Base: Questões de disciplinas onde o usuário é prof ou coord
+        # (Lógica original: q1 | q2)
+        qs = Question.objects.filter(
+            Q(topic__discipline__discipline_profs=self.request.user) |
+            Q(topic__discipline__discipline_coords=self.request.user)
+        )
+
+        disc_id = self.request.GET.get('discipline')
+
+        # LÓGICA DO FILTRO
+        if disc_id:
+            qs = qs.filter(topic__discipline__id=disc_id)
+
+            # Otimização de Performance
+            return qs.select_related('topic') \
+                .prefetch_related(
+                'topic__discipline',
+                'topic__discipline__discipline_coords',
+                'topic__discipline__discipline_profs'
+            ) \
+                .annotate(num_answers=Count('answers2')) \
+                .order_by('question_short_description').distinct()
+        else:
+            # Retorna vazio se não selecionar disciplina (Carga rápida)
+            return Question.objects.none()
+
+# class QuestionListView(LoginRequiredMixin, generic.ListView):
+#     model = Question
+#     template_name = 'question/question_list.html'
+#
+#     # paginate_by = 100
+#
+#     def get_queryset(self):
+#         q1 = Question.objects.filter(topic__discipline__discipline_profs=self.request.user)
+#         q2 = Question.objects.filter(topic__discipline__discipline_coords=self.request.user)
+#         return (q1 | q2).order_by('question_short_description').distinct()
 
 
 class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
     model = Question
     template_name = 'question/question_list_who_created_user.html'
 
-    # paginate_by = 100
+    # Sem paginação, conforme solicitado
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 2. ALTERAÇÃO AQUI:
+        # Carrega apenas disciplinas onde o usuário é Professor OU Coordenador
+        context['filter_disciplines'] = Discipline.objects.filter(
+            Q(discipline_profs=self.request.user) |
+            Q(discipline_coords=self.request.user)
+        ).distinct().order_by('discipline_name')
+
+        # Se o usuário já selecionou uma disciplina, carrega os Tópicos dela
+        selected_discipline = self.request.GET.get('discipline')
+        if selected_discipline:
+            try:
+                disc_id = int(selected_discipline)
+                context['selected_discipline'] = disc_id
+
+                # Carrega tópicos apenas da disciplina selecionada
+                # E apenas tópicos que tenham questões criadas pelo professor (opcional, mas recomendado para não mostrar tópicos vazios)
+                context['filter_topics'] = Topic.objects.filter(
+                    discipline__id=disc_id,
+                    questions2__question_who_created=self.request.user
+                ).distinct().order_by('topic_text')
+
+            except ValueError:
+                pass
+
+        if self.request.GET.get('topic'):
+            try:
+                context['selected_topic'] = int(self.request.GET.get('topic'))
+            except ValueError:
+                pass
+
+        return context
 
     def get_queryset(self):
-        # return Question.objects.filter(question_who_created=self.request.user)
-        lista = Question.objects.filter(question_who_created=self.request.user)
-        return lista.order_by('question_text').distinct()
+        # Base: Questões criadas pelo professor
+        qs = Question.objects.filter(question_who_created=self.request.user)
+
+        disc_id = self.request.GET.get('discipline')
+        topic_id = self.request.GET.get('topic')
+
+        # LÓGICA DO FILTRO OBRIGATÓRIO
+        if disc_id:
+            # Filtra pela disciplina
+            qs = qs.filter(topic__discipline__id=disc_id)
+
+            if topic_id:
+                qs = qs.filter(topic__id=topic_id)
+
+            # Otimização de Banco de Dados
+            return qs.select_related('topic') \
+                .prefetch_related(
+                'topic__discipline',
+                'topic__discipline__discipline_coords',
+                'topic__discipline__discipline_profs'
+            ) \
+                .annotate(num_answers=Count('answers2')) \
+                .order_by('question_short_description').distinct()
+
+        else:
+            # Se não escolheu disciplina, retorna lista VAZIA (carregamento instantâneo)
+            return Question.objects.none()
+
+# class LoanedQuestionByUserListView(LoginRequiredMixin, generic.ListView):
+#     model = Question
+#     template_name = 'question/question_list_who_created_user.html'
+#
+#     # paginate_by = 100
+#
+#     def get_queryset(self):
+#         # Otimização: annotate adiciona o campo 'num_answers' em cada objeto
+#         lista = Question.objects.filter(question_who_created=self.request.user) \
+#             .annotate(num_answers=Count('answers2'))
+#         return lista.order_by('question_text').distinct()
 
 
 class QuestionDetailView(generic.DetailView):
@@ -1062,7 +1286,7 @@ def UpdateQuestion(request, pk):
             # validation = UtilsMC.generateCode(request, question_inst.question_text, pk)
             # if validation is not None:
             #    return validation
-            
+
             question_inst.save()
 
         formset = AnswerInlineFormSet(request.POST, request.FILES,

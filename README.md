@@ -1,4 +1,4 @@
-# MCTest v. 5.3
+# MCTest v.5.4
 
 Welcome to MCTest, a website dedicated to assisting in exam preparation and grading.
 
@@ -97,17 +97,26 @@ A maximum of 5 authors per article; Authors' order proportional to the number of
 * The multiple-choice test template is now stored on the server
 
 ##### MCTest 5.2
-* grant #2018/23561-1, São Paulo Research Foundation (FAPESP)
+* grant [#2018/23561-1](https://bv.fapesp.br/pt/auxilios/105047/um-sistema-universal-para-geracao-e-correcao-automatica-de-questoes-parametrizadas/), São Paulo Research Foundation (FAPESP)
 * 01/09/2019 - 31/08/2021
 * Title: A universal system for generation and correction automatic of parametrized questions
 
+##### **MCTest 5.3**
+* Questions with skills defined in `linker.json`.
+* Test skill table ⇒ [Teubl et al.](https://sol.sbc.org.br/index.php/sbie/article/view/26777)
+* Email-based hashing.
+* Exams with topics and adaptive tests.
+* **VPL 13** for Moodle 4.1.
+* **First Edition of the Book** ⇒ [MCTest v.5.3](https://github.com/fzampirolli/mctest/tree/master/book)
 
-##### MCTest 5.3 - Currently in progress
-* Questions with skills in linker.json
-* Table test skill by Teubl 
-* Hash with email 
-* Exam with topics and adapted test
-* VPL 13 for Moodle 4.1
+##### **MCTest 5.4 – Currently in Progress**
+* **VPL 14:** AI-based feedback ⇒ [Zampirolli et al.](https://doi.org/10.1002/cae.70132)
+* **Interface & Usability:** Main and Exam screens.
+* **Version Control:** Fast switching on the Exam Screen between layouts v5.3 and v5.4.
+* **Organized Workflows:** Automatic selection on the Exam Screen (📋 Flow 1, 📑 Flow 2, ✍️ Flow 3).
+* **Security:** Conflict validation and resolution.
+
+
 
 ---
 ## Install MCTest
@@ -116,7 +125,7 @@ To install [MCTest](https://github.com/fzampirolli/mctest), follow the steps bel
 
 1. **Install [VirtualBox](https://www.virtualbox.org/)**
 
-2. **Install Ubuntu 22.04 on VirtualBox**
+2. **Install Ubuntu 24.04 on VirtualBox**
 
 3. **In Ubuntu, run the following commands in the terminal**:
 

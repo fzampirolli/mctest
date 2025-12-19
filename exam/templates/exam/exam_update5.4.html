@@ -1,0 +1,1327 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <style>
+        .inline-hint {
+            font-size: 11px;
+            color: #6c757d;
+            margin-left: 6px;
+            white-space: nowrap;
+        }
+
+        .workflow-section {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .workflow-header {
+            padding: 15px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .workflow-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #63397d 100%);
+        }
+
+        .workflow-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .workflow-header[aria-expanded="false"] .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .workflow-body {
+            padding: 0;
+        }
+
+        .workflow-steps {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .workflow-step {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid #e0e0e0;
+            min-height: 180px;
+        }
+
+        .workflow-step:last-child {
+            border-right: none;
+        }
+
+        .workflow-step h6 {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .workflow-step small {
+            display: block;
+            color: #666;
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .btn-workflow {
+            font-size: 13px;
+            padding: 8px 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .advanced-options {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .advanced-toggle {
+            color: #667eea;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .advanced-toggle:hover {
+            color: #5568d3;
+            text-decoration: underline;
+        }
+
+        .advanced-content {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #dee2e6;
+        }
+
+        .general-instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .general-instructions p {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .general-instructions p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <form action="" method="post" id="mainForm" enctype="multipart/form-data" novalidate>
+
+                            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                                <div>
+                                    <h4 class="card-title mb-0 text-primary">
+                                        <i class="fa fa-edit"></i> {% trans "Exam Update" %}
+                                    </h4>
+                                    <small class="text-muted">ID: {{ form.exam_id }}
+                                        | {% trans "Created by" %}: {{ form.exam_who_created }}</small>
+                                </div>
+
+                                <div class="btn-group">
+                                    <a href="?version=5.3" class="btn btn-outline-secondary"
+                                       title="Voltar para Versão Antiga (5.3)">
+                                        <i class="fa fa-history"></i> {% trans "version" %} 5.3
+                                    </a>
+                                    <a href="{% url 'exam:myexams' %}" class="btn btn-outline-secondary">
+                                        <i class="fa fa-arrow-left"></i> {% trans "Back" %}
+                                    </a>
+                                    <button type="submit" class="btn btn-success font-weight-bold">
+                                        <i class="fa fa-save"></i> {% trans "Save Changes" %}
+                                    </button>
+
+                                    {% if user.groups.all.0.name == 'professor' %}
+                                        <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                                data-target="#deleteModal">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if user.groups.all.0.name == 'professor' %}
+                                {% csrf_token %}
+                                {{ form.management_form }}
+
+                                <div class="d-none">
+                                    {% render_field form.exam_who_created %}
+                                    {% render_field form.exam_hour %}
+                                    {% render_field form.exam_term %}
+                                </div>
+
+                                <!-- Name/Type/Size Exam -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="text-muted small text-uppercase font-weight-bold">{% trans "Name" %}</label>
+                                            {% render_field form.exam_name class+="form-control form-control-lg" placeholder=form.exam_name.help_text %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="text-muted small text-uppercase font-weight-bold">{% trans "Flow Type" %}</label>
+                                            {% render_field form.exam_print class+="form-control form-control-lg" id="id_exam_print" %}
+
+                                            <small class="text-muted" style="font-size: 10px; line-height: 1.2; display: block; margin-top: 5px;">
+                                                <strong>{% trans "Flow 1" %}:</strong> {% trans "Answers" %} |
+                                                <strong>{% trans "Flow 2" %}:</strong> {% trans "Both" %} |
+                                                <strong>{% trans "Flow 3" %}:</strong> {% trans "Questions" %}
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="text-muted small text-uppercase font-weight-bold">📏 {% trans "Font Size in PDF" %}</label>
+                                            <div class="d-flex align-items-center bg-light p-2 rounded border"
+                                                 style="height: 48px;">
+                                                <input type="range" class="custom-range mr-2" name="font_size"
+                                                       id="font_size"
+                                                       min="10" max="12" value="12"
+                                                       oninput="document.getElementById('fontSizeDisplay').textContent = this.value">
+                                                <span class="font-weight-bold text-primary"
+                                                      style="font-size:18px; width:40px; text-align:center;">
+                                                    <span id="fontSizeDisplay">12</span><small>pt</small>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Student Feedback Configuration -->
+                                <div class="row mt-2 mb-4">
+                                    <div class="col-12">
+                                        <div class="card border-info">
+                                            <div class="card-body bg-light p-3">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-7">
+                                                        <label class="text-info font-weight-bold mb-1"
+                                                               style="font-size: 15px;">
+                                                            <i class="fa fa-commenting-o"></i> {% trans "Student Feedback Configuration" %}
+                                                        </label>
+                                                        <small class="text-muted d-block" style="line-height: 1.2;">
+                                                            {% trans "Defines if/how students will receive their corrected exams and scores automatically via email." %}
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        {% render_field form.exam_student_feedback class+="form-control" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- General Instructions (Collapsible) -->
+                                <div class="workflow-section">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#workflow0"
+                                         aria-expanded="false">
+                                        <h5>⚠️ {% trans "General Instructions" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <div id="workflow0" class="collapse">
+                                        <div class="general-instructions">
+                                            <p><strong>{% trans "Attention" %} ({% trans "Flows 2 and 3" %}):</strong>
+                                                {% trans "Each time you click Create-Variations, a different exam will be generated!" %}
+                                                {% trans "After printing the PDF with the exam, SAVE IT TO YOUR COMPUTER and " %}
+                                                {% trans "DO NOT CHANGE the attributes of this page; " %}
+                                                {% trans "Otherwise automatic correction will not be possible on scanned exams in Upload-PDF." %}
+                                            </p>
+                                            <p><strong>{% trans "Before printing" %}:</strong>
+                                                {% trans "Caution: (1) Choose A4 sheet with good toner. (2) For multiple-choice exams, if the circles are defective, the broker may not work correctly - we recommend that you change the printer and print again. (3) Before applying the exam, it is strongly recommended to print a sheet, fill in, scan and follow the step on the right side. Upload-PDF >>>" %}
+                                            </p>
+                                            <p><strong>{% trans "Before scanning" %}:</strong>
+                                                {% trans "Caution: (1) Before scanning, make sure all circles have been filled correctly. If you to use correction fluid and erase part of the outline of the circle, the correction may not work. (2) Scan with a resolution of 150dpi (if you can not decode QRCode, use 200dpi), <code>gray levels</code>, just the front of the sheet and one PDF per class. (3) The 4 black disks can not be defective." %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- FLOW 1: Answersheets Only -->
+                                <div class="workflow-section" id="flow1" style="display:none;">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#workflow1"
+                                         aria-expanded="true">
+                                        <h5> ✅ {% trans "Flow 1 [Answersheets]: Answer Sheet Only" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <div id="workflow1" class="collapse show">
+                                        <div class="workflow-body">
+                                            <div class="workflow-steps">
+                                                <div class="workflow-step">
+                                                    <h6>📄 {% trans "STEP 1: Create-PDF" %}</h6>
+                                                    <button type="submit" class="btn btn-primary btn-workflow"
+                                                            formaction="../generate/" formtarget="_blank">
+                                                        {% trans "Create-PDF" %}
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger btn-workflow btn-sm"
+                                                            onclick="window.open('https://youtu.be/WBruh6wqIDw')">
+                                                        📹 {% trans "video" %}
+                                                    </button>
+                                                    <small>{% trans "Choose PDF with answer sheet only. Questions will not be generated by MCTest." %}</small>
+                                                </div>
+
+                                                <div class="workflow-step">
+                                                    <h6>📤 {% trans "STEP 2: Upload-PDF" %}</h6>
+                                                    <input type="file" name="myfilePDF" class="form-control mb-2"
+                                                           style="font-size: 12px;">
+                                                    <button type="submit" class="btn btn-success btn-workflow"
+                                                            formaction="../correct/" formtarget="_blank">
+                                                        {% trans "Upload-PDF" %}
+                                                    </button>
+                                                    <small>
+                                                        <ul style="margin-left: 1px; margin-bottom: 0;">
+                                                            <li>
+                                                                {% trans "If you select only the answer sheet in this exam (Flow 1), the first page of the PDF must contain the answer template." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "If you choose to provide feedback to students, also include an image of the answer sheet with the marked responses and the answer key." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "These changes will only take effect after clicking the Save button and then uploading the PDF." %}
+                                                            </li>
+                                                        </ul>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- FLOW 2: Both  -->
+                                <div class="workflow-section" id="flow2" style="display:none;">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#workflow2"
+                                         aria-expanded="true">
+                                        <h5> 📑 {% trans "Flow 2 [Both]: Answer Sheet + Questions" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <div id="workflow2" class="collapse show">
+                                        <div class="workflow-body">
+                                            <div class="workflow-steps">
+                                                <div class="workflow-step">
+                                                    <h6>🔄 {% trans "STEP 1: Create-Variations" %}</h6>
+
+                                                    <button type="submit" class="btn btn-danger btn-workflow"
+                                                            formaction="../variation/" formtarget="_blank">
+                                                        {% trans "Create-Variations" %}
+                                                    </button>
+                                                    <small style="display: block; margin-top: 5px; margin-bottom: 10px;">ID: {{ variation_ID }}</small>
+                                                    <small>
+                                                        <ul style="margin-left: 1px; margin-bottom: 0;">
+                                                            <li>
+                                                                {% trans "This exam is mainly intended for answer sheets and multiple-choice questions (QM), and may include open-ended questions (QT)." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "Before Step 3, you must create the exam variations and save them in the database." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "Only the most recently saved variations are used." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "The variation ID below must match the ID printed in the PDF for automatic correction to work." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "Create new variations whenever you change the questions or the number of variations." %}
+                                                            </li>
+                                                        </ul>
+                                                    </small>
+
+                                                    <p></p>
+
+                                                    <div class="advanced-options">
+                                                        <div class="advanced-toggle" data-toggle="collapse"
+                                                             data-target="#ExportOptions" style="cursor:pointer;">
+                                                            ⚙️ {% trans "Email Attachments Options" %} <i
+                                                                class="fa fa-chevron-down"></i>
+                                                        </div>
+                                                        <div id="ExportOptions" class="collapse advanced-content pt-2">
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_json" name="choicesJSON" value="JSON">
+                                                                <label class="custom-control-label" for="adv_json"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>JSON</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "VPL/Moodle" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_template" name="choicesTemplateCSV"
+                                                                       value="TemplateCSV">
+                                                                <label class="custom-control-label" for="adv_template"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>Template</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Answer Key" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_aiken" name="choicesAiken" value="Aiken">
+                                                                <label class="custom-control-label" for="adv_aiken"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>Aiken</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Moodle .txt" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_xml" name="choicesXML" value="XML">
+                                                                <label class="custom-control-label" for="adv_xml"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>XML</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Moodle .xml" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_latex" name="choicesLatex" value="Latex">
+                                                                <label class="custom-control-label" for="adv_latex"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>LaTeX</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Source + PDF" %}</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="workflow-step">
+                                                    <h6>📄 {% trans "STEP 2: Create-PDF" %}</h6>
+                                                    <button type="submit" class="btn btn-primary btn-workflow"
+                                                            formaction="../generate/" formtarget="_blank">
+                                                        {% trans "Create-PDF" %}
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-danger btn-workflow btn-sm"
+                                                            onclick="window.open('https://youtu.be/WBruh6wqIDw')">
+                                                        📹 {% trans "video" %}
+                                                    </button>
+                                                    <small>
+                                                        <ul style="margin-left: 1px; margin-bottom: 0;">
+                                                            <li>
+                                                                {% trans "If you select Both in this exam (Flow 2), you must choose the questions. The exam will include both the answer sheet and the questions." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "These changes will only take effect after clicking the Save button and then Create-PDF." %}
+                                                            </li>
+                                                        </ul>
+                                                    </small>
+
+                                                    <p></p>
+
+                                                    <div class="advanced-options">
+                                                        <div class="advanced-toggle" data-toggle="collapse"
+                                                             data-target="#advancedBoth" style="cursor:pointer;">
+                                                            ⚙️ {% trans "Adaptive Exam" %} <i
+                                                                class="fa fa-chevron-down"></i>
+                                                        </div>
+                                                        <div id="advancedBoth" class="collapse advanced-content pt-2">
+                                                            <label style="font-size: 14px; font-weight: 600;">{% trans "Type of statistic:" %}</label>
+                                                            <div class="d-flex mt-2" style="gap: 10px;">
+                                                                <div style="flex: 1;">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" id="adv_wpc"
+                                                                               name="adaptative_test" value="WPC"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="adv_wpc" style="cursor:pointer;"
+                                                                               title="{% trans 'Weighted Probability of Correctness (WPC) is a method that enhances assessment by assigning weights to correct answers, taking into account the individual difficulty of each question. This difficulty is quantified by the ratio of the number of correct answers to the total corrections for that specific question.' %}">
+                                                                            WPC
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="flex: 1;">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" id="adv_mle"
+                                                                               name="adaptative_test" value="MLE"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="adv_mle" style="cursor:pointer;"
+                                                                               title="{% trans 'Maximum Likelihood Estimation (MLE) is a method used to determine the values of the parameters of a statistical model that maximize the likelihood of observing the data. This method dynamically adjusts the difficulty of the questions based on your previous responses, following the theory presented in Item Response Theory (IRT).' %}">
+                                                                            MLE
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="flex: 1;">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" id="adv_sat"
+                                                                               name="adaptative_test" value="SAT"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="adv_sat" style="cursor:pointer;"
+                                                                               title="{% trans 'Semi-Adaptive Testing by Bloom (SAT): Adaptive assessment method where the teacher manually sets the Bloom\'s Taxonomy level for each question. This method combines adaptability with personalized assessment, allowing the system to dynamically adjust the difficulty of questions based on students\' answers in previous exams, while also considering cognitive levels pre-defined by the teacher.' %}">
+                                                                            SAT
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mt-3">
+                                                                <span style="font-size: 13px; margin-right: 5px;">{% trans "Number of Exams with QM: " %}</span>
+                                                                <span id="rangeValue"
+                                                                      style="font-size: 1.2em; font-weight:bold;">∞</span>
+                                                                <input type="range" class="form-control"
+                                                                       name="adaptative_test_number"
+                                                                       min="1" max="10" value="10"
+                                                                       onchange="updateRangeValue(this.value)"
+                                                                       title="{% trans 'Adaptive exam: consider X exams performed' %}">
+                                                                <script>
+                                                                    function updateRangeValue(value) {
+                                                                        var rangeValueElement = document.getElementById('rangeValue');
+                                                                        if (value == 10) {
+                                                                            rangeValueElement.innerHTML = '<span style="font-size: 1.2em;">∞</span>';
+                                                                        } else {
+                                                                            rangeValueElement.textContent = value;
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                            <small class="text-muted mt-2 d-block">
+                                                                {% trans "Move the mouse over the items above to view details about adaptive exams." %}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="workflow-step">
+                                                    <h6>📤 {% trans "STEP 3: Upload-PDF" %}</h6>
+                                                    <input type="file" name="myfilePDF" class="form-control mb-2"
+                                                           style="font-size: 12px;">
+
+                                                    <button type="submit" class="btn btn-success btn-workflow"
+                                                            formaction="../correct/"
+                                                            formtarget="_blank">{% trans "Upload-PDF" %}</button>
+                                                    <div class="custom-control custom-checkbox mt-3">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="returnQuestions2" value="Return"
+                                                               name="choiceReturnQuestions">
+                                                        <label class="custom-control-label" for="returnQuestions2"
+                                                               style="font-size: 12px;">
+                                                            {% trans "If you choose to provide feedback to the students, also send the questions and the answer keys." %}
+                                                        </label>
+                                                    </div>
+                                                    <small>
+                                                        <ul style="margin-left: 1px; margin-bottom: 0;">
+                                                            <li>
+                                                                {% trans "If the 'Return to Students' option is enabled, students must have their email registered when enrolling in the course." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "You can then use the 'Upload-PDF' step to email each student the corrected exam, including the marked answer sheet and the answer key." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "To also include the question text in the feedback, select the option above." %}
+                                                            </li>
+                                                        </ul>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- FLOW 3: Questions Only -->
+                                <div class="workflow-section" id="flow3" style="display:none;">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#workflow3"
+                                         aria-expanded="true">
+                                        <h5> ✍️ {% trans "Flow 3 [Questions]: Written Questions Only (Manual Correction or VPL+Moodle)" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <div id="workflow3" class="collapse show">
+                                        <div class="workflow-body">
+                                            <div class="workflow-steps">
+                                                <div class="workflow-step">
+                                                    <h6>🔄 {% trans "STEP 1: Create-Variations" %}</h6>
+                                                    <button type="submit" class="btn btn-danger btn-workflow"
+                                                            formaction="../variation/" formtarget="_blank">
+                                                        {% trans "Create-Variations" %}
+                                                    </button>
+                                                    <small style="display: block; margin-top: 5px; margin-bottom: 10px;">ID: {{ variation_ID }}</small>
+                                                    <small>
+                                                        <ul style="margin-left: 1px; margin-bottom: 0;">
+                                                            <li>
+                                                                {% trans "This exam (Flow 3) is intended for open-ended questions (QT)." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "Before Step 3, you must create the exam variations and save them in the database." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "Only the most recently saved variations are used." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "The variation ID below must match the ID printed in the PDF for automatic correction to work." %}
+                                                            </li>
+                                                            <li>
+                                                                {% trans "Create new variations whenever you change the questions or the number of variations." %}
+                                                            </li>
+                                                        </ul>
+                                                    </small>
+
+                                                    <p></p>
+
+                                                    <div class="advanced-options">
+                                                        <div class="advanced-toggle" data-toggle="collapse"
+                                                             data-target="#ExportOptions" style="cursor:pointer;">
+                                                            ⚙️ {% trans "Email Attachments Options" %} <i
+                                                                class="fa fa-chevron-down"></i>
+                                                        </div>
+                                                        <div id="ExportOptions" class="collapse advanced-content pt-2">
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_json" name="choicesJSON" value="JSON">
+                                                                <label class="custom-control-label" for="adv_json"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>JSON</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "VPL/Moodle" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_template" name="choicesTemplateCSV"
+                                                                       value="TemplateCSV">
+                                                                <label class="custom-control-label" for="adv_template"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>Template</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Answer Key" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_aiken" name="choicesAiken" value="Aiken">
+                                                                <label class="custom-control-label" for="adv_aiken"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>Aiken</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Moodle .txt" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_xml" name="choicesXML" value="XML">
+                                                                <label class="custom-control-label" for="adv_xml"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>XML</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Moodle .xml" %}</span></label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox mb-2">
+                                                                <input type="checkbox" class="custom-control-input"
+                                                                       id="adv_latex" name="choicesLatex" value="Latex">
+                                                                <label class="custom-control-label" for="adv_latex"
+                                                                       style="font-size: 12px; cursor:pointer;"><strong>LaTeX</strong>
+                                                                    <span
+                                                                            class="text-muted">- {% trans "Source + PDF" %}</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="workflow-step">
+                                                    <h6>📄 {% trans "STEP 2: Create-PDF" %}</h6>
+                                                    <button type="submit" class="btn btn-primary btn-workflow"
+                                                            formaction="../generate/"
+                                                            formtarget="_blank">{% trans "Create-PDF" %}</button>
+
+                                                    <small class="d-block mb-3">
+                                                        {% trans "For written questions in non-ecological format, one question is generated per page. For use with VPL+Moodle, generate the questions in the appropriate format." %}
+                                                    </small>
+
+                                                    <div class="p-2 border-top" style="background-color: #fcfcfc;">
+                                                        <small class="text-muted d-block"
+                                                               style="font-size: 11px; line-height: 1.3;">
+                                                            {% trans "For details about integration with VPL/Moodle:" %}
+                                                            <br>
+                                                            <a href="https://sol.sbc.org.br/index.php/sbie/article/view/12913"
+                                                               target="_blank"
+                                                               style="color: #667eea; text-decoration: underline;">
+                                                                <strong>Parameterized and automated assessment on an
+                                                                    introductory programming course</strong>
+                                                            </a>
+                                                            <br>
+                                                            <em>Zampirolli, F.A. et al. — SBIE, 2020</em>
+                                                        </small>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="workflow-step"
+                                                     style="padding: 0; display: flex; flex-direction: column; border-right: none;">
+
+                                                    <div style="border-bottom: 1px solid #e0e0e0;">
+                                                        <div class="p-3" style="cursor: pointer; background: #f8f9fa;"
+                                                             data-toggle="collapse" data-target="#collapseStep3QT">
+                                                            <h6 class="m-0"
+                                                                style="color: #667eea; font-weight: 600; font-size: 14px;">
+                                                                📤 {% trans "STEP 3: Upload-PDF" %}
+                                                                <i class="fa fa-caret-down float-right"></i>
+                                                            </h6>
+                                                        </div>
+                                                        <div id="collapseStep3QT" class="collapse p-3">
+                                                            <input type="file" name="myfilePDF" class="form-control mb-2"
+                                                                   style="font-size: 12px;">
+                                                            <button type="submit" class="btn btn-success btn-workflow"
+                                                                    formaction="../correct/"
+                                                                    formtarget="_blank">{% trans "Upload-PDF" %}</button>
+                                                            <small class="text-muted d-block mt-2"
+                                                                   style="font-size: 11px; line-height: 1.2;">
+                                                                {% trans "When uploading exams in PDF, a zip file will be generated with a folder for each question. Inside this folder a PDF will be generated for each student." %}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="flex: 1;">
+                                                        <div class="p-3"
+                                                             style="cursor: pointer; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;"
+                                                             data-toggle="collapse" data-target="#collapseStep4QT">
+                                                            <h6 class="m-0"
+                                                                style="color: #667eea; font-weight: 600; font-size: 14px;">
+                                                                ✍️ {% trans "STEP 4: Send-Feedback-Students Text" %}
+                                                                <i class="fa fa-caret-down float-right"></i>
+                                                            </h6>
+                                                        </div>
+                                                        <div id="collapseStep4QT" class="collapse p-3">
+                                                            <input type="file"
+                                                                   name="myfileZIP"
+                                                                   class="form-control mb-2"
+                                                                   accept=".zip">
+                                                            <button type="submit" class="btn btn-warning btn-workflow"
+                                                                    formaction="../sendFeedbackStudentsText/"
+                                                                    formtarget="_blank">{% trans "Send Feedback" %}</button>
+                                                            <div style="max-height: 200px; overflow-y: auto; margin-top: 10px; border: 1px solid #eee; padding: 8px; background: #fff;">
+                                                                <small class="text-muted"
+                                                                       style="font-size: 11px; text-align: justify; display: block;">
+                                                                    {% trans "Caution: If you used exams with written questions and in non-ecological format, then one question was generated per sheet, right? If you want to submit manually corrections to each student's in PDFs, you will need to follow a few steps: (1) in the previous column step, when uploading all exams in PDF, a zip file with a folder for each question was generated (for example, Download.zip). Within this folder a pdf was generated for each student in the format _e1_c2_q3_p001_5.pdf, where 1 is the exam ID, 2 is the classroom ID, 3 is the question ID, 001 is the pdf page, and 5 is the student ID. The teacher can correct by making annotations in the PDF itself OR also can scan with annotations made in the pen. (2) manually change the file names of each question in the format _A;e1,e2,...;_e1_c2_q3_p001_5.pdf, where A is a concept or a note and ei are error code numbers (optional); in the question folder, it should have a _e1_c2_q3.txt file (<code>one for each classroom</code>), with a message to be sent to each student. (3) compress the folder of each question for all students (for example _e1_q3.zip) and press the button above. Each student will receive the PDF with the corrections and will also return a CSV file with the concepts of each student." %}
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="p-2 border-top" style="background-color: #fcfcfc;">
+                                                        <small class="text-muted"
+                                                               style="font-size: 9px; line-height: 1.2; display: block;">
+                                                            {% trans "Steps 3 and 4 are detailed in the article:" %}<br>
+                                                            <a href="https://onlinelibrary.wiley.com/doi/10.1002/cae.22029"
+                                                               target="_blank"
+                                                               style="color: #667eea; text-decoration: underline;">
+                                                                <strong>Evaluation process for an introductory
+                                                                    programming course using blended learning</strong>
+                                                            </a><br>
+                                                            Zampirolli, F.A. et al. — <em>COMPUTER APPLICATIONS IN
+                                                            ENGINEERING, 2018</em>
+                                                        </small>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Classrooms Section -->
+                                <div class="workflow-section">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#classroomsSection"
+                                         aria-expanded="false">
+                                        <h5>📚 {% trans "Classrooms List" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+
+                                    <script>
+                                        var count_Class = 0;
+
+                                        function get_ID_Class(con) {
+                                            var aux = "id_classrooms_" + con.toString();
+                                            var x = document.getElementById(aux).value;
+                                            return x.toString();
+                                        }
+
+                                        function get_Dif_Class(con, str) {
+                                            var aux = "id_classrooms_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerText;
+                                            var ini = text.indexOf(str) + 6;
+                                            var sub = text.substring(ini, text.length);
+                                            var fim = sub.indexOf(';');
+                                            return sub.substring(0, fim);
+                                        }
+                                    </script>
+
+                                    <div id="classroomsSection" class="collapse">
+
+                                        <table id="example3" class="table table-striped table-bordered"
+                                               style="width:100%">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">
+                                                    <input type="checkbox" id="mass_select_all_Class"
+                                                           data-to-table="tasks">
+                                                </th>
+                                                <th scope="col">{% trans "Discipline" %}</th>
+                                                <th scope="col">{% trans "Code" %}</th>
+                                                <th scope="col">{% trans "Type" %}</th>
+                                                <th scope="col">{% trans "Room" %}</th>
+                                                <th scope="col">{% trans "Period" %}</th>
+                                                <th scope="col">{% trans "N. Students" %}</th>
+                                                <th scope="col">{% trans "Profs" %}</th>
+                                                <th scope="col" class="text-right">{% trans "See" %}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for c in form.classrooms %}
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <div class="btn btn-outline-primary btn-sm">
+                                                            <label>
+                                                                <div style="color:white;font-size:1px;width:12px">{{ c }}</div>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; dis'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; cod'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; typ'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; roo'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; day'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; stu'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif_Class(count_Class, '; pro'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <script>
+                                                            document.write("<a href=\"/course/classroom/" + get_ID_Class(count_Class) + "\"");
+                                                            document.write("class=\"btn btn-outline-primary btn-sm\"");
+                                                            document.write(" target=\"_blank\">" + get_ID_Class(count_Class++) + "</a>");
+                                                        </script>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Topics Section -->
+                                <div class="workflow-section">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#topicsSection"
+                                         aria-expanded="false">
+                                        <h5>📋 {% trans "Topics List" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <script>
+                                        var count_topic = 0;
+
+                                        function get_ID_topic(con) {
+                                            var aux = "id_topics_" + con.toString();
+                                            var x = document.getElementById(aux).value;
+                                            return x.toString();
+                                        }
+
+                                        function get_Name_topic(con, str) {
+                                            var aux = "id_topics_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerText;
+                                            var ini = text.indexOf(str) + 1;
+                                            var sub = text.substring(ini, text.length);
+                                            var fim = sub.indexOf('>');
+                                            return sub.substring(0, fim);
+                                        }
+                                    </script>
+                                    <div id="topicsSection" class="collapse">
+
+                                        <table id="example6" class="table table-striped table-bordered"
+                                               style="width:100%">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">
+                                                    <input type="checkbox" id="mass_select_all_Topic"
+                                                           data-to-table="tasks">
+                                                </th>
+                                                <th scope="col">{% trans "Topic" %}</th>
+                                                <th scope="col" class="text-right">{% trans "See" %}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for t in form.topics %}
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <div class="btn btn-outline-primary btn-sm">
+                                                            <label>
+                                                                <div style="color:white;font-size:1px;width:12px">{{ t }}</div>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Name_topic(count_topic, '<'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <script>
+                                                            document.write("<a href=\"/topic/topic/" + get_ID_topic(count_topic) + "\"");
+                                                            document.write("class=\"btn btn-outline-primary btn-sm\"");
+                                                            document.write(" target=\"_blank\">" + get_ID_topic(count_topic++) + "</a>");
+                                                        </script>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Questions Section -->
+                                <div class="workflow-section">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#questionsSection"
+                                         aria-expanded="false">
+                                        <h5>❓ {% trans "Questions List" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <script>
+                                        var count = 0;
+
+                                        function get_ID(con) {
+                                            var aux = "id_questions_" + con.toString();
+                                            var x = document.getElementById(aux).value;
+                                            return x.toString();
+                                        }
+
+                                        function get_Dif(con, str) {
+                                            var aux = "id_questions_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerText;
+                                            var ini = text.indexOf(str) + 6;
+                                            var sub = text.substring(ini, text.length);
+                                            var fim = sub.indexOf(';');
+                                            return sub.substring(0, fim);
+                                        }
+
+                                        function get_Element(con) {
+                                            var aux = "id_questions_" + con.toString();
+                                            var x = document.getElementById(aux);
+                                            var text = x.labels[1].innerHTML;
+                                            var fim = text.indexOf('>');
+                                            var sub = text.substring(0, fim + 1);
+                                            var text1 = x.labels[1].innerText;
+                                            var ini = text1.indexOf('; des') + 6;
+                                            var des = text1.substring(ini, text1.length);
+                                            return des;
+                                        }
+                                    </script>
+                                    <div id="questionsSection" class="collapse">
+                                        <table id="example1" class="table table-striped table-bordered"
+                                               style="width:100%">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">
+                                                    <input type="checkbox" id="mass_select_all" data-to-table="tasks">
+                                                </th>
+                                                <th scope="col">{% trans "Topic" %}</th>
+                                                <th scope="col">{% trans "Description" %}</th>
+                                                <th scope="col">{% trans "Type" %}</th>
+                                                <th scope="col">{% trans "Dif." %}</th>
+                                                <th scope="col">{% trans "Group" %}</th>
+                                                <th scope="col">{% trans "Par." %}</th>
+                                                <th scope="col" class="text-right">{% trans "See" %}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for q in form.questions %}
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <div class="btn btn-outline-primary btn-sm">
+                                                            <label>
+                                                                <div style="color:white;font-size:1px;width:12px">{{ q }}</div>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif(count, '; top'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <label>
+                                                                <script>document.write(get_Element(count));</script>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>
+                                                                document.write(get_Dif(count, '; typ'));
+                                                                if (get_Dif(count, '; typ') == 'QM') {
+                                                                    document.write(' ' + get_Dif(count, '; ans'));
+                                                                }
+                                                            </script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif(count, '; dif'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif(count, '; gro'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn btn-outline-light text-dark btn-sm">
+                                                            <script>document.write(get_Dif(count, '; par'));</script>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <script>
+                                                            document.write("<a href=\"/topic/question/" + get_ID(count) + "/update/\"");
+                                                            document.write("class=\"btn btn-outline-primary btn-sm\"");
+                                                            document.write(" target=\"_blank\">" + get_ID(count++) + "</a>");
+                                                        </script>
+                                                        {{ q.question_group }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <p></p>
+
+                                <!-- Exam Attributes Table -->
+                                <div class="workflow-section">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#collapseAttributes"
+                                         aria-expanded="false">
+                                        <h5>⚙️ {% trans "Exam Attributes" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <div id="collapseAttributes" class="collapse">
+                                        <div class="workflow-body">
+                                            <div class="row">
+
+                                                <div class="col-md-6 border-right">
+                                                    <h6 class="mb-3 pb-2 border-bottom text-primary font-weight-bold">
+                                                        {% trans "Number of [GROUP, if defined or] Questions per Exam" %}
+                                                        <small class="text-muted">(∑ Dif. 1–5 → QM)</small>
+                                                    </h6>
+
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Difficulty 1" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_questions_var1 class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Difficulty 2" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_questions_var2 class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Difficulty 3" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_questions_var3 class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Difficulty 4" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_questions_var4 class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Difficulty 5" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_questions_var5 class+="form-control" %}
+                                                    </div>
+
+                                                    <hr class="my-3">
+
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Answers per question" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_anwsers_question class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Textual" %} (∑ QT)</span>
+                                                        </div>
+                                                        {% render_field form.exam_number_of_questions_text class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Variations" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_variations class+="form-control" %}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <h6 class="mb-3 pb-2 border-bottom text-primary font-weight-bold">
+                                                        {% trans "Exam Style" %}
+                                                    </h6>
+
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Questions by block" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_max_questions_square class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Max blocks horiz." %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_max_squares_horizontal class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Stylesheet" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_stylesheet class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Ecological" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_print_eco class+="form-control" %}
+                                                    </div>
+                                                    {#                                                <div class="input-group mb-2">#}
+                                                    {#                                                    <div class="input-group-prepend">#}
+                                                    {#                                                        <span class="input-group-text">{% trans "Student Feedback" %}</span>#}
+                                                    {#                                                    </div>#}
+                                                    {#                                                    {% render_field form.exam_student_feedback class+="form-control" %}#}
+                                                    {#                                                </div>#}
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Date" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_hour class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Term" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_term class+="form-control" %}
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">{% trans "Who created" %}</span>
+                                                        </div>
+                                                        {% render_field form.exam_who_created class+="form-control" %}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Instructions printed on Exam -->
+                                <div class="workflow-section">
+                                    <div class="workflow-header" data-toggle="collapse" data-target="#collapseInstructions"
+                                         aria-expanded="false">
+                                        <h5>📝 {% trans "Instructions printed on Exam" %}</h5>
+                                        <span class="toggle-icon">▼</span>
+                                    </div>
+                                    <div id="collapseInstructions" class="collapse">
+                                        <div class="p-3">
+                                            {% render_field form.exam_instructions class+="form-control" rows="5" %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if user.groups.all.0.name == 'professor' %}
+                                    </form>
+                                {% endif %}
+
+                            {% else %}
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">
+                        <i class="fa fa-exclamation-triangle"></i> {% trans "Delete Exam?" %}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Are you sure you want to delete this exam?" %}</p>
+                    <p class="text-muted small">{% trans "This action cannot be undone." %}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Cancel" %}</button>
+                    <form action="../delete/" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">{% trans "Yes, Delete" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            console.log('=== MCTest Exam Update Script Loaded ===');
+
+            // ===== WORKFLOW DISPLAY LOGIC =====
+            function updateWorkflowDisplay() {
+                var examType = $('#id_exam_print').val();
+                console.log('Exam type selected:', examType);
+
+                // Hide all flows
+                $('#flow1, #flow2, #flow3').hide();
+
+                // Show appropriate flow and expand it
+                if (examType === 'answ' || examType === 'Answersheets' || examType === 'A') {
+                    $('#flow1').show();
+                    $('#workflow1').addClass('show').show();
+                } else if (examType === 'both' || examType === 'Both' || examType === 'B') {
+                    $('#flow2').show();
+                    $('#workflow2').addClass('show').show();
+                } else if (examType === 'ques' || examType === 'Questions' || examType === 'Q') {
+                    $('#flow3').show();
+                    $('#workflow3').addClass('show').show();
+                } else {
+                    $('#flow1').show();
+                    $('#workflow1').addClass('show').show();
+                }
+
+                // Sync font_size for all flows
+                var fontSize = $('#font_size').val();
+                $('#flow1_font_size, #flow2_font_size, #flow3_font_size').val(fontSize);
+            }
+
+            // Update when exam type changes
+            $('#id_exam_print').on('change', updateWorkflowDisplay);
+
+            // Sync font_size across all flows
+            $('#font_size').on('input change', function () {
+                var val = $(this).val();
+                $('#flow1_font_size, #flow2_font_size, #flow3_font_size').val(val);
+            });
+
+            // Sync adaptive test options
+            $('.adaptative_radio').on('change', function () {
+                $('#flow2_adaptative_test').val($(this).val());
+            });
+
+            // Sync export checkboxes with hidden form inputs
+            $('.export-sync').on('change', function () {
+                var target = $(this).data('target');
+                $('#' + target).prop('checked', $(this).prop('checked'));
+            });
+
+            // ===== COLLAPSIBLE SECTIONS (Generic) =====
+            // Remove Bootstrap data-toggle conflict
+            $('[data-toggle="collapse"]').removeAttr('data-toggle');
+
+            // CORREÇÃO AQUI: Adicionamos .not('[data-toggle="modal"]')
+            // Isso diz: "Pegue tudo que tem data-target, EXCETO o que for botão de modal"
+            $('[data-target]').not('[data-toggle="modal"]').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var targetId = $(this).data('target');
+                var $target = $(targetId);
+                var $icon = $(this).find('.toggle-icon');
+
+                if ($target.length === 0) {
+                    console.warn('Target not found:', targetId);
+                    return;
+                }
+
+                console.log('Toggling:', targetId, 'Currently visible:', $target.is(':visible'));
+
+                if ($target.is(':visible')) {
+                    $target.slideUp(300);
+                    $(this).attr('aria-expanded', 'false');
+                    if ($icon.length) {
+                        $icon.css('transform', 'rotate(-90deg)');
+                    }
+                } else {
+                    $target.slideDown(300);
+                    $(this).attr('aria-expanded', 'true');
+                    if ($icon.length) {
+                        $icon.css('transform', 'rotate(0deg)');
+                    }
+
+                    // Adjust DataTables if present
+                    setTimeout(function () {
+                        var tableId = $target.find('table[id^="example"]').attr('id');
+                        if (tableId && $.fn.DataTable.isDataTable('#' + tableId)) {
+                            $('#' + tableId).DataTable().columns.adjust().draw();
+                        }
+                    }, 350);
+                }
+            });
+
+            // Initialize on load
+            updateWorkflowDisplay();
+
+            console.log('=== Script initialization complete ===');
+        });
+    </script>
+
+{% endblock %}

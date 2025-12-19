@@ -1,10 +1,10 @@
 '''
 =====================================================================
-Copyright (C) 2018-2024 Francisco de Assis Zampirolli
+Copyright (C) 2018-2026 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.3.
+This file is part of MCTest 5.4.
 
 Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest

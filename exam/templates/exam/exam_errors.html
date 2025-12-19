@@ -11,11 +11,15 @@
                 <hr>
 
                 {% if messages %}
-                    <ul class="messages">
+                    <div class="mb-4">
                         {% for message in messages %}
-                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            <p class="mb-2 {% if 'error' in message.tags %}text-danger font-weight-bold{% elif 'success' in message.tags %}text-success{% else %}text-body{% endif %}">
+
+                                {{ message|linebreaksbr|safe }}
+
+                            </p>
                         {% endfor %}
-                    </ul>
+                    </div>
                 {% endif %}
 
                 <!-- Display JSON formatted error details -->

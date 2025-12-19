@@ -1,10 +1,10 @@
 '''
 =====================================================================
-Copyright (C) 2018-2024 Francisco de Assis Zampirolli
+Copyright (C) 2018-2026 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.3.
+This file is part of MCTest 5.4.
 
 Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest
@@ -57,7 +57,7 @@ from exam.models import VariationExam
 from exam.models import Exam
 from exam.models import StudentExam
 from exam.models import StudentExamQuestion
-
+from topic.utils_pdf import PDFGenerator
 
 class Utils(object):
 
@@ -614,16 +614,23 @@ class Utils(object):
 
     # create file DB with all variations in aiken format
     @staticmethod
-    def createFile_Tex(request, exam, path_to_file_VARIATIONS_DB, data_hora, font_size=11):
+    def createFile_Tex(request, exam, filename_base, data_hora, font_size=11):
+        """
+        Gera o PDF com todas as variações (Gabarito/Database) de forma segura em ./tmp
+        """
         room = exam.classrooms.all()[0]
         varia_gab_all, s_student_ID = [], 0
+
+        # Lógica original de montagem dos dados
         for v in exam.variationsExams2.all():
             s = eval(v.variation)
             questions_DB = []
             s_student_ID += 1
             student_name = str(s_student_ID)
             for var in s['variations']:
+                # Nota: defineQRcode já salva em ./tmp/, então está ok.
                 myqr = Utils.defineQRcode(exam, room, student_name)
+
                 strQuestions = Utils.drawCircles()
                 strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
                                                 data_hora, font_size)
@@ -633,8 +640,8 @@ class Utils(object):
                 strQuestions += Utils.drawInstructions(exam)
                 try:
                     hash_num = Utils.distro_table(str(s_student_ID))
-                    var_hash = int(var)  # hash_num % int(exam.exam_variations)
-                    myqr.append(qr_answers[var_hash])  # inclui as respostas
+                    var_hash = int(var)
+                    myqr.append(qr_answers[var_hash])
                 except:
                     hash_num = int(s_student_ID)
                     myqr.append('')
@@ -648,23 +655,85 @@ class Utils(object):
             if questions_DB:
                 varia_gab_all.append(questions_DB)
 
+        # GERAÇÃO SEGURA DO PDF
         if varia_gab_all:
-            # start1 = time.time()
-            with open(path_to_file_VARIATIONS_DB, 'w') as f:
-                c = 0
-                f.write(Utils.getBegin())
-                for varia in varia_gab_all:
-                    f.write("%############# variation ########## " + str(c) + '\n\n')
-                    c += 1
-                    for q in varia:
-                        f.write(str(q) + '\n')
-                f.write("\\end{document}")
-                f.close()
-                if not Utils.genTex(path_to_file_VARIATIONS_DB, "pdfExam"):
-                    messages.error(request, _('ERROR in genTex') + ': ' + path_to_file_VARIATIONS_DB)
+            # Monta a string LaTeX em memória
+            latex_content = Utils.getBegin(font_size)
+            c = 0
+            for varia in varia_gab_all:
+                latex_content += "%############# variation ########## " + str(c) + '\n\n'
+                c += 1
+                for q in varia:
+                    latex_content += str(q) + '\n'
+            latex_content += "\\end{document}"
+
+            # Usa o gerador seguro
+            generator = PDFGenerator()
+            # filename_base não deve ter extensão .tex nem caminho, apenas o nome (ex: 'report_Exam_55')
+            final_path = generator.generate(
+                latex_content=latex_content,
+                filename_base=filename_base,
+                destination_folder_name='pdfExam'
+            )
+
+            if not final_path:
+                return False
+
         return True
 
+    # def createFile_Tex(request, exam, path_to_file_VARIATIONS_DB, data_hora, font_size=11):
+
+    #     room = exam.classrooms.all()[0]
+    #     varia_gab_all, s_student_ID = [], 0
+    #     for v in exam.variationsExams2.all():
+    #         s = eval(v.variation)
+    #         questions_DB = []
+    #         s_student_ID += 1
+    #         student_name = str(s_student_ID)
+    #         for var in s['variations']:
+    #             myqr = Utils.defineQRcode(exam, room, student_name)
+    #             strQuestions = Utils.drawCircles()
+    #             strQuestions += Utils.getHeader(request, exam, room, student_name, student_name, myqr,
+    #                                             data_hora, font_size)
+    #             if (exam.exam_print in ['answ', 'both']):
+    #                 strQuestions += Utils.drawAnswerSheet(request, exam)
+    #             strQuestions += Utils.drawCircles()
+    #             strQuestions += Utils.drawInstructions(exam)
+    #             try:
+    #                 hash_num = Utils.distro_table(str(s_student_ID))
+    #                 var_hash = int(var)  # hash_num % int(exam.exam_variations)
+    #                 myqr.append(qr_answers[var_hash])  # inclui as respostas
+    #             except:
+    #                 hash_num = int(s_student_ID)
+    #                 myqr.append('')
+    #
+    #             strQuestions += Utils.drawQuestions(request, myqr,
+    #                                                 exam, room, student_name, student_name,
+    #                                                 hash_num % int(exam.exam_variations), data_hora, font_size)
+    #
+    #             questions_DB.append(strQuestions + '\n\n')
+    #
+    #         if questions_DB:
+    #             varia_gab_all.append(questions_DB)
+    #
+    #     if varia_gab_all:
+    #         # start1 = time.time()
+    #         with open(path_to_file_VARIATIONS_DB, 'w') as f:
+    #             c = 0
+    #             f.write(Utils.getBegin())
+    #             for varia in varia_gab_all:
+    #                 f.write("%############# variation ########## " + str(c) + '\n\n')
+    #                 c += 1
+    #                 for q in varia:
+    #                     f.write(str(q) + '\n')
+    #             f.write("\\end{document}")
+    #             f.close()
+    #             if not Utils.genTex(path_to_file_VARIATIONS_DB, "pdfExam"):
+    #                 messages.error(request, _('ERROR in genTex') + ': ' + path_to_file_VARIATIONS_DB)
+    #     return True
+
     # create file template of all variations in varia_gab_all
+
     @staticmethod
     def createFileTemplates(exam, path_to_file_TEMPLATES):
         letras_1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
@@ -1089,7 +1158,7 @@ class Utils(object):
         if exam.exam_print == 'ques':
             str1 += exam.exam_number_of_questions_text + ';'  # 15
 
-        qrfile = './tmp/QRCode_' + str(room_id) + '_' + str(exam.id) + '_' + str(idStudent) + '.eps'
+        qrfile = './tmp/QRCode_' + str(room_id) + '_' + str(exam.id) + '_' + str(idStudent) + '.png'
         # print('$$$$$ QR0=',[qrfile,str1])
         return ([qrfile, str1])
 
@@ -1187,7 +1256,7 @@ _inst1_
         # course = Utils.format_size_text(course, font_size)
         # classroom = Utils.format_size_text(classroom, font_size)
         # prof = Utils.format_size_text(prof, font_size)
-        nameStudent = Utils.format_size_text(nameStudent, font_size)
+        # nameStudent = Utils.format_size_text(nameStudent, font_size)
 
         disc = "\\textbf{%s:} %s \\hfill" % (_("Discipline"), discipline)
         turma = "\\textbf{%s:} %s\n" % (_("Classroom"), classroom)
@@ -1212,32 +1281,40 @@ _inst1_
             size_qr += Utils.validateNumQuestions(request, exam) / 15
 
         # header da página 1/2
-        str1 = "\\vspace{-1mm}\\hspace{5mm}"
-        str1 += "\\begin{table}[h]\n"
-        str1 += "\\begin{tabular}{|l|p{%scm}|c}\n \\cline{1-2}" % (str(16.5 - size_qr))
-        # str1+="\\cline{1-1} \\cline{3-3}\n"
+
+        # 1. Defina a largura fixa para a coluna do QR Code (4.5cm da imagem + 0.5cm de margem)
+        qr_col_width = 5.5
+
+        # 2. Recalcule a coluna do meio (Texto) subtraindo a coluna do QR
+        # 16.5 é a largura total segura. O 'l' do logo ocupa o espaço da imagem (2cm) + padding.
+        # Então deixamos o resto para o texto.
+        text_col_width = 16.2 - qr_col_width
+
+        str1 = "\\begin{table}[h]\n"
+        str1 += "\\hspace*{2mm}\n"
+        str1 += "\\begin{tabular}{|l|p{%scm}|p{%scm}}\n \\cline{1-2}" % (str(text_col_width), str(qr_col_width))
         str1 += "\\multirow{7}{*}{\\vspace{8mm}\\includegraphics[width=2cm]{./figs/%s}} \n" % logo
         str1 += "&\\textbf{%s} \n              " % (institute)
-        str1 += "&\\multirow{7}{*}[2.5mm]{\\hspace{-2mm}\\includegraphics[scale=%s]{%s}}\\\\ \n" % (
-            size_qr / 3, myqr[0])
+        str1 += "&\\hspace{-2mm}\\multirow{7}{*}{\\centering \\includegraphics[width=4.6cm, valign=c]{%s}}\\\\ \n" % (myqr[0])
 
         str1 += "&%s                        & \\\\ \n" % (course)
         str1 += "&%s                        & \\\\ \n" % (disc)
 
         if len(prof):
-            str1 += "&\\textbf{%s} %s   & \\\\ \n" % (teachers, prof)  # prof
+            str1 += "&\\textbf{%s} %s   & \\\\ \n" % (teachers, prof)
             str1 += "&%s \\hfill %s  & \\\\ \n" % (turma, room_str)
         else:
             str1 += "&%s \\hfill %s   & \\\\ \n" % (turma, room_str)
 
-            # str1+="&\\textbf{%s} %s\\hfill \\textbf{%s} %s \\hfill " % (period,quad,modality,exam.exam_name)
         str1 += "&\\textbf{%s} %s \\hfill " % (modality, exam.exam_name)
-        str1 += "\\textbf{%s} %s           & \\\\ \n \\cline{1-2}" % (date, exam.exam_hour.strftime("%d-%m-%Y"))
+        str1 += "\\textbf{%s} %s           & \\\\[0mm] \n \\cline{1-2}" % (date, exam.exam_hour.strftime("%d-%m-%Y"))
 
-        str1 += "\\multicolumn{2}{|l|}{}      & \\\\ \n"
-        str1 += "\\multicolumn{2}{|l|}{\\textbf{%s: }\\rule{5cm}{0.1pt}} & \\\\ \n " % _("Sig.")
-        str1 += "\\multicolumn{2}{|l|}{%s \\hfill %s}           & \\\\ \n \\cline{1-2}" % (
-            nameStudent_str, idStudent_str)
+        # Linha do nome do aluno com espaçamento abaixo
+        str1 += "\\multicolumn{2}{|l|}{%s}      & \\\\[5mm] \n" % nameStudent_str
+
+        # Linha da assinatura com ID na mesma linha, linha mais longa
+        str1 += "\\multicolumn{2}{|l|}{\\textbf{%s: }\\rule{7.8cm}{0.15pt} \\hfill %s} & \\\\ \n \\cline{1-2}" % (_("Ass."), idStudent_str)
+
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
 
@@ -1260,24 +1337,63 @@ _inst1_
         return str1.replace("_nameStudent_", nameStudent).replace("_idStudent_", idStudent)
 
     @staticmethod
-    def format_size_text(text, font_size):
-        if len(text) > 45:
-            text = text[:45]
-        if int(font_size) == 10:
-            if len(text) > 35:
-                text = '{\\small ' + text + '}'
-        elif int(font_size) == 11:
-            if len(text) > 35:
-                text = '{\\small ' + text + '}'
-            elif len(text) > 28:
-                text = '{\\scriptsize ' + text + '}'
-        elif int(font_size) == 12:
-            if len(text) > 35:
-                text = '{\\scriptsize ' + text + '}'
-            elif len(text) > 28:
-                text = '{\\tiny ' + text + '}'
+    def format_size_text(text, font_size, max_width_ratio=0.5):
+        """
+        Ajusta o tamanho do texto para não ultrapassar uma fração da largura da página.
 
-        return text
+        Args:
+            text: Texto a ser formatado
+            font_size: Tamanho da fonte (10, 11 ou 12)
+            max_width_ratio: Fração máxima da largura da página (padrão: 0.5 = metade)
+
+        Returns:
+            Texto formatado com comandos LaTeX de tamanho
+        """
+        # Largura média de caracteres por tamanho de fonte (valores ajustados)
+        # Valores mais conservadores para evitar overflow
+        char_widths = {
+            10: 6.0,   # pts por caractere
+            11: 6.5,   # pts por caractere
+            12: 7.0,   # pts por caractere (aumentado para ser mais seguro)
+        }
+
+        # Largura típica de página LaTeX em pontos
+        page_width = 345  # ~12cm para margem padrão
+        max_width = page_width * max_width_ratio
+
+        # Adiciona margem de segurança de 5%
+        max_width = max_width * 0.95
+
+        font_size = int(font_size)
+        base_width = char_widths.get(font_size, 6.5)
+
+        # Calcula largura estimada do texto
+        text_width = len(text) * base_width
+
+        # Se cabe no tamanho normal, retorna sem modificação
+        if text_width <= max_width:
+            return text
+
+        # Define fatores de redução para cada comando LaTeX
+        size_commands = [
+            ('small', 0.91),
+            ('footnotesize', 0.83),
+            ('scriptsize', 0.71),
+            ('tiny', 0.58),
+        ]
+
+        # Tenta cada tamanho até encontrar um que caiba
+        for cmd, factor in size_commands:
+            adjusted_width = text_width * factor
+            if adjusted_width <= max_width:
+                return f'{{\\{cmd} {text}}}'
+
+        # Se ainda não cabe, trunca o texto e usa tiny
+        max_chars = int(max_width / (base_width * 0.58))
+        if len(text) > max_chars:
+            text = text[:max_chars-3] + '...'
+
+        return f'{{\\tiny {text}}}'
 
     @staticmethod
     def drawSignatureQR(exam, room, idStudent, nameStudent):
@@ -1479,7 +1595,7 @@ _inst1_
                 if (exam.exam_print in ['answ', 'both']):
                     str1 += "\\begin{center} \n"
                     for i in range(QL):  # para cada linha de quadros
-                        str1 += "\n \\vspace{-5mm} \\ \\hspace{-7mm} \n"
+                        str1 += "\n \\vspace{-3mm} \\ \\hspace{-7mm} \n"
                         for j in range(QC):  # para cada coluna de quadros
                             numQuestEnd = int(fimQuadro_ij[i][j])
                             if numQuestStart == numQuestEnd + 1:
@@ -1510,7 +1626,7 @@ _inst1_
 
     @staticmethod
     def verifyNumQuestionsByDifficulty(exam, count, diff):
-        # aceitar numero maximo de questoes por nivel de dificuldade (1 ate 5)                                                                
+        # aceitar numero maximo de questoes por nivel de dificuldade (1 ate 5)
         if diff == '1':
             if (count >= int(exam.exam_number_of_questions_var1)):
                 return False
@@ -1663,7 +1779,7 @@ _inst1_
 
                         # criar um qrcode por questao dissertativa, por pagina, se nao for ecologico
                         myqr = Utils.defineQRcode(exam, room, student_ID, strVarExam, hash_num)
-                        myqr[0] = myqr[0][:-4] + '_q' + str(q['key']) + '.eps'
+                        myqr[0] = myqr[0][:-4] + '_q' + str(q['key']) + '.png'
                         myqr[1] += str(q['key'])
 
                         # pip install bcrypt
@@ -1688,7 +1804,8 @@ _inst1_
                         # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
                         qr = pyqrcode.create(sbeforeQR, error='M')  # myqr[1])
                         # gerar qr após sorteio das questoes/respostas
-                        qr.eps(myqr[0])
+                        #qr.eps(myqr[0])
+                        qr.png(myqr[0], scale=6)
 
                         strQT += Utils.drawCircles()
                         strQT += Utils.getHeader(request, exam, room, student_ID, student_name, myqr, data_hora,
@@ -1855,7 +1972,8 @@ _inst1_
 
         # L, M, Q, or H; each level ==> 7, 15, 25, or 30 percent
         qr = pyqrcode.create(sbeforeQR, error='M')
-        qr.eps(myqr[0])
+        #qr.eps(myqr[0])
+        qr.png(myqr[0], scale=6)
 
         if (exam.exam_print_eco == 'yes'):
             str1 += "\n \ \ \\ \n \\newpage\n"

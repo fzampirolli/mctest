@@ -1,10 +1,10 @@
 '''
 =====================================================================
-Copyright (C) 2018-2024 Francisco de Assis Zampirolli
+Copyright (C) 2018-2026 Francisco de Assis Zampirolli
 from Federal University of ABC and individual contributors.
 All rights reserved.
 
-This file is part of MCTest 5.3.
+This file is part of MCTest 5.4.
 
 Languages: Python, Django and many libraries described at
 github.com/fzampirolli/mctest
@@ -32,9 +32,7 @@ import binascii
 import csv
 import itertools as it
 import math
-import os
 import smtplib
-import subprocess
 import zlib
 from email import encoders
 from email.mime.base import MIMEBase
@@ -55,13 +53,16 @@ from django.shortcuts import get_object_or_404
 
 from exam.UtilsLatex import Utils
 from exam.models import Exam, StudentExam, StudentExamQuestion
-from mctest.settings import BASE_DIR
-from mctest.settings import webMCTest_FROM
-from mctest.settings import webMCTest_PASS
-from mctest.settings import webMCTest_SERVER
 from student.models import Student
 from topic.models import Question
 from .models import VariationExam
+from topic.utils_pdf import PDFGenerator
+
+import os
+from django.conf import settings
+# Importe suas configurações de email aqui se elas estiverem no settings
+from mctest.settings import webMCTest_SERVER, webMCTest_FROM, webMCTest_PASS
+import shutil
 
 circle_min = 640  # 650
 circle_max = 940  # 895
@@ -86,14 +87,14 @@ class cvMCTest(object):
         qr = []
         try:  # try find Answer Area
             cvMCTest.imgAnswers = img = cvMCTest.getAnswerArea(img, countPage)
-            if DEBUG: cv2.imwrite("_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_01answerArea.png", img)
+            if DEBUG: cv2.imwrite("./tmp/_DEBUG_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_01answerArea.png", img)
         except:
             myFlagArea = False
             pass
 
         try:
             imgQR = cvMCTest.segmentQRcode(img, countPage)
-            if DEBUG: cv2.imwrite("_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_02qrcode.png", imgQR)
+            if DEBUG: cv2.imwrite("./tmp/_DEBUG_getQRCode" + "_p" + str(countPage + 1).zfill(3) + "_02qrcode.png", imgQR)
             qr = cvMCTest.decodeQRcode(imgQR)
 
         except:
@@ -161,7 +162,7 @@ class cvMCTest(object):
     @staticmethod
     def decodeQRcode(img):
         DEBUG = False
-        if DEBUG: cv2.imwrite("_test_decodeQRcode_01all.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_decodeQRcode_01all.png", img)
 
         qr = dict()
         if True:
@@ -308,30 +309,30 @@ class cvMCTest(object):
     def get_circles(img, countPage):
         DEBUG = False
 
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
 
         img = cv2.medianBlur(img, 3)
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 255
         ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_04.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_04.png", img)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (19, 19))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_05.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_05.png", img)
 
         img = cv2.distanceTransform(img, cv2.DIST_L2, 3)
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_06.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_06.png", img)
 
         # label
         labels = label(cvMCTest.imfillhole(img))
-        if DEBUG: cv2.imwrite("_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_07.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testget_circles00" + "_p" + str(countPage + 1).zfill(3) + "_07.png", img)
 
         # encontra circulos
         # print ("in "+str(circle_min)+" until "+str(circle_max)+" ? ")
@@ -363,22 +364,22 @@ class cvMCTest(object):
     def getAnswerArea(img, countPage):
         DEBUG = False
 
-        if DEBUG: cv2.imwrite("_getAnswerArea.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_getAnswerArea.png", img)
         H, W = img.shape
         if (H < W):
             img = np.rot90(img)
 
-        if DEBUG: cv2.imwrite("_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
         # padroniza dimensoes da imagem   
         H = 1754;
         W = 1350;
         img = cv2.resize(img, (W, H), interpolation=cv2.INTER_CUBIC)
-        if DEBUG: cv2.imwrite("_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
 
         pts = cvMCTest.get_circles(img, countPage)
         pts = np.array(pts, np.float32)
         img = cvMCTest.four_point_transform(img, pts)
-        if DEBUG: cv2.imwrite("_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_getAnswerArea" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
         return img
 
     @staticmethod
@@ -386,32 +387,32 @@ class cvMCTest(object):
         DEBUG = False
 
         img0 = img.copy()
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
 
         img = cv2.GaussianBlur(img, (11, 11), 0)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
 
         ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_04ero3x3.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_04ero3x3.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_05clo7x7.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_05clo7x7.png", img)
 
         img = cvMCTest.imfillhole(img)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_06fill.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_06fill.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 35))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_07open1x35.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_07open1x35.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (35, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_08open35x1.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_08open35x1.png", img)
 
         # find the contours in the thresholded image
         (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -440,7 +441,7 @@ class cvMCTest(object):
 
         bord = 7
         img = img0[p1[0] - bord:p2[0] + bord, p1[1] - bord:p2[1] + bord]
-        if DEBUG: cv2.imwrite("_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_09_qrcode.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testQRcode" + "_p" + str(countPage + 1).zfill(3) + "_09_qrcode.png", img)
         return img
 
     @staticmethod
@@ -448,15 +449,15 @@ class cvMCTest(object):
         # from skimage.measure import label
         DEBUG = False
 
-        if DEBUG: cv2.imwrite("_imfillhole" + "_01.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_imfillhole" + "_01.png", img)
 
         labels = label(img == 0)
-        if DEBUG: cv2.imwrite("_imfillhole" + "_02.png", labels)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_imfillhole" + "_02.png", labels)
 
         labelCount = np.bincount(labels.ravel())
         background = np.argmax(labelCount)
         img[labels != background] = 255
-        if DEBUG: cv2.imwrite("_imfillhole" + "_03.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_imfillhole" + "_03.png", img)
 
         # labels = label(img)
         return img
@@ -522,11 +523,11 @@ class cvMCTest(object):
         DEBUG = False
         # img0 = img
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00.png", img)
 
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 25))
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (23, 23))
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
         b = 5;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
@@ -590,39 +591,43 @@ class cvMCTest(object):
 
         # img0 = img
 
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00a.png", img)
+
         img = cvMCTest.findCirclesAnwsers(img, countPage, -1)
+
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00b.png", img)
 
         # encontra quadros
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (30, 30))  # ajustar
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, kernel)
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
 
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 70))  # mudei 3/5/17, antes 120
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 60))  # mudei 3/5/17, antes 120
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_04.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_04.png", img)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (50, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_05.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_05.png", img)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 25))
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
 
-        if DEBUG: cv2.imwrite("_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_06.png", img)
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_06.png", img)
         b = 5;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
@@ -654,21 +659,37 @@ class cvMCTest(object):
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
                 squares.append(cvMCTest.SortPointsExtreme(approximation))
 
+        # --- Lógica Ajustada ---
         pt = []
         ptSort = []
         H, W = imgSquares.shape
+
         for i in range(len(squares)):
             squa = squares[i]
-
             aux = np.array(squa, np.int64)
-            y1, x1 = aux[1]
-            y2, x2 = aux[3]
-            [p1, p2] = [[min(x1, x2), min(y1, y2)], [max(x1, x2), max(y1, y2)]]
 
-            ptSort.append([p1, p2])
+            # 1. Extração CORRETA (OpenCV usa X, Y)
+            #    Isso garante que sabemos quem é largura e quem é altura para ordenar certo
+            x1_real, y1_real = aux[1]
+            x2_real, y2_real = aux[3]
 
-            # pc =int(p1[0]/30)+H*np.int(p1[1]/30)
-            pc = int((p2[0] + p1[0]) / 30) + W * int((p2[1] + p1[1]) / 30)  # raster order
+            # Define os cantos reais em (X, Y)
+            p1_real = [min(x1_real, x2_real), min(y1_real, y2_real)]
+            p2_real = [max(x1_real, x2_real), max(y1_real, y2_real)]
+
+            # 2. Armazenamento INVERTIDO (Y, X) para compatibilidade com seu código legado
+            #    Aqui p1 vira [y, x]
+            p1_output = [p1_real[1], p1_real[0]]
+            p2_output = [p2_real[1], p2_real[0]]
+
+            ptSort.append([p1_output, p2_output])
+
+            # 3. Ordenação Raster usando coordenadas REAIS (X, Y)
+            #    A lógica é: Coluna + Largura_Total * Linha
+            center_x = (p2_real[0] + p1_real[0])
+            center_y = (p2_real[1] + p1_real[1])
+
+            pc = int(center_x / 30) + W * int(center_y / 30)
             pt.append(pc)
 
         pto = np.argsort(pt)
@@ -677,72 +698,123 @@ class cvMCTest(object):
         for i in range(len(ptSort)):
             rectSquares.append(ptSort[pto[i]])
 
+        # --- Desenho de Debug (Adaptado para ler Y, X) ---
+        if DEBUG:
+            imgFinalDebug = cv2.cvtColor(imgSquares.copy(), cv2.COLOR_GRAY2BGR)
+
+            for idx, rect in enumerate(rectSquares):
+                # rect está no formato [[y1, x1], [y2, x2]]
+                p1_yx, p2_yx = rect
+
+                # Inverte para (x, y) apenas para desenhar
+                x1, y1 = int(p1_yx[1]), int(p1_yx[0])
+                x2, y2 = int(p2_yx[1]), int(p2_yx[0])
+
+                cv2.rectangle(imgFinalDebug, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+                # Mostra coord Y, X (como vai ser retornado) para você conferir
+                cv2.putText(imgFinalDebug, f"yx({y1},{x1})", (x1 - 20, y1 - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 100, 0), 1)
+
+                center_x = int((x1 + x2) / 2)
+                center_y = int((y1 + y2) / 2)
+                cv2.putText(imgFinalDebug, str(idx), (center_x - 10, center_y + 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
+
+            cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_07.png", imgFinalDebug)
+
         return rectSquares
+
+        #
+        # pt = []
+        # ptSort = []
+        # H, W = imgSquares.shape
+        # for i in range(len(squares)):
+        #     squa = squares[i]
+        #
+        #     aux = np.array(squa, np.int64)
+        #     y1, x1 = aux[1]
+        #     y2, x2 = aux[3]
+        #     [p1, p2] = [[min(x1, x2), min(y1, y2)], [max(x1, x2), max(y1, y2)]]
+        #
+        #     ptSort.append([p1, p2])
+        #
+        #     # pc =int(p1[0]/30)+H*np.int(p1[1]/30)
+        #     pc = int((p2[0] + p1[0]) / 30) + W * int((p2[1] + p1[1]) / 30)  # raster order
+        #     pt.append(pc)
+        #
+        # pto = np.argsort(pt)
+        #
+        # rectSquares = []
+        # for i in range(len(ptSort)):
+        #     rectSquares.append(ptSort[pto[i]])
+        #
+        # return rectSquares
 
     @staticmethod
     def findBoxesAnwsersHor(img, countPage, countSquare):
         DEBUG = False
 
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_00.png", img)
 
         img = cv2.GaussianBlur(img, (7, 7), 0)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_01.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (2, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_01OPEN1.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (1, 2))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_01OPEN2.png", img)
 
         # se = cv2.getStructuringElement(cv2.MORPH_CROSS,(3,1))
         # img=cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
-        # if DEBUG: cv2.imwrite("_findBoxesAnwsersHor"+"_p"+str(countPage+1).zfill(3)+"_"+str(countSquare+1).zfill(3)+"_01op3.png", img)
+        # if DEBUG: cv2.imwrite("./tmp/_DEBUG_findBoxesAnwsersHor"+"_p"+str(countPage+1).zfill(3)+"_"+str(countSquare+1).zfill(3)+"_01op3.png", img)
 
         b = 20;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 255
         ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
         # img0 = img
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_02.png", img)
 
         img = cvMCTest.imfillhole(img)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_02fill.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 1))  # vertical
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_03ero1.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (1, 7))  # horizontal
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_03ero2.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))  # vertical
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_04ope1.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (1, 15))  # horizontal
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_04open2.png", img)
 
         img = cv2.distanceTransform(img, cv2.DIST_L2, cv2.DIST_MASK_PRECISE)
@@ -750,7 +822,7 @@ class cvMCTest(object):
         labels = label(img)
 
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_05fill.png", img)
 
         img = np.zeros(img.shape, dtype='uint8')
@@ -762,12 +834,12 @@ class cvMCTest(object):
                 continue
 
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_05region.png", img)
 
         img = cvMCTest.imclearborder(img, 1)
         if DEBUG: cv2.imwrite(
-            "_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findBoxesAnwsersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_06.png", img)
 
         cvMCTest.imgAnswersSegment = img
@@ -783,7 +855,7 @@ class cvMCTest(object):
         DEBUG = False
 
         if DEBUG: cv2.imwrite(
-            "_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_01.png", img)
 
         # binarizaÃ§Ã£o por otsu
@@ -794,14 +866,14 @@ class cvMCTest(object):
         # img0 = img
 
         if DEBUG: cv2.imwrite(
-            "_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_02.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, se)
 
         if DEBUG: cv2.imwrite(
-            "_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_03.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 1))
@@ -809,7 +881,7 @@ class cvMCTest(object):
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
 
         if DEBUG: cv2.imwrite(
-            "_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_04.png", img)
 
         # prenche buracos
@@ -827,12 +899,12 @@ class cvMCTest(object):
                 continue
 
         if DEBUG: cv2.imwrite(
-            "_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_05.png", img)
 
         img = cvMCTest.imclearborder(img, 1)
         if DEBUG: cv2.imwrite(
-            "_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
+            "./tmp/_findCirclesAnwsers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1).zfill(
                 3) + "_06.png", img)
 
         return img
@@ -846,14 +918,14 @@ class cvMCTest(object):
 
         # ret, img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
         if DEBUG: cv2.imwrite(
-            "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_00.png", img)
+            "./tmp/_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_00.png", img)
 
         b = 1;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
         se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))  ### fz: estava 4,4
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
+            "./tmp/_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (1, int(H / 2)))
         # img[:,W-1]=img[:,1]=img[1,:]=img[H-1,:]=0
@@ -861,7 +933,7 @@ class cvMCTest(object):
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
         if DEBUG: cv2.imwrite(
-            "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
+            "./tmp/_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
 
         (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
@@ -882,7 +954,7 @@ class cvMCTest(object):
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
 
         if DEBUG: cv2.imwrite(
-            "_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
+            "./tmp/_testCol" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
 
         # Morphological Opening
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (1, int(H / 2)))
@@ -909,15 +981,15 @@ class cvMCTest(object):
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
         se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))  ### fz: estava 4,4
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_00.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_00.png", img)
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
 
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (2 * W, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
 
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
@@ -925,7 +997,7 @@ class cvMCTest(object):
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png", img)
 
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
@@ -948,13 +1020,13 @@ class cvMCTest(object):
         se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, se)
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png", img)
 
         # Morphological Opening
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (2 * W, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
 
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
@@ -962,7 +1034,7 @@ class cvMCTest(object):
         se = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         img = cv2.morphologyEx(img, cv2.MORPH_ERODE, se)
         if DEBUG: cv2.imwrite(
-            "_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png", img)
+            "./tmp/_testLines" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png", img)
 
         b = 3;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
@@ -981,10 +1053,10 @@ class cvMCTest(object):
         img = img[0]
         H, W = img.shape
 
-        if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_01bin.png", img)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_01nc.png",
+            "./tmp/_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_01nc.png",
             imgNC)
         if qr['idStudent'] == 'ERROR':
             pass
@@ -993,33 +1065,33 @@ class cvMCTest(object):
         [NUM, imgLines] = cvMCTest.setLinesHor(img, countPage, countSquare)
         [NUM, imgCols] = cvMCTest.setColumnsHor(img, countPage, countSquare)
 
-        if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_02imgCols.png", imgCols)
-        if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_02imgLines.png", imgLines)
 
         img = cv2.GaussianBlur(imgNC, (7, 7), 0)
-        if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_02Blur.png", img)
 
         img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 175, 1)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03.png",
+            "./tmp/_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03.png",
             img)
         img[:, W - 1] = img[:, 1] = img[1, :] = img[H - 1, :] = 0
 
         se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))  ### FILTRO NOVO
         img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, se)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03aa.png",
+            "./tmp/_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_p_03aa.png",
             img)
 
         img3 = cv2.bitwise_and(imgCols, imgLines)
-        if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_03and1.png", img3)
 
         img = cv2.bitwise_and(img, img3)
-        if DEBUG: cv2.imwrite("_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
             countSquare + 1) + "_p_03and2.png", img)
 
         if DEBUG: lixo = []
@@ -1045,7 +1117,7 @@ class cvMCTest(object):
             im = img[:, jini:jfim]
 
             if DEBUG: cv2.imwrite(
-                "_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+                "./tmp/_test_segmentAnswersHor" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
                     countSquare + 1) + "_p_04_" + str(jfim) + ".png",
                 im)
 
@@ -1111,8 +1183,9 @@ class cvMCTest(object):
                 aaux = {x: list(aux).count(x) for x in set(list(aux))}  # conta False e True
 
                 if count > 1 and False in aaux:  # salva somente as questoes com respostas duplicadas = areas > percOK
-                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[
-                                                                                                      :-4]
+                    #impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[
+                    impath = str(qr['file'])[:-4]
+
                     impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(
                         q).zfill(3)
                     if aaux[False] > 1:  # se tem mais que uma marcacao forte > percOK => questão inválida
@@ -1159,22 +1232,22 @@ class cvMCTest(object):
         [NUM, imgLins] = cvMCTest.setLines(img, countPage, countSquare)
 
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png",
+            "./tmp/_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_01.png",
             img0)
 
         img = cv2.GaussianBlur(img0, (9, 9), 0)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
+            "./tmp/_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_02.png", img)
 
         ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png", img)
+            "./tmp/_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_03.png", img)
 
         img[:, W - 1] = img[:, 1] = img[1, :] = img[H - 1, :] = 0
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
         img2 = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
         if DEBUG: cv2.imwrite(
-            "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_04.png",
+            "./tmp/_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(countSquare + 1) + "_q_04.png",
             img2)
 
         img[:, W - 1] = img[:, 1] = img[1, :] = img[H - 1, :] = 0
@@ -1198,7 +1271,7 @@ class cvMCTest(object):
             im = img2[jini:jfim, :]
 
             if DEBUG: cv2.imwrite(
-                "_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
+                "./tmp/_test_segmentAnswers" + "_p" + str(countPage + 1).zfill(3) + "_" + str(
                     countSquare + 1) + "_q_04_" + str(jfim) + ".png",
                 im)
 
@@ -1236,8 +1309,9 @@ class cvMCTest(object):
 
                 if count > 1 and False in aaux:  # salva somente as questoes com respostas duplicadas = areas > percOK
 
-                    impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[
-                                                                                                      :-4]
+                    #impath = BASE_DIR + "/tmp/_e" + str(qr['idExam']) + '_' + str(qr['user']) + '_' + str(qr['file'])[:-4]
+                    impath = str(qr['file'])[:-4]
+
                     impath += "_RETURN_p" + str(countPage + 1).zfill(3) + "_s" + str(countSquare + 1) + "_q" + str(
                         q).zfill(3)
                     if aaux[False] > 1:  # se tem mais que uma marcação forte > percOK => questão inválida
@@ -1618,7 +1692,7 @@ class cvMCTest(object):
         flagQuestions = False  # somente respostas
         if 'respgrade' in qr and len(qr['respgrade']):
             flagQuestions = True  # questoes no BD
-        elif int(qr['page']) == 0:
+        elif int(qr['page']) == 0: # é somente respostas e é gabarito
             return 0
 
         if len(qra) != int(qr['numquest']):  # nao corrigiu corretamente
@@ -1756,124 +1830,350 @@ class cvMCTest(object):
 
     ####################################
 
+
     @staticmethod
-    def studentSendEmail(exam, qr, choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
-        notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
-        try:
-            s = Student.objects.filter(student_ID=qr['idStudent'])[0]
-        except:
-            return ""
+    def studentSendEmail(exam, qr, choiceReturnQuestions):
+        import shutil
+        import os
+        from django.conf import settings
+        from django.shortcuts import get_object_or_404
+        from .models import Student, StudentExam, StudentExamQuestion, VariationExam
 
-        str1 = ""
-        str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("Student"), str(s.student_name))
-        str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("ID"), s.student_ID)
-        str1 += "\\noindent\\textbf{%s:} %s \n\n \\vspace{0mm} \n" % (_("Email"), s.student_email)
-
+        # --- 1. Buscas Seguras no Banco de Dados (Evita Crash/404) ---
         try:
+            s = Student.objects.filter(student_ID=qr['idStudent']).first()
+            if not s: return ""
+
             sex0 = StudentExam.objects.filter(exam=qr['idExam'])
-            sex = sex0.filter(student=s)
-            sex = sex[0]
+            sex = sex0.filter(student=s).first()
+            if not sex: return ""
         except:
             return ""
 
-        if sex:
-            aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
-            percent = 0
-            if aux:
-                percent = round(100 * int(sex.grade) / aux, 3)
-            else:
-                aux = qr['numquest']
+        notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
+
+        # --- 2. Início da Montagem do LaTeX (Sintaxe \\) ---
+        str1 = ""
+
+        # Cabeçalho com Design Moderno
+        str1 += "\\begin{center}\n"
+        str1 += "\\LARGE \\textbf{Relatório de Desempenho Individual} \\vspace{0.3cm}\\\\ \n"
+        str1 += "\\large \\textcolor{gray}{Avaliação Automática MCTest} \n"
+        str1 += "\\end{center}\n"
+        str1 += "\\vspace{0.1cm}\n"
+        str1 += "\\noindent\\rule{\\textwidth}{1.5pt} \n"
+        str1 += "\\vspace{0.5cm}\n"
+
+        # Seção de Informações do Aluno (sem tabela)
+        str1 += "\\noindent \\textbf{\\large Dados do Candidato} \\\\ \n"
+        str1 += "\\vspace{0.2cm}\n"
+        str1 += "\\noindent \\textbf{" + _("Student") + ":} " + str(s.student_name) + " \\\\ \n"
+        str1 += "\\vspace{0.1cm}\n"
+        str1 += "\\noindent \\textbf{" + _("ID") + ":} " + str(s.student_ID) + " \\\\ \n"
+        str1 += "\\vspace{0.1cm}\n"
+        # Escape de underscore no email para não quebrar o LaTeX
+        email_safe = str(s.student_email).replace("_", "\\_")
+        str1 += "\\noindent \\textbf{" + _("Email") + ":} \\texttt{" + email_safe + "} \\\\ \n"
+        str1 += "\\vspace{0.0cm}\n"
+
+        # Cálculo da Nota
+        aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
+        percent = 0
+        if aux:
+            percent = round(100 * int(sex.grade) / aux, 3)
+        else:
+            aux = qr['numquest']
+            if int(qr['numquest']) > 0:
                 percent = round(100 * int(sex.grade) / qr['numquest'], 3)
 
-            str1 += "\\noindent\\textbf{%s:} %s/%s ({%.3f}___percent___) \n\n" % (
-                _("Grade"), str(sex.grade), str(aux), percent)
-            str1 = str1.replace("___percent___", "\%")
+        # Caixa de Nota Compacta
+        str1 += "\\noindent\\rule{\\textwidth}{0.2pt} \n"
+        str1 += "\\vspace{-0.2cm}\n"
+        str1 += "\\begin{center}\n"
+        str1 += "\\setlength{\\fboxsep}{5pt}\n"
+        str1 += "\\setlength{\\fboxrule}{1pt}\n"
+        str1 += "\\fbox{\\parbox{0.3\\textwidth}{\\centering \n"
+        str1 += "\\textbf{\\large Nota Final} \\\\ \n"
+        str1 += "\\vspace{0.0cm}\n"
+        str1 += "\\Huge \\textbf{" + str(sex.grade) + "} \\\\ \n"
+        str1 += "\\vspace{0.0cm}\n"
+        str1 += "\\large \\textcolor{gray}{" + str(percent) + "\\% de aproveitamento} \n"
+        str1 += "}}\n"
+        str1 += "\\end{center}\n"
+        str1 += "\\vspace{0.1cm}\n"
+        str1 += "\\noindent\\rule{\\textwidth}{0.2pt} \n"
+        str1 += "\\vspace{0.2cm}\n"
 
-            if choiceReturnQuestions:  # mostrar as questões com os gabaritos
-                # alterado em 16/11/2023
-                # pega a variação que está no QRcode e o gabarito do bd em VariantExam
-                if not 'ERROR' in qr['correct']:  # se conseguiu ler o QRCode, pega a variação
 
-                    titl = _("Multiple Choice Questions")
-                    str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+        # --- 3. Detalhamento das Questões ---
+        if choiceReturnQuestions:
+            if not 'ERROR' in qr['correct']:
 
-                    id_variante = int(qr['variations']) + int(qr['variant'])
-                    if id_variante > int(qr['variations']) + int(exam.exam_variations):  # não existe variant
-                        return ""
+                str1 += "\\noindent \\textbf{" + _("Multiple Choice Questions") + "} \\\\ \n"
+                str1 += "\\noindent\\rule{\\textwidth}{0.5pt} \\vspace{0.3cm} \n"
 
-                    variationsExam = get_object_or_404(VariationExam, pk=str(id_variante))
+                id_variante = int(qr['variations']) + int(qr['variant'])
+
+                # Busca segura da variação
+                variationsExam = VariationExam.objects.filter(pk=str(id_variante)).first()
+
+                if variationsExam:
                     vars = eval(variationsExam.variation)
                     for var in vars['variations']:
-                        for q in var['questions']:  # para cada questão
-
+                        for q in var['questions']:
                             if q['type'] == 'QM':
-                                str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
+                                # Enunciado
+                                str1 += "\\noindent \\textbf{Q" + str(q['number']) + ".} " + q['text'] + " \\\\ \n"
+                                str1 += "\\vspace{0.1cm}\n"
+
+                                # Respostas Indentadas
+                                str1 += "\\begin{itemize}\n"
                                 for a in q['answers']:
+                                    # Gabarito (Resposta Correta)
                                     if a['sort'] == '0':
-                                        str1 += "\\textbf{%s:} (%s) \t%s\n\n" % (
-                                            _("Correct answer"), notas[a['answer']], a['text'])
-
+                                        str1 += "\\item[$\\checkmark$] \\textbf{(" + notas[a['answer']] + ") " + a['text'] + "} "
+                                        str1 += "\\textit{(" + _("Correct answer") + ")}"
                                         if a['feedback'] != '\n':
-                                            str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
+                                            str1 += " \\\\ \\small \\textit{Feedback: " + a['feedback'] + "}"
+                                        str1 += "\n"
 
-                                if len(qr['respgrade'][int(q['number']) - 1]) > 1:  # errou
+                                # Verifica Erro do Aluno
+                                if len(qr['respgrade'][int(q['number']) - 1]) > 1:
                                     aa0 = qr['respgrade'][int(q['number']) - 1][0]
                                     for a in q['answers']:
                                         if aa0 == notas[a['answer']]:
-                                            str1 += "\\textbf{%s:} \hspace{5.5mm} (%s) %s \n\n" % (
-                                                _("Your answer"), aa0, a['text'])
-
+                                            # Resposta errada do aluno
+                                            str1 += "\\item[\\textbf{X}] \\textbf{(" + aa0 + ") " + a['text'] + "} "
+                                            str1 += "\\textit{(" + _("Your answer") + ")}"
                                             if a['feedback'] != '\n':
-                                                str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
+                                                str1 += " \\\\ \\small \\textit{Feedback: " + a['feedback'] + "}"
+                                            str1 += "\n"
 
-                    titl = _("Text Questions")
-                    if any(q['type'] == 'QT' for var in vars['variations'] for q in var['questions']):
-                        str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+                                str1 += "\\end{itemize}\n"
+                                str1 += "\\vspace{0.2cm}\\hrule\\vspace{0.2cm}\n" # Linha separadora entre questões
 
+                    # Verifica se há questões dissertativas
+                    has_qt = False
                     for var in vars['variations']:
-                        for q in var['questions']:  # para cada questão dissertativa
-                            if q['type'] == 'QT':
-                                str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
+                        if any(q['type'] == 'QT' for q in var['questions']):
+                            has_qt = True; break
 
+                    if has_qt:
+                        str1 += "\\vspace{0.5cm}\\noindent \\textbf{" + _("Text Questions") + "} \\\\ \n"
+                        str1 += "\\noindent\\rule{\\textwidth}{0.5pt} \\vspace{0.3cm} \n"
+                        for var in vars['variations']:
+                            for q in var['questions']:
+                                if q['type'] == 'QT':
+                                    str1 += "\\noindent \\textbf{Q" + str(q['number']) + ".} " + q['text'] + " \\\\ \n"
+
+
+        # --- 4. Imagem do Gabarito (Cópia para TMP) ---
         file_name = "studentEmail_e" + qr['idExam'] + "_r" + qr['idClassroom'] + "_s" + s.student_ID
-        fileExameName = file_name + '.tex'
 
-        strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr[
-            'idStudent'] + '_GAB.png'
+        strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr['idStudent'] + '_GAB.png'
+        strFig = ""
+        dst_image_path = None
 
-        if not os.path.exists(strGAB):  # se não existe arquivo, aborta
-            return ''
+        if os.path.exists(strGAB):
+            try:
+                # Copia imagem para a pasta TMP
+                image_filename = os.path.basename(strGAB)
+                base_dir_str = str(settings.BASE_DIR)
+                tmp_folder = os.path.join(base_dir_str, 'tmp')
+                src_image_path = os.path.join(base_dir_str, 'pdfStudentEmail', image_filename)
+                dst_image_path = os.path.join(tmp_folder, image_filename)
 
-        with open(fileExameName, 'w') as fileExam:
-            fileExam = open(fileExameName, 'w')
-            # instrucoes = 'asdfasdf asdf afd '
-            fileExam.write(Utils.getBegin())
-            # fileExam.write(strHeader)
-            strFig = "\\includegraphics[scale=%s]{%s}} \\\\ \n" % (0.3, strGAB)
-            fileExam.write(strFig)
-            fileExam.write(str1)
-            fileExam.write("\\end{document}")
-            fileExam.close()
+                if not os.path.exists(tmp_folder):
+                    os.makedirs(tmp_folder)
+                shutil.copy(src_image_path, dst_image_path)
 
-        cmd = ['pdflatex', '-shell-escape', '-interaction', 'nonstopmode', fileExameName]
-        proc = subprocess.Popen(cmd)
-        proc.communicate()
+                # Adiciona ao LaTeX
+                image_name_no_ext = image_filename.replace('.png', '')
 
-        enviaOK = cvMCTest.sendMail(file_name + ".pdf", "Exam Correction by MCTest", s.student_email,
-                                    str(s.student_name))
+                strFig += "\\begin{center}\n"
+                strFig += "\\textbf{Cartão Resposta Digitalizado} \\\\ \\vspace{0.5cm}\n"
+                # Moldura simples fbox
+                strFig += "\\fbox{\\includegraphics[width=0.85\\textwidth]{" + image_name_no_ext + "}}\n"
+                strFig += "\\end{center}\n"
 
-        path = os.getcwd()
-        os.system("cp " + file_name + ".pdf " + path + "/pdfStudentEmail/")
-        try:
-            os.remove("{}.aux".format(file_name))
-            os.remove("{}.log".format(file_name))
-            os.remove("{}.tex".format(file_name))
-            os.remove("{}.pdf".format(file_name))
-            os.remove("{}.out".format(file_name))
-            os.remove("temp.txt")
-            pass
-        except Exception as e:
-            pass
+            except Exception as e:
+                print(f"Erro ao tratar imagem: {e}")
+
+        # --- 5. Geração e Envio ---
+        latex_content = Utils.getBegin()
+        latex_content += str1
+        latex_content += strFig
+        latex_content += "\\end{document}"
+
+        generator = PDFGenerator()
+
+        # Gera o PDF
+        final_pdf_path = generator.generate(
+            latex_content=latex_content,
+            filename_base=file_name,
+            destination_folder_name='pdfStudentEmail'
+        )
+
+        # Limpa imagem temporária
+        if dst_image_path and os.path.exists(dst_image_path):
+            try: os.remove(dst_image_path)
+            except: pass
+
+        if final_pdf_path:
+            return cvMCTest.sendMail(
+                final_pdf_path,
+                "Exam Correction by MCTest",
+                s.student_email,
+                str(s.student_name)
+            )
+
+        return ""
+
+    # @staticmethod
+    # def studentSendEmail(exam, qr, choiceReturnQuestions):  # gera pdf de feedback p/c/ aluno
+    #     notas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P']
+    #     try:
+    #         s = Student.objects.filter(student_ID=qr['idStudent'])[0]
+    #     except:
+    #         return ""
+    #
+    #     str1 = ""
+    #     str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("Student"), str(s.student_name))
+    #     str1 += "\\noindent\\textbf{%s:} %s \n\n" % (_("ID"), s.student_ID)
+    #     str1 += "\\noindent\\textbf{%s:} %s \n\n \\vspace{0mm} \n" % (_("Email"), s.student_email)
+    #
+    #     try:
+    #         sex0 = StudentExam.objects.filter(exam=qr['idExam'])
+    #         sex = sex0.filter(student=s)
+    #         sex = sex[0]
+    #     except:
+    #         return ""
+    #
+    #     if sex:
+    #         aux = len(StudentExamQuestion.objects.filter(studentExam=sex))
+    #         percent = 0
+    #         if aux:
+    #             percent = round(100 * int(sex.grade) / aux, 3)
+    #         else:
+    #             aux = qr['numquest']
+    #             percent = round(100 * int(sex.grade) / qr['numquest'], 3)
+    #
+    #         str1 += "\\noindent\\textbf{%s:} %s/%s ({%.3f}___percent___) \n\n" % (
+    #             _("Grade"), str(sex.grade), str(aux), percent)
+    #         str1 = str1.replace("___percent___", "\%")
+    #
+    #         if choiceReturnQuestions:  # mostrar as questões com os gabaritos
+    #             # alterado em 16/11/2023
+    #             # pega a variação que está no QRcode e o gabarito do bd em VariantExam
+    #             if not 'ERROR' in qr['correct']:  # se conseguiu ler o QRCode, pega a variação
+    #
+    #                 titl = _("Multiple Choice Questions")
+    #                 str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+    #
+    #                 id_variante = int(qr['variations']) + int(qr['variant'])
+    #                 if id_variante > int(qr['variations']) + int(exam.exam_variations):  # não existe variant
+    #                     return ""
+    #
+    #                 variationsExam = get_object_or_404(VariationExam, pk=str(id_variante))
+    #                 vars = eval(variationsExam.variation)
+    #                 for var in vars['variations']:
+    #                     for q in var['questions']:  # para cada questão
+    #
+    #                         if q['type'] == 'QM':
+    #                             str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
+    #                             for a in q['answers']:
+    #                                 if a['sort'] == '0':
+    #                                     str1 += "\\textbf{%s:} (%s) \t%s\n\n" % (
+    #                                         _("Correct answer"), notas[a['answer']], a['text'])
+    #
+    #                                     if a['feedback'] != '\n':
+    #                                         str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
+    #
+    #                             if len(qr['respgrade'][int(q['number']) - 1]) > 1:  # errou
+    #                                 aa0 = qr['respgrade'][int(q['number']) - 1][0]
+    #                                 for a in q['answers']:
+    #                                     if aa0 == notas[a['answer']]:
+    #                                         str1 += "\\textbf{%s:} \hspace{5.5mm} (%s) %s \n\n" % (
+    #                                             _("Your answer"), aa0, a['text'])
+    #
+    #                                         if a['feedback'] != '\n':
+    #                                             str1 += "\\textbf{%s:} \t%s\n\n" % (_("Feedback"), a['feedback'])
+    #
+    #                 titl = _("Text Questions")
+    #                 if any(q['type'] == 'QT' for var in vars['variations'] for q in var['questions']):
+    #                     str1 += "\\vspace{5mm}\\noindent\\textbf{%s:}\\vspace{2mm}" % titl
+    #
+    #                 for var in vars['variations']:
+    #                     for q in var['questions']:  # para cada questão dissertativa
+    #                         if q['type'] == 'QT':
+    #                             str1 += "\n\n\\noindent \\textbf{%s.} \t%s\n\n" % (q['number'], q['text'])
+    #
+    #
+    #         file_name = "studentEmail_e" + qr['idExam'] + "_r" + qr['idClassroom'] + "_s" + s.student_ID
+    #
+    #         # Caminho relativo original (usado apenas para verificação de existência)
+    #         strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr['idStudent'] + '_GAB.png'
+    #
+    #         if not os.path.exists(strGAB):  # se não existe arquivo, aborta
+    #             return ''
+    #
+    #         # --- INÍCIO DA ALTERAÇÃO PARA COPIAR A IMAGEM PARA TMP ---
+    #         # 1. Identifica nomes e caminhos
+    #         # Copiar a imagem para tmp (como você já estava fazendo)
+    #         image_filename = os.path.basename(strGAB)
+    #         base_dir_str = str(settings.BASE_DIR)
+    #
+    #         src_image_path = os.path.join(base_dir_str, 'pdfStudentEmail', image_filename)
+    #         tmp_folder = os.path.join(base_dir_str, 'tmp')
+    #         dst_image_path = os.path.join(tmp_folder, image_filename)
+    #
+    #         try:
+    #             if not os.path.exists(tmp_folder):
+    #                 os.makedirs(tmp_folder)
+    #             shutil.copy(src_image_path, dst_image_path)
+    #         except Exception as e:
+    #             print(f"Erro ao copiar imagem para tmp: {e}")
+    #             return ""
+    #
+    #         # IMPORTANTE: Usar caminho relativo "tmp/arquivo.png" (igual ao wget)
+    #         latex_content = Utils.getBegin()
+    #
+    #         # Remover extensão .png do nome (LaTeX adiciona automaticamente)
+    #         image_name_no_ext = image_filename.replace('.png', '')
+    #
+    #         strFig = "\\includegraphics[scale=%s]{%s}\\\\\n" % (0.3, image_name_no_ext)
+    #
+    #         latex_content += str1
+    #         latex_content += strFig
+    #         latex_content += "\\end{document}"
+    #
+    #         generator = PDFGenerator()
+    #
+    #         # 5. Gera o PDF
+    #         final_pdf_path = generator.generate(
+    #             latex_content=latex_content,
+    #             filename_base=file_name,
+    #             destination_folder_name='pdfStudentEmail'
+    #         )
+    #
+    #         # 6. Limpeza opcional da imagem copiada para tmp (para não lotar a pasta)
+    #         try:
+    #             if os.path.exists(dst_image_path):
+    #                 os.remove(dst_image_path)
+    #         except:
+    #             pass
+    #
+    #         if final_pdf_path:
+    #             enviaOK = cvMCTest.sendMail(
+    #                 final_pdf_path,
+    #                 "Exam Correction by MCTest",
+    #                 s.student_email,
+    #                 str(s.student_name)
+    #             )
+    #         else:
+    #             print(f"Erro ao gerar PDF para o aluno: {s.student_name}")
+    #
+    #         return "" # Retorno padrão da função
 
     # funcao para envio do email
 
@@ -1898,6 +2198,7 @@ class cvMCTest(object):
             except Exception as e:
                 return f"****ERROR****: {str(e)}"
 
+        # TENTATIVA 1: Configuração Padrão Segura
         try:
             gm = smtplib.SMTP(servidor, porta)
             gm.ehlo()
@@ -1907,61 +2208,91 @@ class cvMCTest(object):
             gm.ehlo()
             gm.login(FROM, PASS)
             gm.sendmail(FROM, TO, msg.as_string())
-        except:
+            gm.quit()
+            return ""  # <--- PARA AQUI SE DER CERTO
+        except Exception as e:
+            print(f"Tentativa 1 falhou: {e}")
+            # Se falhar, o código continua para a tentativa 2 abaixo
             pass
 
+        # TENTATIVA 2: Fallback (Menos segura / Sem verificação de certificado)
         try:
             context = ssl.create_default_context()
-            context.check_hostname = False  # Desativar verificação do nome do host
-            context.verify_mode = ssl.CERT_NONE  # Desativar verificação do certificado
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
             with smtplib.SMTP(servidor, porta) as gm:
                 gm.ehlo()
                 gm.starttls(context=context)
                 gm.ehlo()
                 gm.login(FROM, PASS)
                 gm.sendmail(FROM, TO, msg.as_string())
-        except:
-            pass
-
-        return ''
+            return ""
+        except Exception as e:
+            return f"****ERROR FATAL**** no envio: {str(e)}"
 
     @staticmethod
     def sendMail(arquivo, msg_str, mailSend, aluno):
+        """
+        Envia e-mail padronizado para o aluno com anexo.
+        Detecta idioma automaticamente via settings.LANGUAGE_CODE.
+        """
         destinatario = mailSend
-
-        # porta smtp do gmail e ufabc
         myporta = 587
 
-        # Assunto do email
-        assunto = "Mensagem automática enviada pelo MCTest"
+        # Verifica o idioma configurado no projeto
+        lang = getattr(settings, 'LANGUAGE_CODE', 'pt-br').lower()
 
-        mensagem = f"\nPrezado(a) {aluno}\n{msg_str}\n\n"
-        mensagem += '''
-Segue em anexo a sua atividade: Lista de Exercícios ou Exame.
+        if lang.startswith('en'):
+            # --- ENGLISH VERSION ---
+            assunto = "Assessment Activity - MCTest"
 
-Se receber em anexo um arquivo '.bin', renomear para '.pdf'.
+            # msg_str entra aqui como uma mensagem personalizada do professor, se houver
+            mensagem = f"\nDear {aluno},\n\n{msg_str}\n\n"
 
-***
-Não retornar este email para webmctest@ufabc.edu.br, pois não será monitorado.
-***
+            mensagem += (
+                "Please find attached your assessment activity (Exercise List or Exam).\n\n"
+                "Technical Note: If the attachment is downloaded with a '.bin' extension, "
+                "please rename it to '.pdf' to view it correctly.\n\n"
+                "***\n"
+                "Please do not reply to this email (webmctest@ufabc.edu.br) as this inbox is not monitored.\n"
+                "***\n\n"
+                "If you have any questions, please contact your professor directly.\n\n"
+                "===\n"
+                "MCTest is open-source software (available on GitHub) for generating and "
+                "grading questions automatically. "
+                "It is maintained by the Federal University of ABC (UFABC) and was developed with support from FAPESP (grants #2018/23561-1 and #2009/14430-1).\n"
+                "===\n\n"
+            )
 
-Se tiver alguma dúvida, entre em contato com o seu professor.
+        else:
+            # --- VERSÃO EM PORTUGUÊS (Padrão) ---
+            assunto = "Atividade Avaliativa - MCTest"
 
-===
-O MCTest é um software de código aberto (disponível no GitHub) para gerar e 
-corrigir questões (em especial as parametrizadas - com variações) de forma 
-automática e está sendo desenvolvido com apoio das instituições públicas: 
-* Universidade Federal do ABC (UFABC)
-* FAPESP
-===
-'''
+            mensagem = f"\nPrezado(a) {aluno},\n\n{msg_str}\n\n"
 
-        # chamada a funcao de envio do email
-        return cvMCTest.envia_email(webMCTest_SERVER,
-                                    myporta,
-                                    webMCTest_FROM,
-                                    webMCTest_PASS,
-                                    destinatario,
-                                    assunto,
-                                    mensagem,
-                                    [arquivo])
+            mensagem += (
+                "Segue em anexo a sua atividade (Lista de Exercícios ou Exame).\n\n"
+                "Nota técnica: Caso o arquivo anexo seja baixado com a extensão '.bin', "
+                "por favor, renomeie-o para '.pdf' para visualizá-lo corretamente.\n\n"
+                "***\n"
+                "Não responda a este e-mail (webmctest@ufabc.edu.br), pois esta caixa de entrada não é monitorada.\n"
+                "***\n\n"
+                "Em caso de dúvidas, entre em contato diretamente com o seu professor.\n\n"
+                "===\n"
+                "O MCTest é um software de código aberto (disponível no GitHub) para gerar e "
+                "corrigir questões de forma automática. "
+                "É mantido pela Universidade Federal do ABC (UFABC) e foi desenvolvido com o apoio da FAPESP (processos #2018/23561-1 e  #2009/14430–1).\n"
+                "===\n\n"
+            )
+
+        # Chama o método genérico de envio
+        return cvMCTest.envia_email(
+            webMCTest_SERVER,
+            myporta,
+            webMCTest_FROM,
+            webMCTest_PASS,
+            destinatario,
+            assunto,
+            mensagem,
+            [arquivo]  # Passa como lista
+        )
