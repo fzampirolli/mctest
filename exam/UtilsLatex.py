@@ -1192,10 +1192,12 @@ class Utils(object):
 
     @staticmethod
     def getBegin(font_size="10"):
-        with open('./latex/latex_begin.txt', 'r') as latex_begin:
-            str = latex_begin.read()
-        str = str.replace("10pt,brazil,a4paper", f'{font_size}pt,brazil,a4paper')
-        return str
+        # ADICIONE encoding='utf-8'
+        with open('./latex/latex_begin.txt', 'r', encoding='utf-8') as latex_begin:
+            str_content = latex_begin.read()
+
+        str_content = str_content.replace("10pt,brazil,a4paper", f'{font_size}pt,brazil,a4paper')
+        return str_content
 
     @staticmethod
     def drawCircles():

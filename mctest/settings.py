@@ -234,6 +234,8 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_PORT = 587
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Usa nosso backend personalizado que aceita chaves antigas da UFABC
+EMAIL_BACKEND = 'mctest.email_backend.WeakSSLEmailBackend'
 
 EMAIL_USE_TLS = True
 
