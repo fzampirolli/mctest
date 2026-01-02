@@ -1279,48 +1279,57 @@
                                     </thead>
 
                                     <tbody>
-                                    {% for u in users_now %}
+                                    {% for u in users %}
+                                        {# Verifica se o usuário é o atual (pelo ID) OU se está na lista de online #}
+                                        {# A comparação por ID (u.id == user.id) garante que VOCÊ sempre apareça como Online para si mesmo #}
+
                                         <tr>
                                             <td class="align-middle pl-4">
-                                <span class="font-weight-bold text-success">
-                                    <i class="fa fa-circle mr-2 small"></i> {{ u.username }}
-                                </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="text-dark font-weight-bold"><i
-                                                        class="fa fa-clock-o text-success mr-1"></i> {{ u.last_login|date:"d/m/Y H:i" }}
-                                                </div>
-                                                {% if u.history and u.history|length > 1 %}
-                                                    <div class="text-muted small mt-1 ml-4">
-                                                        Prev: {{ u.history.1.timestamp|date:"d/m/Y H:i" }}</div>
+                                                {% if u in users_now or u.id == user.id %}
+                                                    <span class="font-weight-bold text-success">
+                        <i class="fa fa-circle mr-2 small"></i> {{ u.username }}
+                    </span>
+                                                {% else %}
+                                                    <span class="text-muted font-weight-bold">
+                        {{ u.username }}
+                    </span>
                                                 {% endif %}
                                             </td>
+
+                                            <td class="align-middle">
+                                                {% if u.last_login %}
+                                                    <div class="text-dark font-weight-bold">
+                                                        <i class="fa fa-clock-o {% if u in users_now or u.id == user.id %}text-success{% else %}text-muted{% endif %} mr-1"></i>
+                                                        {{ u.last_login|date:"d/m/Y H:i" }}
+                                                    </div>
+
+                                                    {# Lógica para exibir o "Prev" (Login Anterior) #}
+                                                    {% if u.history and u.history|length > 0 %}
+                                                        <div class="text-muted small mt-1 ml-4">
+                                                            {% if u in users_now or u.id == user.id %}
+                                                                {# Se online, o registro 0 é o atual, então mostramos o 1 como anterior #}
+                                                                {% if u.history|length > 1 %}
+                                                                    Prev: {{ u.history.1.timestamp|date:"d/m/Y H:i" }}
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {# Se offline, o registro 0 é o último acesso #}
+                                                                Prev: {{ u.history.0.timestamp|date:"d/m/Y H:i" }}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="text-muted small">{% trans "Never logged in" %}</span>
+                                                {% endif %}
+                                            </td>
+
                                             <td class="align-middle text-right pr-4">
-                                                <span class="pub-badge badge-award">Online</span>
+                                                {% if u in users_now or u.id == user.id %}
+                                                    <span class="pub-badge badge-award">Online</span>
+                                                {% else %}
+                                                    <span class="pub-badge badge-offline">Offline</span>
+                                                {% endif %}
                                             </td>
                                         </tr>
-                                    {% endfor %}
-
-                                    {% for u in users %}
-                                        {% if not u in users_now %}
-                                            <tr>
-                                                <td class="align-middle pl-4 text-muted font-weight-bold">{{ u.username }}</td>
-                                                <td class="align-middle">
-                                                    {% if u.history %}
-                                                        {% for access in u.history %}
-                                                            <div class="{% if forloop.first %}text-dark{% else %}text-muted small mt-1{% endif %}">
-                                                                {{ access.timestamp|date:"d/m/Y H:i" }}
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        <span class="text-muted small">(No history)</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td class="align-middle text-right pr-4">
-                                                    <span class="pub-badge badge-offline">Offline</span>
-                                                </td>
-                                            </tr>
-                                        {% endif %}
                                     {% endfor %}
                                     </tbody>
                                 </table>
