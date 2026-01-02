@@ -7,46 +7,40 @@
         <div class="card">
             <div class="card-body">
 
-                <h5 class="card-title">{% trans "README" %} - MCTest v.5.3</h5>
+                <h4 class="card-title">{% trans "README" %} - MCTest v.5.4</h4>
 
                 <hr>
 
-                <p>{% trans "Welcome to MCTest, a website devoted to assist in preparing and correcting exams" %}.</p>
+                <p>{% trans "Welcome to MCTest, a website dedicated to assisting in exam preparation and grading." %}</p>
+
                 <p>
-                    {% trans "MCTest is a free open-source software (see" %}
-                    <a href="{% url 'main:license' %}">{% trans "License" %}</a>)
-                    {% trans "and its best advantage is the handling to parametric questions through LaTeX and Python, allowing for infinite variations of each same question" %}.
+                    {% trans "MCTest is free and open-source software (see" %}
+                    <a href="{% url 'main:license' %}">{% trans "License" %}</a>),
+                    {% trans "with its most notable feature being the ability to handle parametric questions using LaTeX and Python. This allows for numerous variations of the same question." %}
                 </p>
 
                 <p>
-                    {% trans "Please access " %}
-                    <a href="http://vision.ufabc.edu.br">vision.ufabc.edu.br</a>
-                    {% trans "for some " %}
-                    <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/">examples</a>.
-
+                    <a href="https://github.com/fzampirolli/mctest/tree/master/book">{% trans "Books" %}</a> {% trans "and" %}
+                    <a href="https://youtube.com/playlist?list=PL5rrrH7S583Ad6iQ_neu0F7JwpPqyxNEh&si=PYf6PLBuPfTdZg41">{% trans "Playlist" %}</a>.
                 </p>
-                <p>
-                <h6>{% trans "Help us spread MCTest. If more people use it, the faster the improvements" %}.</h6></p>
-                <p>{% trans "MCTest must be installed on an Ubuntu 22.04 server through ports 3306 and 8000" %}.</p>
-                <p>{% trans "Define specific data in the file " %}
-                    <a href="{% static '_settings.env' %}">_settings.env</a>.
-                </p>
-                <p>
-                <h6>
-                    {% trans "After downloading in " %}
-                    <a href="http://github.com/fzampirolli/mctest">github.com/fzampirolli/mctest</a>
-                    {% trans "install MCTest with" %}:
-                </h6>
-                <ol>
-                <pre>
-                    sudo su
-                    source _setup_all.sh</pre>
-                </ol>
 
-                <p><h5>{% trans "Future Improvements" %}</h5></p>
+{#                <p>#}
+{#                    {% trans "Please access " %}#}
+{#                    <a href="http://vision.ufabc.edu.br">vision.ufabc.edu.br</a>#}
+{#                    {% trans "for some " %}#}
+{#                    <a href="http://vision.ufabc.edu.br/MCTest/MCTest5-Experiments/">examples</a>.#}
+{#                </p>#}
+
+                <div class="alert alert-info">
+                    <h6>{% trans "Help us spread MCTest. The more people use it, the faster we can make improvements." %}</h6>
+                </div>
+
+                <hr>
+
+                <h5>{% trans "Future Improvements" %}</h5>
                 <ol>
                     <li>
-                        <p>{% trans "Error messages and Graphical interfaces" %};</p>
+                        <p>{% trans "Error messages and graphical interfaces" %};</p>
                     </li>
                     <li>
                         <p>{% trans "Install" %} <a
@@ -54,21 +48,21 @@
                             ({% trans "including other operating systems" %});</p>
                     </li>
                     <li>
-                        <p>{% trans "The time to generate PDF from an exam with many students" %};</p>
+                        <p>{% trans "The time to generate PDF from an exam with many students" %}.</p>
                     </li>
                     <li>
                         <p>{% trans "Site and DB in different languages. For example, edit the " %}
                             locale/pt/LC_MESSAGES/django.po {% trans "for Portuguese and use the commands" %}:
-                        <pre>
-                django-admin.py makemessages -l pt
-                django-admin.py compilemessages</pre>
+                        <pre class="bg-light p-2 border rounded">
+django-admin.py makemessages -l pt
+django-admin.py compilemessages</pre>
                         </p>
 
                         <p>{% trans "Afterwards make the following changes in " %}
                             <a href="{% static '_settings.env' %}">_settings.env</a>:
-                        <pre>
-                LANGUAGE_CODE = 'pt-br'
-                TIME_ZONE = 'America/Sao_Paulo'</pre>
+                        <pre class="bg-light p-2 border rounded">
+LANGUAGE_CODE = 'pt-br'
+TIME_ZONE = 'America/Sao_Paulo'</pre>
                         {% trans "Please see 'locale' folder for other languages" %};
                         </p>
                     </li>
@@ -82,10 +76,10 @@
                         <p>{% trans "Use of blockchain to validate exams, history and other features" %};</p>
                     </li>
                     <li>
-                        <p>{% trans "Inclusion of facial recognition in the QRCode of the exams" %};</p>
+                        <p>{% trans "Inclusion of facial recognition in the QR Code of the exams" %};</p>
                     </li>
                     <li>
-                        <p>{% trans "Improve of Item Response Theory;  " %};</p>
+                        <p>{% trans "Improve of Item Response Theory" %};</p>
                     </li>
                     <li>
                         <p>{% trans "Use Markdown to describe questions and send exams or activities to students" %};</p>
@@ -108,29 +102,32 @@
                     <li>
                         <p>{% trans "Write a complete tutorial to install and use MCTest" %}.</p>
                     </li>
-                     <li>
-                        <p>{% trans "Include generative networks to help create questions" %}.</p>
-                    </li>
                 </ol>
 
                 <hr>
 
-                <p><h5>{% trans "Collaboration proposal with experts to write articles or technical reports" %}</h5></p>
-                <ul>
+                <h5>{% trans "I would like to collaborate with experts to write articles or technical reports" %}</h5>
+                <p>
                     {% trans "A maximum of 5 authors per article" %};
                     {% trans "Authors' order proportional to the number of pages written" %};
                     {% trans "I already have data/implementations for some topics" %}:
-                </ul>
+                </p>
 
                 <ol>
                     <li>
                         <p>{% trans "Security in exams using QRcode" %};</p>
                     </li>
                     <li>
+                        <p>{% trans "Exams with multiple-choice questions and different weights in the answers" %};</p>
+                    </li>
+                    <li>
                         <p>{% trans "Answer sheet design comparisons" %};</p>
                     </li>
                     <li>
                         <p>{% trans "A case study using Item Response Theory" %};</p>
+                    </li>
+                    <li>
+                        <p>{% trans "Individualized online activities with multiple-choice parametric questions" %};</p>
                     </li>
                     <li>
                         <p>{% trans "MCTest: Software Requirements Specification" %};</p>
@@ -145,18 +142,13 @@
                         <p>{% trans "MCTest: software architecture" %};</p>
                     </li>
                     <li>
-                        <p>{% trans "MCTest: software deployment" %};</p>
+                        <p>{% trans "MCTest: software deployment" %}.</p>
                     </li>
-                    <li>
-                        <p>{% trans "New question categories screen (with NLP) before opening the exam screen." %};</p>
-                    </li>
-
                 </ol>
 
                 <hr>
 
-                <p><h5>{% trans "Versions" %}</h5></p>
-
+                <h5>{% trans "Versions" %}</h5>
 
                 <ul>
                     <li>
@@ -179,23 +171,90 @@
                     <li>
                         <p><strong>MCTest 5.2</strong></p>
                         <ul>
-                            <li>{% trans "Grant: #2018/23561-1, São Paulo Research Foundation: " %} <a href="https://bv.fapesp.br/pt/auxilios/105047/um-sistema-universal-para-geracao-e-correcao-automatica-de-questoes-parametrizadas/">FAPESP</a></li>
+                            <li>{% trans "Grant: #2018/23561-1, São Paulo Research Foundation: " %} <a
+                                    href="https://bv.fapesp.br/pt/auxilios/105047/um-sistema-universal-para-geracao-e-correcao-automatica-de-questoes-parametrizadas/">FAPESP</a>
+                            </li>
                             <li>{% trans "Title: A universal system for generation and correction automatic of parametrized questions" %}</li>
                             <li>01/09/2019 - 31/08/2021</li>
-                            <li>{% trans "Book" %}: <a href="https://github.com/fzampirolli/mctest/tree/master/book/1ed-br">{% trans "1st edition" %}</a></li>
                         </ul>
                     </li>
                     <p></p>
                     <li>
                         <p><strong>MCTest 5.3</strong></p>
                         <ul>
-                            <li>{% trans "Grant: UFABC - Federal University of ABC" %} - <a href="https://sig.ufabc.edu.br/sigaa/public/docente/pesquisa.jsf?siape=1600876">SIGAA</a></li>
-                            <li>{% trans "Title: Modernization of the MCTest Test Generation and Correction System" %}</li>
-                            <li>05/01/2024 - {% trans "Current" %}</li>
-                            <li>{% trans "Book" %}: <a href="https://github.com/fzampirolli/mctest/tree/master/book/2ed-br">{% trans "2st edition" %} - {% trans "in construction" %}</a></li>
+                            <li>{% trans "Questions with skills defined in" %} <code>linker.json</code>.</li>
+                            <li>{% trans "Trace Tables" %} ⇒ <a
+                                    href="https://sol.sbc.org.br/index.php/sbie/article/view/26777">Teubl et al.</a>
+                            </li>
+                            <li>{% trans "Email-based hashing." %}</li>
+                            <li>{% trans "Exams with topics and adaptive tests." %}</li>
+                            <li><strong>VPL 13</strong> {% trans "for Moodle 4.1." %}</li>
+                            <li><strong>{% trans "First Edition of the Book" %}</strong> ⇒ <a
+                                    href="https://github.com/fzampirolli/mctest/tree/master/book">MCTest v.5.3</a></li>
                         </ul>
                     </li>
+                    <p></p>
+                    <li>
+                        <p><strong>MCTest 5.4 – {% trans "Currently in Progress" %}</strong></p>
+                        <ul>
+                            <li><strong>VPL 14:</strong> {% trans "AI-based feedback" %} ⇒ <a
+                                    href="https://doi.org/10.1002/cae.70132">Zampirolli et al.</a></li>
+                            <li><strong>{% trans "Interface & Usability" %}:</strong> {% trans "Main and Exam screens" %}.
+                            </li>
+                            <li><strong>{% trans "Version Control" %}:</strong> {% trans "Fast switching on the Exam Screen between layouts v5.3 and v5.4" %}.
+                            </li>
+                            <li><strong>{% trans "Organized Workflows" %}:</strong> {% trans "Automatic selection on the Exam Screen" %}
+                                (📋 {% trans "Flow 1" %}, 📑 {% trans "Flow 2" %}, ✍️ {% trans "Flow 3" %}).
+                            </li>
+                            <li><strong>{% trans "Security" %}:</strong> {% trans "Conflict validation and resolution" %}.
+                            </li>
+                            <li><strong>{% trans "Second Edition of the Book (in construction)" %}</strong> ⇒ <a
+                                    href="https://github.com/fzampirolli/mctest/tree/master/book">MCTest v.5.4</a></li></ul>
+                    </li>
                 </ul>
+
+                <hr>
+
+                <h5>{% trans "Install MCTest" %}</h5>
+                <p>{% trans "To install MCTest, follow the steps below:" %}</p>
+
+                <ol>
+                    <li><strong>{% trans "Install" %} <a href="https://www.virtualbox.org/">VirtualBox</a></strong></li>
+                    <li><strong>{% trans "Install Ubuntu 24.04 on VirtualBox" %}</strong></li>
+                    <li>
+                        <strong>{% trans "In Ubuntu, run the following commands in the terminal:" %}</strong>
+                        <pre class="bg-dark text-white p-3 rounded mt-2">
+sudo su
+wget https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh
+sed -i 's/\/home\/fz\//\/home\/yourUsername\//g' _setup-all.sh
+source _setup-all.sh
+pip install mysqlclient</pre>
+                        <small class="text-muted">{% trans "Change 'yourUsername' above before running the script." %}</small>
+                        <p class="mt-2">{% trans "This will download the installation script and perform the necessary configurations." %}</p>
+                        <p>{% trans "Please wait for completion: After a few minutes, the process will be finished, and MCTest will be set up." %}</p>
+                    </li>
+                </ol>
+
+                <p>{% trans "In the same terminal, run MCTest with the following command, changing 'yourUsername':" %}</p>
+                <pre class="bg-dark text-white p-3 rounded">
+source /home/yourUsername/PycharmProjects/runDjango.sh</pre>
+
+                <p>{% trans "Access MCTest: After completion, open a web browser with the URL" %} <a
+                        href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>.</p>
+
+                <p>{% trans "For new terminals, run MCTest with the following commands, changing 'yourUsername':" %}</p>
+                <pre class="bg-dark text-white p-3 rounded">
+sudo su
+source /home/yourUsername/PycharmProjects/AmbientePython3/bin/activate
+source /home/yourUsername/PycharmProjects/_settings.env
+source /home/yourUsername/PycharmProjects/runDjango.sh</pre>
+
+                <p class="mt-3">
+                    {% trans "For more details and configuration options, refer to the" %}
+                    <a href="https://raw.githubusercontent.com/fzampirolli/mctest/master/_setup-all.sh">_setup-all.sh</a>
+                    {% trans "file" %}.
+                </p>
+
             </div>
         </div>
     </div>

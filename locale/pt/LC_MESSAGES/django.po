@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 19:32-0300\n"
+"POT-Creation-Date: 2026-01-02 08:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2021,15 +2021,15 @@ msgstr "Salvar Mudanças"
 msgid "Flow Type"
 msgstr "Tipo de Fluxo"
 
-#: exam/templates/exam/exam_update5.4.html:202
+#: exam/templates/exam/exam_update5.4.html:202 main/templates/readme.html:207
 msgid "Flow 1"
 msgstr "Fluxo 1"
 
-#: exam/templates/exam/exam_update5.4.html:203
+#: exam/templates/exam/exam_update5.4.html:203 main/templates/readme.html:207
 msgid "Flow 2"
 msgstr "Fluxo 2"
 
-#: exam/templates/exam/exam_update5.4.html:204
+#: exam/templates/exam/exam_update5.4.html:204 main/templates/readme.html:207
 msgid "Flow 3"
 msgstr "Fluxo 3"
 
@@ -3289,6 +3289,7 @@ msgid "{value!r} is not a valid UUID."
 msgstr ""
 
 #: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:811
+#: main/templates/readme.html:255
 msgid "file"
 msgstr ""
 
@@ -3514,6 +3515,7 @@ msgid "from"
 msgstr "da"
 
 #: main/templates/base_generic.html:697 main/templates/base_generic.html:705
+#: main/templates/readme.html:23
 msgid "and"
 msgstr "e"
 
@@ -3529,8 +3531,7 @@ msgstr "Quem utiliza"
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:701 main/templates/readme.html:185
-#: main/templates/readme.html:195
+#: main/templates/base_generic.html:701
 msgid "Book"
 msgstr "Livro"
 
@@ -3713,108 +3714,92 @@ msgstr "Histórico"
 msgid "Status"
 msgstr ""
 
-#: main/templates/license.html:9 main/templates/readme.html:17
+#: main/templates/license.html:9 main/templates/readme.html:18
 msgid "License"
 msgstr "Licença"
 
 #: main/templates/readme.html:14
 msgid ""
-"Welcome to MCTest, a website devoted to assist in preparing and correcting "
-"exams"
+"Welcome to MCTest, a website dedicated to assisting in exam preparation and "
+"grading."
 msgstr ""
-"Bem vindo ao <em>MCTest</em>, um portal para a geração e correção de exames"
+"Bem-vindo ao MCTest, um site dedicado a auxiliar na preparação e correção de "
+"exames."
 
-#: main/templates/readme.html:16
-msgid "MCTest is a free open-source software (see"
-msgstr "MCTest é um sofware livre e de código aberto (veja"
+#: main/templates/readme.html:17
+msgid "MCTest is free and open-source software (see"
+msgstr "MCTest é um software livre e de código aberto (veja"
 
-#: main/templates/readme.html:18
+#: main/templates/readme.html:19
 msgid ""
-"and its best advantage is the handling to parametric questions through LaTeX "
-"and Python, allowing for infinite variations of each same question"
+"with its most notable feature being the ability to handle parametric "
+"questions using LaTeX and Python. This allows for numerous variations of the "
+"same question."
 msgstr ""
-"e sua melhor vantagem é o tratamento de questões paramétricas através do "
-"LaTeX e Python, permitindo variações infinitas de cada questão"
+"com sua característica mais notável sendo a capacidade de lidar com questões "
+"paramétricas usando LaTeX e Python. Isso permite inúmeras variações da mesma "
+"questão."
 
-#: main/templates/readme.html:22
-msgid "Please access "
-msgstr "Acesse "
+#: main/templates/readme.html:23
+msgid "Books"
+msgstr "Livros"
 
 #: main/templates/readme.html:24
-msgid "for some "
-msgstr "e mais"
+msgid "Playlist"
+msgstr "Playlist"
 
-#: main/templates/readme.html:29
+#: main/templates/readme.html:35
 msgid ""
-"Help us spread MCTest. If more people use it, the faster the improvements"
+"Help us spread MCTest. The more people use it, the faster we can make "
+"improvements."
 msgstr ""
-"Ajude-nos a divulgar o MCtest. Se mais pessoas utilizarem, mais rápidas "
-"serão as melhorias"
+"Ajude-nos a divulgar o MCTest. Quanto mais pessoas o usarem, mais rápidas "
+"serão as melhorias."
 
-#: main/templates/readme.html:30
-msgid ""
-"MCTest must be installed on an Ubuntu 22.04 server through ports 3306 and "
-"8000"
-msgstr ""
-"O MCtest deve ser instalado em um servidor Ubuntu 22.04 através das portas "
-"3306 e 8000"
-
-#: main/templates/readme.html:31
-msgid "Define specific data in the file "
-msgstr "Definir dados específicos no arquivo "
-
-#: main/templates/readme.html:36
-msgid "After downloading in "
-msgstr "Após baixar em"
-
-#: main/templates/readme.html:38
-msgid "install MCTest with"
-msgstr "instalar MCTest com"
-
-#: main/templates/readme.html:46
+#: main/templates/readme.html:40
 msgid "Future Improvements"
 msgstr "Melhorias Futuras"
 
-#: main/templates/readme.html:49
-msgid "Error messages and Graphical interfaces"
-msgstr "Mensagens de erro e interface gráfica"
+#: main/templates/readme.html:43
+msgid "Error messages and graphical interfaces"
+msgstr "Mensagens de erro e interfaces gráficas"
 
-#: main/templates/readme.html:52
+#: main/templates/readme.html:46 main/templates/readme.html:222
 msgid "Install"
-msgstr "Instalador"
+msgstr "Instalação"
 
-#: main/templates/readme.html:54
+#: main/templates/readme.html:48
 msgid "including other operating systems"
 msgstr "incluindo outros sistemas operacionais"
 
-#: main/templates/readme.html:57
+#: main/templates/readme.html:51
 msgid "The time to generate PDF from an exam with many students"
 msgstr "Tempo para criar pdf de um exame com muitos estudantes"
 
-#: main/templates/readme.html:60
+#: main/templates/readme.html:54
 msgid "Site and DB in different languages. For example, edit the "
 msgstr "Portal e BD em diferentes idiomas. Por exemplo, edit "
 
-#: main/templates/readme.html:61
+#: main/templates/readme.html:55
 msgid "for Portuguese and use the commands"
 msgstr "para Português e use os comandos"
 
-#: main/templates/readme.html:67
+#: main/templates/readme.html:61
 msgid "Afterwards make the following changes in "
 msgstr "Em seguida, faça as seguintes alterações em "
 
-#: main/templates/readme.html:72
+#: main/templates/readme.html:66
 msgid "Please see 'locale' folder for other languages"
 msgstr "Ver pasta 'locale' para outros idiomas"
 
-#: main/templates/readme.html:76
+#: main/templates/readme.html:70
 msgid ""
 "AI Exams Module: individual exams based on the students and the class history"
 msgstr ""
 "Módulo de Exame utilizando IA: exames individuais com base no histórico do "
 "aluno e da turma"
 
-#: main/templates/readme.html:79
+#: main/templates/readme.html:73
 msgid ""
 "AI Students Module: evaluation of how the weigh questions in order to show "
 "the skills and abilities of each student"
@@ -3822,30 +3807,30 @@ msgstr ""
 "Módulo de Estudante utilizando IA: como as questões com diferentes pesos são "
 "escolhidas para mostrar as competências e habilidades de cada estudante"
 
-#: main/templates/readme.html:82
+#: main/templates/readme.html:76
 msgid "Use of blockchain to validate exams, history and other features"
 msgstr "Utilizar blockchain para validar exames, histórico e outros recursos"
 
+#: main/templates/readme.html:79
+msgid "Inclusion of facial recognition in the QR Code of the exams"
+msgstr "Inclusão de reconhecimento facial no QR Code dos exames"
+
+#: main/templates/readme.html:82
+msgid "Improve of Item Response Theory"
+msgstr "Melhoria da Teoria de Resposta ao Item"
+
 #: main/templates/readme.html:85
-msgid "Inclusion of facial recognition in the QRCode of the exams"
-msgstr "Incluir reconhecimento facial no QRCode do exame"
-
-#: main/templates/readme.html:88
-msgid "Improve of Item Response Theory;  "
-msgstr "Melhorias em Teoria de Resposta ao Item"
-
-#: main/templates/readme.html:91
 msgid ""
 "Use Markdown to describe questions and send exams or activities to students"
 msgstr ""
 "Usar Markdown para descrever questões e enviar exames ou atividades aos "
 "alunos"
 
-#: main/templates/readme.html:94
+#: main/templates/readme.html:88
 msgid "Adapt the Android application to this version of MCTest"
 msgstr "Adaptar o aplicativo Android a esta versão do MCTest"
 
-#: main/templates/readme.html:100
+#: main/templates/readme.html:94
 msgid ""
 "Study the integration of MCTest with other systems, for example, SIGAA and "
 "Moodle, sharing different databases"
@@ -3853,7 +3838,7 @@ msgstr ""
 "Estudar a integração do MCTest com outros sistemas, por exemplo, SIGAA e "
 "Moodle, compartilhando bancos de dados diferentes"
 
-#: main/templates/readme.html:103
+#: main/templates/readme.html:97
 msgid ""
 "Run the parametric question codes on other servers, similar to those used in "
 "the Moodle VPL plug-in"
@@ -3861,108 +3846,112 @@ msgstr ""
 "Executar os códigos de questões paramétricos em outros servidores, "
 "semelhante ao usado ​​no plug-in VPL do Moodle"
 
-#: main/templates/readme.html:106
+#: main/templates/readme.html:100
 msgid "Integrate with MakeTests"
 msgstr "Integrar com MakeTests"
 
-#: main/templates/readme.html:109
+#: main/templates/readme.html:103
 msgid "Write a complete tutorial to install and use MCTest"
 msgstr "Escrever um tutorial completo para instalar e usar o MCTest"
 
-#: main/templates/readme.html:112
-msgid "Include generative networks to help create questions"
-msgstr "Incluir redes generativas para ajudar a criar questões"
-
-#: main/templates/readme.html:118
+#: main/templates/readme.html:109
 msgid ""
-"Collaboration proposal with experts to write articles or technical reports"
+"I would like to collaborate with experts to write articles or technical "
+"reports"
 msgstr ""
-"Propostas de colaborações com especialistas para escrever artigos ou "
-"relatórios técnicos"
+"Gostaria de colaborar com especialistas para escrever artigos ou relatórios "
+"técnicos"
 
-#: main/templates/readme.html:120
+#: main/templates/readme.html:111
 msgid "A maximum of 5 authors per article"
 msgstr "Máximo de 5 autores por artigo"
 
-#: main/templates/readme.html:121
+#: main/templates/readme.html:112
 msgid "Authors' order proportional to the number of pages written"
 msgstr "Ordem dos autores proporcional ao número de páginas escritas"
 
-#: main/templates/readme.html:122
+#: main/templates/readme.html:113
 msgid "I already have data/implementations for some topics"
 msgstr "Já tenho dados/implementações para alguns tópicos"
 
-#: main/templates/readme.html:127
+#: main/templates/readme.html:118
 msgid "Security in exams using QRcode"
 msgstr "Segurança em exames utilizando QRCode"
 
-#: main/templates/readme.html:130
+#: main/templates/readme.html:121
+msgid ""
+"Exams with multiple-choice questions and different weights in the answers"
+msgstr ""
+"Exames com questões de múltipla escolha e pesos diferentes nas respostas"
+
+#: main/templates/readme.html:124
 msgid "Answer sheet design comparisons"
 msgstr "Comparações com diferentes folhas de respostas"
 
-#: main/templates/readme.html:133
+#: main/templates/readme.html:127
 msgid "A case study using Item Response Theory"
 msgstr "Um estudo de casos utilizando Teoria de Resposta ao Item"
 
-#: main/templates/readme.html:136
+#: main/templates/readme.html:130
+msgid ""
+"Individualized online activities with multiple-choice parametric questions"
+msgstr ""
+"Atividades online individualizadas com questões paramétricas de múltipla "
+"escolha"
+
+#: main/templates/readme.html:133
 msgid "MCTest: Software Requirements Specification"
 msgstr "MCTest: Especificações de Requisitos de Software"
 
-#: main/templates/readme.html:139
+#: main/templates/readme.html:136
 msgid "MCTest: graphic interface"
 msgstr "MCTest: interfaces gráficas"
 
-#: main/templates/readme.html:142
+#: main/templates/readme.html:139
 msgid "MCTest: data base"
 msgstr "MCTest: banco de dados"
 
-#: main/templates/readme.html:145
+#: main/templates/readme.html:142
 msgid "MCTest: software architecture"
 msgstr "MCTest: arquitetura de software"
 
-#: main/templates/readme.html:148
+#: main/templates/readme.html:145
 msgid "MCTest: software deployment"
 msgstr "MCTest: implantação de software"
 
 #: main/templates/readme.html:151
-msgid ""
-"New question categories screen (with NLP) before opening the exam screen."
-msgstr ""
-"Nova tela de categorias de questões (com PNL) antes de abrir a tela de exame."
-
-#: main/templates/readme.html:158
 msgid "Versions"
 msgstr "Versões"
 
-#: main/templates/readme.html:165
+#: main/templates/readme.html:157
 msgid "August 2018"
 msgstr "Agosto de 2018"
 
-#: main/templates/readme.html:166
+#: main/templates/readme.html:158
 msgid "Multiple choice test model in QR Code itself"
 msgstr "Os gabaritos das questões de múltipla-escolha estão no próprio QRCode"
 
-#: main/templates/readme.html:173
+#: main/templates/readme.html:165
 msgid "August 2019"
 msgstr "Agosto de 2019"
 
-#: main/templates/readme.html:174
+#: main/templates/readme.html:166
 msgid "New graphical interfaces"
 msgstr "Novas interfaces gráficas"
 
-#: main/templates/readme.html:175
+#: main/templates/readme.html:167
 msgid "The multiple-choice test template is now stored on the server"
 msgstr ""
 "Os gabaritos das questões de múltipla escolha estão armazenadas agora no "
 "servidor (por 180 dias)"
 
-#: main/templates/readme.html:182
+#: main/templates/readme.html:174
 msgid "Grant: #2018/23561-1, São Paulo Research Foundation: "
 msgstr ""
 "Processo n. 2018/23561-1, Fundação de Amparo à Pesquisa do Estado de São "
 "Paulo: "
 
-#: main/templates/readme.html:183
+#: main/templates/readme.html:177
 msgid ""
 "Title: A universal system for generation and correction automatic of "
 "parametrized questions"
@@ -3971,30 +3960,132 @@ msgstr ""
 "Parametrizadas"
 
 #: main/templates/readme.html:185
-msgid "1st edition"
-msgstr "1ª edição"
+msgid "Questions with skills defined in"
+msgstr "Questões com habilidades definidas em"
+
+#: main/templates/readme.html:186
+msgid "Trace Tables"
+msgstr "Teste de Mesa"
+
+#: main/templates/readme.html:189
+msgid "Email-based hashing."
+msgstr "Hashing baseado em e-mail."
+
+#: main/templates/readme.html:190
+msgid "Exams with topics and adaptive tests."
+msgstr "Exames com tópicos e testes adaptativos."
+
+#: main/templates/readme.html:191
+msgid "for Moodle 4.1."
+msgstr "para Moodle 4.1."
 
 #: main/templates/readme.html:192
-msgid "Grant: UFABC - Federal University of ABC"
-msgstr "Apoio: UFABC - Universidade Federal do ABC"
+msgid "First Edition of the Book"
+msgstr "Primeira Edição do Livro"
 
-#: main/templates/readme.html:193
-msgid ""
-"Title: Modernization of the MCTest Test Generation and Correction System"
+#: main/templates/readme.html:198
+msgid "Currently in Progress"
+msgstr "Atualmente em Progresso"
+
+#: main/templates/readme.html:200
+msgid "AI-based feedback"
+msgstr "Feedback baseado em IA"
+
+#: main/templates/readme.html:202
+msgid "Interface & Usability"
 msgstr ""
-"Título: Modernização do Sistema de Geração e Correção de Provas do MCTest"
 
-#: main/templates/readme.html:194
-msgid "Current"
-msgstr "Atual"
+#: main/templates/readme.html:202
+msgid "Main and Exam screens"
+msgstr "Telas Principal e de Exame"
 
-#: main/templates/readme.html:195
-msgid "2st edition"
-msgstr "2ª edição"
+#: main/templates/readme.html:204
+msgid "Version Control"
+msgstr "Controle de Versão"
 
-#: main/templates/readme.html:195
-msgid "in construction"
-msgstr "Em construção"
+#: main/templates/readme.html:204
+msgid "Fast switching on the Exam Screen between layouts v5.3 and v5.4"
+msgstr "Troca rápida na Tela de Exame entre os layouts v5.3 e v5.4"
+
+#: main/templates/readme.html:206
+msgid "Organized Workflows"
+msgstr "Fluxos de Trabalho Organizados"
+
+#: main/templates/readme.html:206
+msgid "Automatic selection on the Exam Screen"
+msgstr "Seleção automática na Tela de Exame"
+
+#: main/templates/readme.html:209
+msgid "Security"
+msgstr "Segurança"
+
+#: main/templates/readme.html:209
+msgid "Conflict validation and resolution"
+msgstr "Validação e resolução de conflitos"
+
+#: main/templates/readme.html:211
+msgid "Second Edition of the Book (in construction)"
+msgstr "Segunda Edição do Livro (em construção)"
+
+#: main/templates/readme.html:218
+msgid "Install MCTest"
+msgstr "Instalar MCTest"
+
+#: main/templates/readme.html:219
+msgid "To install MCTest, follow the steps below:"
+msgstr "Para instalar o MCTest, siga os passos abaixo:"
+
+#: main/templates/readme.html:223
+msgid "Install Ubuntu 24.04 on VirtualBox"
+msgstr "Instale o Ubuntu 24.04 no VirtualBox"
+
+#: main/templates/readme.html:225
+msgid "In Ubuntu, run the following commands in the terminal:"
+msgstr "No Ubuntu, execute os seguintes comandos no terminal:"
+
+#: main/templates/readme.html:232
+msgid "Change 'yourUsername' above before running the script."
+msgstr "Altere 'yourUsername' acima antes de executar o script."
+
+#: main/templates/readme.html:233
+msgid ""
+"This will download the installation script and perform the necessary "
+"configurations."
+msgstr ""
+"Isso fará o download do script de instalação e realizará as configurações "
+"necessárias."
+
+#: main/templates/readme.html:234
+msgid ""
+"Please wait for completion: After a few minutes, the process will be "
+"finished, and MCTest will be set up."
+msgstr ""
+"Aguarde a conclusão: Após alguns minutos, o processo será finalizado e o "
+"MCTest estará configurado."
+
+#: main/templates/readme.html:238
+msgid ""
+"In the same terminal, run MCTest with the following command, changing "
+"'yourUsername':"
+msgstr ""
+"No mesmo terminal, execute o MCTest com o seguinte comando, alterando "
+"'yourUsername':"
+
+#: main/templates/readme.html:242
+msgid "Access MCTest: After completion, open a web browser with the URL"
+msgstr "Acessar o MCTest: Após a conclusão, abra um navegador web com a URL"
+
+#: main/templates/readme.html:245
+msgid ""
+"For new terminals, run MCTest with the following commands, changing "
+"'yourUsername':"
+msgstr ""
+"Para novos terminais, execute o MCTest com os seguintes comandos, alterando "
+"'yourUsername':"
+
+#: main/templates/readme.html:253
+msgid "For more details and configuration options, refer to the"
+msgstr "Para mais detalhes e opções de configuração, consulte o arquivo"
 
 #: main/templates/signup.html:15
 msgid "Only teachers can register for this service."
@@ -4819,3 +4910,58 @@ msgstr "ExamUpdate: o professor não está registrado na disciplina"
 #: topic/views.py:1367
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid "Please access "
+#~ msgstr "Acesse "
+
+#~ msgid "for some "
+#~ msgstr "e mais"
+
+#~ msgid ""
+#~ "Welcome to MCTest, a website devoted to assist in preparing and "
+#~ "correcting exams"
+#~ msgstr ""
+#~ "Bem vindo ao <em>MCTest</em>, um portal para a geração e correção de "
+#~ "exames"
+
+#~ msgid ""
+#~ "MCTest must be installed on an Ubuntu 22.04 server through ports 3306 and "
+#~ "8000"
+#~ msgstr ""
+#~ "O MCtest deve ser instalado em um servidor Ubuntu 22.04 através das "
+#~ "portas 3306 e 8000"
+
+#~ msgid "Define specific data in the file "
+#~ msgstr "Definir dados específicos no arquivo "
+
+#~ msgid "After downloading in "
+#~ msgstr "Após baixar em"
+
+#~ msgid "Include generative networks to help create questions"
+#~ msgstr "Incluir redes generativas para ajudar a criar questões"
+
+#~ msgid ""
+#~ "New question categories screen (with NLP) before opening the exam screen."
+#~ msgstr ""
+#~ "Nova tela de categorias de questões (com PNL) antes de abrir a tela de "
+#~ "exame."
+
+#~ msgid "1st edition"
+#~ msgstr "1ª edição"
+
+#~ msgid "Grant: UFABC - Federal University of ABC"
+#~ msgstr "Apoio: UFABC - Universidade Federal do ABC"
+
+#~ msgid ""
+#~ "Title: Modernization of the MCTest Test Generation and Correction System"
+#~ msgstr ""
+#~ "Título: Modernização do Sistema de Geração e Correção de Provas do MCTest"
+
+#~ msgid "Current"
+#~ msgstr "Atual"
+
+#~ msgid "2st edition"
+#~ msgstr "2ª edição"
+
+#~ msgid "in construction"
+#~ msgstr "Em construção"
