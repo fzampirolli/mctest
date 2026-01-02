@@ -92,8 +92,8 @@
 
         /* Ícone Delicado (VERSÃO MENOR) */
         .stat-icon {
-            width: 38px;       /* Reduzido de 50px */
-            height: 38px;      /* Reduzido de 50px */
+            width: 38px; /* Reduzido de 50px */
+            height: 38px; /* Reduzido de 50px */
             border-radius: 50%;
             background-color: #ebf4ff;
             color: #5a67d8;
@@ -102,7 +102,7 @@
             align-items: center;
             justify-content: center;
 
-            font-size: 15px;   /* Reduzido de 18px */
+            font-size: 15px; /* Reduzido de 18px */
             margin-bottom: 4px; /* Margem reduzida */
             transition: all 0.3s ease;
         }
@@ -189,9 +189,9 @@
         .pub-header {
             display: flex;
             justify-content: space-between;
-            align-items: baseline; /* Alinhamento melhorado */
-            margin-bottom: 6px;
-            gap: 15px; /* Espaço entre título e badge */
+            align-items: center; /* Centraliza verticalmente */
+            margin-bottom: 8px; /* Um pouco mais de espaço */
+            gap: 15px;
         }
 
         .pub-title {
@@ -199,32 +199,40 @@
             color: #2b6cb0;
             font-size: 1.05rem;
             line-height: 1.4;
+            flex-grow: 1; /* Garante que o título ocupe o espaço disponível */
+            margin-right: 10px;
         }
 
-        .pub-meta {
-            font-size: 0.9rem;
-            color: #4a5568;
-            line-height: 1.5;
+        /* Container para os badges ficarem alinhados à direita como uma "coluna" */
+        .pub-badges-col {
+            display: flex;
+            gap: 8px; /* Espaço entre a Revista e o Ano */
+            align-items: center;
+            flex-shrink: 0; /* Impede que os badges encolham demais */
+        }
+
+        /* ESTILO NOVO PARA REVISTAS */
+        .badge-journal {
+            background-color: #ed64a6; /* Rosa (Pink-500) para diferenciar do Roxo do Livro */
+            font-size: 0.7rem; /* Fonte um pouco menor para nomes longos */
+            max-width: 250px; /* Limita a largura para não quebrar tudo */
+            white-space: normal; /* Permite quebrar linha se for muito grande */
+            text-align: center;
+            line-height: 1.2;
         }
 
         .pub-journal {
-            font-weight: 700;
-            color: #2d3748;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.02em;
+            font-weight: normal;
         }
 
-        /* Badges */
+        /* Ajuste no badge base para aceitar white-space normal se necessário */
         .pub-badge {
             font-size: 0.75rem;
             padding: 0.35em 0.8em;
-            border-radius: 20px; /* Mais arredondado */
+            border-radius: 20px;
             font-weight: 700;
             color: white;
-            white-space: nowrap;
             display: inline-block;
-            vertical-align: middle;
         }
 
         .badge-year {
@@ -237,7 +245,20 @@
         }
 
         .badge-book {
-            background-color: #9f7aea;
+            background-color: #9f7aea; /* Roxo Original do Book */
+        }
+
+        /* NOVO: Estilo para Revistas (Journal) - Mesma estrutura do Book */
+        .badge-journal {
+            background-color: #d63384; /* Rosa escuro para destaque */
+            font-size: 0.75rem; /* Mesmo tamanho do badge-book */
+            padding: 0.35em 0.8em;
+            border-radius: 20px;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: middle;
         }
 
         .badge-offline {
@@ -751,8 +772,6 @@
                 </div>
 
 
-
-
                 <div class="card mb-4 shadow-sm border-0">
                     <div class="card-header bg-white" style="cursor: pointer;"
                          data-toggle="collapse" data-target="#secDynamic" aria-expanded="false">
@@ -828,8 +847,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
 
 
                 <div class="card mb-4 shadow-sm border-0">
@@ -904,7 +923,8 @@
                                     <td class="text-dark font-weight-bold">MCTest 5</td>
                                     <td>
                                         {% trans "Developed in Python (with Django) for automatic correction" %} -
-                                        <a href="http://vision.ufabc.edu.br" class="text-muted text-decoration-none hover-dark">vision.ufabc.edu.br</a>
+                                        <a href="http://vision.ufabc.edu.br"
+                                           class="text-muted text-decoration-none hover-dark">vision.ufabc.edu.br</a>
                                     </td>
                                 </tr>
 
@@ -927,12 +947,14 @@
                                 </tr>
                                 <tr>
                                     <td class="text-center">BR 51 2015 001444 7</td>
-                                    <td><a href="http://vision.ufabc.edu.br/MCTest/MCTest2-android/" class="text-muted">MCTest 2</a></td>
+                                    <td><a href="http://vision.ufabc.edu.br/MCTest/MCTest2-android/" class="text-muted">MCTest
+                                        2</a></td>
                                     <td>{% trans "Developed in Android" %}</td>
                                 </tr>
                                 <tr>
                                     <td class="text-center">BR 51 2013 001231 7</td>
-                                    <td><a href="http://vision.ufabc.edu.br/MCTest/MCTest1-matlab/" class="text-muted">MCTest</a></td>
+                                    <td><a href="http://vision.ufabc.edu.br/MCTest/MCTest1-matlab/" class="text-muted">MCTest</a>
+                                    </td>
                                     <td>{% trans "Developed in Matlab" %}</td>
                                 </tr>
                                 </tbody>
@@ -952,14 +974,19 @@
 
                     <div id="secPublications" class="collapse">
                         <style>
-                            .hover-dark:hover { color: #2d3748 !important; text-decoration: underline !important; }
+                            .hover-dark:hover {
+                                color: #2d3748 !important;
+                                text-decoration: underline !important;
+                            }
                         </style>
 
                         <div class="card-body">
 
                             <div class="p-3 bg-light border-bottom sticky-top"><p class="section-subtitle m-0">
-                                <span id="pub-count" class="font-weight-bold text-primary" style="font-size: 1.1em;">--</span>
-                                publicações na área de ensino — com foco especial em Computação — muitas delas originadas do
+                                <span id="pub-count" class="font-weight-bold text-primary"
+                                      style="font-size: 1.1em;">--</span>
+                                publicações na área de ensino — com foco especial em Computação — muitas delas
+                                originadas do
                                 projeto <strong>MCTest</strong>.
                             </p>
                             </div>
@@ -972,23 +999,30 @@
                                 });
                             </script>
 
-                            <a href="https://sitionovo.ifto.edu.br/index.php/sitionovo target="_blank" class="pub-item">
+                            <a href="https://sitionovo.ifto.edu.br/index.php/sitionovo" target="_blank"
+                               class="pub-item">
                                 <div class="pub-header">
                                     <span class="pub-title">Adaptive Testing for Programming Logic Skills Assessment</span>
-                                    <span class="pub-badge badge-year">2026</span>
+                                    <div>
+                                        <span class="pub-badge badge-journal">Journal</span>
+                                        <span class="pub-badge badge-year">2026</span>
+                                    </div>
                                 </div>
                                 <div class="pub-meta">Elias, L.M.C., Zampirolli, F.A. —
-                                    <strong class="pub-journal">Revista Sítio Novo (Aceito)</strong>
+                                    <strong class="pub-journal">REVISTA SÍTIO NOVO (ACEITO), 2026</strong>
                                 </div>
                             </a>
 
                             <a href="https://doi.org/10.1002/cae.70132" target="_blank" class="pub-item">
                                 <div class="pub-header">
                                     <span class="pub-title">Intelligent Feedback for Individualized Introductory Programming Exercises</span>
-                                    <span class="pub-badge badge-year">2025a</span>
+                                    <div>
+                                        <span class="pub-badge badge-journal">Journal</span>
+                                        <span class="pub-badge badge-year">2025a</span>
+                                    </div>
                                 </div>
                                 <div class="pub-meta">Zampirolli, F.A. et al. —
-                                    <strong class="pub-journal">COMPUTER APPLICATIONS IN ENGINEERING</strong>
+                                    <strong class="pub-journal">COMPUTER APPLICATIONS IN ENGINEERING, 2025</strong>
                                 </div>
                             </a>
 
@@ -996,10 +1030,14 @@
                                class="pub-item">
                                 <div class="pub-header">
                                     <span class="pub-title">Teaching Hands-On Digital Image Processing with morph.py: Methods and Comprehensive Results</span>
-                                    <span class="pub-badge badge-year">2025b</span>
+                                    <div>
+                                        <span class="pub-badge badge-journal">Journal</span>
+                                        <span class="pub-badge badge-year">2025b</span>
+                                    </div>
                                 </div>
                                 <div class="pub-meta">Zampirolli, F.A., et al. —
-                                    <strong class="pub-journal">REVISTA BRASILEIRA DE INFORMÁTICA NA EDUCAÇÃO (RBIE)</strong>
+                                    <strong class="pub-journal">REVISTA BRASILEIRA DE INFORMÁTICA NA EDUCAÇÃO
+                                        (RBIE), 2025</strong>
                                 </div>
                             </a>
 
@@ -1010,18 +1048,21 @@
                                     <span class="pub-badge badge-award">Best Paper Award</span>
                                     <span class="pub-badge badge-year">2024</span>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>EduComp 2024</em> (Trilha de Recursos e
-                                    Ambientes Educacionais)
+                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>EduComp</em> (Trilha de
+                                    Recursos e
+                                    Ambientes Educacionais), 2024
                                 </div>
                             </a>
 
                             <a href="https://github.com/fzampirolli/mctest/tree/master/book" target="_blank" class="pub-item">
                                 <div class="pub-header">
                                     <span class="pub-title">MCTest: como criar e corrigir exames parametrizados automaticamente</span>
-                                    <span class="pub-badge badge-book">Book</span>
-                                    <span class="pub-badge badge-year">2023a</span>
+                                    <div>
+                                        <span class="pub-badge badge-book">Book</span>
+                                        <span class="pub-badge badge-year">2023a</span>
+                                    </div>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. — <em>ISBN: 978-65-00-79086-3</em></div>
+                                <div class="pub-meta">Zampirolli, F.A. — 1ª Edição — <em>ISBN: 978-65-00-79086-3, 2023</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.5753/sbie.2023.233468" target="_blank" class="pub-item">
@@ -1029,7 +1070,7 @@
                                     <span class="pub-title">Automated Correction for Trace Tables in a CS1 Course</span>
                                     <span class="pub-badge badge-year">2023b</span>
                                 </div>
-                                <div class="pub-meta">Teubl, F., Zampirolli, F.A. — <em>SBIE 2023</em></div>
+                                <div class="pub-meta">Teubl, F., Zampirolli, F.A. — <em>SBIE, 2023</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.5753/sbie.2023.232024" target="_blank" class="pub-item">
@@ -1037,7 +1078,7 @@
                                     <span class="pub-title">Introducing programming logic consistently through gamification</span>
                                     <span class="pub-badge badge-year">2023c</span>
                                 </div>
-                                <div class="pub-meta">Josko, J.M.B., Zampirolli, F.A. — <em>SBIE 2023</em></div>
+                                <div class="pub-meta">Josko, J.M.B., Zampirolli, F.A. — <em>SBIE, 2023</em></div>
                             </a>
 
                             <a href="https://link.springer.com/chapter/10.1007/978-3-031-14756-2_15" target="_blank"
@@ -1046,7 +1087,8 @@
                                     <span class="pub-title">MakeTests: A Flexible Generator and Corrector for Hardcopy Exams</span>
                                     <span class="pub-badge badge-year">2022</span>
                                 </div>
-                                <div class="pub-meta">Teubl, F. et al. — <em>Springer Computer Supported Education</em></div>
+                                <div class="pub-meta">Teubl, F. et al. — <em>Springer Computer Supported Education, 2022</em>
+                                </div>
                             </a>
 
                             <a href="https://dx.doi.org/10.5753/sbie.2021.217464" target="_blank" class="pub-item">
@@ -1054,7 +1096,7 @@
                                     <span class="pub-title">Introductory Computer Science Course by Adopting Many Programming Languages</span>
                                     <span class="pub-badge badge-year">2021a</span>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>SBIE 2021</em></div>
+                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>SBIE, 2021</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.1109/FIE49875.2021.9637055" target="_blank" class="pub-item">
@@ -1062,7 +1104,8 @@
                                     <span class="pub-title">Facilitating the Generation of Parametric Questions and their export to Moodle</span>
                                     <span class="pub-badge badge-year">2021b</span>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>Frontiers in Education (FIE) 2021</em></div>
+                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>Frontiers in Education (FIE),
+                                    2021</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.1109/LACLO54177.2021.00079" target="_blank" class="pub-item">
@@ -1070,7 +1113,7 @@
                                     <span class="pub-title">Automated assessment of parametric programming in a large-scale course</span>
                                     <span class="pub-badge badge-year">2021c</span>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>LACLO 2021</em></div>
+                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>LACLO, 2021</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.1109/LACLO54177.2021.00076" target="_blank" class="pub-item">
@@ -1078,7 +1121,7 @@
                                     <span class="pub-title">Experiments in selection processes of students for a crammer</span>
                                     <span class="pub-badge badge-year">2021d</span>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>LACLO 2021</em></div>
+                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>LACLO, 2021</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.1109/LACLO54177.2021.00078" target="_blank" class="pub-item">
@@ -1086,7 +1129,7 @@
                                     <span class="pub-title">Interactive ENEM: exams with statistics and free access</span>
                                     <span class="pub-badge badge-year">2021e</span>
                                 </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>LACLO 2021</em></div>
+                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>LACLO, 2021</em></div>
                             </a>
 
                             <a href="https://dx.doi.org/10.1109/LACLO54177.2021.00090" target="_blank" class="pub-item">
@@ -1094,161 +1137,170 @@
                                     <span class="pub-title">Face Verification Experiments on Moodle Quiz</span>
                                     <span class="pub-badge badge-year">2021f</span>
                                 </div>
-                                <div class="pub-meta">Silva, D.G., Zampirolli, F.A. — <em>LACLO 2021</em></div>
+                                <div class="pub-meta">Silva, D.G., Zampirolli, F.A. — <em>LACLO, 2021</em></div>
                             </a>
 
                             <a href="https://doi.org/10.1002/cae.22385" target="_blank" class="pub-item">
                                 <div class="pub-header">
                                     <span class="pub-title">An experience of automated assessment in a large-scale introduction programming course</span>
-                                    <span class="pub-badge badge-year">2021g</span>
+                                    <div>
+                                        <span class="pub-badge badge-journal">Journal</span>
+                                        <span class="pub-badge badge-year">2021g</span>
+                                    </div>
                                 </div>
                                 <div class="pub-meta">Zampirolli, F.A. et al. —
-                                    <strong class="pub-journal">COMPUTER APPLICATIONS IN ENGINEERING</strong>
+                                    <strong class="pub-journal">COMPUTER APPLICATIONS IN ENGINEERING, 2021</strong>
                                 </div>
-                            </a>
 
-                            <a href="https://dx.doi.org/10.5220/0010338002540261" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Automated assessment with multiple-choice questions using weighted answers</span>
-                                    <span class="pub-badge badge-year">2021h</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>CSEDU 2021</em></div>
-                            </a>
+                                <a href="https://dx.doi.org/10.5220/0010338002540261" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Automated assessment with multiple-choice questions using weighted answers</span>
+                                        <span class="pub-badge badge-year">2021h</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>CSEDU, 2021</em></div>
+                                </a>
 
-                            <a href="https://dx.doi.org/10.5220/0010337902450253" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">MakeTests: Generate and Correct Individualized Questions with Many Styles</span>
-                                    <span class="pub-badge badge-year">2021i</span>
-                                </div>
-                                <div class="pub-meta">Teubl, F. et al. — <em>CSEDU 2021</em></div>
-                            </a>
+                                <a href="https://dx.doi.org/10.5220/0010337902450253" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">MakeTests: Generate and Correct Individualized Questions with Many Styles</span>
+                                        <span class="pub-badge badge-year">2021i</span>
+                                    </div>
+                                    <div class="pub-meta">Teubl, F. et al. — <em>CSEDU, 2021</em></div>
+                                </a>
 
-                            <a href="https://dx.doi.org/10.5753/cbie.sbie.2020.51" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Online assessments with parametric questions and automatic corrections</span>
-                                    <span class="pub-badge badge-year">2020a</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>SBIE 2020</em></div>
-                            </a>
+                                <a href="https://dx.doi.org/10.5753/cbie.sbie.2020.51" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Online assessments with parametric questions and automatic corrections</span>
+                                        <span class="pub-badge badge-year">2020a</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>SBIE, 2020</em></div>
+                                </a>
 
-                            <a href="https://dx.doi.org/10.5753/cbie.sbie.2020.1573" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Parameterized and automated assessment on an introductory programming course</span>
-                                    <span class="pub-badge badge-year">2020b</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>SBIE 2020</em></div>
-                            </a>
+                                <a href="https://dx.doi.org/10.5753/cbie.sbie.2020.1573" target="_blank"
+                                   class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Parameterized and automated assessment on an introductory programming course</span>
+                                        <span class="pub-badge badge-year">2020b</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>SBIE, 2020</em></div>
+                                </a>
 
-                            <a href="https://sol.sbc.org.br/index.php/cbie_estendido/article/view/13036" target="_blank"
-                               class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Reconhecimento facial para validação de usuário durante um questionário no Moodle</span>
-                                    <span class="pub-badge badge-year">2020c</span>
-                                </div>
-                                <div class="pub-meta">Silva, D.G., Zampirolli, F.A. — <em>WCBIE 2020</em> (Menção Honrosa)</div>
-                            </a>
+                                <a href="https://sol.sbc.org.br/index.php/cbie_estendido/article/view/13036"
+                                   target="_blank"
+                                   class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Reconhecimento facial para validação de usuário durante um questionário no Moodle</span>
+                                        <span class="pub-badge badge-award">Menção Honrosa</span>
+                                        <span class="pub-badge badge-year">2020c</span>
+                                    </div>
+                                    <div class="pub-meta">Silva, D.G., Zampirolli, F.A. — <em>WCBIE, 2020</em>
+                                    </div>
+                                </a>
 
-                            <a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37" target="_blank"
-                               class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">A Generator and Corrector of Parametric Questions in Hard Copy</span>
-                                    <span class="pub-badge badge-year">2019a</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>ITNG 2019 (Las Vegas)</em></div>
-                            </a>
+                                <a href="https://link.springer.com/chapter/10.1007/978-3-030-14070-0_37" target="_blank"
+                                   class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">A Generator and Corrector of Parametric Questions in Hard Copy</span>
+                                        <span class="pub-badge badge-year">2019a</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>ITNG (Las Vegas), 2019</em></div>
+                                </a>
 
-                            <a href="https://dx.doi.org/10.5220/0007672603520359" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Online Generator and Corrector of Parametric Questions...</span>
-                                    <span class="pub-badge badge-year">2019b</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>CSEDU 2019 (Crete)</em></div>
-                            </a>
+                                <a href="https://dx.doi.org/10.5220/0007672603520359" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Online Generator and Corrector of Parametric Questions...</span>
+                                        <span class="pub-badge badge-year">2019b</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>CSEDU (Crete), 2019</em></div>
+                                </a>
 
-                            <a href="https://dx.doi.org/10.5220/0007711000620069" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Convolutional Neural Network applied to Code Assignment Grading</span>
-                                    <span class="pub-badge badge-year">2019c</span>
-                                </div>
-                                <div class="pub-meta">Rezende, F. et al. — <em>CSEDU 2019</em></div>
-                            </a>
+                                <a href="https://dx.doi.org/10.5220/0007711000620069" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Convolutional Neural Network applied to Code Assignment Grading</span>
+                                        <span class="pub-badge badge-year">2019c</span>
+                                    </div>
+                                    <div class="pub-meta">Rezende, F. et al. — <em>CSEDU, 2019</em></div>
+                                </a>
 
-                            {#                    <div class="pub-item">#}
-                            {#                        <div class="pub-header">#}
-                            {#                            <span class="pub-title">Utilizando Ferramentas Gratuitas para Automatizar Testes de Software em Portais WEB</span>#}
-                            {#                            <span class="pub-badge badge-year">2019d</span>#}
-                            {#                        </div>#}
-                            {#                        <div class="pub-meta">Silva, A.P.M — <em>TCC Engenharia de Informação UFABC</em></div>#}
-                            {#                    </div>#}
+                                <a href="https://doi.org/10.1002/cae.22029" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Evaluation process for an introductory programming course using blended learning</span>
+                                        <div>
+                                            <span class="pub-badge badge-journal">Journal</span>
+                                            <span class="pub-badge badge-year">2018a</span>
+                                        </div>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. —
+                                        <strong class="pub-journal">COMPUTER APPLICATIONS IN ENGINEERING, 2018</strong>
+                                    </div>
+                                </a>
 
-                            <a href="https://doi.org/10.1002/cae.22029" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Evaluation process for an introductory programming course using blended learning</span>
-                                    <span class="pub-badge badge-year">2018a</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. —
-                                    <strong class="pub-journal">COMPUTER APPLICATIONS IN ENGINEERING</strong>
-                                </div>
-                            </a>
+                                <a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517"
+                                   target="_blank"
+                                   class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Método baseado nos Referenciais de Formação da SBC para reestruturação de descritivos de disciplinas de Ciência da Computação em conformidade com as DCN de 2016</span>
+                                        <span class="pub-badge badge-year">2018b</span>
+                                    </div>
+                                    <div class="pub-meta">Calsavara, A. et al. — <em>WEI-CSBC, 2018</em></div>
+                                </a>
 
-                            <a href="http://portaldeconteudo.sbc.org.br/index.php/wei/article/view/3517" target="_blank"
-                               class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Método baseado nos Referenciais de Formação da SBC para reestruturação de descritivos...</span>
-                                    <span class="pub-badge badge-year">2018b</span>
-                                </div>
-                                <div class="pub-meta">Calsavara, A. et al. — <em>WEI-CSBC 2018</em></div>
-                            </a>
+                                <a href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao"
+                                   target="_blank" class="pub-item">
+                                    <div class="pub-header">
 
-                            <a href="http://www.sbc.org.br/noticias/10-slideshow-noticias/2018-sbc-apresenta-referenciais-de-formacao-para-os-cursos-de-graduacao-em-computacao"
-                               target="_blank" class="pub-item">
-                                <div class="pub-header">
+                                        <span class="pub-title">Referenciais de Formação para os Cursos de Graduação em Computação (cap. 2)</span>
+                                        <span class="pub-badge badge-book">Book</span>
+                                        <span class="pub-badge badge-year">2017</span>
+                                    </div>
+                                    <div class="pub-meta">Zorzo, A.F. et al. — <em>SBC, 2017</em></div>
+                                </a>
 
-                                    <span class="pub-title">Referenciais de Formação para os Cursos de Graduação em Computação (cap. 2)</span>
-                                    <span class="pub-badge badge-book">Book</span>
-                                    <span class="pub-badge badge-year">2017</span>
-                                </div>
-                                <div class="pub-meta">Zorzo, A.F. et al. — <em>SBC</em></div>
-                            </a>
+                                <a href="https://ieeexplore.ieee.org/document/7757467" target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">An automatic generator and corrector of multiple choice tests with random answer keys</span>
+                                        <span class="pub-badge badge-year">2016a</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>FIE (IEEE), 2016</em></div>
+                                </a>
 
-                            <a href="https://ieeexplore.ieee.org/document/7757467" target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">An automatic generator and corrector of multiple choice tests with random answer keys</span>
-                                    <span class="pub-badge badge-year">2016a</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>FIE 2016 (IEEE)</em></div>
-                            </a>
+                                <a href="https://www.researchgate.net/publication/371069567_An_Application_for_Automatic_Multiple-Choice_Test_Grading_on_Android"
+                                   target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">An application for automatic multiple-choice test grading on android</span>
+                                        <div>
+                                            <span class="pub-badge badge-journal">Journal</span>
+                                            <span class="pub-badge badge-year">2016b</span>
+                                        </div>
+                                    </div>
+                                    <div class="pub-meta">China, R.T. et al. —
+                                        <strong class="pub-journal">REVISTA
+                                            BRASILEIRA DE
+                                            INICIAÇÃO CIENTÍFICA, 2016</strong>
+                                    </div>
+                                </a>
 
-                            <a href="https://www.researchgate.net/publication/371069567_An_Application_for_Automatic_Multiple-Choice_Test_Grading_on_Android"
-                               target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">An application for automatic multiple-choice test grading on android</span>
-                                    <span class="pub-badge badge-year">2016b</span>
-                                </div>
-                                <div class="pub-meta">China, R.T. et al. — <strong class="pub-journal">REVISTA BRASILEIRA DE
-                                    INICIAÇÃO CIENTÍFICA</strong>
-                                </div>
-                            </a>
+                                <a href="https://www.researchgate.net/publication/360223017_Automatic_Correction_of_Multiple-Choice_Tests_on_Android_Devices"
+                                   target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Automatic Correction of Multiple-Choice Tests on Android Devices</span>
+                                        <span class="pub-badge badge-year">2015</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>Workshop de Visão Computacional
+                                        (WVC), 2015</em>
+                                    </div>
+                                </a>
 
-                            <a href="https://www.researchgate.net/publication/360223017_Automatic_Correction_of_Multiple-Choice_Tests_on_Android_Devices"
-                               target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Automatic Correction of Multiple-Choice Tests on Android Devices</span>
-                                    <span class="pub-badge badge-year">2015</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>Workshop de Visão Computacional (WVC)</em>
-                                </div>
-                            </a>
-
-                            <a href="https://www.researchgate.net/publication/360222832_Automatic_Correction_of_Multiple-Choice_Tests_using_Digital_Cameras_and_Image_Processing"
-                               target="_blank" class="pub-item">
-                                <div class="pub-header">
-                                    <span class="pub-title">Automatic Correction of Multiple-Choice Tests using Digital Cameras</span>
-                                    <span class="pub-badge badge-year">2013</span>
-                                </div>
-                                <div class="pub-meta">Zampirolli, F.A. et al. — <em>Workshop de Visão Computacional (WVC)</em>
-                                </div>
-                            </a>
+                                <a href="https://www.researchgate.net/publication/360222832_Automatic_Correction_of_Multiple-Choice_Tests_using_Digital_Cameras_and_Image_Processing"
+                                   target="_blank" class="pub-item">
+                                    <div class="pub-header">
+                                        <span class="pub-title">Automatic Correction of Multiple-Choice Tests using Digital Cameras</span>
+                                        <span class="pub-badge badge-year">2013</span>
+                                    </div>
+                                    <div class="pub-meta">Zampirolli, F.A. et al. — <em>Workshop de Visão Computacional
+                                        (WVC), 2013</em>
+                                    </div>
+                                </a>
 
                         </div>
                     </div>
@@ -1274,7 +1326,8 @@
                                     <tr>
                                         <th style="width: 40%; border:none;">{% trans "Users" %}</th>
                                         <th style="width: 40%; border:none;">{% trans "Access History" %}</th>
-                                        <th style="width: 20%; border:none;" class="text-right">{% trans "Status" %}</th>
+                                        <th style="width: 20%; border:none;"
+                                            class="text-right">{% trans "Status" %}</th>
                                     </tr>
                                     </thead>
 
