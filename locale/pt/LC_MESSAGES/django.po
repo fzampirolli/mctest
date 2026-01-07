@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-02 08:05-0300\n"
+"POT-Creation-Date: 2026-01-07 07:06-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -593,7 +593,7 @@ msgstr "Atualizar "
 #: exam/templates/exam/exam_list_who_created_user.html:26 index.html:491
 #: main/templates/base_generic.html:77 main/templates/base_generic.html:161
 #: main/templates/index - cópia.html:491 main/templates/index-mctest.html:430
-#: main/templates/index.html:788
+#: main/templates/index.html:807
 msgid "Classrooms"
 msgstr "Turmas"
 
@@ -788,7 +788,7 @@ msgstr "A seleção manual não é recomendada para turmas grandes."
 
 #: course/templates/classroom/classroom_update.html:86 index.html:521
 #: main/templates/index - cópia.html:521 main/templates/index-mctest.html:450
-#: main/templates/index.html:820
+#: main/templates/index.html:839
 msgid "Students"
 msgstr "Estudantes"
 
@@ -1318,7 +1318,7 @@ msgstr "Escolha as Questões (de Disciplinas que você está cadastrado)"
 #: exam/forms.py:96 exam/models.py:53 exam/models.py:128
 #: exam/templates/exam/exam_update5.4.html:204 index.html:505
 #: main/templates/base_generic.html:158 main/templates/index - cópia.html:505
-#: main/templates/index-mctest.html:442 main/templates/index.html:808
+#: main/templates/index-mctest.html:442 main/templates/index.html:827
 #: topic/UtilsMCTest4.py:504
 msgid "Questions"
 msgstr "Questões"
@@ -1548,7 +1548,7 @@ msgstr ""
 
 #: exam/models.py:234 exam/templates/exam/exam_update5.3.html:569
 #: exam/templates/exam/exam_update5.4.html:967 index.html:592
-#: main/templates/index - cópia.html:592 main/templates/index.html:898
+#: main/templates/index - cópia.html:592 main/templates/index.html:917
 #: topic/forms.py:104 topic/models.py:50 topic/models.py:96
 #: topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
@@ -1996,7 +1996,7 @@ msgstr "Número de [GRUPOS, se definido ou] Questões por Exame"
 #: exam/templates/exam/exam_update5.4.html:1111 index.html:147 index.html:181
 #: main/templates/index - cópia.html:147 cópia.html:181
 #: main/templates/index-mctest.html:127 main/templates/index-mctest.html:159
-#: main/templates/index.html:447 main/templates/index.html:481
+#: main/templates/index.html:468 main/templates/index.html:502
 msgid "Exam Style"
 msgstr "Estilo do Exame"
 
@@ -2498,7 +2498,7 @@ msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
 #: index.html:17 main/templates/index - cópia.html:17
 #: main/templates/index-mctest.html:16 main/templates/index-mctest.html:483
-#: main/templates/index.html:318
+#: main/templates/index.html:339
 msgid "MCTest"
 msgstr ""
 
@@ -2506,43 +2506,43 @@ msgstr ""
 #: main/templates/index - cópia.html:73 cópia.html:94 cópia.html:113
 #: cópia.html:130 main/templates/index-mctest.html:59
 #: main/templates/index-mctest.html:78 main/templates/index-mctest.html:95
-#: main/templates/index-mctest.html:111 main/templates/index.html:373
-#: main/templates/index.html:394 main/templates/index.html:413
-#: main/templates/index.html:430
+#: main/templates/index-mctest.html:111 main/templates/index.html:394
+#: main/templates/index.html:415 main/templates/index.html:434
+#: main/templates/index.html:451
 msgid "LaTeX Command"
 msgstr "Comando LaTeX"
 
 #: index.html:74 main/templates/index - cópia.html:74
-#: main/templates/index-mctest.html:60 main/templates/index.html:374
+#: main/templates/index-mctest.html:60 main/templates/index.html:395
 msgid "A simple question with latex command"
 msgstr "Uma simples questão com comando LaTeX"
 
 #: index.html:75 main/templates/index - cópia.html:75
-#: main/templates/index-mctest.html:61 main/templates/index.html:375
+#: main/templates/index-mctest.html:61 main/templates/index.html:396
 msgid "After clicking Create-PDF, see the next slide"
 msgstr "Após clicar em Criar-PDF, ver próximo slide"
 
 #: index.html:95 main/templates/index - cópia.html:95
-#: main/templates/index-mctest.html:79 main/templates/index.html:395
+#: main/templates/index-mctest.html:79 main/templates/index.html:416
 msgid ""
 "The formulas between $ from the previous slide are presented differently"
 msgstr ""
 "As fórmulas entre $ do slide anterior são apresentadas de maneira diferente"
 
 #: index.html:114 main/templates/index - cópia.html:114
-#: main/templates/index-mctest.html:96 main/templates/index.html:414
+#: main/templates/index-mctest.html:96 main/templates/index.html:435
 msgid "Adding an image that is on the web"
 msgstr "Adicionando uma imagem que está na web"
 
 #: index.html:131 main/templates/index - cópia.html:131
-#: main/templates/index-mctest.html:112 main/templates/index.html:431
+#: main/templates/index-mctest.html:112 main/templates/index.html:452
 msgid "Question with image to display on exam"
 msgstr "Questão com a imagem a ser exibida no exame"
 
 #: index.html:148 index.html:165 main/templates/index - cópia.html:148
 #: cópia.html:165 main/templates/index-mctest.html:128
-#: main/templates/index-mctest.html:144 main/templates/index.html:448
-#: main/templates/index.html:465
+#: main/templates/index-mctest.html:144 main/templates/index.html:469
+#: main/templates/index.html:486
 msgid ""
 "Exam only with answers (in the correction, the template is the first page of "
 "the PDF)"
@@ -2551,12 +2551,12 @@ msgstr ""
 "PDF)"
 
 #: index.html:164 main/templates/index - cópia.html:164
-#: main/templates/index-mctest.html:143 main/templates/index.html:464
+#: main/templates/index-mctest.html:143 main/templates/index.html:485
 msgid "Exam Style - Vertical"
 msgstr "Estilo do Exame - Vertical"
 
 #: index.html:182 main/templates/index - cópia.html:182
-#: main/templates/index-mctest.html:160 main/templates/index.html:482
+#: main/templates/index-mctest.html:160 main/templates/index.html:503
 msgid ""
 "Q&A (the correct answer can be found with '#0' in the PDF, details in yellow)"
 msgstr ""
@@ -2564,12 +2564,12 @@ msgstr ""
 "busca no PDF por '#0', detalhes em amarelo)"
 
 #: index.html:198 main/templates/index - cópia.html:198
-#: main/templates/index-mctest.html:175 main/templates/index.html:498
+#: main/templates/index-mctest.html:175 main/templates/index.html:519
 msgid "Parametric Question - Part I"
 msgstr "Questão Paramétrica - Parte I"
 
 #: index.html:199 main/templates/index - cópia.html:199
-#: main/templates/index-mctest.html:176 main/templates/index.html:499
+#: main/templates/index-mctest.html:176 main/templates/index.html:520
 msgid ""
 "In the description, we have python code between '[[code:' and ']]' - to "
 "'[[def:"
@@ -2578,12 +2578,12 @@ msgstr ""
 "'[[def:' e ']]'"
 
 #: index.html:215 main/templates/index - cópia.html:215
-#: main/templates/index-mctest.html:191 main/templates/index.html:515
+#: main/templates/index-mctest.html:191 main/templates/index.html:536
 msgid "Parametric Question - Part II"
 msgstr "Questão Paramétrica - Parte II"
 
 #: index.html:216 main/templates/index - cópia.html:216
-#: main/templates/index-mctest.html:192 main/templates/index.html:516
+#: main/templates/index-mctest.html:192 main/templates/index.html:537
 msgid ""
 "Attributes and answers to a question. When creating a question, the first "
 "alternative is always the correct one"
@@ -2592,12 +2592,12 @@ msgstr ""
 "alternativa é sempre a correta"
 
 #: index.html:232 main/templates/index - cópia.html:232
-#: main/templates/index-mctest.html:207 main/templates/index.html:532
+#: main/templates/index-mctest.html:207 main/templates/index.html:553
 msgid "Parametric Question - Part III"
 msgstr "Questão Paramétrica - Parte III"
 
 #: index.html:233 main/templates/index - cópia.html:233
-#: main/templates/index-mctest.html:208 main/templates/index.html:533
+#: main/templates/index-mctest.html:208 main/templates/index.html:554
 msgid ""
 "Question to be displayed. Note the order in which answers were drawn after "
 "'#'"
@@ -2606,84 +2606,84 @@ msgstr ""
 "após '#'"
 
 #: index.html:234 main/templates/index - cópia.html:234
-#: main/templates/index-mctest.html:209 main/templates/index.html:534
+#: main/templates/index-mctest.html:209 main/templates/index.html:555
 msgid "You can assign different weights for each anwers, on the exam grade"
 msgstr ""
 "Você pode atribuir pesos diferentes a cada alternativa, na nota do exame"
 
 #: index.html:252 main/templates/index - cópia.html:252
-#: main/templates/index-mctest.html:225 main/templates/index.html:552
+#: main/templates/index-mctest.html:225 main/templates/index.html:573
 msgid "Parametric Question - Example I"
 msgstr "Questão Paramétrica - Exemplo I"
 
 #: index.html:253 main/templates/index - cópia.html:253
-#: main/templates/index-mctest.html:226 main/templates/index.html:553
+#: main/templates/index-mctest.html:226 main/templates/index.html:574
 msgid "Example with equation and figure"
 msgstr "Exemplo com equação e figura"
 
 #: index.html:271 main/templates/index - cópia.html:271
-#: main/templates/index-mctest.html:242 main/templates/index.html:571
+#: main/templates/index-mctest.html:242 main/templates/index.html:592
 msgid "Parametric Question - Example II"
 msgstr "Questão Paramétrica - Exemplo II"
 
 #: index.html:272 main/templates/index - cópia.html:272
-#: main/templates/index-mctest.html:243 main/templates/index.html:572
+#: main/templates/index-mctest.html:243 main/templates/index.html:593
 msgid "Example with graph"
 msgstr "Exemplo com grafo"
 
 #: index.html:289 main/templates/index - cópia.html:289
-#: main/templates/index-mctest.html:258 main/templates/index.html:589
+#: main/templates/index-mctest.html:258 main/templates/index.html:610
 msgid "Parametric Question - Example III"
 msgstr "Questão Paramétrica - Exemplo III"
 
 #: index.html:290 main/templates/index - cópia.html:290
-#: main/templates/index-mctest.html:259 main/templates/index.html:590
+#: main/templates/index-mctest.html:259 main/templates/index.html:611
 msgid "Example with matrix"
 msgstr "Exemplo com matriz"
 
 #: index.html:307 main/templates/index - cópia.html:307
-#: main/templates/index-mctest.html:274 main/templates/index.html:607
+#: main/templates/index-mctest.html:274 main/templates/index.html:628
 msgid "CSV File with Exam Correction"
 msgstr "Arquivo CSV com as correções dos exames"
 
 #: index.html:308 index.html:329 main/templates/index - cópia.html:308
 #: cópia.html:329 main/templates/index-mctest.html:275
-#: main/templates/index-mctest.html:294 main/templates/index.html:608
-#: main/templates/index.html:629
+#: main/templates/index-mctest.html:294 main/templates/index.html:629
+#: main/templates/index.html:650
 msgid "In yellow, answer marked '/' correct answer"
 msgstr "Em amarelo, alternativa marcada '/' alternativa correta"
 
 #: index.html:309 main/templates/index - cópia.html:309
-#: main/templates/index-mctest.html:276 main/templates/index.html:609
+#: main/templates/index-mctest.html:276 main/templates/index.html:630
 msgid "In green, Question ID in the DB and answers order (0=A, 1=B, ...)"
 msgstr "Em verde, ID da questão no BD e ordem das alternativas (0=A, 1=B, ...)"
 
 #: index.html:310 index.html:330 main/templates/index - cópia.html:310
 #: cópia.html:330 main/templates/index-mctest.html:277
-#: main/templates/index-mctest.html:295 main/templates/index.html:610
-#: main/templates/index.html:630
+#: main/templates/index-mctest.html:295 main/templates/index.html:631
+#: main/templates/index.html:651
 msgid "ID here means exam variations"
 msgstr "Aqui ID siginifica variações de Exame"
 
 #: index.html:327 main/templates/index - cópia.html:327
-#: main/templates/index-mctest.html:292 main/templates/index.html:627
+#: main/templates/index-mctest.html:292 main/templates/index.html:648
 msgid "Grade with weight"
 msgstr "Notas com pesos"
 
 #: index.html:330 main/templates/index - cópia.html:330
-#: main/templates/index-mctest.html:295 main/templates/index.html:630
+#: main/templates/index-mctest.html:295 main/templates/index.html:651
 msgid "In green, answers with weight"
 msgstr "Em verde, alternativas com pesos"
 
 #: index.html:348 index.html:365 main/templates/index - cópia.html:348
 #: cópia.html:365 main/templates/index-mctest.html:311
-#: main/templates/index-mctest.html:328 main/templates/index.html:648
-#: main/templates/index.html:665
+#: main/templates/index-mctest.html:328 main/templates/index.html:669
+#: main/templates/index.html:686
 msgid "Text parametric question, no multiple-choice"
 msgstr "Criar Questões Paramétricas, sem múltipla-escolha"
 
 #: index.html:349 main/templates/index - cópia.html:349
-#: main/templates/index-mctest.html:312 main/templates/index.html:649
+#: main/templates/index-mctest.html:312 main/templates/index.html:670
 msgid ""
 "With random values ​​for a, b, c and d. In this case, it is possible to draw "
 "the answer in light colors, see next slide"
@@ -2696,14 +2696,14 @@ msgstr ""
 #: cópia.html:420 cópia.html:436 main/templates/index-mctest.html:313
 #: main/templates/index-mctest.html:330 main/templates/index-mctest.html:347
 #: main/templates/index-mctest.html:381 main/templates/index-mctest.html:398
-#: main/templates/index.html:650 main/templates/index.html:667
-#: main/templates/index.html:684 main/templates/index.html:720
-#: main/templates/index.html:736
+#: main/templates/index.html:671 main/templates/index.html:688
+#: main/templates/index.html:705 main/templates/index.html:741
+#: main/templates/index.html:757
 msgid "all until"
 msgstr "todos até"
 
 #: index.html:366 main/templates/index - cópia.html:366
-#: main/templates/index-mctest.html:329 main/templates/index.html:666
+#: main/templates/index-mctest.html:329 main/templates/index.html:687
 msgid ""
 "The answer in light colors, not to appear printed. You can program the "
 "answer to have a similar number of lines (same difficulty)"
@@ -2712,12 +2712,12 @@ msgstr ""
 "a resposta para ter um número semelhante de linhas (mesma dificuldade)"
 
 #: index.html:382 main/templates/index - cópia.html:382
-#: main/templates/index-mctest.html:345 main/templates/index.html:682
+#: main/templates/index-mctest.html:345 main/templates/index.html:703
 msgid "Email corrections to each student"
 msgstr "Correções por e-mail para cada estudante"
 
 #: index.html:383 main/templates/index - cópia.html:383
-#: main/templates/index-mctest.html:346 main/templates/index.html:683
+#: main/templates/index-mctest.html:346 main/templates/index.html:704
 msgid ""
 "It is also possible to include in the email a PDF file with the text of the "
 "questions, the alternative the student has marked, the feedback and the "
@@ -2728,24 +2728,24 @@ msgstr ""
 "incorreta)"
 
 #: index.html:399 main/templates/index - cópia.html:399
-#: main/templates/index-mctest.html:362 main/templates/index.html:699
+#: main/templates/index-mctest.html:362 main/templates/index.html:720
 msgid "Email with some correction statistics"
 msgstr "Email com algumas estatísticas das correções"
 
 #: index.html:400 main/templates/index - cópia.html:400
-#: main/templates/index-mctest.html:363 main/templates/index.html:700
+#: main/templates/index-mctest.html:363 main/templates/index.html:721
 msgid ""
 "The teacher receives this email after sending a PDF of the scanned exams"
 msgstr ""
 "O professor recebe esse email após o envio de um PDF dos exames digitalizados"
 
 #: index.html:418 main/templates/index - cópia.html:418
-#: main/templates/index-mctest.html:379 main/templates/index.html:718
+#: main/templates/index-mctest.html:379 main/templates/index.html:739
 msgid "Email with test cases of moodle + VPL"
 msgstr "Email com os casos de teste do moodle + VPL"
 
 #: index.html:419 main/templates/index - cópia.html:419
-#: main/templates/index-mctest.html:380 main/templates/index.html:719
+#: main/templates/index-mctest.html:380 main/templates/index.html:740
 msgid ""
 "The teacher receives this email after creating the variations when there is "
 "an exam that contains program exercises"
@@ -2754,14 +2754,14 @@ msgstr ""
 "que contenha exercícios programa"
 
 #: index.html:435 main/templates/index - cópia.html:435
-#: main/templates/index-mctest.html:396 main/templates/index.html:735
+#: main/templates/index-mctest.html:396 main/templates/index.html:756
 msgid ""
 "Email with templates, DBs (for import into moodle) and variation per student"
 msgstr ""
 "Email com gabaritos, BDs (para importação no moodle) e variação por aluno"
 
 #: index.html:436 main/templates/index - cópia.html:436
-#: main/templates/index-mctest.html:397 main/templates/index.html:736
+#: main/templates/index-mctest.html:397 main/templates/index.html:757
 msgid ""
 "The teacher receives this email after creating the variations when there is "
 "an exam containing multiple-choice questions or questions with answers"
@@ -2786,7 +2786,7 @@ msgstr ""
 "e correção de exames, com geração e correção de muitos exames."
 
 #: index.html:476 main/templates/index - cópia.html:476
-#: main/templates/index-mctest.html:417 main/templates/index.html:760
+#: main/templates/index-mctest.html:417 main/templates/index.html:779
 msgid "Dynamic content"
 msgstr "Conteúdo dinâmico"
 
@@ -2800,7 +2800,7 @@ msgid "see also:"
 msgstr "ver também"
 
 #: index.html:482 main/templates/index - cópia.html:482
-#: main/templates/index-mctest.html:421 main/templates/index.html:770
+#: main/templates/index-mctest.html:421 main/templates/index.html:789
 msgid "Institutes"
 msgstr "Institutos"
 
@@ -2810,7 +2810,7 @@ msgid "Institute has Courses"
 msgstr "Instituto tem Cursos"
 
 #: index.html:485 main/templates/index - cópia.html:485
-#: main/templates/index-mctest.html:424 main/templates/index.html:776
+#: main/templates/index-mctest.html:424 main/templates/index.html:795
 msgid "Courses"
 msgstr "Cursos"
 
@@ -2820,7 +2820,7 @@ msgid "Course has Disciplines"
 msgstr "Curso tem Disciplinas"
 
 #: index.html:488 main/templates/index - cópia.html:488
-#: main/templates/index-mctest.html:427 main/templates/index.html:782
+#: main/templates/index-mctest.html:427 main/templates/index.html:801
 #: topic/models.py:43
 msgid "Disciplines"
 msgstr "Disciplinas"
@@ -2837,7 +2837,7 @@ msgstr "Turmas tem Exames, Profs e Estudantes"
 
 #: index.html:494 main/templates/base_generic.html:164 main/templates/index -
 #: cópia.html:494 main/templates/index-mctest.html:433
-#: main/templates/index.html:794
+#: main/templates/index.html:813
 msgid "Exams"
 msgstr "Exames"
 
@@ -2878,23 +2878,23 @@ msgstr "Paramétrica"
 
 #: index.html:522 index.html:899 main/templates/index - cópia.html:522
 #: cópia.html:899 main/templates/index-mctest.html:451
-#: main/templates/index-mctest.html:503 main/templates/index.html:826
-#: main/templates/index.html:1275
+#: main/templates/index-mctest.html:503 main/templates/index.html:845
+#: main/templates/index.html:1351
 msgid "Users"
 msgstr "Usuários"
 
 #: index.html:528 main/templates/index - cópia.html:528
-#: main/templates/index-mctest.html:456 main/templates/index.html:839
+#: main/templates/index-mctest.html:456 main/templates/index.html:858
 msgid "Explanatory videos"
 msgstr "Vídeos explicativos"
 
 #: index.html:562 main/templates/index - cópia.html:562
-#: main/templates/index.html:863
+#: main/templates/index.html:882
 msgid "Research Project"
 msgstr "Projeto de Pesquisa"
 
 #: index.html:565 index.html:590 main/templates/index - cópia.html:565
-#: cópia.html:590 main/templates/index.html:870 main/templates/index.html:897
+#: cópia.html:590 main/templates/index.html:889 main/templates/index.html:916
 msgid "Title"
 msgstr "Título"
 
@@ -2903,12 +2903,12 @@ msgid "History"
 msgstr "Histórico"
 
 #: index.html:575 main/templates/index - cópia.html:575
-#: main/templates/index.html:887
+#: main/templates/index.html:906
 msgid "Software registration"
 msgstr "Registro de software"
 
 #: index.html:585 main/templates/index - cópia.html:585
-#: main/templates/index.html:896
+#: main/templates/index.html:915
 msgid "Order"
 msgstr "Pedido"
 
@@ -2924,7 +2924,7 @@ msgid "exams generated in LaTeX using a MySQL DB"
 msgstr "exames gerados em LaTeX usando o BD MySQL"
 
 #: index.html:614 main/templates/index - cópia.html:614
-#: main/templates/index.html:914
+#: main/templates/index.html:934
 msgid "Developed in Python for LaTeX generated exams"
 msgstr "Desenvolvido em Python para exames gerados em Latex"
 
@@ -2945,7 +2945,7 @@ msgstr ""
 "BROffice"
 
 #: index.html:644 main/templates/index - cópia.html:644
-#: main/templates/index.html:931
+#: main/templates/index.html:952
 msgid "Developed in Android"
 msgstr "Desenvolvido em Android"
 
@@ -2962,12 +2962,12 @@ msgstr ""
 "BROffice"
 
 #: index.html:668 main/templates/index - cópia.html:668
-#: main/templates/index.html:949
+#: main/templates/index.html:971
 msgid "Publications"
 msgstr "Publicações"
 
 #: index.html:886 main/templates/index - cópia.html:886
-#: main/templates/index-mctest.html:491 main/templates/index.html:1264
+#: main/templates/index-mctest.html:491 main/templates/index.html:1340
 msgid "For verification"
 msgstr "Para verificação"
 
@@ -2977,22 +2977,22 @@ msgid "Last Login"
 msgstr "Último Acesso"
 
 #: index.html:931 main/templates/index - cópia.html:931
-#: main/templates/index-mctest.html:533 main/templates/index.html:1338
+#: main/templates/index-mctest.html:533 main/templates/index.html:1424
 msgid "You have visited this page"
 msgstr "Você visitou esta página"
 
 #: index.html:932 main/templates/index - cópia.html:932
-#: main/templates/index-mctest.html:534 main/templates/index.html:1340
+#: main/templates/index-mctest.html:534 main/templates/index.html:1426
 msgid "time"
 msgstr "vez"
 
 #: index.html:932 main/templates/index - cópia.html:932
-#: main/templates/index-mctest.html:534 main/templates/index.html:1340
+#: main/templates/index-mctest.html:534 main/templates/index.html:1426
 msgid "times"
 msgstr "vezes"
 
 #: index.html:934 main/templates/index - cópia.html:934
-#: main/templates/index-mctest.html:536 main/templates/index.html:1343
+#: main/templates/index-mctest.html:536 main/templates/index.html:1429
 msgid "Send improvement suggestions to"
 msgstr "Enviar sugestões de melhoria para"
 
@@ -3531,7 +3531,8 @@ msgstr "Quem utiliza"
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:701
+#: main/templates/base_generic.html:701 main/templates/index.html:1068
+#: main/templates/index.html:1261
 msgid "Book"
 msgstr "Livro"
 
@@ -3681,38 +3682,60 @@ msgstr ""
 msgid "global vision (in English)"
 msgstr "Versão global (em Inglês)"
 
-#: main/templates/index.html:847
+#: main/templates/index.html:866
 msgid ""
 "Learn how to create classrooms, exams, and parametric questions step-by-step."
 msgstr "Aprenda a criar turmas, exames e questões paramétricas passo a passo."
 
-#: main/templates/index.html:852
+#: main/templates/index.html:871
 msgid "Watch on YouTube"
 msgstr "Assista no YouTube"
 
-#: main/templates/index.html:906
+#: main/templates/index.html:925
 msgid "Developed in Python (with Django) for automatic correction"
 msgstr "Desenvolvido em Python (com Django) para a correção automática"
 
-#: main/templates/index.html:921
+#: main/templates/index.html:941
 msgid "Developed in Python for automatic correction"
 msgstr "Desenvolvido em Python para a correção automática"
 
-#: main/templates/index.html:926
+#: main/templates/index.html:946
 msgid "Developed in Python"
 msgstr "Desenvolvido em Python"
 
-#: main/templates/index.html:936
+#: main/templates/index.html:958
 msgid "Developed in Matlab"
 msgstr "Desenvolvido em Matlab"
 
-#: main/templates/index.html:1276
+#: main/templates/index.html:1007 main/templates/index.html:1020
+#: main/templates/index.html:1034 main/templates/index.html:1154
+#: main/templates/index.html:1236 main/templates/index.html:1280
+msgid "Journal"
+msgstr "Revista"
+
+#: main/templates/index.html:1053
+msgid "Best Paper"
+msgstr "Melhor Artigo"
+
+#: main/templates/index.html:1200 main/templates/index.html:1250
+msgid "Honorable Mention"
+msgstr "Menção Honrosa"
+
+#: main/templates/index.html:1308
+msgid "2nd Place"
+msgstr "2º Lugar"
+
+#: main/templates/index.html:1352
 msgid "Access History"
 msgstr "Histórico"
 
-#: main/templates/index.html:1277
+#: main/templates/index.html:1354
 msgid "Status"
-msgstr ""
+msgstr "Status"
+
+#: main/templates/index.html:1398
+msgid "Never logged in"
+msgstr "Nunca fez login"
 
 #: main/templates/license.html:9 main/templates/readme.html:18
 msgid "License"
