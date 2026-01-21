@@ -50,7 +50,8 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         from scipy.special import comb
         output, pode_gerar = [], True
         T, F = len(T), len(F)
-        if N * C < A or C >= N or P > T:
+        #if N * C < A or C >= N or P > T:
+        if C >= N or P > T:
             output.append(f"ERRO: Não é possível gerar variações com {A} alternativas,"
                           f" {N} itens e {C} item(ns) correto(s)")
             pode_gerar = False
@@ -61,9 +62,15 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         if comb(T + F, P) < N:
             output.append(f"ERRO: Não é possível gerar {N} itens")
             pode_gerar = False
-        if comb(N, P) < A:
-            output.append(f"ERRO: Não é possível gerar {A} alternativas")
+        # if comb(N, P) < A:
+        #     output.append(f"ERRO: Não é possível gerar {A} alternativas")
+        #     pode_gerar = False
+        # O número total de combinações possíveis de itens (de 1 a num_itens) é 2^n - 1
+        total_combinacoes_possiveis = (2**N) - 1
+        if total_combinacoes_possiveis < A:
+            output.append(f"ERRO: num_itens ({N}) gera no máximo {total_combinacoes_possiveis} alternativas únicas.")
             pode_gerar = False
+
         variacoes = (f'Número de variações possíveis: '
                      f'comb({comb(T + F, P):.0f},{N}) = {comb(comb(T + F, P), N):.0f}')
         itens_format = ''
@@ -126,7 +133,7 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         for i, item in enumerate(itens):
             s = f"{'; '.join(item)}"
             # itens_format += f"\item {itens_str[i]}. {s}\n"
-            itens_format += f"\item {s}\n"
+            itens_format += f"\item {s}\n" # isso é o correto!
 
             # Adicionar o índice do item à lista de itens corretos
             for c in itens_corretos:
@@ -151,18 +158,40 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
 
         corretos = gerar_indices_itens_corretos(itens, itens_corretos)
 
-        # Alternativa correta
-        aux = []
-        for corr in range(num_itens_corretos):
-            aux.append(itens_str[corretos[corr]])
-        itens_comb = [aux]
+        # # Alternativa correta (continua fixa na quantidade de itens corretos)
+        # aux_correto = []
+        # for corr in range(num_itens_corretos):
+        #     aux_correto.append(itens_str[corretos[corr]])
+        # itens_comb = [aux_correto] # A primeira sempre é a correta
 
-        # Gerar alternativas erradas
-        for i in range(num_alternativas):
-            aux = sorted(random.sample(itens_str[:num_itens], num_itens_corretos))
-            # Incluir apenas alternativas diferentes
-            if not aux in itens_comb:
-                itens_comb.append(aux)
+        # Alternativa correta (fixa com os índices dos itens verdadeiros)
+        aux_correto = sorted([itens_str[i] for i in corretos])
+        itens_comb = [aux_correto]
+
+        ###########
+        # Gerar alternativas erradas com TAMANHOS VARIÁVEIS
+        import itertools
+        # 1. Gera todas as combinações possíveis de 1 até num_itens elementos
+        todas_combinacoes = []
+        for r in range(1, num_itens + 1):
+            for combo in itertools.combinations(itens_str[:num_itens], r):
+                todas_combinacoes.append(list(combo))
+
+        # 2. Remove a correta da lista de opções para não sorteá-la como errada
+        if aux_correto in todas_combinacoes:
+            todas_combinacoes.remove(aux_correto)
+
+        # 3. Sorteia as erradas necessárias (num_alternativas - 1)
+        # O sample garante que não haverá duplicatas
+        erradas_sorteadas = random.sample(todas_combinacoes, num_alternativas - 1)
+
+        # 4. Une Correta + Erradas (e ordena as letras de cada alternativa)
+        itens_comb = [aux_correto] + [sorted(e) for e in erradas_sorteadas]
+
+        # Opcional: Embaralha as alternativas para a correta não ser sempre a 'A'
+        # NÃO USAR, POIS A 1a sempre deve ser a correta - depois embaralha...
+        #random.shuffle(itens_comb)
+        ################
 
         # Montar as descrições das alternativas
         descricoes = []
@@ -177,15 +206,15 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         # Encerrar o loop, pois a questão foi gerada com sucesso
         break
 
-    if pode_gerar:
-        print('Quais itens têm apenas números ímpares')
-        print('Itens:')
-        print(itens_format)
-
-        print("Alternativas:")
-        opcoes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        for idx, alt in enumerate(descricoes):
-            print(f"{opcoes[idx]}. {alt}")
+    # if pode_gerar:
+    #     print('Quais itens têm apenas números ímpares')
+    #     print('Itens:')
+    #     print(itens_format)
+    #
+    #     print("Alternativas:")
+    #     opcoes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    #     for idx, alt in enumerate(descricoes):
+    #         print(f"{opcoes[idx]}. {alt}")
 
     return itens_format, descricoes
 
