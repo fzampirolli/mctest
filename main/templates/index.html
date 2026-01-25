@@ -345,13 +345,13 @@
                             ✅ Esta é a <strong>versão estável</strong> atualmente em <strong>produção</strong> ✅
                         </div>
 
-                        <p class="text-muted mt-2">
-                            🔗 Ver versão para desenvolvimento e backup diário:
-                            <a href="http://vision.ufabc.edu.br:80" target="_blank"
-                               class="text-indigo-600 font-semibold hover:underline">
-                                vision.ufabc.edu.br
-                            </a>
-                        </p>
+{#                        <p class="text-muted mt-2">#}
+{#                            🔗 Ver versão para desenvolvimento e backup diário:#}
+{#                            <a href="http://vision.ufabc.edu.br:80" target="_blank"#}
+{#                               class="text-indigo-600 font-semibold hover:underline">#}
+{#                                vision.ufabc.edu.br#}
+{#                            </a>#}
+{#                        </p>#}
                     </div>
                 </div>
 
@@ -894,8 +894,18 @@
                                    target="_blank" class="badge badge-success p-2 ml-2">FAPESP #2018/23561-1</a>
                                 <span class="text-muted ml-3 small"><i class="fa fa-calendar mr-1"></i> 01 Sep 19 - 31 Aug 21</span>
                             </p>
+                            <p></p>
+
+                            <p class="mb-2"><strong>{% trans "Title" %}:</strong> "Modelagem de objetos usando morfologia matemática e grafos de vizinhança"</p>
+                            <p class="mb-0">
+                                <strong>Support:</strong>
+                                <a href="https://bv.fapesp.br/pt/auxilios/28430/modelagem-de-objetos-usando-morfologia-matematica-e-grafos-de-vizinhanca/"
+                                   target="_blank" class="badge badge-success p-2 ml-2">FAPESP #2009/14430-1</a>
+                                <span class="text-muted ml-3 small"><i class="fa fa-calendar mr-1"></i> 01 May 10 - 30 Apr 12</span>
+                            </p>
                         </div>
                     </div>
+
                 </div>
 
 
@@ -922,9 +932,7 @@
                                     <td class="text-center">-</td>
                                     <td class="text-dark font-weight-bold">MCTest 5</td>
                                     <td>
-                                        {% trans "Developed in Python (with Django) for automatic correction" %} -
-                                        <a href="http://vision.ufabc.edu.br"
-                                           class="text-muted text-decoration-none hover-dark">vision.ufabc.edu.br</a>
+                                        {% trans "Developed in Python (with Django) for automatic correction" %}
                                     </td>
                                 </tr>
 
