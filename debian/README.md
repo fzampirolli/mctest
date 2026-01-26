@@ -13,7 +13,7 @@ O MCTest é um aplicativo web baseado no framework Django, com muitas dependênc
   - **Automação:** Usa scripts para automatizar tarefas após a instalação, como a configuração do banco de dados.
   - **Integração com o Sistema:** Integra o aplicativo ao sistema operacional, adicionando um atalho na área de trabalho, como qualquer outro programa.
 
-Download (1.6GB): https://drive.google.com/file/d/1LqyMbcAvLv7KNAUzw18vKajKEAKlL8HR/view?usp=sharing
+Download (do arquivo `mctest_5.3_amd64.deb` com 1.6GB): https://drive.google.com/file/d/1LqyMbcAvLv7KNAUzw18vKajKEAKlL8HR/view?usp=sharing
 
 -----
 
