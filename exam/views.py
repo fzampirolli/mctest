@@ -905,7 +905,7 @@ def correctStudentsExam(request, pk):
         # CONVERSÃO PDF -> IMAGEM
         # ==============================================================================
         # Ajuste poppler_path conforme seu servidor (Linux geralmente não precisa, MacOS sim)
-        pages = convert_from_path(file, 200, poppler_path='/opt/local/bin')
+        pages = convert_from_path(file, 200) # , poppler_path='/opt/local/bin'
 
         numPAGES = 0
         for page in pages:
