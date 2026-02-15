@@ -520,177 +520,419 @@ class cvMCTest(object):
 
     @staticmethod
     def findSquaresHor(qr, img, countPage):
-        DEBUG = False
-        # img0 = img
+        """
+        Detecta e ordena retângulos de respostas em layout HORIZONTAL.
+        Versão simplificada para gabaritos onde as opções estão dispostas horizontalmente.
 
+        Args:
+            qr: Dicionário contendo metadados da prova (ex: número de questões)
+            img: Imagem em escala de cinza já processada
+            countPage: Número da página sendo processada (usado para debug)
+
+        Returns:
+            rectSquares: Lista de retângulos ordenados no formato [[x1,y1], [x2,y2]]
+        """
+
+        # Flag para ativar/desativar salvamento de imagens intermediárias
+        DEBUG = False
+
+        # Salva imagem original se DEBUG ativo
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00.png", img)
 
+        # === FASE 1: PROCESSAMENTO MORFOLÓGICO SIMPLIFICADO ===
+
+        # Cria kernel retangular 23x23 para dilatação
+        # Expande regiões brancas para unir componentes próximos dos quadros
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (23, 23))
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+
+        # Remove 5 pixels de todas as bordas da imagem
+        # Evita detecções falsas nas extremidades
         b = 5;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
+        # Salva imagem processada para detecção
         imgSquares = img
 
+        # === FASE 2: DETECÇÃO DE CONTORNOS ===
+
+        # Encontra todos os contornos externos na imagem
         (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Ordena contornos por área (do maior para o menor)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
 
-        # size_rectangle_max = 0
+        # Lista para armazenar os quadrados válidos
         squares = []
-        for cnt in contours:  # loop over the contours
+
+        # Itera sobre cada contorno detectado
+        for cnt in contours:
+            # Define precisão da aproximação poligonal baseado no número de questões
             if int(qr['numquest']) <= 200:
+                # Aproximação padrão (4%) para provas até 200 questões
                 approximation = cv2.approxPolyDP(cnt, 0.04 * cv2.arcLength(cnt, True), True)
             else:
+                # Aproximação mais rigorosa (0.4%) para provas maiores
+                # Permite detectar formas mais complexas ou irregulares
                 approximation = cv2.approxPolyDP(cnt, 0.004 * cv2.arcLength(cnt, True), True)
                 ############################# ATENCAO ^^^^^ TRATAMENTO DIFERENCIADO PARA >= 200 QUESTOES
-            # has the polygon 4 sides?
+
+            # === VALIDAÇÃO 1: Verifica se tem exatamente 4 lados ===
             if (not (len(approximation) == 4)):
-                continue;
+                continue  # Descarta se não for quadrilátero
 
+            # === VALIDAÇÃO 2: Verifica se é convexo ===
             if (not cv2.isContourConvex(approximation)):
-                continue;
+                continue # Descarta formas côncavas ou irregulares
 
-            # descarta qrcode
+            # === VALIDAÇÃO 3: Descarta QR Code ===
+            # Calcula bounding box do contorno
             x, y, w, h = cv2.boundingRect(cnt)
-            if abs(
-                    w - h) < 30 and x + w > 800 and y < 200:  # quadrado e no topo direito
-                if cv2.contourArea(cnt) > 25000:
-                    continue;
 
+            # Verifica se é aproximadamente quadrado e está no canto superior direito
+            if abs(w - h) < 30 and x + w > 800 and y < 200:
+                # Se for grande (>25000 pixels²), provavelmente é o QR code
+                if cv2.contourArea(cnt) > 25000:
+                    continue # Descarta QR code
+
+            # Calcula área do polígono aproximado
             size_rectangle = cv2.contourArea(approximation)
 
+            # === VALIDAÇÃO 4: Filtra por área mínima ===
+            # Aceita apenas retângulos maiores que 2000 pixels²
             if size_rectangle > 2000:
+                # Desenha contorno na imagem de debug (roxo, espessura 10)
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
+                # Ordena pontos do quadrilátero e adiciona à lista
                 squares.append(cvMCTest.SortPointsExtreme(approximation))
 
-        pt = []
-        ptSort = []
-        H, W = imgSquares.shape
+        # === FASE 3: ORDENAÇÃO RASTER (LEITURA NATURAL) ===
+
+        pt = []       # Lista para índices de ordenação
+        ptSort = []   # Lista para coordenadas normalizadas
+        H, W = imgSquares.shape  # Dimensões da imagem
+
+        # Processa cada retângulo detectado
         for i in range(len(squares)):
             squa = squares[i]
             aux = np.array(squa, np.int64)
-            y1, x1 = aux[1]
-            y2, x2 = aux[3]
+
+            # Extrai coordenadas dos pontos extremos
+            # NOTA: aux[1] e aux[3] são pontos opostos do retângulo
+            y1, x1 = aux[1] # Ponto 1 (formato: y, x)
+            y2, x2 = aux[3] # Ponto 3 (formato: y, x)
+
+            # Normaliza coordenadas para formato padrão [x, y]
+            # p1 = canto superior esquerdo
+            # p2 = canto inferior direito
             [p1, p2] = [[min(x1, x2), min(y1, y2)], [max(x1, x2), max(y1, y2)]]
+
+            # Armazena coordenadas normalizadas
             ptSort.append([p1, p2])
+
+            # === CÁLCULO DO ÍNDICE RASTER ===
+            # Fórmula: coluna + (largura_total * linha)
+            # Divide por 30 para criar grid de células 30x30 pixels
+            # p1[1] = y (linha), p1[0] = x (coluna)
             pc = int(p1[1] / 30) + W * int(p1[0] / 30)  # raster order
             pt.append(pc)
 
+        # Ordena índices em ordem crescente (padrão raster: esquerda→direita, cima→baixo)
         pto = np.argsort(pt)
+
+        # Reconstrói lista de retângulos na ordem correta
         rectSquares = []
         for i in range(len(ptSort)):
             rectSquares.append(ptSort[pto[i]])
 
+        # Retorna lista ordenada no formato [[x1,y1], [x2,y2]]
         return rectSquares
+
+
+    # @staticmethod
+    # def findSquaresHor_new(qr, img, countPage): # se der bug no anterior, comparar com este
+    #     """
+    #     Detecta e ordena retângulos de respostas em layout HORIZONTAL.
+    #     Versão simplificada para gabaritos onde as opções estão dispostas horizontalmente.
+    #
+    #     Args:
+    #         qr: Dicionário contendo metadados da prova (ex: número de questões)
+    #         img: Imagem em escala de cinza já processada
+    #         countPage: Número da página sendo processada (usado para debug)
+    #
+    #     Returns:
+    #         rectSquares: Lista de retângulos ordenados no formato [[x1,y1], [x2,y2]]
+    #     """
+    #
+    #     DEBUG = False
+    #
+    #     if DEBUG:
+    #         cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00.png", img)
+    #
+    #     # === FASE 1: PROCESSAMENTO MORFOLÓGICO SIMPLIFICADO ===
+    #
+    #     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (23, 23))
+    #     img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
+    #
+    #     if DEBUG:
+    #         cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
+    #
+    #     b = 5
+    #     img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
+    #
+    #     imgSquares = img
+    #
+    #     # === FASE 2: DETECÇÃO DE CONTORNOS ===
+    #
+    #     (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
+    #
+    #     squares = []
+    #
+    #     for cnt in contours:
+    #
+    #         if int(qr['numquest']) <= 200:
+    #             approximation = cv2.approxPolyDP(cnt, 0.04 * cv2.arcLength(cnt, True), True)
+    #         else:
+    #             approximation = cv2.approxPolyDP(cnt, 0.004 * cv2.arcLength(cnt, True), True)
+    #
+    #         if (not (len(approximation) == 4)):
+    #             continue
+    #
+    #         if (not cv2.isContourConvex(approximation)):
+    #             continue
+    #
+    #         # Descarta QR Code
+    #         x, y, w, h = cv2.boundingRect(cnt)
+    #         if abs(w - h) < 30 and x + w > 800 and y < 200:
+    #             if cv2.contourArea(cnt) > 25000:
+    #                 continue
+    #
+    #         size_rectangle = cv2.contourArea(approximation)
+    #
+    #         if size_rectangle > 2000:
+    #             cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
+    #             squares.append(cvMCTest.SortPointsExtreme(approximation))
+    #
+    #     # === FASE 3: ORDENAÇÃO RASTER CORRIGIDA ===
+    #
+    #     H, W = imgSquares.shape
+    #     ROW_THRESHOLD = 50  # Tolerância para considerar mesma linha
+    #
+    #     rectangles_with_centers = []
+    #
+    #     for i, squa in enumerate(squares):
+    #         aux = np.array(squa, np.int64)
+    #
+    #         # 1. Extração CORRETA (OpenCV usa X, Y)
+    #         x1_real, y1_real = aux[1]
+    #         x2_real, y2_real = aux[3]
+    #
+    #         # Normaliza coordenadas
+    #         p1_real = [min(x1_real, x2_real), min(y1_real, y2_real)]  # [x, y]
+    #         p2_real = [max(x1_real, x2_real), max(y1_real, y2_real)]  # [x, y]
+    #
+    #         # 2. Armazenamento no formato [x, y] (diferente do findSquares que usa [y, x])
+    #         p1_output = [p1_real[0], p1_real[1]]
+    #         p2_output = [p2_real[0], p2_real[1]]
+    #
+    #         # 3. Cálculo do centro para ordenação
+    #         center_x = (p2_real[0] + p1_real[0]) / 2
+    #         center_y = (p2_real[1] + p1_real[1]) / 2
+    #
+    #         rectangles_with_centers.append({
+    #             'index': i,
+    #             'center_x': center_x,
+    #             'center_y': center_y,
+    #             'p1': p1_output,
+    #             'p2': p2_output
+    #         })
+    #
+    #     # Ordenação: primeiro por linha (Y), depois por coluna (X)
+    #     def sort_key(rect):
+    #         """
+    #         Agrupa retângulos por linha, depois ordena por coluna.
+    #         """
+    #         row_band = int(rect['center_y'] / ROW_THRESHOLD)
+    #         return (row_band, rect['center_x'])
+    #
+    #     rectangles_with_centers.sort(key=sort_key)
+    #
+    #     # Reconstrói lista ordenada
+    #     rectSquares = []
+    #     for rect in rectangles_with_centers:
+    #         rectSquares.append([rect['p1'], rect['p2']])
+    #
+    #     # === FASE 4: VISUALIZAÇÃO DE DEBUG ===
+    #     if DEBUG:
+    #         imgFinalDebug = cv2.cvtColor(imgSquares.copy(), cv2.COLOR_GRAY2BGR)
+    #
+    #         for idx, rect in enumerate(rectSquares):
+    #             # rect está no formato [[x1, y1], [x2, y2]]
+    #             p1_xy, p2_xy = rect
+    #
+    #             x1, y1 = int(p1_xy[0]), int(p1_xy[1])
+    #             x2, y2 = int(p2_xy[0]), int(p2_xy[1])
+    #
+    #             # Desenha retângulo verde
+    #             cv2.rectangle(imgFinalDebug, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    #
+    #             # Mostra coordenadas no formato [x, y]
+    #             cv2.putText(imgFinalDebug, f"xy({x1},{y1})", (x1 - 20, y1 - 10),
+    #                         cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 100, 0), 1)
+    #
+    #             # Número de ordem no centro
+    #             center_x = int((x1 + x2) / 2)
+    #             center_y = int((y1 + y2) / 2)
+    #             cv2.putText(imgFinalDebug, str(idx), (center_x - 10, center_y + 10),
+    #                         cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
+    #
+    #         cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_02.png", imgFinalDebug)
+    #
+    #     return rectSquares
+    #
 
     @staticmethod
     def findSquares(qr, img, countPage):
+        """
+          Detecta e ordena retângulos (quadros de questões) em uma imagem de prova/gabarito VERTICAIS
 
+          Args:
+              qr: Dicionário contendo metadados da prova (ex: número de questões)
+              img: Imagem em escala de cinza para processar
+              countPage: Número da página sendo processada (usado para debug)
+
+          Returns:
+              rectSquares: Lista de retângulos ordenados no formato [[y1,x1], [y2,x2]]
+          """
+        # Flag para ativar/desativar salvamento de imagens intermediárias
         DEBUG = False
 
-        # img0 = img
-
+        # Salva imagem original se DEBUG ativo
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00a.png", img)
 
+        # Remove círculos de respostas da imagem para não interferir na detecção de quadros
         img = cvMCTest.findCirclesAnwsers(img, countPage, -1)
-
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_00b.png", img)
 
+        # === FASE 1: PROCESSAMENTO MORFOLÓGICO ===
+
         # encontra quadros
+        # Cria kernel elíptico 15x15 para operação de abertura (remove ruídos pequenos)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_01.png", img)
 
+        # Cria kernel retangular 30x30 para dilatação (expande regiões brancas)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (30, 30))  # ajustar
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
-
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
 
-        b = 1;
+        # Remove pixels das bordas da imagem (1 pixel de cada lado) para evitar detecções falsas
+        b = 1
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
-        img = cv2.morphologyEx(img, cv2.MORPH_ERODE, kernel)
 
+        # Erosão para reverter parte da dilatação e refinar bordas
+        img = cv2.morphologyEx(img, cv2.MORPH_ERODE, kernel)
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_03.png", img)
 
+        # Remove linhas verticais finas (kernel 1x60) - elimina possíveis separadores
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 60))  # mudei 3/5/17, antes 120
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_04.png", img)
 
+        # Remove linhas horizontais finas (kernel 50x1)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (50, 1))
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_05.png", img)
 
+        # Dilata novamente com kernel 25x25 para unir componentes dos quadros
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 25))
         img = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
-
         if DEBUG: cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_06.png", img)
+
+        # Remove 5 pixels das bordas (mais agressivo que antes)
         b = 5;
         img[:, -b:] = img[:, :b] = img[:b, :] = img[-b:, :] = 0
 
+        # Salva imagem com retângulos detectados
         imgSquares = img
 
+        # === FASE 2: DETECÇÃO DE CONTORNOS ===
+
+        # Encontra contornos externos na imagem
         (contours, _) = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Ordena contornos por área (maior para menor)
         contours = sorted(contours, key=cv2.contourArea, reverse=True)[:len(contours)]
 
-        # size_rectangle_max = 0
+        # Lista para armazenar os quadrados válidos
         squares = []
-        for cnt in contours:  # loop over the contours
 
+        # Itera sobre cada contorno encontrado
+        for cnt in contours:  # loop over the contours
+            # Define precisão da aproximação poligonal baseado no número de questões
             if int(qr['numquest']) <= 200:
+                # Aproximação menos rigorosa para provas menores
                 approximation = cv2.approxPolyDP(cnt, 0.04 * cv2.arcLength(cnt, True), True)
             else:
+                # Aproximação mais rigorosa para provas com muitas questões (>200)
                 approximation = cv2.approxPolyDP(cnt, 0.004 * cv2.arcLength(cnt, True), True)
                 ############################# ATENCAO ^^^^^ TRATAMENTO DIFERENCIADO PARA >= 200 QUESTOES
 
-            # has the polygon 4 sides?
+            # Valida se o polígono tem exatamente 4 lados (é um quadrilátero)
             if (not (len(approximation) == 4)):
                 continue;
-            # is the polygon convex ?
+
+            # Valida se o polígono é convexo (descarta formas irregulares)
             if (not cv2.isContourConvex(approximation)):
                 continue;
-                # area of the polygon
+
+            # Calcula área do polígono
             size_rectangle = cv2.contourArea(approximation)
 
+            # Filtra apenas retângulos com área mínima de 800 pixels²
             if size_rectangle > 800:
+                # Desenha contorno na imagem de debug
                 cv2.drawContours(imgSquares, [approximation], 0, (255, 0, 255), 10)
+                # Adiciona quadrado ordenado à lista
                 squares.append(cvMCTest.SortPointsExtreme(approximation))
+
+        # === FASE 3: ORDENAÇÃO RASTER (LEITURA NATURAL) ===
 
         # --- Lógica Ajustada ---
         pt = []
         ptSort = []
-        H, W = imgSquares.shape
+        H, W = imgSquares.shape # Altura e Largura da imagem
 
-        ROW_THRESHOLD = 50  # pixels de tolerância para considerar mesma linha
+        # Tolerância em pixels para considerar retângulos na mesma linha
+        ROW_THRESHOLD = 50
 
-        # Extrair centros e criar lista com índices
+        # Lista para armazenar retângulos com seus centros calculados
         rectangles_with_centers = []
+
         for i, squa in enumerate(squares):
             aux = np.array(squa, np.int64)
 
-            # 1. Extração CORRETA (OpenCV usa X, Y)
-            #    Isso garante que sabemos quem é largura e quem é altura para ordenar certo
-            x1_real, y1_real = aux[1]
-            x2_real, y2_real = aux[3]
+            # === EXTRAÇÃO DE COORDENADAS (formato OpenCV: X, Y) ===
+            x1_real, y1_real = aux[1]  # Ponto superior esquerdo
+            x2_real, y2_real = aux[3]  # Ponto inferior direito
 
-            # Define os cantos reais em (X, Y)
+            # Normaliza coordenadas (garante p1=canto superior esquerdo, p2=inferior direito)
             p1_real = [min(x1_real, x2_real), min(y1_real, y2_real)]
             p2_real = [max(x1_real, x2_real), max(y1_real, y2_real)]
 
-            # 2. Armazenamento INVERTIDO (Y, X) para compatibilidade com seu código legado
-            #    Aqui p1 vira [y, x]
+            # === CONVERSÃO PARA FORMATO LEGADO (Y, X) ===
+            # Inverte para [y, x] para compatibilidade com código existente
             p1_output = [p1_real[1], p1_real[0]]
             p2_output = [p2_real[1], p2_real[0]]
 
             ptSort.append([p1_output, p2_output])
 
-            # 3. Ordenação Raster usando coordenadas REAIS (X, Y)
-            #    A lógica é: Coluna + Largura_Total * Linha
-            center_x = (p2_real[0] + p1_real[0])/2
-            center_y = (p2_real[1] + p1_real[1])/2
+            # === CÁLCULO DO CENTRO (usado para ordenação) ===
+            center_x = (p2_real[0] + p1_real[0])/2 # Centro X em coordenadas reais
+            center_y = (p2_real[1] + p1_real[1])/2 # Centro Y em coordenadas reais
 
             # Armazenar: índice, centro, coordenadas
             rectangles_with_centers.append({
@@ -701,30 +943,38 @@ class cvMCTest(object):
                 'p2': [p2_real[1], p2_real[0]]
             })
 
+        # === CÓDIGO COMENTADO: Algoritmo antigo de ordenação ===
+        # Usava grid 30x30 para criar índice de ordenação
         #     pc = int(center_x / 30) + W * int(center_y / 30)
         #     pt.append(pc)
         #
         # pto = np.argsort(pt)
-        #
         # rectSquares = []
         # for i in range(len(ptSort)):
         #     rectSquares.append(ptSort[pto[i]])
 
-        # Ordenar: primeiro por linha (Y), depois por coluna (X)
+        # === NOVO ALGORITMO: Ordenação por linha e coluna ===
         def sort_key(rect):
-            # Arredondar Y para criar "bandas" de linha
+            """
+            Função de ordenação que agrupa retângulos por linha, depois por coluna.
+
+            A divisão por ROW_THRESHOLD cria "bandas" de linha, permitindo que
+            retângulos quase alinhados horizontalmente sejam considerados na mesma linha.
+            """
             row_band = int(rect['center_y'] / ROW_THRESHOLD)
             return (row_band, rect['center_x'])
 
+        # Ordena: primeiro por linha (Y), depois por coluna (X) dentro da mesma linha
         rectangles_with_centers.sort(key=sort_key)
 
-        # Reconstruir listas ordenadas
+        # Reconstrói lista no formato esperado pelo resto do código
         rectSquares = []
         for rect in rectangles_with_centers:
             rectSquares.append([rect['p1'], rect['p2']])
 
-        # --- Desenho de Debug (Adaptado para ler Y, X) ---
+        # === FASE 4: VISUALIZAÇÃO DE DEBUG ===
         if DEBUG:
+            # Converte imagem para BGR para desenhar em cores
             imgFinalDebug = cv2.cvtColor(imgSquares.copy(), cv2.COLOR_GRAY2BGR)
 
             for idx, rect in enumerate(rectSquares):
@@ -735,46 +985,24 @@ class cvMCTest(object):
                 x1, y1 = int(p1_yx[1]), int(p1_yx[0])
                 x2, y2 = int(p2_yx[1]), int(p2_yx[0])
 
+                # Desenha retângulo verde ao redor do quadro detectado
                 cv2.rectangle(imgFinalDebug, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-                # Mostra coord Y, X (como vai ser retornado) para você conferir
+                # Mostra coordenadas no formato que será retornado [y, x]
                 cv2.putText(imgFinalDebug, f"yx({y1},{x1})", (x1 - 20, y1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 100, 0), 1)
 
+                # Calcula e desenha número de ordem no centro do retângulo
                 center_x = int((x1 + x2) / 2)
                 center_y = int((y1 + y2) / 2)
                 cv2.putText(imgFinalDebug, str(idx), (center_x - 10, center_y + 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
 
+            # Salva imagem final com anotações
             cv2.imwrite("./tmp/_DEBUG_testfindSquares" + "_p" + str(countPage + 1).zfill(3) + "_07.png", imgFinalDebug)
 
+        # Retorna lista de retângulos ordenados em padrão raster (esquerda→direita, cima→baixo)
         return rectSquares
-
-        #
-        # pt = []
-        # ptSort = []
-        # H, W = imgSquares.shape
-        # for i in range(len(squares)):
-        #     squa = squares[i]
-        #
-        #     aux = np.array(squa, np.int64)
-        #     y1, x1 = aux[1]
-        #     y2, x2 = aux[3]
-        #     [p1, p2] = [[min(x1, x2), min(y1, y2)], [max(x1, x2), max(y1, y2)]]
-        #
-        #     ptSort.append([p1, p2])
-        #
-        #     # pc =int(p1[0]/30)+H*np.int(p1[1]/30)
-        #     pc = int((p2[0] + p1[0]) / 30) + W * int((p2[1] + p1[1]) / 30)  # raster order
-        #     pt.append(pc)
-        #
-        # pto = np.argsort(pt)
-        #
-        # rectSquares = []
-        # for i in range(len(ptSort)):
-        #     rectSquares.append(ptSort[pto[i]])
-        #
-        # return rectSquares
 
     @staticmethod
     def findBoxesAnwsersHor(img, countPage, countSquare):
@@ -1327,7 +1555,7 @@ class cvMCTest(object):
                 percOK = 0.75  # < porcentagem da area maxima sera descartada
 
                 aux = answers_area / np.max(answers_area) * 1.0 < percOK
-                # verdade para áreas < percOK%, ex. [250 130 230] aux=[False True False]  
+                # verdade para áreas < percOK%, ex. [250 130 230] aux=[False True False]
                 aaux = {x: list(aux).count(x) for x in set(list(aux))}  # conta False e True
 
                 # return HttpResponse(str(answers_area),str(aux),str(aaux))
