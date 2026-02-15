@@ -664,8 +664,11 @@ class cvMCTest(object):
         ptSort = []
         H, W = imgSquares.shape
 
-        for i in range(len(squares)):
-            squa = squares[i]
+        ROW_THRESHOLD = 50  # pixels de tolerância para considerar mesma linha
+
+        # Extrair centros e criar lista com índices
+        rectangles_with_centers = []
+        for i, squa in enumerate(squares):
             aux = np.array(squa, np.int64)
 
             # 1. Extração CORRETA (OpenCV usa X, Y)
@@ -686,17 +689,39 @@ class cvMCTest(object):
 
             # 3. Ordenação Raster usando coordenadas REAIS (X, Y)
             #    A lógica é: Coluna + Largura_Total * Linha
-            center_x = (p2_real[0] + p1_real[0])
-            center_y = (p2_real[1] + p1_real[1])
+            center_x = (p2_real[0] + p1_real[0])/2
+            center_y = (p2_real[1] + p1_real[1])/2
 
-            pc = int(center_x / 30) + W * int(center_y / 30)
-            pt.append(pc)
+            # Armazenar: índice, centro, coordenadas
+            rectangles_with_centers.append({
+                'index': i,
+                'center_x': center_x,
+                'center_y': center_y,
+                'p1': [p1_real[1], p1_real[0]],  # Formato [Y, X] para compatibilidade
+                'p2': [p2_real[1], p2_real[0]]
+            })
 
-        pto = np.argsort(pt)
+        #     pc = int(center_x / 30) + W * int(center_y / 30)
+        #     pt.append(pc)
+        #
+        # pto = np.argsort(pt)
+        #
+        # rectSquares = []
+        # for i in range(len(ptSort)):
+        #     rectSquares.append(ptSort[pto[i]])
 
+        # Ordenar: primeiro por linha (Y), depois por coluna (X)
+        def sort_key(rect):
+            # Arredondar Y para criar "bandas" de linha
+            row_band = int(rect['center_y'] / ROW_THRESHOLD)
+            return (row_band, rect['center_x'])
+
+        rectangles_with_centers.sort(key=sort_key)
+
+        # Reconstruir listas ordenadas
         rectSquares = []
-        for i in range(len(ptSort)):
-            rectSquares.append(ptSort[pto[i]])
+        for rect in rectangles_with_centers:
+            rectSquares.append([rect['p1'], rect['p2']])
 
         # --- Desenho de Debug (Adaptado para ler Y, X) ---
         if DEBUG:

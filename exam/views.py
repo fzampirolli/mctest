@@ -1369,7 +1369,7 @@ def correctStudentsExam(request, pk):
 
     # Retorna o arquivo ZIP final para download imediato no navegador
     return serve(request, os.path.basename(fzip_path), os.path.dirname(fzip_path))
-
+#
 # @login_required
 # def correctStudentsExam_old(request, pk):
 #     # --- Verificação de Permissões ---
