@@ -1152,7 +1152,7 @@ def correctStudentsExam(request, pk):
 
             # Limpa a pasta temporária que foi zipada
             os.system("rm -rf " + mypath_base)
-            os.system("rm " + mypath_base[:-5] + "*.png")
+            os.system("rm -rf " + mypath_base[:-5] + "*.png")
 
         else:
             # --- CASO MÚLTIPLA ESCOLHA ---
@@ -1228,7 +1228,7 @@ def correctStudentsExam(request, pk):
                             spamWriter.writerow(dados[n])
                         csvfile.close()
 
-                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv &")
+                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
 
                 except:
                     messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
@@ -1272,7 +1272,7 @@ def correctStudentsExam(request, pk):
                             spamWriter.writerow(dados[n])
                         csvfile.close()
 
-                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv &")
+                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
 
                 except:
                     messages.error(request, _("correctStudentsExam: Error in IRT"))
@@ -1350,20 +1350,20 @@ def correctStudentsExam(request, pk):
         # D) LIMPEZA GERAL (CLEANUP)
         try:
             # Limpa arquivos temporários da pasta TMP
-            os.system("rm " + MYFILES + "_RETURN_*")      # Logs e CSVs temporários
-            os.system("rm " + MYFILES + "_p*.png")        # Páginas PNG do PDF
+            os.system("rm -rf " + MYFILES + "_RETURN_*")      # Logs e CSVs temporários
+            os.system("rm -rf " + MYFILES + "_p*.png")        # Páginas PNG do PDF
 
             # Remove ZIPs que estejam no TMP (temporários)
-            os.system("rm " + MYFILES + "*.zip")
-            #os.system("rm " + os.path.join(BASE_DIR, "tmp", "_DEBUG_*"))
+            os.system("rm -rf " + MYFILES + "*.zip")
+            #os.system("rm -rf " + os.path.join(BASE_DIR, "tmp", "_DEBUG_*"))
 
             # Limpa arquivos individuais da pasta pdfStudentEmail (já estão no ZIP)
             if not qr['onlyT']:
                 pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
-                os.system("rm " + pdfs_student_pattern)
+                os.system("rm -rf " + pdfs_student_pattern)
 
                 gabs_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_*_GAB.png")
-                os.system("rm " + gabs_pattern)
+                os.system("rm -rf " + gabs_pattern)
         except Exception as e:
             pass
 
