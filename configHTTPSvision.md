@@ -1,7 +1,3 @@
-Aqui está o roteiro atualizado em formato Markdown (`.md`), consolidando tudo o que funcionou para a **vision.ufabc.edu.br**, incluindo a estratégia de IPv6, o uso do modo Standalone e a automação completa da renovação.
-
----
-
 # Guia de Configuração SSL e Apache: vision.ufabc.edu.br
 
 Este guia detalha o processo de sucesso para configurar o servidor, utilizando IPv6 para contornar bloqueios de firewall e o modo Standalone para garantir a emissão do certificado.
