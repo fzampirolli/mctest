@@ -1292,7 +1292,9 @@ _inst1_
         # Então deixamos o resto para o texto.
         text_col_width = 16.2 - qr_col_width
 
-        str1 = "\\begin{table}[h]\n"
+        str1 = "\\footnote[2]{\\vspace{-5mm}\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
+            instURL)
+        str1 += "\\vspace{-5mm}\\begin{table}[h]\n"
         str1 += "\\hspace*{2mm}\n"
         str1 += "\\begin{tabular}{|l|p{%scm}|p{%scm}}\n \\cline{1-2}" % (str(text_col_width), str(qr_col_width))
         str1 += "\\multirow{7}{*}{\\vspace{8mm}\\includegraphics[width=2cm]{./figs/%s}} \n" % logo
@@ -1319,9 +1321,6 @@ _inst1_
 
         str1 += "\\end{tabular}\n"
         str1 += "\\end{table}\n"
-
-        str1 += "\\footnote[2]{\\vspace{10mm}\color{lightgray}\\textbf{MCTest:} gerador e corretor de exames disponível para professores - \\textbf{\\url{%s}}}\n\n" % (
-            instURL)
 
         try:
             str1 += '\n\n \\vspace{-7mm}\\hfill {\\tiny {\\color{red}\#E' + str(
