@@ -8,6 +8,8 @@ else
     . /home/operador/PycharmProjects/crontabDjango.sh
 fi
 
+exit 1
+
 # Verificar se a API Go está rodando na porta 8080
 if sudo lsof -i :8080 | grep LISTEN > /dev/null; then
     echo "A API Go já está em execução na porta 8080."

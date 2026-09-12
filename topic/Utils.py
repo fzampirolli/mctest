@@ -50,7 +50,8 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         from scipy.special import comb
         output, pode_gerar = [], True
         T, F = len(T), len(F)
-        if N * C < A or C >= N or P > T:
+        #if N * C < A or C >= N or P > T:
+        if C >= N or P > T:
             output.append(f"ERRO: Não é possível gerar variações com {A} alternativas,"
                           f" {N} itens e {C} item(ns) correto(s)")
             pode_gerar = False
@@ -61,9 +62,15 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         if comb(T + F, P) < N:
             output.append(f"ERRO: Não é possível gerar {N} itens")
             pode_gerar = False
-        if comb(N, P) < A:
-            output.append(f"ERRO: Não é possível gerar {A} alternativas")
+        # if comb(N, P) < A:
+        #     output.append(f"ERRO: Não é possível gerar {A} alternativas")
+        #     pode_gerar = False
+        # O número total de combinações possíveis de itens (de 1 a num_itens) é 2^n - 1
+        total_combinacoes_possiveis = (2**N) - 1
+        if total_combinacoes_possiveis < A:
+            output.append(f"ERRO: num_itens ({N}) gera no máximo {total_combinacoes_possiveis} alternativas únicas.")
             pode_gerar = False
+
         variacoes = (f'Número de variações possíveis: '
                      f'comb({comb(T + F, P):.0f},{N}) = {comb(comb(T + F, P), N):.0f}')
         itens_format = ''
@@ -126,7 +133,7 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         for i, item in enumerate(itens):
             s = f"{'; '.join(item)}"
             # itens_format += f"\item {itens_str[i]}. {s}\n"
-            itens_format += f"\item {s}\n"
+            itens_format += f"\item {s}\n" # isso é o correto!
 
             # Adicionar o índice do item à lista de itens corretos
             for c in itens_corretos:
@@ -151,18 +158,40 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
 
         corretos = gerar_indices_itens_corretos(itens, itens_corretos)
 
-        # Alternativa correta
-        aux = []
-        for corr in range(num_itens_corretos):
-            aux.append(itens_str[corretos[corr]])
-        itens_comb = [aux]
+        # # Alternativa correta (continua fixa na quantidade de itens corretos)
+        # aux_correto = []
+        # for corr in range(num_itens_corretos):
+        #     aux_correto.append(itens_str[corretos[corr]])
+        # itens_comb = [aux_correto] # A primeira sempre é a correta
 
-        # Gerar alternativas erradas
-        for i in range(num_alternativas):
-            aux = sorted(random.sample(itens_str[:num_itens], num_itens_corretos))
-            # Incluir apenas alternativas diferentes
-            if not aux in itens_comb:
-                itens_comb.append(aux)
+        # Alternativa correta (fixa com os índices dos itens verdadeiros)
+        aux_correto = sorted([itens_str[i] for i in corretos])
+        itens_comb = [aux_correto]
+
+        ###########
+        # Gerar alternativas erradas com TAMANHOS VARIÁVEIS
+        import itertools
+        # 1. Gera todas as combinações possíveis de 1 até num_itens elementos
+        todas_combinacoes = []
+        for r in range(1, num_itens + 1):
+            for combo in itertools.combinations(itens_str[:num_itens], r):
+                todas_combinacoes.append(list(combo))
+
+        # 2. Remove a correta da lista de opções para não sorteá-la como errada
+        if aux_correto in todas_combinacoes:
+            todas_combinacoes.remove(aux_correto)
+
+        # 3. Sorteia as erradas necessárias (num_alternativas - 1)
+        # O sample garante que não haverá duplicatas
+        erradas_sorteadas = random.sample(todas_combinacoes, num_alternativas - 1)
+
+        # 4. Une Correta + Erradas (e ordena as letras de cada alternativa)
+        itens_comb = [aux_correto] + [sorted(e) for e in erradas_sorteadas]
+
+        # Opcional: Embaralha as alternativas para a correta não ser sempre a 'A'
+        # NÃO USAR, POIS A 1a sempre deve ser a correta - depois embaralha...
+        #random.shuffle(itens_comb)
+        ################
 
         # Montar as descrições das alternativas
         descricoes = []
@@ -177,15 +206,15 @@ def gerar_QM_itens(setTrue=['1', '3', '5'],
         # Encerrar o loop, pois a questão foi gerada com sucesso
         break
 
-    if pode_gerar:
-        print('Quais itens têm apenas números ímpares')
-        print('Itens:')
-        print(itens_format)
-
-        print("Alternativas:")
-        opcoes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        for idx, alt in enumerate(descricoes):
-            print(f"{opcoes[idx]}. {alt}")
+    # if pode_gerar:
+    #     print('Quais itens têm apenas números ímpares')
+    #     print('Itens:')
+    #     print(itens_format)
+    #
+    #     print("Alternativas:")
+    #     opcoes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    #     for idx, alt in enumerate(descricoes):
+    #         print(f"{opcoes[idx]}. {alt}")
 
     return itens_format, descricoes
 
@@ -963,3 +992,328 @@ def ast_to_pseudocode(source_ast, **kwargs):
 
 def source_to_pseudocode(source, **kwargs):
     return ast_to_pseudocode(ast.parse(source), **kwargs)
+
+
+########################################## PDI-VC
+# para converter símbolos matemáticos de latex para txt
+#
+
+import re
+
+def latex_to_text_old(text):
+    """
+    Remove ou traduz marcações LaTeX básicas para texto simples (Unicode/ASCII/Emojis),
+    garantindo compatibilidade com o dicionário cases['description'].
+    """
+    if not text:
+        return ""
+    
+    # Substituições comuns de símbolos matemáticos LaTeX para Unicode/Emojis
+    substitutions = {
+        r'\\times': '×',
+        r'\\cdot': '·',
+        r'\\leq': '≤',
+        r'\\geq': '≥',
+        r'\\neq': '≠',
+        r'\\approx': '≈',
+        r'\\infty': '∞',
+        r'\\dots': '...',
+        r'\\rightarrow': '→',
+        r'\\leftarrow': '←',
+        r'\\cap': '∩',
+        r'\\cup': '∪',
+        r'\\in': '∈',
+        r'\\emptyset': '∅',
+        r'\\alpha': 'α',
+        r'\\beta': 'β',
+        r'\\gamma': 'γ',
+        r'\\sigma': 'σ',
+        r'\\mu': 'μ',
+        r'\\lambda': 'λ',
+        r'\\Delta': 'Δ',
+        r'\\pi': 'π'
+    }
+    
+    # 1. Aplicar substituições de comandos nomeados
+    for pattern, repl in substitutions.items():
+        text = re.sub(pattern, repl, text)
+        
+    # 2. Simplificar subscritos e sobrescritos simples (ex: x_i ou x^2)
+    text = re.sub(r'([a-zA-Z0-9]+)_([a-zA-Z0-9]+)', r'\1[\2]', text) # x_i -> x[i]
+    text = re.sub(r'([a-zA-Z0-9]+)\^([a-zA-Z0-9]+)', r'\1^\2', text)  # x^2 -> x^2
+    
+    # 3. Remover os delimitadores de ambiente matemático ($...$ ou $$...$$) mantendo o conteúdo interno
+    text = re.sub(r'\$\$?([^\$]+)\$\$?', r'\1', text)
+    
+    # 4. Remover comandos LaTeX estruturais comuns remanescentes (\textbf, \textit, etc)
+    text = re.sub(r'\\textbf\{([^\}]+)\}', r'\1', text)
+    text = re.sub(r'\\textit\{([^\}]+)\}', r'\1', text)
+    text = re.sub(r'\\mathrm\{([^\}]+)\}', r'\1', text)
+    
+    # Eliminar barras invertidas duplas que sobram
+    text = text.replace('\\\\', '\n')
+    
+    return text.strip()
+
+########################################## PDI-VC
+# Conversão de marcações LaTeX básicas para texto simples (Unicode/ASCII),
+# usada para preencher cases['description'] no mctest.
+#
+# Cobre: símbolos matemáticos, letras gregas, \frac, \sqrt, sub/sobrescritos,
+# comandos de formatação de texto (\textbf, \texttt, ...), ambientes de lista
+# (itemize/enumerate), comandos de espaçamento (\vspace, \noindent, ...),
+# caracteres escapados (\%, \&, \_, ...), aspas tipográficas e travessões.
+#
+# Blocos \begin{verbatim}...\end{verbatim} são preservados intactos (código-fonte).
+
+import re
+
+# ---------------------------------------------------------------------------
+# Tabelas de tradução
+# ---------------------------------------------------------------------------
+
+GREEK = {
+    'alpha': 'α', 'beta': 'β', 'gamma': 'γ', 'delta': 'δ', 'epsilon': 'ε',
+    'varepsilon': 'ε', 'zeta': 'ζ', 'eta': 'η', 'theta': 'θ', 'vartheta': 'ϑ',
+    'iota': 'ι', 'kappa': 'κ', 'lambda': 'λ', 'mu': 'μ', 'nu': 'ν', 'xi': 'ξ',
+    'pi': 'π', 'rho': 'ρ', 'sigma': 'σ', 'varsigma': 'ς', 'tau': 'τ',
+    'upsilon': 'υ', 'phi': 'φ', 'varphi': 'φ', 'chi': 'χ', 'psi': 'ψ',
+    'omega': 'ω',
+    'Gamma': 'Γ', 'Delta': 'Δ', 'Theta': 'Θ', 'Lambda': 'Λ', 'Xi': 'Ξ',
+    'Pi': 'Π', 'Sigma': 'Σ', 'Upsilon': 'Υ', 'Phi': 'Φ', 'Psi': 'Ψ',
+    'Omega': 'Ω',
+}
+
+SYMBOLS = {
+    # operadores e relações
+    'times': '×', 'div': '÷', 'cdot': '·', 'pm': '±', 'mp': '∓',
+    'leq': '≤', 'le': '≤', 'geq': '≥', 'ge': '≥', 'neq': '≠', 'ne': '≠',
+    'approx': '≈', 'equiv': '≡', 'cong': '≅', 'sim': '∼', 'propto': '∝',
+    # conjuntos e lógica
+    'infty': '∞', 'emptyset': '∅', 'varnothing': '∅',
+    'in': '∈', 'notin': '∉', 'ni': '∋',
+    'cup': '∪', 'cap': '∩', 'subset': '⊂', 'subseteq': '⊆',
+    'supset': '⊃', 'supseteq': '⊇', 'setminus': '∖',
+    'wedge': '∧', 'land': '∧', 'vee': '∨', 'lor': '∨', 'neg': '¬', 'lnot': '¬',
+    'forall': '∀', 'exists': '∃', 'nexists': '∄',
+    'oplus': '⊕', 'otimes': '⊗',
+    # setas
+    'rightarrow': '→', 'to': '→', 'leftarrow': '←', 'gets': '←',
+    'leftrightarrow': '↔', 'Rightarrow': '⇒', 'Leftarrow': '⇐',
+    'Leftrightarrow': '⇔', 'mapsto': '↦',
+    # cálculo / somatórios
+    'sum': 'Σ', 'prod': '∏', 'int': '∫', 'oint': '∮', 'partial': '∂',
+    'nabla': '∇',
+    # reticências
+    'ldots': '…', 'dots': '…', 'cdots': '⋯', 'vdots': '⋮', 'ddots': '⋱',
+    # geometria / misc
+    'perp': '⊥', 'parallel': '∥', 'angle': '∠', 'triangle': '△',
+    'degree': '°', 'circ': '°', 'star': '★', 'ast': '∗',
+}
+
+# comandos de 1 argumento cujo conteúdo deve ser mantido, sem marcação
+TEXT_WRAPPERS = (
+    'textbf', 'textit', 'texttt', 'textsc', 'textrm', 'textsf',
+    'emph', 'underline', 'mathrm', 'mathbf', 'mathit', 'mathcal',
+    'uppercase', 'lowercase', 'MakeUppercase', 'MakeLowercase',
+)
+
+# comandos "estruturais" a remover por completo (com ou sem argumento {...})
+STRIP_COMMANDS = (
+    'vspace', 'hspace', 'vspace*', 'hspace*', 'noindent', 'indent',
+    'newline', 'linebreak', 'pagebreak', 'clearpage', 'newpage',
+    'label', 'ref', 'eqref', 'cite', 'footnote', 'small', 'large',
+    'Large', 'huge', 'Huge', 'centering', 'raggedright', 'raggedleft',
+)
+
+ESCAPED_CHARS = {
+    r'\%': '%', r'\&': '&', r'\#': '#', r'\$': '$', r'\_': '_',
+    r'\{': '{', r'\}': '}', r'\~': '~', r'\^': '^',
+}
+
+VERBATIM_RE = re.compile(r'\\begin\{verbatim\}.*?\\end\{verbatim\}', re.DOTALL)
+COMMENT_RE = re.compile(r'(?<!\\)%.*')
+
+
+def _find_balanced(s, start):
+    """
+    Dado que s[start] == '{', retorna o índice do '}' que fecha esse grupo,
+    respeitando aninhamento. Retorna None se não houver fechamento.
+    """
+    depth = 0
+    for i in range(start, len(s)):
+        if s[i] == '{':
+            depth += 1
+        elif s[i] == '}':
+            depth -= 1
+            if depth == 0:
+                return i
+    return None
+
+
+def _replace_one_arg_commands(text, names, transform=lambda content: content):
+    """
+    Substitui \\nome{conteudo} por transform(conteudo), respeitando chaves
+    aninhadas. `names` é um iterável de nomes de comando (sem a barra).
+    """
+    for name in names:
+        pattern = re.compile(r'\\' + re.escape(name) + r'\*?\s*\{')
+        while True:
+            m = pattern.search(text)
+            if not m:
+                break
+            open_brace = m.end() - 1
+            close_brace = _find_balanced(text, open_brace)
+            if close_brace is None:
+                break  # chave desbalanceada; evita loop infinito
+            content = text[open_brace + 1:close_brace]
+            text = text[:m.start()] + transform(content) + text[close_brace + 1:]
+    return text
+
+
+def _replace_frac_and_sqrt(text):
+    # \frac{a}{b} -> (a)/(b)
+    pattern = re.compile(r'\\d?frac\s*\{')
+    while True:
+        m = pattern.search(text)
+        if not m:
+            break
+        b1_open = m.end() - 1
+        b1_close = _find_balanced(text, b1_open)
+        if b1_close is None:
+            break
+        rest = text[b1_close + 1:]
+        m2 = re.match(r'\s*\{', rest)
+        if not m2:
+            break
+        b2_open = b1_close + 1 + m2.end() - 1
+        b2_close = _find_balanced(text, b2_open)
+        if b2_close is None:
+            break
+        num = text[b1_open + 1:b1_close]
+        den = text[b2_open + 1:b2_close]
+        text = text[:m.start()] + f'({num})/({den})' + text[b2_close + 1:]
+
+    # \sqrt{x} -> √(x)   /   \sqrt[n]{x} -> raiz-n-ésima de (x)
+    pattern = re.compile(r'\\sqrt(\[[^\]]*\])?\s*\{')
+    while True:
+        m = pattern.search(text)
+        if not m:
+            break
+        idx = m.group(1)
+        open_brace = m.end() - 1
+        close_brace = _find_balanced(text, open_brace)
+        if close_brace is None:
+            break
+        content = text[open_brace + 1:close_brace]
+        if idx:
+            n = idx.strip('[]')
+            repl = f'raiz[{n}]({content})'
+        else:
+            repl = f'√({content})'
+        text = text[:m.start()] + repl + text[close_brace + 1:]
+
+    return text
+
+
+def _replace_list_environments(text):
+    def itemize_repl(m):
+        body = m.group(1)
+        items = re.split(r'\\item\s*', body)[1:]
+        return '\n'.join(f'- {it.strip()}' for it in items if it.strip())
+
+    def enumerate_repl(m):
+        body = m.group(1)
+        items = re.split(r'\\item\s*', body)[1:]
+        return '\n'.join(f'{i+1}. {it.strip()}' for i, it in enumerate(items) if it.strip())
+
+    text = re.sub(r'\\begin\{itemize\}(.*?)\\end\{itemize\}', itemize_repl, text, flags=re.DOTALL)
+    text = re.sub(r'\\begin\{enumerate\}(.*?)\\end\{enumerate\}', enumerate_repl, text, flags=re.DOTALL)
+    return text
+
+
+def latex_to_text(text):
+    """
+    Remove ou traduz marcações LaTeX básicas para texto simples
+    (Unicode/ASCII), garantindo compatibilidade com cases['description'].
+    Blocos \\begin{verbatim}...\\end{verbatim} são preservados sem alteração.
+    """
+    if not text:
+        return ""
+
+    # 0. Protege blocos verbatim (código-fonte) para não sofrerem nenhuma
+    #    substituição abaixo.
+    verbatim_blocks = []
+
+    def _stash_verbatim(m):
+        verbatim_blocks.append(m.group(0))
+        return f'\x00VERBATIM{len(verbatim_blocks) - 1}\x00'
+
+    text = VERBATIM_RE.sub(_stash_verbatim, text)
+
+    # 1. Remove comentários LaTeX (% não escapado até o fim da linha)
+    text = COMMENT_RE.sub('', text)
+
+    # 2. Ambientes de lista
+    text = _replace_list_environments(text)
+
+    # 3. \frac{}{} e \sqrt{}
+    text = _replace_frac_and_sqrt(text)
+
+    # 4. Comandos de formatação de texto -> mantém apenas o conteúdo
+    text = _replace_one_arg_commands(text, TEXT_WRAPPERS)
+
+    # 5. Comandos estruturais/espaçamento -> remove completamente
+    #    (com argumento opcional {...} ou sem argumento)
+    for name in STRIP_COMMANDS:
+        text = re.sub(r'\\' + re.escape(name) + r'\s*(\{[^{}]*\})?', '', text)
+
+    # 6. Letras gregas e símbolos matemáticos nomeados
+    for table in (GREEK, SYMBOLS):
+        for name, repl in table.items():
+            text = re.sub(r'\\' + re.escape(name) + r'(?![a-zA-Z])', repl, text)
+
+    # 7. Sub/sobrescritos simples: x_{ij} -> x[ij], x_i -> x[i], x^{2} -> x^2
+    text = re.sub(r'([a-zA-Z0-9\)\]])_\{([^{}]+)\}', r'\1[\2]', text)
+    text = re.sub(r'([a-zA-Z0-9\)\]])_([a-zA-Z0-9])', r'\1[\2]', text)
+    text = re.sub(r'([a-zA-Z0-9\)\]])\^\{([^{}]+)\}', r'\1^\2', text)
+
+    # 8. Remove delimitadores de modo matemático ($...$ ou $$...$$),
+    #    mantendo o conteúdo interno
+    text = re.sub(r'\${1,2}([^\$]+)\${1,2}', r'\1', text)
+
+    # 9. \left( \right) \left[ \right] etc -> apenas o delimitador
+    text = re.sub(r'\\left([\(\[\{])', r'\1', text)
+    text = re.sub(r'\\right([\)\]\}])', r'\1', text)
+
+    # 10. Aspas tipográficas e travessões
+    text = text.replace('``', '“').replace("''", '”')
+    text = re.sub(r'(?<!-)---(?!-)', '—', text)
+    text = re.sub(r'(?<!-)--(?!-)', '–', text)
+
+    # 11. Caracteres escapados (\% \& \_ \{ \} \~ \^ ...)
+    for esc, repl in ESCAPED_CHARS.items():
+        text = text.replace(esc, repl)
+
+    # 12. \\ (quebra de linha LaTeX) -> quebra de linha real
+    text = text.replace('\\\\', '\n')
+
+    # 13. Qualquer comando \nome{conteudo} remanescente e desconhecido ->
+    #     mantém só o conteúdo (fallback conservador)
+    text = re.sub(r'\\[a-zA-Z]+\*?\s*\{([^{}]*)\}', r'\1', text)
+
+    # 14. Comandos sem argumento remanescentes (\nome) -> remove a barra
+    text = re.sub(r'\\([a-zA-Z]+)', r'\1', text)
+
+    # 15. Normaliza espaços/linhas em branco excessivos (ainda com os blocos
+    #     verbatim protegidos pelo placeholder, para não mexer na indentação
+    #     do código-fonte dentro deles)
+    text = re.sub(r'[ \t]+\n', '\n', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    text = re.sub(r'[ \t]{2,}', ' ', text)
+
+    # 16. Restaura os blocos verbatim protegidos (por último, intactos)
+    for i, block in enumerate(verbatim_blocks):
+        text = text.replace(f'\x00VERBATIM{i}\x00', block)
+
+    return text.strip()

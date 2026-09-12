@@ -34,6 +34,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False #os.getenv('DEBUG')
 
+
+
 #SECURE_SSL_REDIRECT = True
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
@@ -56,7 +58,6 @@ DEFAULT_PASS = os.getenv('DEFAULT_PASS')
 #EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 #EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-EMAIL_USE_TLS = True
 EMAIL_HOST = os.getenv('webMCTest_SERVER')
 EMAIL_HOST_USER = os.getenv('webMCTest_FROM')
 DEFAULT_FROM_EMAIL = os.getenv('webMCTest_FROM')
@@ -72,10 +73,19 @@ webMCTest_PASS = os.getenv('webMCTest_PASS')
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE')
 TIME_ZONE = os.getenv('TIME_ZONE')
 
+TIME_ZONE = 'America/Sao_Paulo'
+USE_TZ = True
+
 ####
 
+# 1. Adicione o domínio e IPs aos Hosts permitidos
+ALLOWED_HOSTS = ['mctest.ufabc.edu.br', '127.0.0.1', 'localhost', '177.104.62.5']
 
-ALLOWED_HOSTS = ['*']
+# 2. Configuração CRUCIAL: Confiar no HTTPS vindo do Apache
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# 3. Permitir formulários (Login) via HTTPS
+CSRF_TRUSTED_ORIGINS = ['https://mctest.ufabc.edu.br']
 
 # Application definition
 
@@ -108,7 +118,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'mctest.middleware.ActiveUserMiddleware',
     # 'django_session_timeout.middleware.SessionTimeoutMiddleware',
     # Custom Middlewares
     # 'mctest.middlewares.FiltraIPMiddleware',
@@ -136,12 +145,6 @@ WSGI_APPLICATION = 'mctest.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
-
-# ATENÇÃO: TIVE QUE INCLUIR ISSO PARA RODAR NO MACOS!!!!!
-import pymysql
-pymysql.version_info = (2, 2, 4, 'final', 0)
-pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
@@ -185,14 +188,11 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 #STATIC_URL = "http://vision.ufabc.edu.br/static/"
 #STATIC_URL = "http://nubisys.ufabc.edu.br/static/"
-STATIC_URL = "http://mctest.ufabc.edu.br:8000/static/"
+#STATIC_URL = "http://mctest.ufabc.edu.br:8000/static/"
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #STATIC_ROOT = "http://nubisys.ufabc.edu.br/static"
 #STATIC_ROOT = "http://vision.ufabc.edu.br/static"
 
@@ -204,11 +204,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #     'django.contrib.staticfiles.finders.FileSystemFinder',
 # ]
 
-#STATICFILES_DIRS = [
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_URL = "http://mctest.ufabc.edu.br:8000/static/"
+
+# STATICFILES_DIRS = [
 #    os.path.join(BASE_DIR, 'static'),
 #    os.path.join(BASE_DIR, 'topic/static'),
 #    '/var/www/html/static'
-#]
+# ]
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
@@ -234,20 +238,12 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_PORT = 587
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Usa nosso backend personalizado que aceita chaves antigas da UFABC
+EMAIL_BACKEND = 'mctest.email_backend.WeakSSLEmailBackend'
 
 EMAIL_USE_TLS = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-import ssl
-
-# Desabilita SSL para desenvolvimento local
-ssl._create_default_https_context = ssl._create_unverified_context
-
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-
 
 # pip install django-session-timeout
 # Configurar expirar seção por usuário

@@ -4,3 +4,10 @@ pdf*/*
 tmp/*
 .DS_Store
 __init__.py
+imgs180days
+correct.log
+_killDjango.txt
+static/admin/
+static/django_extensions/
+static/import_export/
+LabMoodle
