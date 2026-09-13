@@ -62,7 +62,7 @@ except:
 # código Python arbitrário escrito por diferentes professores -- não dá para
 # revisar/consertar loop infinito questão por questão, então o limite é
 # aplicado aqui, na chamada (ver questionParametric), para qualquer código.
-PARAMETRIC_CODE_TIMEOUT_SECONDS = 10
+PARAMETRIC_CODE_TIMEOUT_SECONDS = 30
 
 
 def _parametric_code_timeout_handler(signum, frame):
