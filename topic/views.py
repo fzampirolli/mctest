@@ -134,6 +134,21 @@ def see_question_PDF(request, pk):
                 if quest == "":
                     messages.error(request, _('UtilsMC.questionParametric: forbidden words found.'))
                     return render(request, 'exam/exam_errors.html', {})
+
+                # questionParametric devolve uma string começando com "ERROR"
+                # (erro no código [[def: ...]], incluindo timeout por loop
+                # infinito) em vez de levantar uma exceção -- sem esta checagem,
+                # o texto de erro (técnico, com traceback/código Python) seguia
+                # direto para o PDF gerado, em vez de mostrar um aviso claro.
+                if isinstance(quest, str) and quest.startswith('ERROR'):
+                    print(f"see_question_PDF: erro ao gerar questão paramétrica {q.id}: {quest}")
+                    messages.error(request, _(
+                        'This parametric question (#%(id)s) could not be generated '
+                        'automatically -- its code has an error or took too long to '
+                        'run (possible infinite loop). Ask whoever created the '
+                        'question to review the code in "[[def: ...]]".'
+                    ) % {'id': q.id})
+                    return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
             except Exception as e:
                 messages.error(request, f"Error generating parametric question: {e}")
                 return render(request, 'exam/exam_errors.html', {})

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 08:35-0300\n"
+"POT-Creation-Date: 2026-09-13 10:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1128,7 +1128,7 @@ msgstr "ImportStudentsClassroom: ID tem que ter somente dígitos: "
 msgid "Back to Classroom Detail"
 msgstr "Voltar para detalhes da turma"
 
-#: course/views.py:521 exam/views.py:3166 exam/views_old.py:2895
+#: course/views.py:521 exam/views.py:3201 exam/views_old.py:2895
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1318,7 +1318,7 @@ msgstr "Escolha as Questões (de Disciplinas que você está cadastrado)"
 #: exam/forms.py:96 exam/models.py:53 exam/models.py:128
 #: exam/templates/exam/exam_update5.4.html:204
 #: main/templates/base_generic.html:158 main/templates/index-mctest.html:442
-#: main/templates/index.html:827 topic/UtilsMCTest4.py:504
+#: main/templates/index.html:827 topic/UtilsMCTest4.py:550
 msgid "Questions"
 msgstr "Questões"
 
@@ -1828,8 +1828,8 @@ msgstr "Aumentar o contraste? Útil se o PDF estiver muito branco!"
 #: exam/templates/exam/exam_update5.3.html:145
 #: exam/templates/exam/exam_update5.4.html:306
 #: exam/templates/exam/exam_update5.4.html:523
-#: exam/templates/exam/exam_update5.4.html:688 exam/views.py:722
-#: exam/views.py:856 exam/views.py:1022
+#: exam/templates/exam/exam_update5.4.html:688 exam/views.py:749
+#: exam/views.py:885 exam/views.py:1053
 msgid "Upload-PDF"
 msgstr "Upload-PDF"
 
@@ -2335,19 +2335,19 @@ msgstr "Esta ação não pode ser desfeita."
 msgid "Yes, Delete"
 msgstr "Sim, Apagar"
 
-#: exam/views.py:285 exam/views_old.py:283
+#: exam/views.py:312 exam/views_old.py:283
 msgid "variationsExam: there are no variations in the answer-only style!"
 msgstr "variationsExam: não há variações no estilo: somente resposta!"
 
-#: exam/views.py:548 exam/views_old.py:546
+#: exam/views.py:575 exam/views_old.py:546
 msgid "Error sending email with variations."
 msgstr "Erro ao enviar e-mail com as variações."
 
-#: exam/views.py:569 exam/views_old.py:567
+#: exam/views.py:596 exam/views_old.py:567
 msgid "Exam variations were stored in the database."
 msgstr "As variações do exame foram armazenadas no banco de dados."
 
-#: exam/views.py:570 exam/views_old.py:568
+#: exam/views.py:597 exam/views_old.py:568
 msgid ""
 "Return and refresh the exam page. Notice the ID change next to the Create-"
 "Variations button."
@@ -2355,7 +2355,7 @@ msgstr ""
 "Retorne e atualize a página do exame. Observe a mudança de ID ao lado do "
 "botão Create-Variations."
 
-#: exam/views.py:571 exam/views_old.py:569
+#: exam/views.py:598 exam/views_old.py:569
 msgid ""
 "Whenever you click this button, new exam variations will be stored in the "
 "database!"
@@ -2363,11 +2363,11 @@ msgstr ""
 "Sempre que você clicar neste botão, novas variações do exame serão "
 "armazenadas no banco de dados!"
 
-#: exam/views.py:574 exam/views_old.py:572
+#: exam/views.py:601 exam/views_old.py:572
 msgid "Selected files have been sent to your email."
 msgstr "Os arquivos selecionados foram enviados para o seu e-mail."
 
-#: exam/views.py:603 exam/views_old.py:601
+#: exam/views.py:630 exam/views_old.py:601
 msgid ""
 "feedbackStudentsExamText: feedback to student is NO, Change to YES and click "
 "in Upload-PDF again!"
@@ -2375,7 +2375,7 @@ msgstr ""
 "feedbackStudentsExamText: retorno do estudante é NÃO, escolher SIM e clique "
 "em Upload-PDF novamente"
 
-#: exam/views.py:615 exam/views_old.py:613
+#: exam/views.py:642 exam/views_old.py:613
 msgid ""
 "feedbackStudentsExamText: choose a ZIP file with scanned exams, for example "
 "_e31_769.zip!"
@@ -2383,14 +2383,14 @@ msgstr ""
 "feedbackStudentsExamText: escolher um arquivo ZIP com os exames "
 "digitalizados, por exemplo: _e31_769.zip!"
 
-#: exam/views.py:663 exam/views_old.py:661
+#: exam/views.py:690 exam/views_old.py:661
 msgid ""
 "feedbackStudentsExamText: name of the pdf file does not follow a pattern "
 "ID_xxx.pdf"
 msgstr ""
 "feedbackStudentsExamText: nome do arquivo PDF não segue um padrão: ID_xxx.pdf"
 
-#: exam/views.py:693
+#: exam/views.py:720
 #, fuzzy
 #| msgid ""
 #| "feedbackStudentsExamText: no email was sent, are you in the correct Exam "
@@ -2402,7 +2402,7 @@ msgstr ""
 "feedbackStudentsExamText: nenhum email foi enviado, você está em Exame e "
 "Turma corretos?"
 
-#: exam/views.py:718
+#: exam/views.py:745
 #, python-format
 msgid ""
 "Upload received. Sending feedback e-mails to %(n)d file(s) in the background "
@@ -2413,7 +2413,7 @@ msgstr ""
 "segundo plano -- tempo estimado: cerca de %(mins)d minuto(s). Você receberá "
 "o relatório por e-mail quando terminar."
 
-#: exam/views.py:809 exam/views_old.py:744
+#: exam/views.py:838 exam/views_old.py:744
 msgid ""
 "feedbackStudentsExam: feedback to student is NO, Change to YES and click in "
 "Upload-PDF again!"
@@ -2421,12 +2421,12 @@ msgstr ""
 "feedbackStudentsExam: retorno ao estudante é NÃO, escolher SIM e clique em "
 "Upload-PDF novamente!"
 
-#: exam/views.py:838
+#: exam/views.py:867
 msgid "feedbackStudentsExam: no PDF files found in pdfStudentEmail/."
 msgstr ""
 "feedbackStudentsExam: nenhum arquivo PDF encontrado em pdfStudentEmail/."
 
-#: exam/views.py:852
+#: exam/views.py:881
 #, python-format
 msgid ""
 "Sending feedback e-mails to %(n)d file(s) in the background -- estimated "
@@ -2437,11 +2437,11 @@ msgstr ""
 "estimado: cerca de %(mins)d minuto(s). Você receberá o relatório por e-mail "
 "quando terminar."
 
-#: exam/views.py:963 exam/views_old.py:834
+#: exam/views.py:994 exam/views_old.py:834
 msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
-#: exam/views.py:1017
+#: exam/views.py:1048
 #, python-format
 msgid ""
 "Correcting exam in the background for %(n)d page(s). Estimated time: about "
@@ -2452,15 +2452,15 @@ msgstr ""
 "cerca de %(mins)d minuto(s). Você receberá o ZIP resultante por e-mail "
 "quando terminar (e eventuais erros) -- não precisa esperar nesta página."
 
-#: exam/views.py:1089 exam/views_old.py:901
+#: exam/views.py:1122 exam/views_old.py:901
 msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
-#: exam/views.py:1143 exam/views_old.py:956
+#: exam/views.py:1176 exam/views_old.py:956
 msgid "Error reading QRcode from PDF for exam ID: "
 msgstr "Erro ao ler QRcode do PDF para o ID do exame: "
 
-#: exam/views.py:2298
+#: exam/views.py:2331
 #, python-format
 msgid ""
 "PDF generation started for %(n)d student(s). Estimated time: about %(mins)d "
@@ -2471,67 +2471,67 @@ msgstr ""
 "%(mins)d minuto(s). Você receberá um e-mail com o PDF/ZIP (e eventuais "
 "erros) quando terminar -- não precisa esperar nesta página."
 
-#: exam/views.py:2302
+#: exam/views.py:2335
 msgid "PDF Generation"
 msgstr "Geração de PDF"
 
-#: exam/views.py:2385 exam/views_old.py:2143
+#: exam/views.py:2420 exam/views_old.py:2143
 msgid "Create variations first"
 msgstr "Criar primeiro as variações"
 
-#: exam/views.py:2400 exam/views_old.py:2158
+#: exam/views.py:2435 exam/views_old.py:2158
 msgid "ERROR in generate_page, number_of_questions_text!!!!  "
 msgstr "ERRO em generate_page, number_of_questions_text!!!!  "
 
-#: exam/views.py:2404 exam/views_old.py:2162
+#: exam/views.py:2439 exam/views_old.py:2162
 msgid "ERROR in generate_page, number_of_QM!!!! - no questions: "
 msgstr "ERRO em generate_page, number_of_QM!!! - sem questões:"
 
-#: exam/views.py:2437 exam/views_old.py:2192
+#: exam/views.py:2472 exam/views_old.py:2192
 msgid "ERROR in generate_page, class with zero students: "
 msgstr "ERRO: classe com zero estudantes: "
 
-#: exam/views.py:2482 exam/views_old.py:2237
+#: exam/views.py:2517 exam/views_old.py:2237
 msgid "ERROR in Utils.distro_table, student: "
 msgstr "ERRO em Utils.distro_table, estudante: "
 
-#: exam/views.py:2546 exam/views_old.py:2292
+#: exam/views.py:2581 exam/views_old.py:2292
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr "ERRO em distro_table!!!! - nome do estudante:"
 
-#: exam/views.py:2587 exam/views_old.py:2333
+#: exam/views.py:2622 exam/views_old.py:2333
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:2661 exam/views_old.py:2401
+#: exam/views.py:2696 exam/views_old.py:2401
 msgid "ERROR generating PDF for student"
 msgstr "ERRO ao gerar PDF para estudante"
 
-#: exam/views.py:2684 exam/views_old.py:2419
+#: exam/views.py:2719 exam/views_old.py:2419
 msgid "ERROR generating PDF for class"
 msgstr "ERRO ao gerar PDF para a turma"
 
-#: exam/views.py:2859 exam/views_old.py:2588
+#: exam/views.py:2894 exam/views_old.py:2588
 msgid "ERROR: PDF file not found."
 msgstr "ERRO: Arquivo PDF não encontrado."
 
-#: exam/views.py:2884 exam/views_old.py:2613
+#: exam/views.py:2919 exam/views_old.py:2613
 msgid "ERROR: Zip file not created."
 msgstr "ERRO: Arquivo Zip não criado."
 
-#: exam/views.py:2925 exam/views_old.py:2654
+#: exam/views.py:2960 exam/views_old.py:2654
 msgid "ERROR - watch out for special characters in exam name"
 msgstr "ERRO - cuidado com os caracteres especiais no nome do exame"
 
-#: exam/views.py:3102 exam/views_old.py:2831
+#: exam/views.py:3137 exam/views_old.py:2831
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:3117 exam/views_old.py:2846
+#: exam/views.py:3152 exam/views_old.py:2846
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:3131 exam/views_old.py:2860
+#: exam/views.py:3166 exam/views_old.py:2860
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -3869,35 +3869,35 @@ msgstr ""
 "Enviamos instruções por e-mail para definir sua senha. Se não chegar em "
 "alguns minutos, verifique sua pasta de spam."
 
-#: topic/UtilsMCTest4.py:374 topic/views.py:550
+#: topic/UtilsMCTest4.py:420 topic/views.py:565
 msgid "Error reading file: "
 msgstr ""
 
-#: topic/UtilsMCTest4.py:491
+#: topic/UtilsMCTest4.py:537
 msgid "ImportQuestions: Question without answers: "
 msgstr "ImportQuestions: ERRO - questão sem respostas: "
 
-#: topic/UtilsMCTest4.py:506
+#: topic/UtilsMCTest4.py:552
 msgid "Total of questions without groups:"
 msgstr "Total de questões sem grupos: "
 
-#: topic/UtilsMCTest4.py:508 topic/UtilsMCTest4.py:519
+#: topic/UtilsMCTest4.py:554 topic/UtilsMCTest4.py:565
 msgid "Easy questions QE: "
 msgstr "Questão com nível fácil: "
 
-#: topic/UtilsMCTest4.py:510 topic/UtilsMCTest4.py:521
+#: topic/UtilsMCTest4.py:556 topic/UtilsMCTest4.py:567
 msgid "Mean questions QM: "
 msgstr "Questões com nível médio: "
 
-#: topic/UtilsMCTest4.py:512 topic/UtilsMCTest4.py:523
+#: topic/UtilsMCTest4.py:558 topic/UtilsMCTest4.py:569
 msgid "Hard questions QH: "
 msgstr "Questões com nível difícil: "
 
-#: topic/UtilsMCTest4.py:514 topic/UtilsMCTest4.py:525
+#: topic/UtilsMCTest4.py:560 topic/UtilsMCTest4.py:571
 msgid "Text questions QT: "
 msgstr "Questões Dissertativas: "
 
-#: topic/UtilsMCTest4.py:517
+#: topic/UtilsMCTest4.py:563
 msgid "Total of questions with groups:"
 msgstr "Total de questões com grupos: "
 
@@ -4061,7 +4061,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1243
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1258
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -4423,7 +4423,23 @@ msgstr "Erro ao mover arquivo para o destino final: {e}"
 msgid "UtilsMC.questionParametric: forbidden words found."
 msgstr "UtilsMC.questionParametric: palavras proibidas encontradas."
 
-#: topic/views.py:315 topic/views.py:346
+#: topic/views.py:146
+#, python-format
+msgid ""
+"This parametric question (#%(id)s) could not be generated automatically -- "
+"its code has an error or took too long to run (possible infinite loop). Ask "
+"whoever created the question to review the code in \"[[def: ...]]\"."
+msgstr ""
+"Esta questão paramétrica (#%(id)s) não pôde ser gerada automaticamente -- "
+"o código dela tem um erro ou demorou demais para rodar (possível loop "
+"infinito). Peça para quem criou a questão revisar o código em "
+"\"[[def: ...]]\"."
+
+#: topic/views.py:151
+msgid "Error generating question"
+msgstr "Erro ao gerar questão"
+
+#: topic/views.py:330 topic/views.py:361
 msgid ""
 "The question has been successfully duplicated! You can <a href=\"../../{}/"
 "update/\">view and edit the duplicated question here</a>."
@@ -4431,58 +4447,58 @@ msgstr ""
 "A questão foi duplicada com sucesso! Você pode <a href=\"../../{}/update/"
 "\">ver e editar a questão duplicada aqui</a>."
 
-#: topic/views.py:403
+#: topic/views.py:418
 msgid "Error reading JSON: "
 msgstr ""
 
-#: topic/views.py:407
+#: topic/views.py:422
 msgid "JSON file is empty."
 msgstr "O arquivo JSON está vazio."
 
-#: topic/views.py:501 topic/views.py:661
+#: topic/views.py:516 topic/views.py:676
 msgid "Questions Created Successfully:"
 msgstr "Questões Criadas com Sucesso:"
 
-#: topic/views.py:517 topic/views.py:681
+#: topic/views.py:532 topic/views.py:696
 msgid "Skipped similar question(s) already in DB:"
 msgstr "Ignoradas questão(ões) similar(es) já existentes no BD:"
 
-#: topic/views.py:533
+#: topic/views.py:548
 msgid "No questions were processed or permissions denied."
 msgstr "Nenhuma questão foi processada ou permissão negada."
 
-#: topic/views.py:544
+#: topic/views.py:559
 msgid "ImportQuestions: choose a TXT file following the model!"
 msgstr "ImportQuestions: escolha um arquivo TXT seguindo o modelo!"
 
-#: topic/views.py:555
+#: topic/views.py:570
 msgid "No questions found or invalid format."
 msgstr "Nenhuma questão encontrada ou formato inválido."
 
-#: topic/views.py:607
+#: topic/views.py:622
 msgid ""
 "ImportQuestions: Teacher is not associated with any discipline for topic: "
 msgstr ""
 "ImportQuestions: O professor não está associado a nenhuma disciplina para o "
 "tópico: "
 
-#: topic/views.py:611
+#: topic/views.py:626
 msgid "ImportQuestions: Topic does not exist (Create it first): "
 msgstr "ImportQuestions: O tópico não existe (Crie-o primeiro): "
 
-#: topic/views.py:699
+#: topic/views.py:714
 msgid "No questions were processed."
 msgstr "Nenhuma questão foi processada."
 
-#: topic/views.py:717
+#: topic/views.py:732
 msgid "ImportQuestionsImage: choose a PNG following the model!"
 msgstr "ImportQuestions: escolher um arquivo PNG seguindo o exemplo"
 
-#: topic/views.py:737
+#: topic/views.py:752
 msgid "Image imported successfully! "
 msgstr "Imagem importada com sucesso! "
 
-#: topic/views.py:787 topic/views.py:839
+#: topic/views.py:802 topic/views.py:854
 msgid ""
 "A topic with the same text already exists. Please consider using a unique "
 "name. Suggested name: {}"
@@ -4490,11 +4506,11 @@ msgstr ""
 "Já existe um tópico com o mesmo texto. Considere usar um nome exclusivo. "
 "Nome sugerido: {}"
 
-#: topic/views.py:795 topic/views.py:847
+#: topic/views.py:810 topic/views.py:862
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:920
+#: topic/views.py:935
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -4504,19 +4520,19 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:927
+#: topic/views.py:942
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
 
-#: topic/views.py:970
+#: topic/views.py:985
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:1313
+#: topic/views.py:1328
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:1367
+#: topic/views.py:1382
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 
