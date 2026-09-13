@@ -12,6 +12,12 @@
 #   4. Tenta SIGTERM (kill -15) antes de SIGKILL (kill -9), dando chance
 #      ao processo de terminar sem corromper PDFs em geração.
 #   5. Se USERS_NOW não vier um número válido, aborta em vez de assumir 0.
+#   6. Nunca mata nada se houver um job de Criar-PDF/Upload-PDF em andamento
+#      em background (arquivo de lock tmp/.bg_job_*.lock criado pela thread
+#      em exam/views.py e removido ao terminar) -- sem isso, um job longo
+#      rodando no exato momento em que ninguém tem sessão válida e o processo
+#      passa de LIMITE_MEMORIA seria morto no meio, perdendo o trabalho sem
+#      avisar o professor.
 
 set -u
 
@@ -46,7 +52,14 @@ if [ "$USERS_NOW" -gt 0 ]; then
     exit 0
 fi
 
-log "Nenhum usuário logado no Django. Verificando processos python3..."
+# Verifica se há algum job de Criar-PDF/Upload-PDF em andamento em background
+# (ver exam/views.py: _acquire_background_job_lock/_release_background_job_lock).
+if compgen -G "$PROJECT_DIR/tmp/.bg_job_*.lock" > /dev/null; then
+    log "Há job(s) de Criar-PDF/Upload-PDF em andamento (lock em tmp/). Não matando processos python3."
+    exit 0
+fi
+
+log "Nenhum usuário logado no Django e nenhum job em andamento. Verificando processos python3..."
 
 for pid in $(pgrep -x python3); do
     MEMORIA=$(ps -o %mem= -p "$pid" 2>/dev/null | tr -d ' ')

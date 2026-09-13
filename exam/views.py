@@ -34,6 +34,7 @@ import os
 import re
 import threading
 import traceback
+import uuid
 import pandas as pd
 
 import PyPDF2
@@ -76,6 +77,32 @@ import requests
 from topic.utils_pdf import PDFGenerator  # <--- ADICIONE ISSO
 from mctest.settings import BASE_DIR      # Verifique se já tem
 from django.conf import settings
+
+def _acquire_background_job_lock():
+    """
+    Cria um arquivo de lock em tmp/ enquanto um job pesado (Criar-PDF ou
+    Upload-PDF) roda numa thread de background. Em produção, `_killDjango.sh`
+    mata via cron processos python3 com memória alta quando nenhum usuário
+    tem sessão válida no momento da checagem -- ele foi atualizado para
+    também checar a presença de qualquer arquivo `tmp/.bg_job_*.lock` antes
+    de matar, para nunca derrubar o processo com uma dessas threads em
+    andamento (o que perderia o trabalho silenciosamente, sem avisar o
+    professor). Sempre remover o lock em um `finally` (ver
+    `_release_background_job_lock`).
+    """
+    tmp_dir = os.path.join(str(settings.BASE_DIR), 'tmp')
+    os.makedirs(tmp_dir, exist_ok=True)
+    lock_path = os.path.join(tmp_dir, f'.bg_job_{os.getpid()}_{uuid.uuid4().hex}.lock')
+    open(lock_path, 'w').close()
+    return lock_path
+
+
+def _release_background_job_lock(lock_path):
+    try:
+        os.remove(lock_path)
+    except OSError:
+        pass
+
 
 def get_email_report_content(user_name, exam_name, date_str):
     """
@@ -725,6 +752,7 @@ def feedbackStudentsExamText(request, pk):
 
 
 def _feedback_students_exam_text_worker(exam_id, myfiles, msg_str, path_to_file, professor_email):
+    lock_path = _acquire_background_job_lock()
     try:
         _feedback_students_exam_text_impl(exam_id, myfiles, msg_str, path_to_file, professor_email)
     except Exception as e:
@@ -738,6 +766,7 @@ def _feedback_students_exam_text_worker(exam_id, myfiles, msg_str, path_to_file,
         except Exception as e2:
             print(f"Erro ao notificar professor sobre falha no upload-pdf (texto): {e2}")
     finally:
+        _release_background_job_lock(lock_path)
         from django.db import connection
         connection.close()
 
@@ -859,6 +888,7 @@ def feedbackStudentsExam(request, pk):
 
 
 def _feedback_students_exam_worker(exam_id, myfiles, path_to_file, professor_email):
+    lock_path = _acquire_background_job_lock()
     try:
         _feedback_students_exam_impl(exam_id, myfiles, path_to_file, professor_email)
     except Exception as e:
@@ -872,6 +902,7 @@ def _feedback_students_exam_worker(exam_id, myfiles, path_to_file, professor_ema
         except Exception as e2:
             print(f"Erro ao notificar professor sobre falha no upload-pdf: {e2}")
     finally:
+        _release_background_job_lock(lock_path)
         from django.db import connection
         connection.close()
 
@@ -1025,6 +1056,7 @@ def correctStudentsExam(request, pk):
 
 
 def _correct_students_exam_worker(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name):
+    lock_path = _acquire_background_job_lock()
     try:
         _correct_students_exam_impl(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name)
     except Exception as e:
@@ -1038,6 +1070,7 @@ def _correct_students_exam_worker(exam_id, file, file0, choiceReturnQuestions, p
         except Exception as e2:
             print(f"Erro ao notificar professor sobre falha no correctStudentsExam: {e2}")
     finally:
+        _release_background_job_lock(lock_path)
         from django.db import connection
         connection.close()
 
@@ -2312,6 +2345,7 @@ def _generate_page_worker(request, pk):
     e-mail ao professor, e cada "return render(request, 'exam/exam_errors.html', {})"
     abaixo apenas encerra a thread silenciosamente (o print/log ainda mostra a causa).
     """
+    lock_path = _acquire_background_job_lock()
     try:
         _generate_page_impl(request, pk)
     except Exception as e:
@@ -2327,6 +2361,7 @@ def _generate_page_worker(request, pk):
         except Exception as e2:
             print(f"Erro ao notificar professor sobre falha na geracao: {e2}")
     finally:
+        _release_background_job_lock(lock_path)
         # Esta thread nao passa pelo ciclo request/response do Django, que e
         # quem normalmente fecha conexoes de banco ociosas/expiradas ao final
         # de cada requisicao -- sem isso a conexao desta thread ficaria aberta
