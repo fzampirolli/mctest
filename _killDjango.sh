@@ -54,8 +54,14 @@ fi
 
 # Verifica se há algum job de Criar-PDF/Upload-PDF em andamento em background
 # (ver exam/views.py: _acquire_background_job_lock/_release_background_job_lock).
-if compgen -G "$PROJECT_DIR/tmp/.bg_job_*.lock" > /dev/null; then
-    log "Há job(s) de Criar-PDF/Upload-PDF em andamento (lock em tmp/). Não matando processos python3."
+# Só considera locks com no máximo LOCK_MAX_IDADE_MIN de idade: um job legítimo
+# (Criar-PDF/Upload-PDF) leva no máximo ~2h; um lock mais velho que isso é lixo
+# órfão (processo morto sem passar pelo "finally", queda de energia, etc.) e
+# NÃO deve bloquear esta checagem para sempre -- sem esse limite, um lock
+# órfão desativaria esta proteção de memória permanentemente e silenciosamente.
+LOCK_MAX_IDADE_MIN=180
+if find "$PROJECT_DIR/tmp" -maxdepth 1 -name '.bg_job_*.lock' -mmin "-$LOCK_MAX_IDADE_MIN" 2>/dev/null | grep -q .; then
+    log "Há job(s) de Criar-PDF/Upload-PDF em andamento (lock recente em tmp/). Não matando processos python3."
     exit 0
 fi
 
