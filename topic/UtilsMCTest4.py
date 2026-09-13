@@ -29,7 +29,6 @@ GNU General Public License for more details.
 
 import datetime
 import random
-import signal
 import subprocess
 import threading
 import os
@@ -63,13 +62,6 @@ except:
 # revisar/consertar loop infinito questão por questão, então o limite é
 # aplicado aqui, na chamada (ver questionParametric), para qualquer código.
 PARAMETRIC_CODE_TIMEOUT_SECONDS = 30
-
-
-def _parametric_code_timeout_handler(signum, frame):
-    raise TimeoutError(
-        f"Tempo limite de {PARAMETRIC_CODE_TIMEOUT_SECONDS}s excedido ao executar o "
-        f"código [[def: ...]] da questão (possível loop infinito)."
-    )
 
 
 def createWrongAnswers(a):
@@ -279,22 +271,41 @@ class UtilsMC(object):
             # while que só para ao sortear por acaso uma combinação exata --
             # ver gerar_QM_itens em topic/Utils.py). Não dá para revisar questão
             # por questão, então o limite de tempo é aplicado aqui, na chamada,
-            # para qualquer código. signal.alarm só funciona na thread principal
-            # (é o caso de todas as chamadas atuais de questionParametric); fora
-            # dela, roda sem o limite em vez de falhar.
-            is_main_thread = threading.current_thread() is threading.main_thread()
-            try:
-                if is_main_thread:
-                    old_handler = signal.signal(signal.SIGALRM, _parametric_code_timeout_handler)
-                    signal.alarm(PARAMETRIC_CODE_TIMEOUT_SECONDS)
+            # para qualquer código.
+            #
+            # Roda numa thread separada com .join(timeout=...) em vez de
+            # signal.alarm: o Django runserver atende cada requisição numa
+            # thread própria (não a principal), e signal.alarm só funciona na
+            # thread principal do processo -- com sinal, o timeout nunca
+            # disparava de verdade numa requisição HTTP real (só funcionava em
+            # scripts de thread única, tipo "manage.py shell"). Limitação
+            # aceita: se o código realmente nunca terminar, a requisição
+            # desiste de esperar e devolve erro na hora, mas a thread de
+            # execução continua rodando (gastando CPU) em segundo plano --
+            # não existe forma segura de "matar" uma thread Python de fora.
+            # Mesmo assim resolve o problema real: a página não trava mais
+            # esperando um código que nunca termina.
+            exec_namespace = dict(globals())
+            exec_error = {}
+
+            def _run_def_code():
                 try:
-                    exec('\n'.join(myDef))  # run the algorithm and variables
-                finally:
-                    if is_main_thread:
-                        signal.alarm(0)
-                        signal.signal(signal.SIGALRM, old_handler)
-            except Exception as e:
-                e = str(e).replace('<','$<$').replace('>','$>$')
+                    exec('\n'.join(myDef), exec_namespace)  # run the algorithm and variables
+                except Exception as run_exc:
+                    exec_error['exc'] = run_exc
+
+            def_thread = threading.Thread(target=_run_def_code, daemon=True)
+            def_thread.start()
+            def_thread.join(PARAMETRIC_CODE_TIMEOUT_SECONDS)
+
+            if def_thread.is_alive():
+                e = (f"Tempo limite de {PARAMETRIC_CODE_TIMEOUT_SECONDS}s excedido ao executar o "
+                     f"código [[def: ...]] da questão (possível loop infinito).")
+                e += '\n\n\n\\begin{verbatim}' + '\n'.join(myDef) + '\n\\end{verbatim}'
+                return [f"ERROR in [[def: ... ]]: {e}", "", ""]
+
+            if 'exc' in exec_error:
+                e = str(exec_error['exc']).replace('<', '$<$').replace('>', '$>$')
                 e += '\n\n\n\\begin{verbatim}' + '\n'.join(myDef) + '\n\\end{verbatim}'
                 return [f"ERROR in [[def: ... ]]: {e}", "", ""]
         else:
@@ -307,7 +318,7 @@ class UtilsMC(object):
         while i < tam:
             for j in arg:
                 try:
-                    AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
+                    AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j, exec_namespace)))
                 except Exception as e:
                     e = str(e).replace('<', '$<$').replace('>', '$>$')
                     e += '\n\n\n\\begin{verbatim}' + '\n'.join(myDef) + '\n\\end{verbatim}'
@@ -343,7 +354,7 @@ class UtilsMC(object):
                     m = 0
                     for k in j.split('\n'):
                         if len(str(k)) > 0:
-                            for z in str(eval(k)).split('\n'):
+                            for z in str(eval(k, exec_namespace)).split('\n'):
                                 if z:
                                     if exam: # limita pelo n. respostas do exame
                                         if len(AllLines) < int(exam.exam_number_of_anwsers_question):
@@ -357,7 +368,7 @@ class UtilsMC(object):
 
                     i -= 1
                     tam = tam + m
-                AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j)))
+                AllLines[i] = AllLines[i].replace("[[code:" + j + "]]", str(eval(j, exec_namespace)))
 
             if i >= len(AllLines) or AllLines[i].find("[[def:") > -1:
                 tam = i
@@ -382,7 +393,7 @@ class UtilsMC(object):
 
         while i < tam:
             for j in arg:
-                AllLinesFeedback[i] = AllLinesFeedback[i].replace("[[code:" + j + "]]", str(eval(j)))
+                AllLinesFeedback[i] = AllLinesFeedback[i].replace("[[code:" + j + "]]", str(eval(j, exec_namespace)))
 
             if i >= len(AllLinesFeedback) or AllLinesFeedback[i].find("[[def:") > -1:
                 tam = i
