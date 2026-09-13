@@ -15,7 +15,7 @@
                         {% for message in messages %}
                             <p class="mb-2 {% if 'error' in message.tags %}text-danger font-weight-bold{% elif 'success' in message.tags %}text-success{% else %}text-body{% endif %}">
 
-                                {{ message|linebreaksbr|safe }}
+                                {{ message|safe|linebreaksbr }}
 
                             </p>
                         {% endfor %}
