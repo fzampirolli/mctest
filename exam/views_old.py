@@ -32,8 +32,6 @@ import glob
 import json
 import os
 import re
-import threading
-import traceback
 import pandas as pd
 
 import PyPDF2
@@ -688,11 +686,6 @@ def feedbackStudentsExamText(request, pk):
         except:
             msg_str = ""
 
-        if not myfiles:
-            messages.error(request,
-                           _("feedbackStudentsExamText: no PDF files found matching the expected pattern in the ZIP."))
-            return render(request, 'exam/exam_errors.html', {})
-
         path_to_file = BASE_DIR + "/report" + str(pk) + "q" + idQuestion + ".csv"
         # raise Http404(path_to_file)
 
@@ -702,94 +695,36 @@ def feedbackStudentsExamText(request, pk):
         except Exception as e:
             pass
 
-        # O upload/unzip acima e rapido e precisa do request.FILES ainda vivo, entao
-        # fica sincrono. O laco de envio de e-mail por aluno e que pode demorar em
-        # turmas grandes -- roda em background (dados simples, sem o objeto request)
-        # e o professor recebe o relatorio por e-mail ao final, em vez de esperar
-        # nesta pagina.
-        professor_email = str(request.user)
-        thread = threading.Thread(
-            target=_feedback_students_exam_text_worker,
-            args=(exam.id, myfiles, msg_str, path_to_file, professor_email),
-            daemon=True)
-        thread.start()
+        for room in exam.classrooms.all():  # para cada turma
+            for s in room.students.all():  # para cada estudante da turma
+                # path = os.getcwd() + "/pdfStudentEmail/"
+                # file_name = "studentEmail_e" + str(exam.id) + "_r" + str(room.id) + "_s" + s.student_ID
 
-        estimated_minutes = max(1, round(len(myfiles) * 2 / 60))
-        messages.success(request, _('Upload received. Sending feedback e-mails to %(n)d file(s) in the '
-                                     'background -- estimated time: about %(mins)d minute(s). You will '
-                                     'receive the report by e-mail when it finishes.') % {
-                                     'n': len(myfiles), 'mins': estimated_minutes})
-        return render(request, 'exam/exam_errors.html', {'title': _('Upload-PDF')})
+                for f in myfiles:
+                    if f[0] == str(exam.id) and f[2] == s.student_ID:
+                        email = "fzampirolli@gmail.com"
+                        email = s.student_email
+                        data_hora = datetime.datetime.now()
+                        data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+                        file_name = f[6]
+                        print('send mail to: ', s.student_email)
+                        cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name))
+                        with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
+                            writer = csv.writer(data)
+                            writer.writerow([f[5], s.student_ID, email, s.student_name, f[3], f[4], data_hora])
+
+        try:
+            with open(path_to_file, 'r') as f:
+                pass
+        except:
+            messages.error(request,
+                           _("feedbackStudentsExamText: no email was sent, are you in the correct Exam and Term?"))
+            return render(request, 'exam/exam_errors.html', {})
+
+        return serve(request, os.path.basename(path_to_file),
+                     os.path.dirname(path_to_file))
 
     return HttpResponseRedirect("/")
-
-
-def _feedback_students_exam_text_worker(exam_id, myfiles, msg_str, path_to_file, professor_email):
-    try:
-        _feedback_students_exam_text_impl(exam_id, myfiles, msg_str, path_to_file, professor_email)
-    except Exception as e:
-        tb = traceback.format_exc()
-        print(f"ERRO NAO TRATADO em _feedback_students_exam_text_worker (exam {exam_id}): {e}\n{tb}")
-        try:
-            cvMCTest.envia_email(
-                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
-                f"[MCTest] Erro no Upload-PDF (texto) do exame {exam_id}",
-                f"Ocorreu um erro ao enviar os e-mails de feedback do exame {exam_id}:\n\n{tb}")
-        except Exception as e2:
-            print(f"Erro ao notificar professor sobre falha no upload-pdf (texto): {e2}")
-    finally:
-        from django.db import connection
-        connection.close()
-
-
-def _feedback_students_exam_text_impl(exam_id, myfiles, msg_str, path_to_file, professor_email):
-    exam = get_object_or_404(Exam, pk=exam_id)
-
-    # Reaproveita uma unica conexao SMTP para todos os alunos, evitando
-    # reconectar/TLS a cada e-mail em turmas grandes.
-    smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS)
-
-    for room in exam.classrooms.all():  # para cada turma
-        for s in room.students.all():  # para cada estudante da turma
-            for f in myfiles:
-                if f[0] == str(exam.id) and f[2] == s.student_ID:
-                    email = s.student_email
-                    data_hora = datetime.datetime.now()
-                    data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
-                    file_name = f[6]
-                    print('send mail to: ', s.student_email)
-                    enviaOK = cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
-                                                 connection=smtp_connection)
-                    if enviaOK and 'ERROR' in enviaOK:
-                        smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM,
-                                                                      webMCTest_PASS)
-                        cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
-                                           connection=smtp_connection)
-                    with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
-                        writer = csv.writer(data)
-                        writer.writerow([f[5], s.student_ID, email, s.student_name, f[3], f[4], data_hora])
-
-    if smtp_connection is not None:
-        try:
-            smtp_connection.quit()
-        except Exception:
-            pass
-
-    anexos = [path_to_file] if os.path.exists(path_to_file) else []
-    if anexos:
-        subject = f"[MCTest] Upload-PDF concluido - Exame {exam.id} - {exam.exam_name}"
-        body = (f"O envio de feedback (Upload-PDF texto) do exame '{exam.exam_name}' (ID: {exam.id}) "
-                f"foi concluido.\n\nRelatorio de envios em anexo.")
-    else:
-        subject = f"[MCTest] Upload-PDF - Exame {exam.id} - nenhum e-mail enviado"
-        body = (f"Nenhum e-mail foi enviado para o exame '{exam.exam_name}' (ID: {exam.id}). "
-                f"Verifique se voce esta no Exame/Termo correto.")
-
-    try:
-        cvMCTest.envia_email(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
-                              subject, body, anexos)
-    except Exception as e:
-        print(f"Erro ao enviar relatorio final ao professor (upload-pdf texto): {e}")
 
 
 @login_required
@@ -834,102 +769,38 @@ def feedbackStudentsExam(request, pk):
             # return HttpResponse(file,idStudent,idRoom,idExam,ff[len(ff)-1])
             myfiles.append([idExam, idRoom, idStudent, ff[len(ff) - 1]])
 
-        if not myfiles:
-            messages.error(request, _("feedbackStudentsExam: no PDF files found in pdfStudentEmail/."))
+        for room in exam.classrooms.all():  # para cada turma
+            for s in room.students.all():  # para cada estudante da turma
+                path = os.getcwd() + "/pdfStudentEmail/"
+                for f in myfiles:
+                    if f[0] == str(exam.id) and f[1] == str(room.id) and f[2] == s.student_ID:
+                        email = "fzampirolli@gmail.com"
+                        # email = s.student_email
+                        data_hora = datetime.datetime.now()
+                        data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+
+                        path = os.getcwd()
+                        file_name = "studentEmail_e" + f[0] + "_r" + f[1] + "_s" + f[2]
+                        file_name = path + "/pdfStudentEmail/" + file_name + '.pdf'
+
+                        msg_str = ""
+                        cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name))
+
+                        with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
+                            writer = csv.writer(data)
+                            writer.writerow(['page', s.student_ID, email, s.student_name, data_hora])
+
+        try:
+            with open(path_to_file, 'r') as f:
+                pass
+        except:
+            messages.error(request, _("feedbackStudentsExam: no email was sent, are you in the correct Exam and Term?"))
             return render(request, 'exam/exam_errors.html', {})
 
-        # O envio de e-mail por aluno pode demorar em turmas grandes -- roda em
-        # background (dados simples, sem o objeto request) e o professor recebe
-        # o relatorio por e-mail ao final, em vez de esperar nesta pagina.
-        professor_email = str(request.user)
-        thread = threading.Thread(
-            target=_feedback_students_exam_worker,
-            args=(exam.id, myfiles, path_to_file, professor_email),
-            daemon=True)
-        thread.start()
-
-        estimated_minutes = max(1, round(len(myfiles) * 2 / 60))
-        messages.success(request, _('Sending feedback e-mails to %(n)d file(s) in the background -- '
-                                     'estimated time: about %(mins)d minute(s). You will receive the '
-                                     'report by e-mail when it finishes.') % {
-                                     'n': len(myfiles), 'mins': estimated_minutes})
-        return render(request, 'exam/exam_errors.html', {'title': _('Upload-PDF')})
+        return serve(request, os.path.basename(path_to_file),
+                     os.path.dirname(path_to_file))
 
     return HttpResponseRedirect("/")
-
-
-def _feedback_students_exam_worker(exam_id, myfiles, path_to_file, professor_email):
-    try:
-        _feedback_students_exam_impl(exam_id, myfiles, path_to_file, professor_email)
-    except Exception as e:
-        tb = traceback.format_exc()
-        print(f"ERRO NAO TRATADO em _feedback_students_exam_worker (exam {exam_id}): {e}\n{tb}")
-        try:
-            cvMCTest.envia_email(
-                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
-                f"[MCTest] Erro no Upload-PDF do exame {exam_id}",
-                f"Ocorreu um erro ao enviar os e-mails de feedback do exame {exam_id}:\n\n{tb}")
-        except Exception as e2:
-            print(f"Erro ao notificar professor sobre falha no upload-pdf: {e2}")
-    finally:
-        from django.db import connection
-        connection.close()
-
-
-def _feedback_students_exam_impl(exam_id, myfiles, path_to_file, professor_email):
-    exam = get_object_or_404(Exam, pk=exam_id)
-
-    # Reaproveita uma unica conexao SMTP para todos os alunos, evitando
-    # reconectar/TLS a cada e-mail em turmas grandes.
-    smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS)
-
-    for room in exam.classrooms.all():  # para cada turma
-        for s in room.students.all():  # para cada estudante da turma
-            for f in myfiles:
-                if f[0] == str(exam.id) and f[1] == str(room.id) and f[2] == s.student_ID:
-                    email = "fzampirolli@gmail.com"
-                    # email = s.student_email
-                    data_hora = datetime.datetime.now()
-                    data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
-
-                    path = os.getcwd()
-                    file_name = "studentEmail_e" + f[0] + "_r" + f[1] + "_s" + f[2]
-                    file_name = path + "/pdfStudentEmail/" + file_name + '.pdf'
-
-                    msg_str = ""
-                    enviaOK = cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
-                                                 connection=smtp_connection)
-                    if enviaOK and 'ERROR' in enviaOK:
-                        smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM,
-                                                                      webMCTest_PASS)
-                        cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
-                                           connection=smtp_connection)
-
-                    with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
-                        writer = csv.writer(data)
-                        writer.writerow(['page', s.student_ID, email, s.student_name, data_hora])
-
-    if smtp_connection is not None:
-        try:
-            smtp_connection.quit()
-        except Exception:
-            pass
-
-    anexos = [path_to_file] if os.path.exists(path_to_file) else []
-    if anexos:
-        subject = f"[MCTest] Upload-PDF concluido - Exame {exam.id} - {exam.exam_name}"
-        body = (f"O envio de feedback (Upload-PDF) do exame '{exam.exam_name}' (ID: {exam.id}) "
-                f"foi concluido.\n\nRelatorio de envios em anexo.")
-    else:
-        subject = f"[MCTest] Upload-PDF - Exame {exam.id} - nenhum e-mail enviado"
-        body = (f"Nenhum e-mail foi enviado para o exame '{exam.exam_name}' (ID: {exam.id}). "
-                f"Verifique se voce esta no Exame/Termo correto.")
-
-    try:
-        cvMCTest.envia_email(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
-                              subject, body, anexos)
-    except Exception as e:
-        print(f"Erro ao enviar relatorio final ao professor (upload-pdf): {e}")
 
 @login_required
 def correctStudentsExam(request, pk):
@@ -975,11 +846,8 @@ def correctStudentsExam(request, pk):
         file0 = file0.replace(' ', '')
         file0 = re.sub('[^A-Za-z0-9._-]+', '', file0)
 
-        # str(request.user) == e-mail do professor (USERNAME_FIELD = 'email' em account.models)
-        professor_email = str(request.user)
-
         # Constrói o nome exato para salvar no disco
-        filename_custom = "_e" + str(exam.id) + '_' + professor_email + '_' + file0[:-4] + '.pdf'
+        filename_custom = "_e" + str(exam.id) + '_' + str(request.user) + '_' + file0[:-4] + '.pdf'
 
         # Inicializa o Storage e salva o arquivo
         fs = FileSystemStorage(location=tmp_path)
@@ -990,567 +858,517 @@ def correctStudentsExam(request, pk):
         # 'file' armazena o caminho absoluto do PDF salvo
         file = fs.path(saved_filename)
 
-        # A correção (conversão PDF->imagem, detecção de QRCode, leitura das
-        # marcações via cv2, estatísticas/IRT) pode demorar bastante em PDFs
-        # com muitas páginas -- roda em background (só valores simples, sem o
-        # objeto request) e o professor recebe o ZIP final por e-mail ao
-        # terminar, em vez de esperar nesta página (o que antes estourava o
-        # timeout do servidor).
-        thread = threading.Thread(
-            target=_correct_students_exam_worker,
-            args=(exam.id, file, file0, choiceReturnQuestions, professor_email, request.user.first_name),
-            daemon=True)
-        thread.start()
+        # 'MYFILES' é o prefixo base para todos os arquivos gerados (imagens, csvs, logs)
+        MYFILES = BASE_DIR + "/tmp/_e" + str(exam.id) + '_' + str(request.user) + '_' + file0[:-4]
 
-        # Estimativa aproximada: paginas do PDF enviado (uma por folha
-        # escaneada) x tempo unitario -- nao usa a quantidade de alunos da
-        # turma, pois o PDF enviado pode conter so uma prova ou a turma
-        # inteira. Mesmo ~5s/pagina usado como base em generate_page, ainda
-        # sem medicao de carga propria para a correcao -- ajustar aqui se um
-        # teste real mostrar outro valor.
+        # ==============================================================================
+        # [NOVO] DEFINIÇÃO DO ARQUIVO ZIP FINAL E LOG CSV
+        # ==============================================================================
+        dir_pdf_student = os.path.join(BASE_DIR, 'pdfStudentEmail')
+        fzip_name = "studentEmail_e" + str(exam.id) + ".zip"
+        fzip_path = os.path.join(dir_pdf_student, fzip_name)
+
+        # Remove ZIP antigo se existir
+        if os.path.exists(fzip_path):
+            os.remove(fzip_path)
+
+        # --- CRIAÇÃO DO LOG CSV (HEADER) ---
+        email_log_path = MYFILES + "_RETURN_email_log.csv"
+        with open(email_log_path, "w", newline='', encoding='utf-8') as f_log:
+            writer = csv.writer(f_log, delimiter=',') # Use ';' se preferir abrir direto no Excel BR
+
+            # Metadados
+            writer.writerow(['RELATORIO DE PROCESSAMENTO', f"EXAME {exam.id}"])
+            writer.writerow(['Professor', str(request.user)])
+            writer.writerow(['Data', str(datetime.datetime.now())])
+            writer.writerow([])
+
+            # Cabeçalho das Colunas
+            writer.writerow(['Pagina', 'Exame', 'Turma', 'ID Aluno', 'Nome', 'Nota', 'Status'])
+
+        # Limpeza preventiva da pasta TMP
         try:
-            num_pages = PyPDF2.PdfFileReader(open(str(file), "rb")).getNumPages()
-        except Exception:
-            num_pages = 0
-        estimated_minutes = max(1, round(num_pages * 5 / 60))
+            files_to_remove = glob.glob(MYFILES + "*")
+            for f_rem in files_to_remove:
+                if f_rem != file and f_rem != email_log_path:
+                    os.remove(f_rem)
+        except Exception as e:
+            pass
 
-        messages.success(request, _('Correcting exam in the background for %(n)d page(s). '
-                                     'Estimated time: about %(mins)d minute(s). You will receive '
-                                     'the resulting ZIP by e-mail when it finishes (and any errors) '
-                                     '-- no need to wait on this page.') % {
-                                     'n': num_pages, 'mins': estimated_minutes})
-        return render(request, 'exam/exam_errors.html', {'title': _('Upload-PDF')})
-
-    return HttpResponseRedirect("/")
-
-
-def _correct_students_exam_worker(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name):
-    try:
-        _correct_students_exam_impl(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name)
-    except Exception as e:
-        tb = traceback.format_exc()
-        print(f"ERRO NAO TRATADO em _correct_students_exam_worker (exam {exam_id}): {e}\n{tb}")
         try:
-            cvMCTest.envia_email(
-                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
-                f"[MCTest] Erro no Upload-PDF (correção) do exame {exam_id}",
-                f"Ocorreu um erro ao corrigir o exame {exam_id}:\n\n{tb}")
-        except Exception as e2:
-            print(f"Erro ao notificar professor sobre falha no correctStudentsExam: {e2}")
-    finally:
-        from django.db import connection
-        connection.close()
+            input_pdf = PyPDF2.PdfFileReader(open(str(file), "rb"))
+        except PyPDF2.utils.PdfReadError:
+            messages.error(request, _("correctStudentsExam: Error in read PDF file: ") + str(file))
+            return render(request, 'exam/exam_errors.html', {})
 
+        # ==============================================================================
+        # CONVERSÃO PDF -> IMAGEM
+        # ==============================================================================
+        # Ajuste poppler_path conforme seu servidor (Linux geralmente não precisa, MacOS sim)
+        pages = convert_from_path(file, 200) # , poppler_path='/opt/local/bin'
 
-def _correct_students_exam_impl(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name):
-    exam = get_object_or_404(Exam, pk=exam_id)
-    BASE_DIR = str(settings.BASE_DIR)
+        numPAGES = 0
+        for page in pages:
+            myfile0 = MYFILES + '_p' + str(numPAGES) + '.png'
+            page.save(myfile0)
+            numPAGES += 1
+        pages.clear()
 
-    # 'MYFILES' é o prefixo base para todos os arquivos gerados (imagens, csvs, logs)
-    MYFILES = BASE_DIR + "/tmp/_e" + str(exam.id) + '_' + professor_email + '_' + file0[:-4]
+        # 3. LOOP DE PROCESSAMENTO DAS PÁGINAS
+        countCorrectExams = 0
+        countCorrectQuestions = 0
+        qr0 = dict()
+        countPage = 0
+        while countPage < numPAGES:  # para cada pagina do pdf
+            print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
+            myfile0 = MYFILES + '_p' + str(countPage) + '.png'
+            img = cv2.imread(myfile0)
 
-    # ==============================================================================
-    # DEFINIÇÃO DO ARQUIVO ZIP FINAL E LOG CSV
-    # ==============================================================================
-    dir_pdf_student = os.path.join(BASE_DIR, 'pdfStudentEmail')
-    fzip_name = "studentEmail_e" + str(exam.id) + ".zip"
-    fzip_path = os.path.join(dir_pdf_student, fzip_name)
+            DEBUG = False
+            img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            cvMCTest.centroidsMarked = []
+            countCorrectExams += 1
 
-    # Remove ZIP antigo se existir
-    if os.path.exists(fzip_path):
-        os.remove(fzip_path)
+            if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)
 
-    # --- CRIAÇÃO DO LOG CSV (HEADER) ---
-    email_log_path = MYFILES + "_RETURN_email_log.csv"
-    with open(email_log_path, "w", newline='', encoding='utf-8') as f_log:
-        writer = csv.writer(f_log, delimiter=',')  # Use ';' se preferir abrir direto no Excel BR
+            # Detecta QRCode
+            myFlagArea, qr = cvMCTest.getQRCode(img, countPage)
+            img = cvMCTest.imgAnswers
 
-        # Metadados
-        writer.writerow(['RELATORIO DE PROCESSAMENTO', f"EXAME {exam.id}"])
-        writer.writerow(['Professor', professor_email])
-        writer.writerow(['Data', str(datetime.datetime.now())])
-        writer.writerow([])
-
-        # Cabeçalho das Colunas
-        writer.writerow(['Pagina', 'Exame', 'Turma', 'ID Aluno', 'Nome', 'Nota', 'Status'])
-
-    # Limpeza preventiva da pasta TMP
-    try:
-        files_to_remove = glob.glob(MYFILES + "*")
-        for f_rem in files_to_remove:
-            if f_rem != file and f_rem != email_log_path:
-                os.remove(f_rem)
-    except Exception as e:
-        pass
-
-    try:
-        input_pdf = PyPDF2.PdfFileReader(open(str(file), "rb"))
-    except PyPDF2.utils.PdfReadError:
-        raise Exception(str(_("correctStudentsExam: Error in read PDF file: ")) + str(file))
-
-    # ==============================================================================
-    # CONVERSÃO PDF -> IMAGEM
-    # ==============================================================================
-    # Ajuste poppler_path conforme seu servidor (Linux geralmente não precisa, MacOS sim)
-    pages = convert_from_path(file, 200)  # , poppler_path='/opt/local/bin'
-
-    numPAGES = 0
-    for page in pages:
-        myfile0 = MYFILES + '_p' + str(numPAGES) + '.png'
-        page.save(myfile0)
-        numPAGES += 1
-    pages.clear()
-
-    # 3. LOOP DE PROCESSAMENTO DAS PÁGINAS
-    countCorrectExams = 0
-    countCorrectQuestions = 0
-    qr0 = dict()
-    countPage = 0
-    while countPage < numPAGES:  # para cada pagina do pdf
-        print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
-        myfile0 = MYFILES + '_p' + str(countPage) + '.png'
-        img = cv2.imread(myfile0)
-
-        DEBUG = False
-        img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        cvMCTest.centroidsMarked = []
-        countCorrectExams += 1
-
-        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)
-
-        # Detecta QRCode
-        myFlagArea, qr = cvMCTest.getQRCode(img, countPage)
-        img = cvMCTest.imgAnswers
-
-        # Fallback se não detectar QR Code
-        if not qr:
-            qr = dict()
-            qr['idStudent'] = 'ERROR'
-            if myFlagArea:
-                qr['answer'] = exam.exam_number_of_anwsers_question
+            # Fallback se não detectar QR Code
+            if not qr:
+                qr = dict()
+                qr['idStudent'] = 'ERROR'
+                if myFlagArea:
+                    qr['answer'] = exam.exam_number_of_anwsers_question
+                else:
+                    qr['answer'] = 'ERROR'
+                qr['numquest'] = Utils.getNumMCQuestions(exam)
+                qr['idExam'] = pk
+                qr['idClassroom'] = '0'
+                qr['question'] = '0'
+                qr['respgrade'] = '0'
+                qr['stylesheet'] = '0'
+                qr['variations'] = '0'
+                qr['variant'] = '0'
             else:
-                qr['answer'] = 'ERROR'
-            qr['numquest'] = Utils.getNumMCQuestions(exam)
-            qr['idExam'] = str(exam_id)
-            qr['idClassroom'] = '0'
-            qr['question'] = '0'
-            qr['respgrade'] = '0'
-            qr['stylesheet'] = '0'
-            qr['variations'] = '0'
-            qr['variant'] = '0'
-        else:
-            if int(qr['idExam']) != exam.id:
-                raise Exception(str(_("Error reading QRcode from PDF for exam ID: ")) + str(qr['idExam']))
+                if int(qr['idExam']) != exam.id:
+                    messages.error(request, _("Error reading QRcode from PDF for exam ID: ") + str(qr['idExam']))
+                    return render(request, 'exam/exam_errors.html', {})
 
-        qr['exam_print'] = exam.exam_print
+            qr['exam_print'] = exam.exam_print
 
-        if int(Utils.getNumMCQuestions(exam) == 0):
-            qr['onlyT'] = True  # Exame Dissertativo
-        else:
-            qr['onlyT'] = False  # Exame Múltipla Escolha
-
-        qr['file'] = file
-        qr['page'] = countPage
-        qr['max_questions_square'] = exam.exam_max_questions_square
-        qr['user'] = professor_email
-
-        # Guarda gabarito se for folha de resposta apenas
-        if not countPage and qr['exam_print'] == 'answ':
-            qr0 = qr
-
-        # --- Ramo A: Lógica para Questões Dissertativas (onlyT) ---
-        if qr['onlyT']:
-            print(">>>>text>>>>", qr)
-            mypath = MYFILES + "_q" + qr['question']
-            myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
-            myfileMSG = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + '.txt'
-
-            os.system("mkdir " + mypath)
-
-            if not os.path.exists(myfileMSG):
-                with open(myfileMSG, 'w') as fileMSG:
-                    fileMSG.write('Write here a message to sent to student, for each question/classroom')
-                    fileMSG.close()
-
-            if countPage < numPAGES - 1:
-                fileImages = [myfile0]
-                flagOK = False
-                while not flagOK and countPage < numPAGES - 1:
-                    myfile3 = MYFILES + '_p' + str(countPage + 1) + '.png'
-                    img2 = cv2.imread(myfile3)
-                    img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-                    flagOK, qr3 = cvMCTest.getQRCode(img2, countPage)
-                    if not qr3:
-                        fileImages.append(myfile3)
-                        countPage += 1
-                    else:
-                        flagOK = True
-                with open(myfile, "wb") as outputStream:
-                    outputStream.write(img2pdf.convert(fileImages))
+            if int(Utils.getNumMCQuestions(exam) == 0):
+                qr['onlyT'] = True # Exame Dissertativo
             else:
-                with open(myfile, "wb") as outputStream:
-                    outputStream.write(img2pdf.convert(myfile0))
+                qr['onlyT'] = False # Exame Múltipla Escolha
 
-        # --- Ramo B: Lógica para Múltipla Escolha (Standard) ---
-        elif qr:
-            if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
-                cvMCTest.findBoxesAnwsersHor(img, countPage, -1)
-                img = cvMCTest.imgAnswersSegment
-                rectSquares = cvMCTest.findSquaresHor(qr, img, countPage)
-            else:
-                rectSquares = cvMCTest.findSquares(qr, img, countPage)
+            qr['file'] = file
+            qr['page'] = countPage
+            qr['max_questions_square'] = exam.exam_max_questions_square
+            qr['user'] = request.user.email
 
-            if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+            # Guarda gabarito se for folha de resposta apenas
+            if not countPage and qr['exam_print'] == 'answ':
+                qr0 = qr
 
-            if qr['idStudent'] != 'ERROR':
-                strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr['idStudent'] + '_GAB.png'
-                imgGAB = cv2.medianBlur(cvMCTest.imgAnswers, 3)
-                imgGAB_rgb = cv2.cvtColor(imgGAB, cv2.COLOR_GRAY2RGB)
+            # --- Ramo A: Lógica para Questões Dissertativas (onlyT) ---
+            if qr['onlyT']:
+                print(">>>>text>>>>", qr)
+                mypath = MYFILES + "_q" + qr['question']
+                myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
+                myfileMSG = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + '.txt'
 
-            testAnswers = []
-            qr['squares'] = rectSquares
+                os.system("mkdir " + mypath)
 
-            if myFlagArea:
-                for countSquare in range(len(rectSquares)):
-                    p1, p2 = rectSquares[countSquare]
+                if not os.path.exists(myfileMSG):
+                    with open(myfileMSG, 'w') as fileMSG:
+                        fileMSG.write('Write here a message to sent to student, for each question/classroom')
+                        fileMSG.close()
 
-                    if qr['idStudent'] != 'ERROR':
-                        cv2.rectangle(imgGAB_rgb, (p1[1], p1[0]), (p2[1], p2[0]), (255, 255, 0), 1);
-
-                    if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
-                        imgQi = cvMCTest.imgAnswersSegment[p1[0]:p2[0], p1[1]:p2[1]]
-                        [NUM_COLUMNS, img] = cvMCTest.setColumnsHor(imgQi, countPage, countSquare)
-                        [NUM_LINES, img] = cvMCTest.setLinesHor(imgQi, countPage, countSquare)
-                        NUM_RESPOSTAS = NUM_LINES
-                        NUM_QUESTOES = NUM_COLUMNS
-                    else:
-                        imgQi = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
-                        [NUM_COLUMNS, img] = cvMCTest.setColumns(imgQi, countPage, countSquare)
-                        [NUM_LINES, img] = cvMCTest.setLines(imgQi, countPage, countSquare)
-                        NUM_RESPOSTAS = NUM_COLUMNS
-                        NUM_QUESTOES = NUM_LINES
-
-                    if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_q" + str(countSquare + 1).zfill(2) + "_00.png", imgQi)
-
-                    countCorrectQuestions += NUM_QUESTOES
-
-                    if int(NUM_RESPOSTAS) != int(qr['answer']):
-                        qr['correct'] = 'ERROR:' + ' page ' + str(countPage + 1) + ' square ' + str(countSquare + 1) + ': ' + str(NUM_RESPOSTAS) + '-' + str(qr['answer'])
-
-                    imgQiNC = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
-
-                    if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
-                        testAnswers.append(cvMCTest.segmentAnswersHor([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
-                    else:
-                        testAnswers.append(cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
-
-                qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)
-
-                if len(qr0) == 0 and exam.exam_print != 'answ':
-                    qr = Utils.getQRanswersbyVariation(qr, exam)
-
-                qr = cvMCTest.studentGrade(qr, qr0)
-
-            # Salva o resultado parcial (um aluno) no CSV
-            cvMCTest.saveCSVone(qr)
-
-            # ==============================================================================
-            # POPULAR DADOS REAIS DO ALUNO E LOGAR NO CSV
-            # ==============================================================================
-            if qr['idStudent'] != 'ERROR':
-
-                real_name = "---"
-                real_email = "---"
-
-                # Busca segura dos dados no Banco para usar no LOG
-                try:
-                    # Busca apenas se o ID parecer válido (numérico ou string válida)
-                    s_obj = Student.objects.filter(student_ID=qr['idStudent']).first()
-                    if s_obj:
-                        real_name = s_obj.student_name
-                        real_email = s_obj.student_email
-                        # Atualiza o dicionário qr para uso posterior no envio de email
-                        qr['name'] = real_name
-                        qr['email'] = real_email
-                except Exception as e:
-                    print(f"Erro ao buscar aluno ID {qr['idStudent']}: {e}")
-
-                is_answer_key = int(qr['page']) == 0
-                status_log = "Gabarito processado" if is_answer_key else "Prova processada"
-
-                # Gera feedback visual (Imagem GAB) e envia Email se configurado
-                if (exam.exam_student_feedback == 'yes' and not 'ERROR' in qr['correct']):
-                    if not is_answer_key or exam.exam_print == 'both':
-                        cvMCTest.drawImageGAB(qr, strGAB, imgGAB_rgb)
-
-                        # Chama o método de envio de email
-                        cvMCTest.studentSendEmail(exam, qr, choiceReturnQuestions)
-
-                        status_log = f"Email enviado para {real_email}"
-
-                # Escreve a linha no CSV de Log
-                with open(email_log_path, "a", newline='', encoding='utf-8') as f_log:
-                    writer = csv.writer(f_log, delimiter=',')
-                    writer.writerow([
-                        f"pag{countPage + 1:02d}",      # Pagina
-                        exam_id,                        # Exame
-                        qr['idClassroom'],              # Turma
-                        qr['idStudent'],                # ID
-                        real_name,                      # Nome (REAL, buscado do DB)
-                        qr.get('grade', 'N/A'),          # Nota
-                        status_log                      # Status
-                    ])
-
-        countPage += 1
-
-    # Fim do loop de páginas - Fecha o log com rodapé
-    with open(email_log_path, "a", newline='', encoding='utf-8') as f_log:
-        writer = csv.writer(f_log, delimiter=',')
-        writer.writerow([])
-        writer.writerow(['FIM DO PROCESSAMENTO'])
-
-    # Atualiza contadores do Instituto
-    myflag = True
-    for r in exam.classrooms.all():
-        for d in r.discipline.courses.all():
-            for i in d.institutes.all():
-                if myflag:
-                    i.institute_exams_corrected += countCorrectExams
-                    i.institute_questions_corrected += countCorrectQuestions
-                    i.save()
-                    myflag = False
-                    break
-
-    # ==============================================================================
-    # 4. PREPARAÇÃO DOS ARQUIVOS (Separada por Tipo)
-    # ==============================================================================
-
-    if qr['onlyT']:
-        # --- CASO DISSERTATIVO ---
-        mypath_base = MYFILES + "_q0"
-
-        # Consolida arquivos gerados (mv)
-        os.system("mv " + BASE_DIR + "/tmp/_e" + str(exam.id) + professor_email + "*_q0/* " + mypath_base)
-
-        # Zipa diretamente para o fzip_path final
-        os.system("zip -j \'" + fzip_path + "\' " + mypath_base + "/*")
-
-        # Limpa a pasta temporária que foi zipada
-        os.system("rm -rf " + mypath_base)
-        os.system("rm -rf " + mypath_base[:-5] + "*.png")
-
-    else:
-        # --- CASO MÚLTIPLA ESCOLHA ---
-        path_to_file = file[:-4] + ".csv"
-
-        # Gera cópia do CSV com nome padronizado para retorno (_RETURN__.csv)
-        os.system("cp \'" + path_to_file + "\' " + MYFILES + "_RETURN__.csv")
-
-        ### log begin (Original Log)
-        f_log_orig = "correct.log"
-        if not os.path.exists(f_log_orig):
-            with open(f_log_orig, 'w') as csvfile:
-                spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-                spamWriter.writerow("CORRECTIONS of MCTest")
-        with open(f_log_orig, 'a') as csvfile:
-            spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-            spamWriter.writerow(["\n" + professor_email, ",", str(datetime.datetime.now())])
-        os.system("cat >> correct.log " + path_to_file)
-        ### log end
-
-        ### IRT e Estatísticas begin
-        if exam.exam_print in ['both']:
-            try:
-                M = int(Utils.getNumMCQuestions(exam))
-                X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
-                X.replace('', np.nan, inplace=True)
-                X.replace(' ', np.nan, inplace=True)
-                X.dropna(inplace=True)
-
-                ANS = int(exam.exam_number_of_anwsers_question)
-                K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
-                K.replace('', np.nan, inplace=True)
-                K.replace(' ', np.nan, inplace=True)
-                K.dropna(inplace=True)
-                K = K.to_numpy() // 10 ** ANS
-
-                acertos, erros = {}, {}
-                for q in X:
-                    i = int(q[1:]) - 1
-                    for n, s in enumerate(X[q]):
-                        ki = K[n][i]
-                        if len(str(s).split()[0]) == 1:
-                            acertos[ki] = acertos.get(ki, 0) + 1
+                if countPage < numPAGES - 1:
+                    fileImages = [myfile0]
+                    flagOK = False
+                    while not flagOK and countPage < numPAGES - 1:
+                        myfile3 = MYFILES + '_p' + str(countPage + 1) + '.png'
+                        img2 = cv2.imread(myfile3)
+                        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+                        flagOK, qr3 = cvMCTest.getQRCode(img2, countPage)
+                        if not qr3:
+                            fileImages.append(myfile3)
+                            countPage += 1
                         else:
-                            erros[ki] = erros.get(ki, 0) + 1
+                            flagOK = True
+                    with open(myfile, "wb") as outputStream:
+                        outputStream.write(img2pdf.convert(fileImages))
+                else:
+                    with open(myfile, "wb") as outputStream:
+                        outputStream.write(img2pdf.convert(myfile0))
 
-                for k in set(acertos.keys()) | set(erros.keys()):
-                    acertos[k] = acertos.get(k, 0)
-                    erros[k] = erros.get(k, 0)
+            # --- Ramo B: Lógica para Múltipla Escolha (Standard) ---
+            elif qr:
+                if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
+                    cvMCTest.findBoxesAnwsersHor(img, countPage, -1)
+                    img = cvMCTest.imgAnswersSegment
+                    rectSquares = cvMCTest.findSquaresHor(qr, img, countPage)
+                else:
+                    rectSquares = cvMCTest.findSquares(qr, img, countPage)
 
-                with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
-                    f.write(f' id,  key, corr, fail, %corr, %fail\n')
-                    for i, k in enumerate(sorted(acertos.keys())):
-                        a, e = acertos[k], erros[k]
-                        try:
-                            f.write(f'{i + 1:3d},{int(k):5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
-                        except:
-                            continue
-                    f.close()
+                if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
 
-                chaves = sorted(acertos.keys())
-                dados = np.zeros((len(X), len(chaves)), dtype=int)
-                X0 = X.to_numpy()
-                for i, a in enumerate(X0):
-                    for j, b in enumerate(a):
-                        if len(X0[i, j].split()[0]) == 1:
-                            dados[i, chaves.index(K[i, j])] = 1
+                if qr['idStudent'] != 'ERROR':
+                    strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr['idStudent'] + '_GAB.png'
+                    imgGAB = cv2.medianBlur(cvMCTest.imgAnswers, 3)
+                    imgGAB_rgb = cv2.cvtColor(imgGAB, cv2.COLOR_GRAY2RGB)
 
-                N = len(X['Q1'])
-                with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
-                    spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-                    for n in range(N):
-                        spamWriter.writerow(dados[n])
-                    csvfile.close()
+                testAnswers = []
+                qr['squares'] = rectSquares
 
-                os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
+                if myFlagArea:
+                    for countSquare in range(len(rectSquares)):
+                        p1, p2 = rectSquares[countSquare]
 
-            except Exception as e:
-                print(f"correctStudentsExam: Error in IRT or more Statists: {e}")
+                        if qr['idStudent'] != 'ERROR':
+                            cv2.rectangle(imgGAB_rgb, (p1[1], p1[0]), (p2[1], p2[0]), (255, 255, 0), 1);
 
-            try:
-                cvMCTest.estimate_IRT_parameters(exam)
-            except Exception as e:
-                print(f"correctStudentsExam: Error in MLE by scipy.optimize: {e}")
+                        if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
+                            imgQi = cvMCTest.imgAnswersSegment[p1[0]:p2[0], p1[1]:p2[1]]
+                            [NUM_COLUMNS, img] = cvMCTest.setColumnsHor(imgQi, countPage, countSquare)
+                            [NUM_LINES, img] = cvMCTest.setLinesHor(imgQi, countPage, countSquare)
+                            NUM_RESPOSTAS = NUM_LINES
+                            NUM_QUESTOES = NUM_COLUMNS
+                        else:
+                            imgQi = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
+                            [NUM_COLUMNS, img] = cvMCTest.setColumns(imgQi, countPage, countSquare)
+                            [NUM_LINES, img] = cvMCTest.setLines(imgQi, countPage, countSquare)
+                            NUM_RESPOSTAS = NUM_COLUMNS
+                            NUM_QUESTOES = NUM_LINES
 
-        else:  # (Stats para exames sem chaves/ambos)
-            try:
-                M = int(Utils.getNumMCQuestions(exam))
-                X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
-                X.replace('', np.nan, inplace=True)
-                X.replace(' ', np.nan, inplace=True)
-                X.dropna(inplace=True)
+                        if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_q" + str(countSquare + 1).zfill(2) + "_00.png", imgQi)
 
-                N = len(X['Q1'])
-                dados = np.zeros((N, M), dtype=int)
-                for q in X:
-                    for n, s in enumerate(X[q]):
-                        if len(str(s).split()[0]) == 1:
-                            dados[n][int(q[1:]) - 1] = 1
-                N -= 1
-                dados = np.delete(dados, 0, 0)
+                        countCorrectQuestions += NUM_QUESTOES
 
-                with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
-                    f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
-                    media_colunas = np.mean(dados, axis=0)
-                    desvio_padrao_colunas = np.std(dados, axis=0)
-                    acertos = np.sum(dados, axis=0)
-                    erros = N - np.sum(dados, axis=0)
-                    for i in range(len(dados[0])):
-                        a, e, m, s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
-                        f.write(f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
-                    f.close()
+                        if int(NUM_RESPOSTAS) != int(qr['answer']):
+                            qr['correct'] = 'ERROR:' + ' page ' + str(countPage + 1) + ' square ' + str(countSquare + 1) + ': ' + str(NUM_RESPOSTAS) + '-' + str(qr['answer'])
 
-                with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
-                    spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-                    for n in range(N):
-                        spamWriter.writerow(dados[n])
-                    csvfile.close()
+                        imgQiNC = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
 
-                os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
+                        if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
+                            testAnswers.append(cvMCTest.segmentAnswersHor([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
+                        else:
+                            testAnswers.append(cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
 
-            except Exception as e:
-                print(f"correctStudentsExam: Error in IRT: {e}")
-        ### IRT end
+                    qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)
 
-    # ==============================================================================
-    # 5. ZIP UNIFICADO, ENVIO DE EMAIL E LIMPEZA (Cleanup)
-    # ==============================================================================
+                    if len(qr0) == 0 and exam.exam_print != 'answ':
+                        qr = Utils.getQRanswersbyVariation(qr, exam)
 
-    # A) ZIPAR ARQUIVOS COMUNS
-    cmd_zip_common = "zip -j \'" + fzip_path + "\' " + MYFILES + "_RETURN_*"
-    os.system(cmd_zip_common)
+                    qr = cvMCTest.studentGrade(qr, qr0)
 
-    # B) ZIPAR PDFS DOS ALUNOS
-    # - Apenas para múltipla escolha, pois dissertativo já zipou acima.
-    if not qr['onlyT']:
-        pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
-        if glob.glob(pdfs_student_pattern):
-            cmd_zip_students = "zip -j \'" + fzip_path + "\' " + pdfs_student_pattern
-            os.system(cmd_zip_students)
+                # Salva o resultado parcial (um aluno) no CSV
+                cvMCTest.saveCSVone(qr)
 
-    # C) ENVIAR EMAIL PARA O PROFESSOR
-    try:
-        # 1. Verifica quais tipos de arquivos foram gerados
-        has_student_pdfs = False
-        # Verifica se há PDFs na pasta de origem antes de serem movidos/apagados
-        pdf_pattern_check = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
-        if not qr['onlyT'] and glob.glob(pdf_pattern_check) and exam.exam_student_feedback == 'yes':
-            has_student_pdfs = True
+                # ==============================================================================
+                # [NOVO] POPULAR DADOS REAIS DO ALUNO E LOGAR NO CSV
+                # ==============================================================================
+                if qr['idStudent'] != 'ERROR':
 
-        # Verifica se há imagens de recortes (PNG) na pasta temporária
-        png_pattern_check = MYFILES + "_RETURN_p*.png"
-        has_png_snippets = len(glob.glob(png_pattern_check)) > 0
+                    real_name = "---"
+                    real_email = "---"
 
-        # 2. Constrói o Assunto e Cabeçalho
-        subject = f'[MCTest] Resultado da Correção - Exame {exam.id} - {exam.exam_name}'
+                    # Busca segura dos dados no Banco para usar no LOG
+                    try:
+                        # Busca apenas se o ID parecer válido (numérico ou string válida)
+                        s_obj = Student.objects.filter(student_ID=qr['idStudent']).first()
+                        if s_obj:
+                            real_name = s_obj.student_name
+                            real_email = s_obj.student_email
+                            # Atualiza o dicionário qr para uso posterior no envio de email
+                            qr['name'] = real_name
+                            qr['email'] = real_email
+                    except Exception as e:
+                        print(f"Erro ao buscar aluno ID {qr['idStudent']}: {e}")
 
-        status_msg = "ENVIADO aos alunos" if has_student_pdfs else "PROCESSADO (Sem envio aos alunos)"
+                    is_answer_key = int(qr['page']) == 0
+                    status_log = "Gabarito processado" if is_answer_key else "Prova processada"
 
-        body = (
-            f"Olá, {professor_first_name}.\n\n"
-            f"A correção do exame '{exam.exam_name}' (ID: {exam.id}) foi concluída.\n"
-            f"Status do Feedback: {status_msg}.\n\n"
-            f"Resumo do conteúdo do anexo (ZIP):\n"
-            f"--------------------------------------------------\n"
-            f"[X] Relatório de Processamento (_RETURN_email_log.csv)\n"
-            f"[X] Estatísticas Gerais e Dados IRT (CSV)\n"
-        )
 
-        # 3. Adiciona itens condicionais
-        if has_student_pdfs:
-            body += f"[X] PDFs Individuais: Feedback detalhado de cada aluno.\n"
+                    # Gera feedback visual (Imagem GAB) e envia Email se configurado
+                    if (exam.exam_student_feedback == 'yes' and not 'ERROR' in qr['correct']):
+                        if not is_answer_key or exam.exam_print == 'both':
+                            cvMCTest.drawImageGAB(qr, strGAB, imgGAB_rgb)
+
+                            # Chama o método de envio de email
+                            cvMCTest.studentSendEmail(exam, qr, choiceReturnQuestions)
+
+                            status_log = f"Email enviado para {real_email}"
+
+                    # Escreve a linha no CSV de Log
+                    with open(email_log_path, "a", newline='', encoding='utf-8') as f_log:
+                        writer = csv.writer(f_log, delimiter=',')
+                        writer.writerow([
+                            f"pag{countPage + 1:02d}",      # Pagina
+                            pk,                             # Exame
+                            qr['idClassroom'],              # Turma
+                            qr['idStudent'],                # ID
+                            real_name,                      # Nome (REAL, buscado do DB)
+                            qr.get('grade', 'N/A'),         # Nota
+                            status_log                      # Status
+                        ])
+
+            countPage += 1
+
+        # Fim do loop de páginas - Fecha o log com rodapé
+        with open(email_log_path, "a", newline='', encoding='utf-8') as f_log:
+            writer = csv.writer(f_log, delimiter=',')
+            writer.writerow([])
+            writer.writerow(['FIM DO PROCESSAMENTO'])
+
+        # Atualiza contadores do Instituto
+        myflag = True
+        for r in exam.classrooms.all():
+            for d in r.discipline.courses.all():
+                for i in d.institutes.all():
+                    if myflag:
+                        i.institute_exams_corrected += countCorrectExams
+                        i.institute_questions_corrected += countCorrectQuestions
+                        i.save()
+                        myflag = False
+                        break
+
+        # ==============================================================================
+        # 4. PREPARAÇÃO DOS ARQUIVOS (Separada por Tipo)
+        # ==============================================================================
+
+        if qr['onlyT']:
+            # --- CASO DISSERTATIVO ---
+            mypath_base = MYFILES + "_q0"
+
+            # Consolida arquivos gerados (mv)
+            os.system("mv " + BASE_DIR + "/tmp/_e" + str(exam.id) + str(request.user) + "*_q0/* " + mypath_base)
+
+            # Zipa diretamente para o fzip_path final
+            os.system("zip -j \'" + fzip_path + "\' " + mypath_base + "/*")
+
+            # Limpa a pasta temporária que foi zipada
+            os.system("rm -rf " + mypath_base)
+            os.system("rm -rf " + mypath_base[:-5] + "*.png")
+
         else:
-            body += f"[ ] PDFs Individuais: Não gerados nesta configuração.\n"
+            # --- CASO MÚLTIPLA ESCOLHA ---
+            path_to_file = file[:-4] + ".csv"
 
-        if has_png_snippets:
-            body += f"[X] Imagens de Conferência (.png): Recortes das respostas manuscritas.\n"
-            body += f"    Legenda: _pAAA_sB_qCCC.png\n"
-            body += f"    (p=Página, s=Bloco/Quadro, q=Questão relativa ao bloco)\n"
+            # Gera cópia do CSV com nome padronizado para retorno (_RETURN__.csv)
+            os.system("cp \'" + path_to_file + "\' " + MYFILES + "_RETURN__.csv")
 
-        body += f"--------------------------------------------------\n\n"
-        body += f"Sistema MCTest"
+            ### log begin (Original Log)
+            f_log_orig = "correct.log"
+            if not os.path.exists(f_log_orig):
+                with open(f_log_orig, 'w') as csvfile:
+                    spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                    spamWriter.writerow("CORRECTIONS of MCTest")
+            with open(f_log_orig, 'a') as csvfile:
+                spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                spamWriter.writerow(["\n" + str(request.user), ",", str(datetime.datetime.now())])
+            os.system("cat >> correct.log " + path_to_file)
+            ### log end
 
-        email = EmailMessage(
-            subject,
-            body,
-            to=[professor_email],
-        )
-        email.attach_file(fzip_path)
-        email.send()
-    except Exception as e:
-        print(f"Erro ao enviar email para professor: {e}")
-        pass
+            ### IRT e Estatísticas begin
+            if exam.exam_print in ['both']:
+                try:
+                    M = int(Utils.getNumMCQuestions(exam))
+                    X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                    X.replace('', np.nan, inplace=True)
+                    X.replace(' ', np.nan, inplace=True)
+                    X.dropna(inplace=True)
 
-    # D) LIMPEZA GERAL (CLEANUP)
-    try:
-        # Limpa arquivos temporários da pasta TMP
-        os.system("rm -rf " + MYFILES + "_RETURN_*")      # Logs e CSVs temporários
-        os.system("rm -rf " + MYFILES + "_p*.png")        # Páginas PNG do PDF
+                    ANS = int(exam.exam_number_of_anwsers_question)
+                    K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
+                    K.replace('', np.nan, inplace=True)
+                    K.replace(' ', np.nan, inplace=True)
+                    K.dropna(inplace=True)
+                    K = K.to_numpy() // 10 ** ANS
 
-        # Remove ZIPs que estejam no TMP (temporários)
-        os.system("rm -rf " + MYFILES + "*.zip")
-        #os.system("rm -rf " + os.path.join(BASE_DIR, "tmp", "_DEBUG_*"))
+                    acertos, erros = {}, {}
+                    for q in X:
+                        i = int(q[1:]) - 1
+                        for n, s in enumerate(X[q]):
+                            ki = K[n][i]
+                            if len(str(s).split()[0]) == 1:
+                                acertos[ki] = acertos.get(ki, 0) + 1
+                            else:
+                                erros[ki] = erros.get(ki, 0) + 1
 
-        # Limpa arquivos individuais da pasta pdfStudentEmail (já estão no ZIP)
+                    for k in set(acertos.keys()) | set(erros.keys()):
+                        acertos[k] = acertos.get(k, 0)
+                        erros[k] = erros.get(k, 0)
+
+                    with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                        f.write(f' id,  key, corr, fail, %corr, %fail\n')
+                        for i, k in enumerate(sorted(acertos.keys())):
+                            a, e = acertos[k], erros[k]
+                            try:
+                                f.write(f'{i + 1:3d},{int(k):5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                            except:
+                                continue
+                        f.close()
+
+                    chaves = sorted(acertos.keys())
+                    dados = np.zeros((len(X), len(chaves)), dtype=int)
+                    X0 = X.to_numpy()
+                    for i, a in enumerate(X0):
+                        for j, b in enumerate(a):
+                            if len(X0[i, j].split()[0]) == 1:
+                                dados[i, chaves.index(K[i, j])] = 1
+
+                    N = len(X['Q1'])
+                    with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+                        spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                        for n in range(N):
+                            spamWriter.writerow(dados[n])
+                        csvfile.close()
+
+                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
+
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
+
+                try:
+                    cvMCTest.estimate_IRT_parameters(exam)
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in MLE by scipy.optimize"))
+
+            else: # (Stats para exames sem chaves/ambos)
+                try:
+                    M = int(Utils.getNumMCQuestions(exam))
+                    X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                    X.replace('', np.nan, inplace=True)
+                    X.replace(' ', np.nan, inplace=True)
+                    X.dropna(inplace=True)
+
+                    N = len(X['Q1'])
+                    dados = np.zeros((N, M), dtype=int)
+                    for q in X:
+                        for n, s in enumerate(X[q]):
+                            if len(str(s).split()[0]) == 1:
+                                dados[n][int(q[1:]) - 1] = 1
+                    N -= 1
+                    dados = np.delete(dados, 0, 0)
+
+                    with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                        f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
+                        media_colunas = np.mean(dados, axis=0)
+                        desvio_padrao_colunas = np.std(dados, axis=0)
+                        acertos = np.sum(dados, axis=0)
+                        erros = N - np.sum(dados, axis=0)
+                        for i in range(len(dados[0])):
+                            a, e, m, s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
+                            f.write(f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                        f.close()
+
+                    with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+                        spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                        for n in range(N):
+                            spamWriter.writerow(dados[n])
+                        csvfile.close()
+
+                    os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
+
+                except:
+                    messages.error(request, _("correctStudentsExam: Error in IRT"))
+            ### IRT end
+
+        # ==============================================================================
+        # 5. ZIP UNIFICADO, ENVIO DE EMAIL E LIMPEZA (Cleanup)
+        # ==============================================================================
+
+        # A) ZIPAR ARQUIVOS COMUNS
+        cmd_zip_common = "zip -j \'" + fzip_path + "\' " + MYFILES + "_RETURN_*"
+        os.system(cmd_zip_common)
+
+        # B) ZIPAR PDFS DOS ALUNOS
+        # - Apenas para múltipla escolha, pois dissertativo já zipou acima.
         if not qr['onlyT']:
             pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
-            os.system("rm -rf " + pdfs_student_pattern)
+            if glob.glob(pdfs_student_pattern):
+                cmd_zip_students = "zip -j \'" + fzip_path + "\' " + pdfs_student_pattern
+                os.system(cmd_zip_students)
 
-            gabs_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_*_GAB.png")
-            os.system("rm -rf " + gabs_pattern)
-    except Exception as e:
-        pass
+        # C) ENVIAR EMAIL PARA O PROFESSOR
+        try:
+            # 1. Verifica quais tipos de arquivos foram gerados
+            has_student_pdfs = False
+            # Verifica se há PDFs na pasta de origem antes de serem movidos/apagados
+            pdf_pattern_check = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
+            if not qr['onlyT'] and glob.glob(pdf_pattern_check) and exam.exam_student_feedback == 'yes':
+                has_student_pdfs = True
+
+            # Verifica se há imagens de recortes (PNG) na pasta temporária
+            png_pattern_check = MYFILES + "_RETURN_p*.png"
+            has_png_snippets = len(glob.glob(png_pattern_check)) > 0
+
+            # 2. Constrói o Assunto e Cabeçalho
+            subject = f'[MCTest] Resultado da Correção - Exame {exam.id} - {exam.exam_name}'
+
+            status_msg = "ENVIADO aos alunos" if has_student_pdfs else "PROCESSADO (Sem envio aos alunos)"
+
+            body = (
+                f"Olá, {request.user.first_name}.\n\n"
+                f"A correção do exame '{exam.exam_name}' (ID: {exam.id}) foi concluída.\n"
+                f"Status do Feedback: {status_msg}.\n\n"
+                f"Resumo do conteúdo do anexo (ZIP):\n"
+                f"--------------------------------------------------\n"
+                f"[X] Relatório de Processamento (_RETURN_email_log.csv)\n"
+                f"[X] Estatísticas Gerais e Dados IRT (CSV)\n"
+            )
+
+            # 3. Adiciona itens condicionais
+            if has_student_pdfs:
+                body += f"[X] PDFs Individuais: Feedback detalhado de cada aluno.\n"
+            else:
+                body += f"[ ] PDFs Individuais: Não gerados nesta configuração.\n"
+
+            if has_png_snippets:
+                body += f"[X] Imagens de Conferência (.png): Recortes das respostas manuscritas.\n"
+                body += f"    Legenda: _pAAA_sB_qCCC.png\n"
+                body += f"    (p=Página, s=Bloco/Quadro, q=Questão relativa ao bloco)\n"
+
+            body += f"--------------------------------------------------\n\n"
+            body += f"Sistema MCTest"
+
+            email = EmailMessage(
+                subject,
+                body,
+                to=[request.user],
+            )
+            email.attach_file(fzip_path)
+            email.send()
+        except Exception as e:
+            print(f"Erro ao enviar email para professor: {e}")
+            pass
+
+        # D) LIMPEZA GERAL (CLEANUP)
+        try:
+            # Limpa arquivos temporários da pasta TMP
+            os.system("rm -rf " + MYFILES + "_RETURN_*")      # Logs e CSVs temporários
+            os.system("rm -rf " + MYFILES + "_p*.png")        # Páginas PNG do PDF
+
+            # Remove ZIPs que estejam no TMP (temporários)
+            os.system("rm -rf " + MYFILES + "*.zip")
+            #os.system("rm -rf " + os.path.join(BASE_DIR, "tmp", "_DEBUG_*"))
+
+            # Limpa arquivos individuais da pasta pdfStudentEmail (já estão no ZIP)
+            if not qr['onlyT']:
+                pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
+                os.system("rm -rf " + pdfs_student_pattern)
+
+                gabs_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_*_GAB.png")
+                os.system("rm -rf " + gabs_pattern)
+        except Exception as e:
+            pass
+
+    # Retorna o arquivo ZIP final para download imediato no navegador
+    return serve(request, os.path.basename(fzip_path), os.path.dirname(fzip_path))
 #
 # @login_required
 # def correctStudentsExam_old(request, pk):
@@ -2268,12 +2086,6 @@ def generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
 @login_required
 @csrf_exempt
 def generate_page(request, pk):
-    """
-    View fina: valida permissao/POST na hora (sincrono) e dispara a geracao
-    pesada (PDFs + e-mails, pode levar minutos em turmas grandes) em background,
-    respondendo ao navegador imediatamente. O professor ja recebe por e-mail o
-    PDF/ZIP final e, em caso de erro, um aviso -- ver _generate_page_worker.
-    """
     print("generate_page-00-" + str(datetime.datetime.now()))
     if request.user.get_group_permissions():
         perm = [p for p in request.user.get_group_permissions()]
@@ -2282,60 +2094,6 @@ def generate_page(request, pk):
     else:
         return HttpResponseRedirect("/")
 
-    exam = get_object_or_404(Exam, pk=pk)
-
-    if not request.POST:
-        return HttpResponseRedirect("/")
-
-    thread = threading.Thread(target=_generate_page_worker, args=(request, pk), daemon=True)
-    thread.start()
-
-    # Estimativa aproximada baseada em teste de carga (100 alunos ~= 8 minutos
-    # ponta a ponta): ~5s/aluno, com um piso de 1 minuto para turmas pequenas.
-    total_students = sum(room.students.count() for room in exam.classrooms.all())
-    estimated_minutes = max(1, round(total_students * 5 / 60))
-
-    messages.success(request, _('PDF generation started for %(n)d student(s). Estimated time: '
-                                 'about %(mins)d minute(s). You will receive an e-mail with the PDF/ZIP '
-                                 '(and any errors) when it finishes -- no need to wait on this page.') % {
-                                 'n': total_students, 'mins': estimated_minutes})
-    return render(request, 'exam/exam_errors.html', {'title': _('PDF Generation')})
-
-
-def _generate_page_worker(request, pk):
-    """
-    Faz o trabalho pesado do Criar-PDF (antigo corpo de generate_page) fora do
-    ciclo request/response. Roda numa thread separada: request.POST/FILES/user
-    ja estao totalmente carregados em memoria e continuam legiveis aqui, mas
-    messages.error(request, ...) nao tem mais efeito visivel (a resposta ja foi
-    enviada) -- por isso qualquer excecao e capturada no final e enviada por
-    e-mail ao professor, e cada "return render(request, 'exam/exam_errors.html', {})"
-    abaixo apenas encerra a thread silenciosamente (o print/log ainda mostra a causa).
-    """
-    try:
-        _generate_page_impl(request, pk)
-    except Exception as e:
-        tb = traceback.format_exc()
-        print(f"ERRO NAO TRATADO em _generate_page_worker (exam {pk}): {e}\n{tb}")
-        try:
-            cvMCTest.envia_email(
-                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS,
-                str(request.user),
-                f"[MCTest] Erro ao gerar PDF do exame {pk}",
-                f"Ocorreu um erro ao gerar o PDF/enviar e-mails do exame {pk}:\n\n{tb}"
-            )
-        except Exception as e2:
-            print(f"Erro ao notificar professor sobre falha na geracao: {e2}")
-    finally:
-        # Esta thread nao passa pelo ciclo request/response do Django, que e
-        # quem normalmente fecha conexoes de banco ociosas/expiradas ao final
-        # de cada requisicao -- sem isso a conexao desta thread ficaria aberta
-        # indefinidamente.
-        from django.db import connection
-        connection.close()
-
-
-def _generate_page_impl(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     context = {"students": exam}
 
@@ -2408,12 +2166,9 @@ def _generate_page_impl(request, pk):
         data_hora = datetime.datetime.now()
         data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
 
-        # (Removido) checagem "aborta se ja houver alguma mensagem pendente no
-        # request": agora que esta funcao roda em thread separada, a view
-        # principal adiciona sua propria messages.success(request, ...) no MESMO
-        # request logo apos disparar essa thread -- essa checagem enxergava essa
-        # mensagem de sucesso como se fosse um erro anterior e abortava sempre,
-        # silenciosamente, antes de chegar na conexao SMTP.
+        storage = get_messages(request)
+        for message in storage:
+            return render(request, 'exam/exam_errors.html', {})
 
         strAnswerSheet = Utils.drawAnswerSheet(request, exam)
         strCircles = Utils.drawCircles()
@@ -2505,15 +2260,6 @@ def _generate_page_impl(request, pk):
 
             distribute_students_by_room_random[room.id] = distribute_students_random
 
-        # Abre UMA conexao SMTP para reaproveitar em todos os e-mails de feedback
-        # desta geracao, em vez de reconectar/TLS a cada aluno (evita timeout em
-        # turmas grandes quando exam_student_feedback == 'yes').
-        print("generate_page-03-antes-smtp-" + str(datetime.datetime.now()))
-        smtp_connection = None
-        if exam.exam_student_feedback == 'yes':
-            smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS)
-        print("generate_page-04-depois-smtp-" + str(datetime.datetime.now()) + " conexao=" + str(smtp_connection))
-
         # ... (Loop das salas) ...
         for room in exam.classrooms.all():
             # Define o nome base do arquivo da turma
@@ -2585,6 +2331,9 @@ def _generate_page_impl(request, pk):
 
                 else:
                     messages.error(request, _('ERROR in validateNumQuestions!!!!'))
+
+                storage = get_messages(request)
+                for message in storage:
                     return render(request, 'exam/exam_errors.html', {})
 
                 if exam.exam_print in ['answ', 'both']:
@@ -2634,17 +2383,8 @@ def _generate_page_impl(request, pk):
                     if final_student_pdf and os.path.exists(final_student_pdf):
 
                         email = s.student_email
-                        # Usa o caminho retornado pelo generator; reaproveita a conexao SMTP aberta
-                        # para toda a geracao, evitando reconectar a cada aluno.
-                        enviaOK = cvMCTest.sendMail(final_student_pdf, "Exam by MCTest", email, str(s.student_name),
-                                                     connection=smtp_connection)
-                        if enviaOK and 'ERROR' in enviaOK:
-                            # Conexao pode ter caido (turma grande/servidor SMTP fechou por ociosidade);
-                            # reabre uma vez e tenta novamente antes de desistir deste aluno.
-                            smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM,
-                                                                          webMCTest_PASS)
-                            enviaOK = cvMCTest.sendMail(final_student_pdf, "Exam by MCTest", email,
-                                                         str(s.student_name), connection=smtp_connection)
+                        # Usa o caminho retornado pelo generator
+                        enviaOK = cvMCTest.sendMail(final_student_pdf, "Exam by MCTest", email, str(s.student_name))
 
                         # Log no CSV
                         with open(path_to_file_REPORT, 'a+') as data:
@@ -2676,22 +2416,11 @@ def _generate_page_impl(request, pk):
             )
 
             if not final_class_pdf:
-                if smtp_connection is not None:
-                    try:
-                        smtp_connection.quit()
-                    except Exception:
-                        pass
                 messages.error(request, _('ERROR generating PDF for class') + ': ' + room.classroom_code)
                 return render(request, 'exam/exam_errors.html', {})
 
             ### Final das classes selecionadas ###
 
-        # Encerra a conexao SMTP reaproveitada (se foi aberta)
-        if smtp_connection is not None:
-            try:
-                smtp_connection.quit()
-            except Exception:
-                pass
 
         # Lista para rastrear quais tipos de arquivos foram gerados com sucesso
         generated_types = []

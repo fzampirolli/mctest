@@ -452,6 +452,9 @@ sudo service cron restart
 django-admin.py makemessages -l pt
 django-admin.py compilemessages
 
+python3 -m django makemessages -l pt
+python3 -m django compilemessages
+
 pip install django-extensions
 python manage.py graph_models -a -o myapp_models.png
 

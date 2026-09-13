@@ -33,7 +33,6 @@ import csv
 import itertools as it
 import math
 import smtplib
-import time
 import zlib
 from email import encoders
 from email.mime.base import MIMEBase
@@ -2424,36 +2423,7 @@ class cvMCTest(object):
     # funcao para envio do email
 
     @staticmethod
-    def abre_conexao_smtp(servidor, porta, FROM, PASS, tentativas=3, espera_segundos=2):
-        """
-        Abre uma unica conexao SMTP autenticada para ser reaproveitada em varios
-        envios (envia_email/sendMail com o parametro connection=...), evitando o
-        custo de reconectar/handshake TLS a cada e-mail em laços com muitos alunos.
-
-        Tenta novamente algumas vezes com pequena espera: o servidor de e-mail da
-        instituicao parece estar atras de mais de uma instancia/balanceador, e uma
-        delas as vezes oferece um parametro Diffie-Hellman fraco demais para o
-        OpenSSL aceitar ([SSL: DH_KEY_TOO_SMALL]) -- uma nova tentativa costuma cair
-        em outra instancia. Retorna None se todas as tentativas falharem.
-        """
-        for tentativa in range(1, tentativas + 1):
-            try:
-                gm = smtplib.SMTP(servidor, porta)
-                gm.ehlo()
-                context = ssl.create_default_context()
-                context.set_ciphers('DEFAULT@SECLEVEL=1')
-                gm.starttls(context=context)
-                gm.ehlo()
-                gm.login(FROM, PASS)
-                return gm
-            except Exception as e:
-                print(f"Erro ao abrir conexão SMTP reaproveitável (tentativa {tentativa}/{tentativas}): {e}")
-                if tentativa < tentativas:
-                    time.sleep(espera_segundos)
-        return None
-
-    @staticmethod
-    def envia_email(servidor, porta, FROM, PASS, TO, subject, texto, anexo=[], connection=None):
+    def envia_email(servidor, porta, FROM, PASS, TO, subject, texto, anexo=[]):
         msg = MIMEMultipart()
         msg['From'] = FROM
         msg['To'] = TO
@@ -2473,15 +2443,6 @@ class cvMCTest(object):
             except Exception as e:
                 return f"****ERROR****: {str(e)}"
 
-        # Se uma conexao ja aberta foi passada (laço com varios alunos), reaproveita-a
-        # em vez de abrir uma nova conexao/TLS a cada e-mail.
-        if connection is not None:
-            try:
-                connection.sendmail(FROM, TO, msg.as_string())
-                return ""
-            except Exception as e:
-                return f"****ERROR**** no envio (conexão reaproveitada): {str(e)}"
-
         # TENTATIVA 1: Configuração Padrão Segura
         try:
             gm = smtplib.SMTP(servidor, porta)
@@ -2500,12 +2461,8 @@ class cvMCTest(object):
             pass
 
         # TENTATIVA 2: Fallback (Menos segura / Sem verificação de certificado)
-        # Mantem SECLEVEL=1 (senao herda o padrao mais estrito, que rejeita o
-        # mesmo DH fraco que fez a Tentativa 1 falhar, tornando este fallback inutil
-        # justamente no caso de erro mais comum: [SSL: DH_KEY_TOO_SMALL]).
         try:
             context = ssl.create_default_context()
-            context.set_ciphers('DEFAULT@SECLEVEL=1')
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
             with smtplib.SMTP(servidor, porta) as gm:
@@ -2519,13 +2476,10 @@ class cvMCTest(object):
             return f"****ERROR FATAL**** no envio: {str(e)}"
 
     @staticmethod
-    def sendMail(arquivo, msg_str, mailSend, aluno, connection=None):
+    def sendMail(arquivo, msg_str, mailSend, aluno):
         """
         Envia e-mail padronizado para o aluno com anexo.
         Detecta idioma automaticamente via settings.LANGUAGE_CODE.
-
-        connection: conexao SMTP ja aberta (ver abre_conexao_smtp) para reaproveitar
-        em laços com varios alunos, evitando reconectar/TLS a cada envio.
         """
         destinatario = mailSend
         myporta = 587
@@ -2585,6 +2539,5 @@ class cvMCTest(object):
             destinatario,
             assunto,
             mensagem,
-            [arquivo],  # Passa como lista
-            connection=connection
+            [arquivo]  # Passa como lista
         )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-07 07:06-0300\n"
+"POT-Creation-Date: 2026-09-13 08:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -425,8 +425,7 @@ msgstr "Sala"
 #: course/templates/discipline/discipline_detail.html:126
 #: exam/templates/exam/exam_create.html:85
 #: exam/templates/exam/exam_update5.3.html:314
-#: exam/templates/exam/exam_update5.4.html:786 index.html:569
-#: main/templates/index - cópia.html:569
+#: exam/templates/exam/exam_update5.4.html:786
 msgid "Period"
 msgstr "Período"
 
@@ -462,6 +461,7 @@ msgstr "Tipo"
 #: course/templates/institute/institute_update.html:78
 #: exam/templates/exam/exam_create.html:192
 #: exam/templates/exam/exam_errors.html:30
+#: exam/templates/exam/exam_errors_old.html:30
 #: exam/templates/exam/exam_update5.3.html:820
 #: exam/templates/exam/exam_update5.4.html:162
 #: student/templates/student/student_create.old.html:47
@@ -522,7 +522,8 @@ msgid "Students List"
 msgstr "Listar Estudantes"
 
 #: course/templates/classroom/classroom_detail.html:43
-#: course/templates/classroom/classroom_detail.html:144 exam/CVMCTest.py:1872
+#: course/templates/classroom/classroom_detail.html:144 exam/CVMCTest.py:2118
+#: exam/CVMCTest_old.py:2117
 #: student/templates/student/student_create.old.html:23
 #: student/templates/student/student_detail.html:15
 #: topic/templates/question/question_list.html:50
@@ -532,14 +533,15 @@ msgid "ID"
 msgstr "ID"
 
 #: course/templates/classroom/classroom_detail.html:44
-#: course/templates/classroom/classroom_detail.html:112 exam/CVMCTest.py:1870
-#: exam/UtilsLatex.py:1274 exam/UtilsLatex.py:1403 exam/models.py:246
-#: exam/models.py:280
+#: course/templates/classroom/classroom_detail.html:112 exam/CVMCTest.py:2116
+#: exam/CVMCTest_old.py:2115 exam/UtilsLatex.py:1274 exam/UtilsLatex.py:1403
+#: exam/models.py:246 exam/models.py:280
 msgid "Student"
 msgstr "Estudante"
 
 #: course/templates/classroom/classroom_detail.html:45
-#: course/templates/classroom/classroom_detail.html:157 exam/CVMCTest.py:1876
+#: course/templates/classroom/classroom_detail.html:157 exam/CVMCTest.py:2122
+#: exam/CVMCTest_old.py:2121
 #: student/templates/student/student_create.old.html:39
 #: student/templates/student/student_detail.html:17
 #: student/templates/student/student_update.html:38
@@ -590,10 +592,9 @@ msgstr "Atualizar "
 
 #: course/templates/classroom/classroom_detail.html:96 exam/forms.py:82
 #: exam/models.py:48 exam/templates/exam/exam_list.html:22
-#: exam/templates/exam/exam_list_who_created_user.html:26 index.html:491
+#: exam/templates/exam/exam_list_who_created_user.html:26
 #: main/templates/base_generic.html:77 main/templates/base_generic.html:161
-#: main/templates/index - cópia.html:491 main/templates/index-mctest.html:430
-#: main/templates/index.html:807
+#: main/templates/index-mctest.html:430 main/templates/index.html:807
 msgid "Classrooms"
 msgstr "Turmas"
 
@@ -786,9 +787,8 @@ msgstr ""
 msgid "Manual selection is not recommended for large classes."
 msgstr "A seleção manual não é recomendada para turmas grandes."
 
-#: course/templates/classroom/classroom_update.html:86 index.html:521
-#: main/templates/index - cópia.html:521 main/templates/index-mctest.html:450
-#: main/templates/index.html:839
+#: course/templates/classroom/classroom_update.html:86
+#: main/templates/index-mctest.html:450 main/templates/index.html:839
 msgid "Students"
 msgstr "Estudantes"
 
@@ -1128,7 +1128,7 @@ msgstr "ImportStudentsClassroom: ID tem que ter somente dígitos: "
 msgid "Back to Classroom Detail"
 msgstr "Voltar para detalhes da turma"
 
-#: course/views.py:521 exam/views.py:2895
+#: course/views.py:521 exam/views.py:3166 exam/views_old.py:2895
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1140,19 +1140,20 @@ msgstr "ClassroomCreate: o professor não está registrado na disciplina"
 msgid "ClassroomDelete: The teacher is not registered in a Discipline"
 msgstr "ClassroomDelete: o professor não está registrado na disciplina"
 
-#: exam/CVMCTest.py:1912 exam/UtilsLatex.py:72
+#: exam/CVMCTest.py:2158 exam/CVMCTest_old.py:2157 exam/UtilsLatex.py:72
 msgid "Multiple Choice Questions"
 msgstr "Questões de Múltipla Escolha"
 
-#: exam/CVMCTest.py:1935
+#: exam/CVMCTest.py:2181 exam/CVMCTest_old.py:2180
 msgid "Correct answer"
 msgstr "Alternativa correta"
 
-#: exam/CVMCTest.py:1947
+#: exam/CVMCTest.py:2193 exam/CVMCTest_old.py:2192
 msgid "Your answer"
 msgstr "Sua alternativa"
 
-#: exam/CVMCTest.py:1962 exam/UtilsLatex.py:1764 exam/UtilsLatex.py:1941
+#: exam/CVMCTest.py:2208 exam/CVMCTest_old.py:2207 exam/UtilsLatex.py:1764
+#: exam/UtilsLatex.py:1941
 msgid "Text Questions"
 msgstr "Questões Dissertativas"
 
@@ -1188,7 +1189,7 @@ msgstr "Data"
 msgid "ID/RA"
 msgstr "ID/RA"
 
-#: exam/UtilsLatex.py:1318
+#: exam/UtilsLatex.py:1321
 msgid "Ass."
 msgstr "Ass."
 
@@ -1306,8 +1307,7 @@ msgstr ""
 msgid "Choose the topics"
 msgstr "Escolher Tópico"
 
-#: exam/forms.py:89 exam/models.py:75 index.html:499 main/templates/index -
-#: cópia.html:499 main/templates/index-mctest.html:436
+#: exam/forms.py:89 exam/models.py:75 main/templates/index-mctest.html:436
 msgid "Topics"
 msgstr "Tópicos"
 
@@ -1316,10 +1316,9 @@ msgid "Choose the questions"
 msgstr "Escolha as Questões (de Disciplinas que você está cadastrado)"
 
 #: exam/forms.py:96 exam/models.py:53 exam/models.py:128
-#: exam/templates/exam/exam_update5.4.html:204 index.html:505
-#: main/templates/base_generic.html:158 main/templates/index - cópia.html:505
-#: main/templates/index-mctest.html:442 main/templates/index.html:827
-#: topic/UtilsMCTest4.py:504
+#: exam/templates/exam/exam_update5.4.html:204
+#: main/templates/base_generic.html:158 main/templates/index-mctest.html:442
+#: main/templates/index.html:827 topic/UtilsMCTest4.py:504
 msgid "Questions"
 msgstr "Questões"
 
@@ -1547,8 +1546,7 @@ msgstr ""
 "(consulte as publicações)."
 
 #: exam/models.py:234 exam/templates/exam/exam_update5.3.html:569
-#: exam/templates/exam/exam_update5.4.html:967 index.html:592
-#: main/templates/index - cópia.html:592 main/templates/index.html:917
+#: exam/templates/exam/exam_update5.4.html:967 main/templates/index.html:927
 #: topic/forms.py:104 topic/models.py:50 topic/models.py:96
 #: topic/templates/question/question_create.html:48
 #: topic/templates/question/question_detail.html:54
@@ -1634,15 +1632,19 @@ msgstr "Detalhar Exame"
 msgid "Exam of the disciplines that I am enrolled"
 msgstr "Exame das disciplinas que eu participo"
 
-#: exam/templates/exam/exam_errors.html:9 exam/templates/exam/exam_erros.html:4
+#: exam/templates/exam/exam_errors.html:9
+#: exam/templates/exam/exam_errors_old.html:9
+#: exam/templates/exam/exam_erros.html:4
 msgid "Error"
 msgstr "Erro"
 
 #: exam/templates/exam/exam_errors.html:34
+#: exam/templates/exam/exam_errors_old.html:34
 msgid "Code between [[def: and ]] contains instructions not permitted"
 msgstr "O código entre [[def: e ]] contém instruções não permitidas"
 
 #: exam/templates/exam/exam_errors.html:35
+#: exam/templates/exam/exam_errors_old.html:35
 msgid "Report:"
 msgstr "Relatório:"
 
@@ -1826,7 +1828,8 @@ msgstr "Aumentar o contraste? Útil se o PDF estiver muito branco!"
 #: exam/templates/exam/exam_update5.3.html:145
 #: exam/templates/exam/exam_update5.4.html:306
 #: exam/templates/exam/exam_update5.4.html:523
-#: exam/templates/exam/exam_update5.4.html:688
+#: exam/templates/exam/exam_update5.4.html:688 exam/views.py:722
+#: exam/views.py:856 exam/views.py:1022
 msgid "Upload-PDF"
 msgstr "Upload-PDF"
 
@@ -1993,8 +1996,7 @@ msgid "Number of [GROUP, if defined or] Questions per Exam"
 msgstr "Número de [GRUPOS, se definido ou] Questões por Exame"
 
 #: exam/templates/exam/exam_update5.3.html:670
-#: exam/templates/exam/exam_update5.4.html:1111 index.html:147 index.html:181
-#: main/templates/index - cópia.html:147 cópia.html:181
+#: exam/templates/exam/exam_update5.4.html:1111
 #: main/templates/index-mctest.html:127 main/templates/index-mctest.html:159
 #: main/templates/index.html:468 main/templates/index.html:502
 msgid "Exam Style"
@@ -2333,19 +2335,19 @@ msgstr "Esta ação não pode ser desfeita."
 msgid "Yes, Delete"
 msgstr "Sim, Apagar"
 
-#: exam/views.py:283
+#: exam/views.py:285 exam/views_old.py:283
 msgid "variationsExam: there are no variations in the answer-only style!"
 msgstr "variationsExam: não há variações no estilo: somente resposta!"
 
-#: exam/views.py:546
+#: exam/views.py:548 exam/views_old.py:546
 msgid "Error sending email with variations."
 msgstr "Erro ao enviar e-mail com as variações."
 
-#: exam/views.py:567
+#: exam/views.py:569 exam/views_old.py:567
 msgid "Exam variations were stored in the database."
 msgstr "As variações do exame foram armazenadas no banco de dados."
 
-#: exam/views.py:568
+#: exam/views.py:570 exam/views_old.py:568
 msgid ""
 "Return and refresh the exam page. Notice the ID change next to the Create-"
 "Variations button."
@@ -2353,7 +2355,7 @@ msgstr ""
 "Retorne e atualize a página do exame. Observe a mudança de ID ao lado do "
 "botão Create-Variations."
 
-#: exam/views.py:569
+#: exam/views.py:571 exam/views_old.py:569
 msgid ""
 "Whenever you click this button, new exam variations will be stored in the "
 "database!"
@@ -2361,11 +2363,11 @@ msgstr ""
 "Sempre que você clicar neste botão, novas variações do exame serão "
 "armazenadas no banco de dados!"
 
-#: exam/views.py:572
+#: exam/views.py:574 exam/views_old.py:572
 msgid "Selected files have been sent to your email."
 msgstr "Os arquivos selecionados foram enviados para o seu e-mail."
 
-#: exam/views.py:601
+#: exam/views.py:603 exam/views_old.py:601
 msgid ""
 "feedbackStudentsExamText: feedback to student is NO, Change to YES and click "
 "in Upload-PDF again!"
@@ -2373,7 +2375,7 @@ msgstr ""
 "feedbackStudentsExamText: retorno do estudante é NÃO, escolher SIM e clique "
 "em Upload-PDF novamente"
 
-#: exam/views.py:613
+#: exam/views.py:615 exam/views_old.py:613
 msgid ""
 "feedbackStudentsExamText: choose a ZIP file with scanned exams, for example "
 "_e31_769.zip!"
@@ -2381,22 +2383,37 @@ msgstr ""
 "feedbackStudentsExamText: escolher um arquivo ZIP com os exames "
 "digitalizados, por exemplo: _e31_769.zip!"
 
-#: exam/views.py:661
+#: exam/views.py:663 exam/views_old.py:661
 msgid ""
 "feedbackStudentsExamText: name of the pdf file does not follow a pattern "
 "ID_xxx.pdf"
 msgstr ""
 "feedbackStudentsExamText: nome do arquivo PDF não segue um padrão: ID_xxx.pdf"
 
-#: exam/views.py:721
+#: exam/views.py:693
+#, fuzzy
+#| msgid ""
+#| "feedbackStudentsExamText: no email was sent, are you in the correct Exam "
+#| "and Term?"
 msgid ""
-"feedbackStudentsExamText: no email was sent, are you in the correct Exam and "
-"Term?"
+"feedbackStudentsExamText: no PDF files found matching the expected pattern "
+"in the ZIP."
 msgstr ""
 "feedbackStudentsExamText: nenhum email foi enviado, você está em Exame e "
 "Turma corretos?"
 
-#: exam/views.py:744
+#: exam/views.py:718
+#, python-format
+msgid ""
+"Upload received. Sending feedback e-mails to %(n)d file(s) in the background "
+"-- estimated time: about %(mins)d minute(s). You will receive the report by "
+"e-mail when it finishes."
+msgstr ""
+"Upload recebido. Enviando e-mails de feedback para %(n)d arquivo(s) em "
+"segundo plano -- tempo estimado: cerca de %(mins)d minuto(s). Você receberá "
+"o relatório por e-mail quando terminar."
+
+#: exam/views.py:809 exam/views_old.py:744
 msgid ""
 "feedbackStudentsExam: feedback to student is NO, Change to YES and click in "
 "Upload-PDF again!"
@@ -2404,7 +2421,133 @@ msgstr ""
 "feedbackStudentsExam: retorno ao estudante é NÃO, escolher SIM e clique em "
 "Upload-PDF novamente!"
 
-#: exam/views.py:797
+#: exam/views.py:838
+msgid "feedbackStudentsExam: no PDF files found in pdfStudentEmail/."
+msgstr ""
+"feedbackStudentsExam: nenhum arquivo PDF encontrado em pdfStudentEmail/."
+
+#: exam/views.py:852
+#, python-format
+msgid ""
+"Sending feedback e-mails to %(n)d file(s) in the background -- estimated "
+"time: about %(mins)d minute(s). You will receive the report by e-mail when "
+"it finishes."
+msgstr ""
+"Enviando e-mails de feedback para %(n)d arquivo(s) em segundo plano -- tempo "
+"estimado: cerca de %(mins)d minuto(s). Você receberá o relatório por e-mail "
+"quando terminar."
+
+#: exam/views.py:963 exam/views_old.py:834
+msgid "correctStudentsExam: choose a PDF file with scanned exams!"
+msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
+
+#: exam/views.py:1017
+#, python-format
+msgid ""
+"Correcting exam in the background for %(n)d page(s). Estimated time: about "
+"%(mins)d minute(s). You will receive the resulting ZIP by e-mail when it "
+"finishes (and any errors) -- no need to wait on this page."
+msgstr ""
+"Corrigindo a prova em segundo plano para %(n)d página(s). Tempo estimado: "
+"cerca de %(mins)d minuto(s). Você receberá o ZIP resultante por e-mail "
+"quando terminar (e eventuais erros) -- não precisa esperar nesta página."
+
+#: exam/views.py:1089 exam/views_old.py:901
+msgid "correctStudentsExam: Error in read PDF file: "
+msgstr "correctStudentsExam: erro ao ler PDF"
+
+#: exam/views.py:1143 exam/views_old.py:956
+msgid "Error reading QRcode from PDF for exam ID: "
+msgstr "Erro ao ler QRcode do PDF para o ID do exame: "
+
+#: exam/views.py:2298
+#, python-format
+msgid ""
+"PDF generation started for %(n)d student(s). Estimated time: about %(mins)d "
+"minute(s). You will receive an e-mail with the PDF/ZIP (and any errors) when "
+"it finishes -- no need to wait on this page."
+msgstr ""
+"Geração de PDF iniciada para %(n)d aluno(s). Tempo estimado: cerca de "
+"%(mins)d minuto(s). Você receberá um e-mail com o PDF/ZIP (e eventuais "
+"erros) quando terminar -- não precisa esperar nesta página."
+
+#: exam/views.py:2302
+msgid "PDF Generation"
+msgstr "Geração de PDF"
+
+#: exam/views.py:2385 exam/views_old.py:2143
+msgid "Create variations first"
+msgstr "Criar primeiro as variações"
+
+#: exam/views.py:2400 exam/views_old.py:2158
+msgid "ERROR in generate_page, number_of_questions_text!!!!  "
+msgstr "ERRO em generate_page, number_of_questions_text!!!!  "
+
+#: exam/views.py:2404 exam/views_old.py:2162
+msgid "ERROR in generate_page, number_of_QM!!!! - no questions: "
+msgstr "ERRO em generate_page, number_of_QM!!! - sem questões:"
+
+#: exam/views.py:2437 exam/views_old.py:2192
+msgid "ERROR in generate_page, class with zero students: "
+msgstr "ERRO: classe com zero estudantes: "
+
+#: exam/views.py:2482 exam/views_old.py:2237
+msgid "ERROR in Utils.distro_table, student: "
+msgstr "ERRO em Utils.distro_table, estudante: "
+
+#: exam/views.py:2546 exam/views_old.py:2292
+msgid "ERROR in distro_table!!!! - student name:"
+msgstr "ERRO em distro_table!!!! - nome do estudante:"
+
+#: exam/views.py:2587 exam/views_old.py:2333
+msgid "ERROR in validateNumQuestions!!!!"
+msgstr "ERRO em validateNumQuestions"
+
+#: exam/views.py:2661 exam/views_old.py:2401
+msgid "ERROR generating PDF for student"
+msgstr "ERRO ao gerar PDF para estudante"
+
+#: exam/views.py:2684 exam/views_old.py:2419
+msgid "ERROR generating PDF for class"
+msgstr "ERRO ao gerar PDF para a turma"
+
+#: exam/views.py:2859 exam/views_old.py:2588
+msgid "ERROR: PDF file not found."
+msgstr "ERRO: Arquivo PDF não encontrado."
+
+#: exam/views.py:2884 exam/views_old.py:2613
+msgid "ERROR: Zip file not created."
+msgstr "ERRO: Arquivo Zip não criado."
+
+#: exam/views.py:2925 exam/views_old.py:2654
+msgid "ERROR - watch out for special characters in exam name"
+msgstr "ERRO - cuidado com os caracteres especiais no nome do exame"
+
+#: exam/views.py:3102 exam/views_old.py:2831
+msgid "ExamListView: The teacher is not registered in a Discipline"
+msgstr "ExamListView: o professor não está registrado na disciplina"
+
+#: exam/views.py:3117 exam/views_old.py:2846
+msgid "ExamUpdate: The teacher is not registered in a Discipline"
+msgstr "ExamUpdate: o professor não está registrado na disciplina"
+
+#: exam/views.py:3131 exam/views_old.py:2860
+msgid "ExamDetailView: The teacher is not registered in a Discipline"
+msgstr "ExamDetailView: o professor não está registrado na disciplina"
+
+#: exam/views_old.py:721
+#, fuzzy
+#| msgid ""
+#| "feedbackStudentsExam: no email was sent, are you in the correct Exam and "
+#| "Term?"
+msgid ""
+"feedbackStudentsExamText: no email was sent, are you in the correct Exam and "
+"Term?"
+msgstr ""
+"feedbackStudentsExam: nenhum email foi enviado, você está em Exame e Turma "
+"corretos?"
+
+#: exam/views_old.py:797
 msgid ""
 "feedbackStudentsExam: no email was sent, are you in the correct Exam and "
 "Term?"
@@ -2412,928 +2555,17 @@ msgstr ""
 "feedbackStudentsExam: nenhum email foi enviado, você está em Exame e Turma "
 "corretos?"
 
-#: exam/views.py:834
-msgid "correctStudentsExam: choose a PDF file with scanned exams!"
-msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
-
-#: exam/views.py:901
-msgid "correctStudentsExam: Error in read PDF file: "
-msgstr "correctStudentsExam: erro ao ler PDF"
-
-#: exam/views.py:956
-msgid "Error reading QRcode from PDF for exam ID: "
-msgstr "Erro ao ler QRcode do PDF para o ID do exame: "
-
-#: exam/views.py:1234
+#: exam/views_old.py:1234
 msgid "correctStudentsExam: Error in IRT or more Statists"
 msgstr "correctStudentsExam: erro na TRI ou em mais estatísticas"
 
-#: exam/views.py:1239
+#: exam/views_old.py:1239
 msgid "correctStudentsExam: Error in MLE by scipy.optimize"
 msgstr "correctStudentsExam: Erro no MLE pelo scipy.optimize"
 
-#: exam/views.py:1278
+#: exam/views_old.py:1278
 msgid "correctStudentsExam: Error in IRT"
 msgstr "correctStudentsExam: erro na TRI"
-
-#: exam/views.py:2143
-msgid "Create variations first"
-msgstr "Criar primeiro as variações"
-
-#: exam/views.py:2158
-msgid "ERROR in generate_page, number_of_questions_text!!!!  "
-msgstr "ERRO em generate_page, number_of_questions_text!!!!  "
-
-#: exam/views.py:2162
-msgid "ERROR in generate_page, number_of_QM!!!! - no questions: "
-msgstr "ERRO em generate_page, number_of_QM!!! - sem questões:"
-
-#: exam/views.py:2192
-msgid "ERROR in generate_page, class with zero students: "
-msgstr "ERRO: classe com zero estudantes: "
-
-#: exam/views.py:2237
-msgid "ERROR in Utils.distro_table, student: "
-msgstr "ERRO em Utils.distro_table, estudante: "
-
-#: exam/views.py:2292
-msgid "ERROR in distro_table!!!! - student name:"
-msgstr "ERRO em distro_table!!!! - nome do estudante:"
-
-#: exam/views.py:2333
-msgid "ERROR in validateNumQuestions!!!!"
-msgstr "ERRO em validateNumQuestions"
-
-#: exam/views.py:2401
-msgid "ERROR generating PDF for student"
-msgstr "ERRO ao gerar PDF para estudante"
-
-#: exam/views.py:2419
-msgid "ERROR generating PDF for class"
-msgstr "ERRO ao gerar PDF para a turma"
-
-#: exam/views.py:2588
-msgid "ERROR: PDF file not found."
-msgstr "ERRO: Arquivo PDF não encontrado."
-
-#: exam/views.py:2613
-msgid "ERROR: Zip file not created."
-msgstr "ERRO: Arquivo Zip não criado."
-
-#: exam/views.py:2654
-msgid "ERROR - watch out for special characters in exam name"
-msgstr "ERRO - cuidado com os caracteres especiais no nome do exame"
-
-#: exam/views.py:2831
-msgid "ExamListView: The teacher is not registered in a Discipline"
-msgstr "ExamListView: o professor não está registrado na disciplina"
-
-#: exam/views.py:2846
-msgid "ExamUpdate: The teacher is not registered in a Discipline"
-msgstr "ExamUpdate: o professor não está registrado na disciplina"
-
-#: exam/views.py:2860
-msgid "ExamDetailView: The teacher is not registered in a Discipline"
-msgstr "ExamDetailView: o professor não está registrado na disciplina"
-
-#: index.html:17 main/templates/index - cópia.html:17
-#: main/templates/index-mctest.html:16 main/templates/index-mctest.html:483
-#: main/templates/index.html:339
-msgid "MCTest"
-msgstr ""
-
-#: index.html:73 index.html:94 index.html:113 index.html:130
-#: main/templates/index - cópia.html:73 cópia.html:94 cópia.html:113
-#: cópia.html:130 main/templates/index-mctest.html:59
-#: main/templates/index-mctest.html:78 main/templates/index-mctest.html:95
-#: main/templates/index-mctest.html:111 main/templates/index.html:394
-#: main/templates/index.html:415 main/templates/index.html:434
-#: main/templates/index.html:451
-msgid "LaTeX Command"
-msgstr "Comando LaTeX"
-
-#: index.html:74 main/templates/index - cópia.html:74
-#: main/templates/index-mctest.html:60 main/templates/index.html:395
-msgid "A simple question with latex command"
-msgstr "Uma simples questão com comando LaTeX"
-
-#: index.html:75 main/templates/index - cópia.html:75
-#: main/templates/index-mctest.html:61 main/templates/index.html:396
-msgid "After clicking Create-PDF, see the next slide"
-msgstr "Após clicar em Criar-PDF, ver próximo slide"
-
-#: index.html:95 main/templates/index - cópia.html:95
-#: main/templates/index-mctest.html:79 main/templates/index.html:416
-msgid ""
-"The formulas between $ from the previous slide are presented differently"
-msgstr ""
-"As fórmulas entre $ do slide anterior são apresentadas de maneira diferente"
-
-#: index.html:114 main/templates/index - cópia.html:114
-#: main/templates/index-mctest.html:96 main/templates/index.html:435
-msgid "Adding an image that is on the web"
-msgstr "Adicionando uma imagem que está na web"
-
-#: index.html:131 main/templates/index - cópia.html:131
-#: main/templates/index-mctest.html:112 main/templates/index.html:452
-msgid "Question with image to display on exam"
-msgstr "Questão com a imagem a ser exibida no exame"
-
-#: index.html:148 index.html:165 main/templates/index - cópia.html:148
-#: cópia.html:165 main/templates/index-mctest.html:128
-#: main/templates/index-mctest.html:144 main/templates/index.html:469
-#: main/templates/index.html:486
-msgid ""
-"Exam only with answers (in the correction, the template is the first page of "
-"the PDF)"
-msgstr ""
-"Exame apenas com respostas (na correção, o gabarito é a primeira página do "
-"PDF)"
-
-#: index.html:164 main/templates/index - cópia.html:164
-#: main/templates/index-mctest.html:143 main/templates/index.html:485
-msgid "Exam Style - Vertical"
-msgstr "Estilo do Exame - Vertical"
-
-#: index.html:182 main/templates/index - cópia.html:182
-#: main/templates/index-mctest.html:160 main/templates/index.html:503
-msgid ""
-"Q&A (the correct answer can be found with '#0' in the PDF, details in yellow)"
-msgstr ""
-"Questões e respostas (a resposta correta pode ser encontrada fazendo uma "
-"busca no PDF por '#0', detalhes em amarelo)"
-
-#: index.html:198 main/templates/index - cópia.html:198
-#: main/templates/index-mctest.html:175 main/templates/index.html:519
-msgid "Parametric Question - Part I"
-msgstr "Questão Paramétrica - Parte I"
-
-#: index.html:199 main/templates/index - cópia.html:199
-#: main/templates/index-mctest.html:176 main/templates/index.html:520
-msgid ""
-"In the description, we have python code between '[[code:' and ']]' - to "
-"'[[def:"
-msgstr ""
-"Na descrição, temos códigos python entre '[[code:' e ']]' -  também entre "
-"'[[def:' e ']]'"
-
-#: index.html:215 main/templates/index - cópia.html:215
-#: main/templates/index-mctest.html:191 main/templates/index.html:536
-msgid "Parametric Question - Part II"
-msgstr "Questão Paramétrica - Parte II"
-
-#: index.html:216 main/templates/index - cópia.html:216
-#: main/templates/index-mctest.html:192 main/templates/index.html:537
-msgid ""
-"Attributes and answers to a question. When creating a question, the first "
-"alternative is always the correct one"
-msgstr ""
-"Atributos e respostas de uma questão. Ao criar uma questão, a primeira "
-"alternativa é sempre a correta"
-
-#: index.html:232 main/templates/index - cópia.html:232
-#: main/templates/index-mctest.html:207 main/templates/index.html:553
-msgid "Parametric Question - Part III"
-msgstr "Questão Paramétrica - Parte III"
-
-#: index.html:233 main/templates/index - cópia.html:233
-#: main/templates/index-mctest.html:208 main/templates/index.html:554
-msgid ""
-"Question to be displayed. Note the order in which answers were drawn after "
-"'#'"
-msgstr ""
-"Questão a ser exibida. Observe a ordem na qual as respostas foram extraídas "
-"após '#'"
-
-#: index.html:234 main/templates/index - cópia.html:234
-#: main/templates/index-mctest.html:209 main/templates/index.html:555
-msgid "You can assign different weights for each anwers, on the exam grade"
-msgstr ""
-"Você pode atribuir pesos diferentes a cada alternativa, na nota do exame"
-
-#: index.html:252 main/templates/index - cópia.html:252
-#: main/templates/index-mctest.html:225 main/templates/index.html:573
-msgid "Parametric Question - Example I"
-msgstr "Questão Paramétrica - Exemplo I"
-
-#: index.html:253 main/templates/index - cópia.html:253
-#: main/templates/index-mctest.html:226 main/templates/index.html:574
-msgid "Example with equation and figure"
-msgstr "Exemplo com equação e figura"
-
-#: index.html:271 main/templates/index - cópia.html:271
-#: main/templates/index-mctest.html:242 main/templates/index.html:592
-msgid "Parametric Question - Example II"
-msgstr "Questão Paramétrica - Exemplo II"
-
-#: index.html:272 main/templates/index - cópia.html:272
-#: main/templates/index-mctest.html:243 main/templates/index.html:593
-msgid "Example with graph"
-msgstr "Exemplo com grafo"
-
-#: index.html:289 main/templates/index - cópia.html:289
-#: main/templates/index-mctest.html:258 main/templates/index.html:610
-msgid "Parametric Question - Example III"
-msgstr "Questão Paramétrica - Exemplo III"
-
-#: index.html:290 main/templates/index - cópia.html:290
-#: main/templates/index-mctest.html:259 main/templates/index.html:611
-msgid "Example with matrix"
-msgstr "Exemplo com matriz"
-
-#: index.html:307 main/templates/index - cópia.html:307
-#: main/templates/index-mctest.html:274 main/templates/index.html:628
-msgid "CSV File with Exam Correction"
-msgstr "Arquivo CSV com as correções dos exames"
-
-#: index.html:308 index.html:329 main/templates/index - cópia.html:308
-#: cópia.html:329 main/templates/index-mctest.html:275
-#: main/templates/index-mctest.html:294 main/templates/index.html:629
-#: main/templates/index.html:650
-msgid "In yellow, answer marked '/' correct answer"
-msgstr "Em amarelo, alternativa marcada '/' alternativa correta"
-
-#: index.html:309 main/templates/index - cópia.html:309
-#: main/templates/index-mctest.html:276 main/templates/index.html:630
-msgid "In green, Question ID in the DB and answers order (0=A, 1=B, ...)"
-msgstr "Em verde, ID da questão no BD e ordem das alternativas (0=A, 1=B, ...)"
-
-#: index.html:310 index.html:330 main/templates/index - cópia.html:310
-#: cópia.html:330 main/templates/index-mctest.html:277
-#: main/templates/index-mctest.html:295 main/templates/index.html:631
-#: main/templates/index.html:651
-msgid "ID here means exam variations"
-msgstr "Aqui ID siginifica variações de Exame"
-
-#: index.html:327 main/templates/index - cópia.html:327
-#: main/templates/index-mctest.html:292 main/templates/index.html:648
-msgid "Grade with weight"
-msgstr "Notas com pesos"
-
-#: index.html:330 main/templates/index - cópia.html:330
-#: main/templates/index-mctest.html:295 main/templates/index.html:651
-msgid "In green, answers with weight"
-msgstr "Em verde, alternativas com pesos"
-
-#: index.html:348 index.html:365 main/templates/index - cópia.html:348
-#: cópia.html:365 main/templates/index-mctest.html:311
-#: main/templates/index-mctest.html:328 main/templates/index.html:669
-#: main/templates/index.html:686
-msgid "Text parametric question, no multiple-choice"
-msgstr "Criar Questões Paramétricas, sem múltipla-escolha"
-
-#: index.html:349 main/templates/index - cópia.html:349
-#: main/templates/index-mctest.html:312 main/templates/index.html:670
-msgid ""
-"With random values ​​for a, b, c and d. In this case, it is possible to draw "
-"the answer in light colors, see next slide"
-msgstr ""
-"Com valores aleatórios para a, b, c e d. Nesse caso, você pode desenhar a "
-"resposta em cores claras, ver o próximo slide"
-
-#: index.html:350 index.html:367 index.html:384 index.html:420 index.html:436
-#: main/templates/index - cópia.html:350 cópia.html:367 cópia.html:384
-#: cópia.html:420 cópia.html:436 main/templates/index-mctest.html:313
-#: main/templates/index-mctest.html:330 main/templates/index-mctest.html:347
-#: main/templates/index-mctest.html:381 main/templates/index-mctest.html:398
-#: main/templates/index.html:671 main/templates/index.html:688
-#: main/templates/index.html:705 main/templates/index.html:741
-#: main/templates/index.html:757
-msgid "all until"
-msgstr "todos até"
-
-#: index.html:366 main/templates/index - cópia.html:366
-#: main/templates/index-mctest.html:329 main/templates/index.html:687
-msgid ""
-"The answer in light colors, not to appear printed. You can program the "
-"answer to have a similar number of lines (same difficulty)"
-msgstr ""
-"A resposta em cores claras, para não aparecer impressa. Você pode programar "
-"a resposta para ter um número semelhante de linhas (mesma dificuldade)"
-
-#: index.html:382 main/templates/index - cópia.html:382
-#: main/templates/index-mctest.html:345 main/templates/index.html:703
-msgid "Email corrections to each student"
-msgstr "Correções por e-mail para cada estudante"
-
-#: index.html:383 main/templates/index - cópia.html:383
-#: main/templates/index-mctest.html:346 main/templates/index.html:704
-msgid ""
-"It is also possible to include in the email a PDF file with the text of the "
-"questions, the alternative the student has marked, the feedback and the "
-"correct alternative (if incorrect)"
-msgstr ""
-"Também é possível incluir no e-mail um arquivo PDF com o texto das questões, "
-"a alternativa que o aluno marcou, o feedback e a alternativa correta (se "
-"incorreta)"
-
-#: index.html:399 main/templates/index - cópia.html:399
-#: main/templates/index-mctest.html:362 main/templates/index.html:720
-msgid "Email with some correction statistics"
-msgstr "Email com algumas estatísticas das correções"
-
-#: index.html:400 main/templates/index - cópia.html:400
-#: main/templates/index-mctest.html:363 main/templates/index.html:721
-msgid ""
-"The teacher receives this email after sending a PDF of the scanned exams"
-msgstr ""
-"O professor recebe esse email após o envio de um PDF dos exames digitalizados"
-
-#: index.html:418 main/templates/index - cópia.html:418
-#: main/templates/index-mctest.html:379 main/templates/index.html:739
-msgid "Email with test cases of moodle + VPL"
-msgstr "Email com os casos de teste do moodle + VPL"
-
-#: index.html:419 main/templates/index - cópia.html:419
-#: main/templates/index-mctest.html:380 main/templates/index.html:740
-msgid ""
-"The teacher receives this email after creating the variations when there is "
-"an exam that contains program exercises"
-msgstr ""
-"O professor recebe esse email após criar as variações quando houver um exame "
-"que contenha exercícios programa"
-
-#: index.html:435 main/templates/index - cópia.html:435
-#: main/templates/index-mctest.html:396 main/templates/index.html:756
-msgid ""
-"Email with templates, DBs (for import into moodle) and variation per student"
-msgstr ""
-"Email com gabaritos, BDs (para importação no moodle) e variação por aluno"
-
-#: index.html:436 main/templates/index - cópia.html:436
-#: main/templates/index-mctest.html:397 main/templates/index.html:757
-msgid ""
-"The teacher receives this email after creating the variations when there is "
-"an exam containing multiple-choice questions or questions with answers"
-msgstr ""
-"O professor recebe esse email após criar as variações quando houver um exame "
-"que contenha questões de múltipla-escolha ou questões com respostas"
-
-#: index.html:457 main/templates/index - cópia.html:457
-msgid ""
-"Welcome to <em>MCTest</em>, a website designed to assist with exams "
-"preparation and correction."
-msgstr ""
-"Bem vindo ao <em>MCTest</em>, um portal para a geração e correção de exames."
-
-#: index.html:465 main/templates/index - cópia.html:465
-msgid ""
-"Attendance offered to the community to facilitate the process of automatic "
-"elaboration and correction of the exams, with generation and correction of "
-"many exams."
-msgstr ""
-"Serviço oferecido para a comunidade para facilitar o processo de elaboração "
-"e correção de exames, com geração e correção de muitos exames."
-
-#: index.html:476 main/templates/index - cópia.html:476
-#: main/templates/index-mctest.html:417 main/templates/index.html:779
-msgid "Dynamic content"
-msgstr "Conteúdo dinâmico"
-
-#: index.html:478 main/templates/index - cópia.html:478
-#: main/templates/index-mctest.html:419
-msgid "The MCTest has the following record counts"
-msgstr "O MCTest tem os seguintes contadores"
-
-#: index.html:478 main/templates/index - cópia.html:478
-msgid "see also:"
-msgstr "ver também"
-
-#: index.html:482 main/templates/index - cópia.html:482
-#: main/templates/index-mctest.html:421 main/templates/index.html:789
-msgid "Institutes"
-msgstr "Institutos"
-
-#: index.html:483 main/templates/index - cópia.html:483
-#: main/templates/index-mctest.html:422
-msgid "Institute has Courses"
-msgstr "Instituto tem Cursos"
-
-#: index.html:485 main/templates/index - cópia.html:485
-#: main/templates/index-mctest.html:424 main/templates/index.html:795
-msgid "Courses"
-msgstr "Cursos"
-
-#: index.html:486 main/templates/index - cópia.html:486
-#: main/templates/index-mctest.html:425
-msgid "Course has Disciplines"
-msgstr "Curso tem Disciplinas"
-
-#: index.html:488 main/templates/index - cópia.html:488
-#: main/templates/index-mctest.html:427 main/templates/index.html:801
-#: topic/models.py:43
-msgid "Disciplines"
-msgstr "Disciplinas"
-
-#: index.html:489 main/templates/index - cópia.html:489
-#: main/templates/index-mctest.html:428
-msgid "Discipline has Topics and Classrooms"
-msgstr "Disciplina tem Tópicos, Turmas e Profs"
-
-#: index.html:492 main/templates/index - cópia.html:492
-#: main/templates/index-mctest.html:431
-msgid "Classroom has Exams, Profs and Student"
-msgstr "Turmas tem Exames, Profs e Estudantes"
-
-#: index.html:494 main/templates/base_generic.html:164 main/templates/index -
-#: cópia.html:494 main/templates/index-mctest.html:433
-#: main/templates/index.html:813
-msgid "Exams"
-msgstr "Exames"
-
-#: index.html:495 main/templates/index - cópia.html:495
-#: main/templates/index-mctest.html:434
-msgid "Exam has Classrooms and Questions"
-msgstr "Exame tem Turmas e Questões"
-
-#: index.html:495 main/templates/index - cópia.html:495
-msgid "motivations"
-msgstr "motivações"
-
-#: index.html:500 main/templates/index - cópia.html:500
-#: main/templates/index-mctest.html:437
-msgid "Topic has Questions"
-msgstr "Tópico tem Questões"
-
-#: index.html:506 main/templates/index - cópia.html:506
-msgid "motivations for the use of bloom taxonomy"
-msgstr "motivações para o uso da taxonomia de bloom"
-
-#: index.html:511 main/templates/index - cópia.html:511
-#: main/templates/index-mctest.html:445
-msgid "Multiple Choice"
-msgstr "Múltipla Escolha"
-
-#: index.html:512 main/templates/index - cópia.html:512
-#: main/templates/index-mctest.html:446
-msgid "Text"
-msgstr "Dissertativa"
-
-#: index.html:513 main/templates/index - cópia.html:513
-#: main/templates/index-mctest.html:447
-#: topic/templates/question/question_create.html:80
-#: topic/templates/question/question_update.html:158
-msgid "Parametric"
-msgstr "Paramétrica"
-
-#: index.html:522 index.html:899 main/templates/index - cópia.html:522
-#: cópia.html:899 main/templates/index-mctest.html:451
-#: main/templates/index-mctest.html:503 main/templates/index.html:845
-#: main/templates/index.html:1351
-msgid "Users"
-msgstr "Usuários"
-
-#: index.html:528 main/templates/index - cópia.html:528
-#: main/templates/index-mctest.html:456 main/templates/index.html:858
-msgid "Explanatory videos"
-msgstr "Vídeos explicativos"
-
-#: index.html:562 main/templates/index - cópia.html:562
-#: main/templates/index.html:882
-msgid "Research Project"
-msgstr "Projeto de Pesquisa"
-
-#: index.html:565 index.html:590 main/templates/index - cópia.html:565
-#: cópia.html:590 main/templates/index.html:889 main/templates/index.html:916
-msgid "Title"
-msgstr "Título"
-
-#: index.html:575 main/templates/index - cópia.html:575
-msgid "History"
-msgstr "Histórico"
-
-#: index.html:575 main/templates/index - cópia.html:575
-#: main/templates/index.html:906
-msgid "Software registration"
-msgstr "Registro de software"
-
-#: index.html:585 main/templates/index - cópia.html:585
-#: main/templates/index.html:915
-msgid "Order"
-msgstr "Pedido"
-
-#: index.html:600 main/templates/index - cópia.html:600
-msgid ""
-"Developed in Python (Django 2.0) for automatic correction - available in"
-msgstr ""
-"Desenvolvido em Python (Django 2.0) para a correção automática - disponível "
-"em"
-
-#: index.html:603 main/templates/index - cópia.html:603
-msgid "exams generated in LaTeX using a MySQL DB"
-msgstr "exames gerados em LaTeX usando o BD MySQL"
-
-#: index.html:614 main/templates/index - cópia.html:614
-#: main/templates/index.html:934
-msgid "Developed in Python for LaTeX generated exams"
-msgstr "Desenvolvido em Python para exames gerados em Latex"
-
-#: index.html:625 main/templates/index - cópia.html:625
-msgid "Developed in Python for automatic correction - available in"
-msgstr "Desenvolvido em Python para a correção automática - disponível em"
-
-#: index.html:626 main/templates/index - cópia.html:626
-msgid "by ftp"
-msgstr "por ftp"
-
-#: index.html:636 main/templates/index - cópia.html:636
-msgid ""
-"Developed in Python for automatic correction - exams generated in Word / "
-"BROffic"
-msgstr ""
-"Desenvolvido em Python para a correção automática - exames gerados em Word/"
-"BROffice"
-
-#: index.html:644 main/templates/index - cópia.html:644
-#: main/templates/index.html:952
-msgid "Developed in Android"
-msgstr "Desenvolvido em Android"
-
-#: index.html:645 main/templates/index - cópia.html:645
-msgid "for automatic correction - exams generated in Word / BROffice"
-msgstr "para correção automática - exames gerados em Word/BROffice"
-
-#: index.html:657 main/templates/index - cópia.html:657
-msgid ""
-"Developed in Matlab for automatic correction - exams generated in Word / "
-"BROffice"
-msgstr ""
-"Desenvolvido em Matlab  para a correção automática - exames gerados em Word/"
-"BROffice"
-
-#: index.html:668 main/templates/index - cópia.html:668
-#: main/templates/index.html:971
-msgid "Publications"
-msgstr "Publicações"
-
-#: index.html:886 main/templates/index - cópia.html:886
-#: main/templates/index-mctest.html:491 main/templates/index.html:1340
-msgid "For verification"
-msgstr "Para verificação"
-
-#: index.html:903 main/templates/index - cópia.html:903
-#: main/templates/index-mctest.html:506
-msgid "Last Login"
-msgstr "Último Acesso"
-
-#: index.html:931 main/templates/index - cópia.html:931
-#: main/templates/index-mctest.html:533 main/templates/index.html:1424
-msgid "You have visited this page"
-msgstr "Você visitou esta página"
-
-#: index.html:932 main/templates/index - cópia.html:932
-#: main/templates/index-mctest.html:534 main/templates/index.html:1426
-msgid "time"
-msgstr "vez"
-
-#: index.html:932 main/templates/index - cópia.html:932
-#: main/templates/index-mctest.html:534 main/templates/index.html:1426
-msgid "times"
-msgstr "vezes"
-
-#: index.html:934 main/templates/index - cópia.html:934
-#: main/templates/index-mctest.html:536 main/templates/index.html:1429
-msgid "Send improvement suggestions to"
-msgstr "Enviar sugestões de melhoria para"
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:420
-msgid "open('foo"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:424
-msgid "open(\"foo"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:428
-#, python-format
-msgid "%ls foo"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:562
-msgid "a[0]."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:569
-msgid "a[0].r"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:577
-msgid "a[0].from_"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1537
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1559
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1562
-msgid "do not suppress"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1538
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1550
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1553
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1556
-msgid "suppress all"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1539
-msgid "suppress all but a"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1540
-msgid "suppress all but c"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1588
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1591
-msgid "---"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/IPython/core/tests/test_completer.py:1594
-msgid "--"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/_termui_impl.py:496
-#, python-brace-format
-msgid "{editor}: Editing failed"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/_termui_impl.py:500
-#, python-brace-format
-msgid "{editor}: Editing failed: {e}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1097
-msgid "Aborted!"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1282
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/decorators.py:495
-msgid "Show this message and exit."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1313
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1339
-#, python-brace-format
-msgid "(Deprecated) {text}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1357
-msgid "Options"
-msgstr "Ações"
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1383
-#, python-brace-format
-msgid "Got unexpected extra argument ({args})"
-msgid_plural "Got unexpected extra arguments ({args})"
-msgstr[0] ""
-msgstr[1] ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1399
-msgid "DeprecationWarning: The command {name!r} is deprecated."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1605
-msgid "Commands"
-msgstr "Comandos"
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1637
-msgid "Missing command."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:1715
-msgid "No such command {name!r}."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:2271
-msgid "Value must be an iterable."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:2291
-#, python-brace-format
-msgid "Takes {nargs} values but 1 was given."
-msgid_plural "Takes {nargs} values but {len} were given."
-msgstr[0] ""
-msgstr[1] ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:2734
-#, python-brace-format
-msgid "env var: {var}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:2764
-msgid "(dynamic)"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:2777
-#, python-brace-format
-msgid "default: {default}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/core.py:2790
-msgid "required"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/decorators.py:400
-#, python-format
-msgid "%(prog)s, version %(version)s"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/decorators.py:464
-msgid "Show the version and exit."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:43
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:79
-#, python-brace-format
-msgid "Error: {message}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:71
-#, python-brace-format
-msgid "Try '{command} {option}' for help."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:120
-#, python-brace-format
-msgid "Invalid value: {message}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:122
-#, python-brace-format
-msgid "Invalid value for {param_hint}: {message}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:178
-msgid "Missing argument"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:180
-msgid "Missing option"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:182
-msgid "Missing parameter"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:184
-#, python-brace-format
-msgid "Missing {param_type}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:191
-#, python-brace-format
-msgid "Missing parameter: {param_name}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:211
-#, python-brace-format
-msgid "No such option: {name}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:223
-#, python-brace-format
-msgid "Did you mean {possibility}?"
-msgid_plural "(Possible options: {possibilities})"
-msgstr[0] ""
-msgstr[1] ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:261
-msgid "unknown error"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/exceptions.py:268
-msgid "Could not open file {filename!r}: {message}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/parser.py:231
-msgid "Argument {name!r} takes {nargs} values."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/parser.py:413
-msgid "Option {name!r} does not take a value."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/parser.py:474
-msgid "Option {name!r} requires an argument."
-msgid_plural "Option {name!r} requires {nargs} arguments."
-msgstr[0] ""
-msgstr[1] ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/shell_completion.py:316
-msgid "Shell completion is not supported for Bash versions older than 4.4."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/shell_completion.py:322
-msgid "Couldn't detect Bash version, shell completion is not supported."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/termui.py:160
-msgid "Repeat for confirmation"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/termui.py:176
-msgid "Error: The value you entered was invalid."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/termui.py:178
-#, python-brace-format
-msgid "Error: {e.message}"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/termui.py:189
-msgid "Error: The two entered values do not match."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/termui.py:245
-msgid "Error: invalid input"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/termui.py:776
-msgid "Press any key to continue..."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:265
-#, fuzzy, python-brace-format
-#| msgid "Choose the topics"
-msgid ""
-"Choose from:\n"
-"\t{choices}"
-msgstr "Escolher Tópico"
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:297
-msgid "{value!r} is not {choice}."
-msgid_plural "{value!r} is not one of {choices}."
-msgstr[0] ""
-msgstr[1] ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:387
-msgid "{value!r} does not match the format {format}."
-msgid_plural "{value!r} does not match the formats {formats}."
-msgstr[0] ""
-msgstr[1] ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:409
-msgid "{value!r} is not a valid {number_type}."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:465
-#, python-brace-format
-msgid "{value} is not in the range {range}."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:606
-msgid "{value!r} is not a valid boolean."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:630
-msgid "{value!r} is not a valid UUID."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:811
-#: main/templates/readme.html:255
-msgid "file"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:813
-#, fuzzy
-#| msgid "History"
-msgid "directory"
-msgstr "Histórico"
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:815
-msgid "path"
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:861
-msgid "{name} {filename!r} does not exist."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:870
-msgid "{name} {filename!r} is a file."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:878
-#, python-brace-format
-msgid "{name} '{filename}' is a directory."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:887
-msgid "{name} {filename!r} is not readable."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:896
-msgid "{name} {filename!r} is not writable."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:905
-msgid "{name} {filename!r} is not executable."
-msgstr ""
-
-#: lattes2memorial/lattesEnv/lib/python3.8/site-packages/click/types.py:972
-#, python-brace-format
-msgid "{len_type} values are required, but {len_value} was given."
-msgid_plural "{len_type} values are required, but {len_value} were given."
-msgstr[0] ""
-msgstr[1] ""
 
 #: main/templates/According.html:10 main/templates/signup.html:36
 #: topic/templates/question/question_confirm_delete.html:32
@@ -3452,6 +2684,11 @@ msgstr "Questões"
 msgid "All exams"
 msgstr "Exames"
 
+#: main/templates/base_generic.html:164 main/templates/index-mctest.html:433
+#: main/templates/index.html:813
+msgid "Exams"
+msgstr "Exames"
+
 #: main/templates/base_generic.html:169
 msgid "Admin"
 msgstr "Admin"
@@ -3531,8 +2768,8 @@ msgstr "Quem utiliza"
 msgid "Download"
 msgstr ""
 
-#: main/templates/base_generic.html:701 main/templates/index.html:1068
-#: main/templates/index.html:1261
+#: main/templates/base_generic.html:701 main/templates/index.html:1076
+#: main/templates/index.html:1270
 msgid "Book"
 msgstr "Livro"
 
@@ -3606,9 +2843,301 @@ msgstr "Enviar email para"
 msgid "if I forgot anyone"
 msgstr "se eu esqueci de alguém"
 
+#: main/templates/index-mctest.html:16 main/templates/index-mctest.html:483
+#: main/templates/index.html:339
+msgid "MCTest"
+msgstr ""
+
 #: main/templates/index-mctest.html:16
 msgid "produção"
 msgstr ""
+
+#: main/templates/index-mctest.html:59 main/templates/index-mctest.html:78
+#: main/templates/index-mctest.html:95 main/templates/index-mctest.html:111
+#: main/templates/index.html:394 main/templates/index.html:415
+#: main/templates/index.html:434 main/templates/index.html:451
+msgid "LaTeX Command"
+msgstr "Comando LaTeX"
+
+#: main/templates/index-mctest.html:60 main/templates/index.html:395
+msgid "A simple question with latex command"
+msgstr "Uma simples questão com comando LaTeX"
+
+#: main/templates/index-mctest.html:61 main/templates/index.html:396
+msgid "After clicking Create-PDF, see the next slide"
+msgstr "Após clicar em Criar-PDF, ver próximo slide"
+
+#: main/templates/index-mctest.html:79 main/templates/index.html:416
+msgid ""
+"The formulas between $ from the previous slide are presented differently"
+msgstr ""
+"As fórmulas entre $ do slide anterior são apresentadas de maneira diferente"
+
+#: main/templates/index-mctest.html:96 main/templates/index.html:435
+msgid "Adding an image that is on the web"
+msgstr "Adicionando uma imagem que está na web"
+
+#: main/templates/index-mctest.html:112 main/templates/index.html:452
+msgid "Question with image to display on exam"
+msgstr "Questão com a imagem a ser exibida no exame"
+
+#: main/templates/index-mctest.html:128 main/templates/index-mctest.html:144
+#: main/templates/index.html:469 main/templates/index.html:486
+msgid ""
+"Exam only with answers (in the correction, the template is the first page of "
+"the PDF)"
+msgstr ""
+"Exame apenas com respostas (na correção, o gabarito é a primeira página do "
+"PDF)"
+
+#: main/templates/index-mctest.html:143 main/templates/index.html:485
+msgid "Exam Style - Vertical"
+msgstr "Estilo do Exame - Vertical"
+
+#: main/templates/index-mctest.html:160 main/templates/index.html:503
+msgid ""
+"Q&A (the correct answer can be found with '#0' in the PDF, details in yellow)"
+msgstr ""
+"Questões e respostas (a resposta correta pode ser encontrada fazendo uma "
+"busca no PDF por '#0', detalhes em amarelo)"
+
+#: main/templates/index-mctest.html:175 main/templates/index.html:519
+msgid "Parametric Question - Part I"
+msgstr "Questão Paramétrica - Parte I"
+
+#: main/templates/index-mctest.html:176 main/templates/index.html:520
+msgid ""
+"In the description, we have python code between '[[code:' and ']]' - to "
+"'[[def:"
+msgstr ""
+"Na descrição, temos códigos python entre '[[code:' e ']]' -  também entre "
+"'[[def:' e ']]'"
+
+#: main/templates/index-mctest.html:191 main/templates/index.html:536
+msgid "Parametric Question - Part II"
+msgstr "Questão Paramétrica - Parte II"
+
+#: main/templates/index-mctest.html:192 main/templates/index.html:537
+msgid ""
+"Attributes and answers to a question. When creating a question, the first "
+"alternative is always the correct one"
+msgstr ""
+"Atributos e respostas de uma questão. Ao criar uma questão, a primeira "
+"alternativa é sempre a correta"
+
+#: main/templates/index-mctest.html:207 main/templates/index.html:553
+msgid "Parametric Question - Part III"
+msgstr "Questão Paramétrica - Parte III"
+
+#: main/templates/index-mctest.html:208 main/templates/index.html:554
+msgid ""
+"Question to be displayed. Note the order in which answers were drawn after "
+"'#'"
+msgstr ""
+"Questão a ser exibida. Observe a ordem na qual as respostas foram extraídas "
+"após '#'"
+
+#: main/templates/index-mctest.html:209 main/templates/index.html:555
+msgid "You can assign different weights for each anwers, on the exam grade"
+msgstr ""
+"Você pode atribuir pesos diferentes a cada alternativa, na nota do exame"
+
+#: main/templates/index-mctest.html:225 main/templates/index.html:573
+msgid "Parametric Question - Example I"
+msgstr "Questão Paramétrica - Exemplo I"
+
+#: main/templates/index-mctest.html:226 main/templates/index.html:574
+msgid "Example with equation and figure"
+msgstr "Exemplo com equação e figura"
+
+#: main/templates/index-mctest.html:242 main/templates/index.html:592
+msgid "Parametric Question - Example II"
+msgstr "Questão Paramétrica - Exemplo II"
+
+#: main/templates/index-mctest.html:243 main/templates/index.html:593
+msgid "Example with graph"
+msgstr "Exemplo com grafo"
+
+#: main/templates/index-mctest.html:258 main/templates/index.html:610
+msgid "Parametric Question - Example III"
+msgstr "Questão Paramétrica - Exemplo III"
+
+#: main/templates/index-mctest.html:259 main/templates/index.html:611
+msgid "Example with matrix"
+msgstr "Exemplo com matriz"
+
+#: main/templates/index-mctest.html:274 main/templates/index.html:628
+msgid "CSV File with Exam Correction"
+msgstr "Arquivo CSV com as correções dos exames"
+
+#: main/templates/index-mctest.html:275 main/templates/index-mctest.html:294
+#: main/templates/index.html:629 main/templates/index.html:650
+msgid "In yellow, answer marked '/' correct answer"
+msgstr "Em amarelo, alternativa marcada '/' alternativa correta"
+
+#: main/templates/index-mctest.html:276 main/templates/index.html:630
+msgid "In green, Question ID in the DB and answers order (0=A, 1=B, ...)"
+msgstr "Em verde, ID da questão no BD e ordem das alternativas (0=A, 1=B, ...)"
+
+#: main/templates/index-mctest.html:277 main/templates/index-mctest.html:295
+#: main/templates/index.html:631 main/templates/index.html:651
+msgid "ID here means exam variations"
+msgstr "Aqui ID siginifica variações de Exame"
+
+#: main/templates/index-mctest.html:292 main/templates/index.html:648
+msgid "Grade with weight"
+msgstr "Notas com pesos"
+
+#: main/templates/index-mctest.html:295 main/templates/index.html:651
+msgid "In green, answers with weight"
+msgstr "Em verde, alternativas com pesos"
+
+#: main/templates/index-mctest.html:311 main/templates/index-mctest.html:328
+#: main/templates/index.html:669 main/templates/index.html:686
+msgid "Text parametric question, no multiple-choice"
+msgstr "Criar Questões Paramétricas, sem múltipla-escolha"
+
+#: main/templates/index-mctest.html:312 main/templates/index.html:670
+msgid ""
+"With random values ​​for a, b, c and d. In this case, it is possible to draw "
+"the answer in light colors, see next slide"
+msgstr ""
+"Com valores aleatórios para a, b, c e d. Nesse caso, você pode desenhar a "
+"resposta em cores claras, ver o próximo slide"
+
+#: main/templates/index-mctest.html:313 main/templates/index-mctest.html:330
+#: main/templates/index-mctest.html:347 main/templates/index-mctest.html:381
+#: main/templates/index-mctest.html:398 main/templates/index.html:671
+#: main/templates/index.html:688 main/templates/index.html:705
+#: main/templates/index.html:741 main/templates/index.html:757
+msgid "all until"
+msgstr "todos até"
+
+#: main/templates/index-mctest.html:329 main/templates/index.html:687
+msgid ""
+"The answer in light colors, not to appear printed. You can program the "
+"answer to have a similar number of lines (same difficulty)"
+msgstr ""
+"A resposta em cores claras, para não aparecer impressa. Você pode programar "
+"a resposta para ter um número semelhante de linhas (mesma dificuldade)"
+
+#: main/templates/index-mctest.html:345 main/templates/index.html:703
+msgid "Email corrections to each student"
+msgstr "Correções por e-mail para cada estudante"
+
+#: main/templates/index-mctest.html:346 main/templates/index.html:704
+msgid ""
+"It is also possible to include in the email a PDF file with the text of the "
+"questions, the alternative the student has marked, the feedback and the "
+"correct alternative (if incorrect)"
+msgstr ""
+"Também é possível incluir no e-mail um arquivo PDF com o texto das questões, "
+"a alternativa que o aluno marcou, o feedback e a alternativa correta (se "
+"incorreta)"
+
+#: main/templates/index-mctest.html:362 main/templates/index.html:720
+msgid "Email with some correction statistics"
+msgstr "Email com algumas estatísticas das correções"
+
+#: main/templates/index-mctest.html:363 main/templates/index.html:721
+msgid ""
+"The teacher receives this email after sending a PDF of the scanned exams"
+msgstr ""
+"O professor recebe esse email após o envio de um PDF dos exames digitalizados"
+
+#: main/templates/index-mctest.html:379 main/templates/index.html:739
+msgid "Email with test cases of moodle + VPL"
+msgstr "Email com os casos de teste do moodle + VPL"
+
+#: main/templates/index-mctest.html:380 main/templates/index.html:740
+msgid ""
+"The teacher receives this email after creating the variations when there is "
+"an exam that contains program exercises"
+msgstr ""
+"O professor recebe esse email após criar as variações quando houver um exame "
+"que contenha exercícios programa"
+
+#: main/templates/index-mctest.html:396 main/templates/index.html:756
+msgid ""
+"Email with templates, DBs (for import into moodle) and variation per student"
+msgstr ""
+"Email com gabaritos, BDs (para importação no moodle) e variação por aluno"
+
+#: main/templates/index-mctest.html:397 main/templates/index.html:757
+msgid ""
+"The teacher receives this email after creating the variations when there is "
+"an exam containing multiple-choice questions or questions with answers"
+msgstr ""
+"O professor recebe esse email após criar as variações quando houver um exame "
+"que contenha questões de múltipla-escolha ou questões com respostas"
+
+#: main/templates/index-mctest.html:417 main/templates/index.html:779
+msgid "Dynamic content"
+msgstr "Conteúdo dinâmico"
+
+#: main/templates/index-mctest.html:419
+msgid "The MCTest has the following record counts"
+msgstr "O MCTest tem os seguintes contadores"
+
+#: main/templates/index-mctest.html:421 main/templates/index.html:789
+msgid "Institutes"
+msgstr "Institutos"
+
+#: main/templates/index-mctest.html:422
+msgid "Institute has Courses"
+msgstr "Instituto tem Cursos"
+
+#: main/templates/index-mctest.html:424 main/templates/index.html:795
+msgid "Courses"
+msgstr "Cursos"
+
+#: main/templates/index-mctest.html:425
+msgid "Course has Disciplines"
+msgstr "Curso tem Disciplinas"
+
+#: main/templates/index-mctest.html:427 main/templates/index.html:801
+#: topic/models.py:43
+msgid "Disciplines"
+msgstr "Disciplinas"
+
+#: main/templates/index-mctest.html:428
+msgid "Discipline has Topics and Classrooms"
+msgstr "Disciplina tem Tópicos, Turmas e Profs"
+
+#: main/templates/index-mctest.html:431
+msgid "Classroom has Exams, Profs and Student"
+msgstr "Turmas tem Exames, Profs e Estudantes"
+
+#: main/templates/index-mctest.html:434
+msgid "Exam has Classrooms and Questions"
+msgstr "Exame tem Turmas e Questões"
+
+#: main/templates/index-mctest.html:437
+msgid "Topic has Questions"
+msgstr "Tópico tem Questões"
+
+#: main/templates/index-mctest.html:445
+msgid "Multiple Choice"
+msgstr "Múltipla Escolha"
+
+#: main/templates/index-mctest.html:446
+msgid "Text"
+msgstr "Dissertativa"
+
+#: main/templates/index-mctest.html:447
+#: topic/templates/question/question_create.html:80
+#: topic/templates/question/question_update.html:158
+msgid "Parametric"
+msgstr "Paramétrica"
+
+#: main/templates/index-mctest.html:451 main/templates/index-mctest.html:503
+#: main/templates/index.html:845 main/templates/index.html:1360
+msgid "Users"
+msgstr "Usuários"
+
+#: main/templates/index-mctest.html:456 main/templates/index.html:858
+msgid "Explanatory videos"
+msgstr "Vídeos explicativos"
 
 #: main/templates/index-mctest.html:458
 msgid "in Portuguese"
@@ -3682,6 +3211,30 @@ msgstr ""
 msgid "global vision (in English)"
 msgstr "Versão global (em Inglês)"
 
+#: main/templates/index-mctest.html:491 main/templates/index.html:1349
+msgid "For verification"
+msgstr "Para verificação"
+
+#: main/templates/index-mctest.html:506
+msgid "Last Login"
+msgstr "Último Acesso"
+
+#: main/templates/index-mctest.html:533 main/templates/index.html:1433
+msgid "You have visited this page"
+msgstr "Você visitou esta página"
+
+#: main/templates/index-mctest.html:534 main/templates/index.html:1435
+msgid "time"
+msgstr "vez"
+
+#: main/templates/index-mctest.html:534 main/templates/index.html:1435
+msgid "times"
+msgstr "vezes"
+
+#: main/templates/index-mctest.html:536 main/templates/index.html:1438
+msgid "Send improvement suggestions to"
+msgstr "Enviar sugestões de melhoria para"
+
 #: main/templates/index.html:866
 msgid ""
 "Learn how to create classrooms, exams, and parametric questions step-by-step."
@@ -3691,49 +3244,78 @@ msgstr "Aprenda a criar turmas, exames e questões paramétricas passo a passo."
 msgid "Watch on YouTube"
 msgstr "Assista no YouTube"
 
+#: main/templates/index.html:882
+msgid "Research Project"
+msgstr "Projeto de Pesquisa"
+
+#: main/templates/index.html:889 main/templates/index.html:899
+#: main/templates/index.html:926
+msgid "Title"
+msgstr "Título"
+
+#: main/templates/index.html:916
+msgid "Software registration"
+msgstr "Registro de software"
+
 #: main/templates/index.html:925
+msgid "Order"
+msgstr "Pedido"
+
+#: main/templates/index.html:935
 msgid "Developed in Python (with Django) for automatic correction"
 msgstr "Desenvolvido em Python (com Django) para a correção automática"
 
-#: main/templates/index.html:941
+#: main/templates/index.html:942
+msgid "Developed in Python for LaTeX generated exams"
+msgstr "Desenvolvido em Python para exames gerados em Latex"
+
+#: main/templates/index.html:949
 msgid "Developed in Python for automatic correction"
 msgstr "Desenvolvido em Python para a correção automática"
 
-#: main/templates/index.html:946
+#: main/templates/index.html:954
 msgid "Developed in Python"
 msgstr "Desenvolvido em Python"
 
-#: main/templates/index.html:958
+#: main/templates/index.html:960
+msgid "Developed in Android"
+msgstr "Desenvolvido em Android"
+
+#: main/templates/index.html:966
 msgid "Developed in Matlab"
 msgstr "Desenvolvido em Matlab"
 
-#: main/templates/index.html:1007 main/templates/index.html:1020
-#: main/templates/index.html:1034 main/templates/index.html:1154
-#: main/templates/index.html:1236 main/templates/index.html:1280
+#: main/templates/index.html:979
+msgid "Publications"
+msgstr "Publicações"
+
+#: main/templates/index.html:1015 main/templates/index.html:1028
+#: main/templates/index.html:1042 main/templates/index.html:1162
+#: main/templates/index.html:1245 main/templates/index.html:1289
 msgid "Journal"
 msgstr "Revista"
 
-#: main/templates/index.html:1053
+#: main/templates/index.html:1061
 msgid "Best Paper"
 msgstr "Melhor Artigo"
 
-#: main/templates/index.html:1200 main/templates/index.html:1250
+#: main/templates/index.html:1208 main/templates/index.html:1259
 msgid "Honorable Mention"
 msgstr "Menção Honrosa"
 
-#: main/templates/index.html:1308
+#: main/templates/index.html:1317
 msgid "2nd Place"
 msgstr "2º Lugar"
 
-#: main/templates/index.html:1352
+#: main/templates/index.html:1361
 msgid "Access History"
 msgstr "Histórico"
 
-#: main/templates/index.html:1354
+#: main/templates/index.html:1363
 msgid "Status"
 msgstr "Status"
 
-#: main/templates/index.html:1398
+#: main/templates/index.html:1407
 msgid "Never logged in"
 msgstr "Nunca fez login"
 
@@ -4110,6 +3692,10 @@ msgstr ""
 msgid "For more details and configuration options, refer to the"
 msgstr "Para mais detalhes e opções de configuração, consulte o arquivo"
 
+#: main/templates/readme.html:255
+msgid "file"
+msgstr ""
+
 #: main/templates/signup.html:15
 msgid "Only teachers can register for this service."
 msgstr "Somente professores podem se inscrever neste serviço."
@@ -4134,11 +3720,11 @@ msgstr ""
 msgid "Federal University of ABC"
 msgstr "Universidade Federal do ABC"
 
-#: mctest/settings.py:218
+#: mctest/settings.py:222
 msgid "English"
 msgstr "Inglês"
 
-#: mctest/settings.py:219
+#: mctest/settings.py:223
 msgid "Portugues"
 msgstr "Português"
 
@@ -4933,6 +4519,83 @@ msgstr "ExamUpdate: o professor não está registrado na disciplina"
 #: topic/views.py:1367
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
+
+#~ msgid ""
+#~ "Welcome to <em>MCTest</em>, a website designed to assist with exams "
+#~ "preparation and correction."
+#~ msgstr ""
+#~ "Bem vindo ao <em>MCTest</em>, um portal para a geração e correção de "
+#~ "exames."
+
+#~ msgid ""
+#~ "Attendance offered to the community to facilitate the process of "
+#~ "automatic elaboration and correction of the exams, with generation and "
+#~ "correction of many exams."
+#~ msgstr ""
+#~ "Serviço oferecido para a comunidade para facilitar o processo de "
+#~ "elaboração e correção de exames, com geração e correção de muitos exames."
+
+#~ msgid "see also:"
+#~ msgstr "ver também"
+
+#~ msgid "motivations"
+#~ msgstr "motivações"
+
+#~ msgid "motivations for the use of bloom taxonomy"
+#~ msgstr "motivações para o uso da taxonomia de bloom"
+
+#~ msgid "History"
+#~ msgstr "Histórico"
+
+#~ msgid ""
+#~ "Developed in Python (Django 2.0) for automatic correction - available in"
+#~ msgstr ""
+#~ "Desenvolvido em Python (Django 2.0) para a correção automática - "
+#~ "disponível em"
+
+#~ msgid "exams generated in LaTeX using a MySQL DB"
+#~ msgstr "exames gerados em LaTeX usando o BD MySQL"
+
+#~ msgid "Developed in Python for automatic correction - available in"
+#~ msgstr "Desenvolvido em Python para a correção automática - disponível em"
+
+#~ msgid "by ftp"
+#~ msgstr "por ftp"
+
+#~ msgid ""
+#~ "Developed in Python for automatic correction - exams generated in Word / "
+#~ "BROffic"
+#~ msgstr ""
+#~ "Desenvolvido em Python para a correção automática - exames gerados em "
+#~ "Word/BROffice"
+
+#~ msgid "for automatic correction - exams generated in Word / BROffice"
+#~ msgstr "para correção automática - exames gerados em Word/BROffice"
+
+#~ msgid ""
+#~ "Developed in Matlab for automatic correction - exams generated in Word / "
+#~ "BROffice"
+#~ msgstr ""
+#~ "Desenvolvido em Matlab  para a correção automática - exames gerados em "
+#~ "Word/BROffice"
+
+#~ msgid "Options"
+#~ msgstr "Ações"
+
+#~ msgid "Commands"
+#~ msgstr "Comandos"
+
+#, fuzzy, python-brace-format
+#~| msgid "Choose the topics"
+#~ msgid ""
+#~ "Choose from:\n"
+#~ "\t{choices}"
+#~ msgstr "Escolher Tópico"
+
+#, fuzzy
+#~| msgid "History"
+#~ msgid "directory"
+#~ msgstr "Histórico"
 
 #~ msgid "Please access "
 #~ msgstr "Acesse "
