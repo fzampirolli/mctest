@@ -29,7 +29,9 @@ GNU General Public License for more details.
 
 import datetime
 import random
+import signal
 import subprocess
+import threading
 import os
 import json
 
@@ -53,6 +55,21 @@ try:
     from topic.Utils import *
 except:
     pass
+
+
+# Tempo máximo (segundos) para rodar o código [[def: ...]] de uma questão
+# paramétrica. Existem 1139+ questões paramétricas na base, cada uma com
+# código Python arbitrário escrito por diferentes professores -- não dá para
+# revisar/consertar loop infinito questão por questão, então o limite é
+# aplicado aqui, na chamada (ver questionParametric), para qualquer código.
+PARAMETRIC_CODE_TIMEOUT_SECONDS = 10
+
+
+def _parametric_code_timeout_handler(signum, frame):
+    raise TimeoutError(
+        f"Tempo limite de {PARAMETRIC_CODE_TIMEOUT_SECONDS}s excedido ao executar o "
+        f"código [[def: ...]] da questão (possível loop infinito)."
+    )
 
 
 def createWrongAnswers(a):
@@ -256,8 +273,26 @@ class UtilsMC(object):
         myDef = UtilsMC.get_code(mystr, 'def')
 
         if myDef is not None:  # spend more time
+            # O código de "[[def: ... ]]" é escrito livremente por cada professor
+            # (mais de 1139 questões paramétricas hoje) e pode conter loops que,
+            # a depender dos parâmetros escolhidos, nunca terminam (ex.: um
+            # while que só para ao sortear por acaso uma combinação exata --
+            # ver gerar_QM_itens em topic/Utils.py). Não dá para revisar questão
+            # por questão, então o limite de tempo é aplicado aqui, na chamada,
+            # para qualquer código. signal.alarm só funciona na thread principal
+            # (é o caso de todas as chamadas atuais de questionParametric); fora
+            # dela, roda sem o limite em vez de falhar.
+            is_main_thread = threading.current_thread() is threading.main_thread()
             try:
-                exec('\n'.join(myDef))  # run the algorithm and variables
+                if is_main_thread:
+                    old_handler = signal.signal(signal.SIGALRM, _parametric_code_timeout_handler)
+                    signal.alarm(PARAMETRIC_CODE_TIMEOUT_SECONDS)
+                try:
+                    exec('\n'.join(myDef))  # run the algorithm and variables
+                finally:
+                    if is_main_thread:
+                        signal.alarm(0)
+                        signal.signal(signal.SIGALRM, old_handler)
             except Exception as e:
                 e = str(e).replace('<','$<$').replace('>','$>$')
                 e += '\n\n\n\\begin{verbatim}' + '\n'.join(myDef) + '\n\\end{verbatim}'
