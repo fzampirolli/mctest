@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 10:28-0300\n"
+"POT-Creation-Date: 2026-09-13 10:34-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2344,12 +2344,13 @@ msgstr "variationsExam: não há variações no estilo: somente resposta!"
 msgid ""
 "Could not create variations: parametric question #%(id)s failed to generate "
 "-- its code has an error or took too long to run (possible infinite loop). "
-"No variations were changed. Fix the question here: %(url)s"
+"No variations were changed. Fix the question here: <a href=\"%(url)s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">%(url)s</a>"
 msgstr ""
-"Não foi possível criar as variações: a questão paramétrica #%(id)s falhou "
-"ao gerar -- o código dela tem um erro ou demorou demais para rodar "
-"(possível loop infinito). Nenhuma variação foi alterada. Corrija a "
-"questão aqui: %(url)s"
+"Não foi possível criar as variações: a questão paramétrica #%(id)s falhou ao "
+"gerar -- o código dela tem um erro ou demorou demais para rodar (possível "
+"loop infinito). Nenhuma variação foi alterada. Corrija a questão aqui: "
+"<a href=\"%(url)s\" target=\"_blank\" rel=\"noopener noreferrer\">%(url)s</a>"
 
 #: exam/views.py:403
 msgid "Error creating variations"
@@ -3885,7 +3886,7 @@ msgstr ""
 "Enviamos instruções por e-mail para definir sua senha. Se não chegar em "
 "alguns minutos, verifique sua pasta de spam."
 
-#: topic/UtilsMCTest4.py:420 topic/views.py:565
+#: topic/UtilsMCTest4.py:420 topic/views.py:566
 msgid "Error reading file: "
 msgstr ""
 
@@ -4077,7 +4078,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1272
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1274
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -4439,22 +4440,24 @@ msgstr "Erro ao mover arquivo para o destino final: {e}"
 msgid "UtilsMC.questionParametric: forbidden words found."
 msgstr "UtilsMC.questionParametric: palavras proibidas encontradas."
 
-#: topic/views.py:147 topic/views.py:949
+#: topic/views.py:147 topic/views.py:950
 #, python-format
 msgid ""
 "This parametric question (#%(id)s) could not be generated automatically -- "
 "its code has an error or took too long to run (possible infinite loop). Fix "
-"the question here: %(url)s"
+"the question here: <a href=\"%(url)s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">%(url)s</a>"
 msgstr ""
-"Esta questão paramétrica (#%(id)s) não pôde ser gerada automaticamente -- "
-"o código dela tem um erro ou demorou demais para rodar (possível loop "
-"infinito). Corrija a questão aqui: %(url)s"
+"Esta questão paramétrica (#%(id)s) não pôde ser gerada automaticamente -- o "
+"código dela tem um erro ou demorou demais para rodar (possível loop "
+"infinito). Corrija a questão aqui: "
+"<a href=\"%(url)s\" target=\"_blank\" rel=\"noopener noreferrer\">%(url)s</a>"
 
-#: topic/views.py:151 topic/views.py:953
+#: topic/views.py:152 topic/views.py:955
 msgid "Error generating question"
 msgstr "Erro ao gerar questão"
 
-#: topic/views.py:330 topic/views.py:361
+#: topic/views.py:331 topic/views.py:362
 msgid ""
 "The question has been successfully duplicated! You can <a href=\"../../{}/"
 "update/\">view and edit the duplicated question here</a>."
@@ -4462,58 +4465,58 @@ msgstr ""
 "A questão foi duplicada com sucesso! Você pode <a href=\"../../{}/update/"
 "\">ver e editar a questão duplicada aqui</a>."
 
-#: topic/views.py:418
+#: topic/views.py:419
 msgid "Error reading JSON: "
 msgstr ""
 
-#: topic/views.py:422
+#: topic/views.py:423
 msgid "JSON file is empty."
 msgstr "O arquivo JSON está vazio."
 
-#: topic/views.py:516 topic/views.py:676
+#: topic/views.py:517 topic/views.py:677
 msgid "Questions Created Successfully:"
 msgstr "Questões Criadas com Sucesso:"
 
-#: topic/views.py:532 topic/views.py:696
+#: topic/views.py:533 topic/views.py:697
 msgid "Skipped similar question(s) already in DB:"
 msgstr "Ignoradas questão(ões) similar(es) já existentes no BD:"
 
-#: topic/views.py:548
+#: topic/views.py:549
 msgid "No questions were processed or permissions denied."
 msgstr "Nenhuma questão foi processada ou permissão negada."
 
-#: topic/views.py:559
+#: topic/views.py:560
 msgid "ImportQuestions: choose a TXT file following the model!"
 msgstr "ImportQuestions: escolha um arquivo TXT seguindo o modelo!"
 
-#: topic/views.py:570
+#: topic/views.py:571
 msgid "No questions found or invalid format."
 msgstr "Nenhuma questão encontrada ou formato inválido."
 
-#: topic/views.py:622
+#: topic/views.py:623
 msgid ""
 "ImportQuestions: Teacher is not associated with any discipline for topic: "
 msgstr ""
 "ImportQuestions: O professor não está associado a nenhuma disciplina para o "
 "tópico: "
 
-#: topic/views.py:626
+#: topic/views.py:627
 msgid "ImportQuestions: Topic does not exist (Create it first): "
 msgstr "ImportQuestions: O tópico não existe (Crie-o primeiro): "
 
-#: topic/views.py:714
+#: topic/views.py:715
 msgid "No questions were processed."
 msgstr "Nenhuma questão foi processada."
 
-#: topic/views.py:732
+#: topic/views.py:733
 msgid "ImportQuestionsImage: choose a PNG following the model!"
 msgstr "ImportQuestions: escolher um arquivo PNG seguindo o exemplo"
 
-#: topic/views.py:752
+#: topic/views.py:753
 msgid "Image imported successfully! "
 msgstr "Imagem importada com sucesso! "
 
-#: topic/views.py:802 topic/views.py:854
+#: topic/views.py:803 topic/views.py:855
 msgid ""
 "A topic with the same text already exists. Please consider using a unique "
 "name. Suggested name: {}"
@@ -4521,11 +4524,11 @@ msgstr ""
 "Já existe um tópico com o mesmo texto. Considere usar um nome exclusivo. "
 "Nome sugerido: {}"
 
-#: topic/views.py:810 topic/views.py:862
+#: topic/views.py:811 topic/views.py:863
 msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
-#: topic/views.py:935
+#: topic/views.py:936
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -4535,19 +4538,19 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:956
+#: topic/views.py:958
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
 
-#: topic/views.py:999
+#: topic/views.py:1001
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:1342
+#: topic/views.py:1344
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:1396
+#: topic/views.py:1398
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 

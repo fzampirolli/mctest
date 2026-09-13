@@ -146,7 +146,8 @@ def see_question_PDF(request, pk):
                     messages.error(request, _(
                         'This parametric question (#%(id)s) could not be generated '
                         'automatically -- its code has an error or took too long to '
-                        'run (possible infinite loop). Fix the question here: %(url)s'
+                        'run (possible infinite loop). Fix the question here: '
+                        '<a href="%(url)s" target="_blank" rel="noopener noreferrer">%(url)s</a>'
                     ) % {'id': q.id, 'url': question_url})
                     return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
             except Exception as e:
@@ -948,7 +949,8 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
                     messages.error(request, _(
                         'This parametric question (#%(id)s) could not be generated '
                         'automatically -- its code has an error or took too long to '
-                        'run (possible infinite loop). Fix the question here: %(url)s'
+                        'run (possible infinite loop). Fix the question here: '
+                        '<a href="%(url)s" target="_blank" rel="noopener noreferrer">%(url)s</a>'
                     ) % {'id': q.id, 'url': question_url})
                     return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
             except:

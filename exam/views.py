@@ -398,7 +398,7 @@ def variationsExam(request, pk):
             'Could not create variations: parametric question #%(id)s failed to '
             'generate -- its code has an error or took too long to run (possible '
             'infinite loop). No variations were changed. Fix the question here: '
-            '%(url)s'
+            '<a href="%(url)s" target="_blank" rel="noopener noreferrer">%(url)s</a>'
         ) % {'id': e.question_id, 'url': question_url})
         return render(request, 'exam/exam_errors.html', {'title': _('Error creating variations')})
 
