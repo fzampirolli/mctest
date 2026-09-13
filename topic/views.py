@@ -51,7 +51,7 @@ import datetime
 
 
 ###################################################################
-from exam.UtilsLatex import Utils
+from exam.UtilsLatex import Utils, ParametricQuestionError
 from .forms import UpdateQuestionForm, QuestionCreateForm, TopicCreateForm, TopicUpdateForm
 from django.utils.html import format_html
 
@@ -931,33 +931,40 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
                     [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), [])
                 else:  # se for dissertativa, não colocar alternativas
                     [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], [])
-                if quest == "":
-                    messages.error(request,
-                                   _('UtilsMC.questionParametric: do not use some words in the code, '
-                                     'for ex. exec, cmd, open, import os, remove, mkdir, sys, gnureadline, '
-                                     'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
-                    messages.error(request, 'Question: %d' % q.id)
-                    return render(request, 'exam/exam_errors.html', {})
-
-                # questionParametric devolve uma string começando com "ERROR"
-                # (código com erro ou timeout por loop infinito) em vez de
-                # levantar uma exceção -- sem esta checagem o texto de erro
-                # cru seguia direto para o PDF (ver mesma correção em
-                # see_question_PDF).
-                if isinstance(quest, str) and quest.startswith('ERROR'):
-                    question_url = request.build_absolute_uri(f'/topic/question/{q.id}/update/')
-                    messages.error(request, _(
-                        'This parametric question (#%(id)s) could not be generated '
-                        'automatically -- its code has an error or took too long to '
-                        'run (possible infinite loop). Fix the question here: '
-                        '<a href="%(url)s" target="_blank" rel="noopener noreferrer">%(url)s</a>'
-                    ) % {'id': q.id, 'url': question_url})
-                    return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
             except:
                 str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
                 messages.error(request, _('ERROR IN THE PARAMETRIC PART!!!'))
                 messages.error(request, 'Question: %d' % q.id)
-                return render(request, 'exam/exam_errors.html', {})
+                # Levanta em vez de "return render(...)": esta função devolve
+                # uma tupla (countQuestions, allQuestionsStr) no caso normal, e
+                # os dois pontos que a chamam (see_topic_PDF) fazem
+                # "countQuestions, allQuestionsStr = see_topic_PDF_aux(...)" --
+                # devolver um HttpResponse aqui quebraria esse unpacking em vez
+                # de mostrar a página de erro (ver ParametricQuestionError).
+                raise ParametricQuestionError(q.id)
+
+            if quest == "":
+                messages.error(request,
+                               _('UtilsMC.questionParametric: do not use some words in the code, '
+                                 'for ex. exec, cmd, open, import os, remove, mkdir, sys, gnureadline, '
+                                 'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
+                messages.error(request, 'Question: %d' % q.id)
+                raise ParametricQuestionError(q.id)
+
+            # questionParametric devolve uma string começando com "ERROR"
+            # (código com erro ou timeout por loop infinito) em vez de
+            # levantar uma exceção -- sem esta checagem o texto de erro
+            # cru seguia direto para o PDF (ver mesma correção em
+            # see_question_PDF).
+            if isinstance(quest, str) and quest.startswith('ERROR'):
+                question_url = request.build_absolute_uri(f'/topic/question/{q.id}/update/')
+                messages.error(request, _(
+                    'This parametric question (#%(id)s) could not be generated '
+                    'automatically -- its code has an error or took too long to '
+                    'run (possible infinite loop). Fix the question here: '
+                    '<a href="%(url)s" target="_blank" rel="noopener noreferrer">%(url)s</a>'
+                ) % {'id': q.id, 'url': question_url})
+                raise ParametricQuestionError(q.id)
                 # continue
 
         str1 += r' %s\n\n' % ''.join(quest)
@@ -1011,34 +1018,39 @@ def see_topic_PDF(request, pk):
         allQuestionsStr = []
         countQuestions = 0
 
-        # 1. Questões de Múltipla Escolha (QM)
-        # Filtra direto no banco para evitar loops desnecessários
-        qs_qm = topic.questions2.filter(question_type='QM').order_by('question_text')
-        if qs_qm.exists():
-            questions_id = [q.id for q in qs_qm]
-            questions_text = [q.question_text for q in qs_qm]
+        try:
+            # 1. Questões de Múltipla Escolha (QM)
+            # Filtra direto no banco para evitar loops desnecessários
+            qs_qm = topic.questions2.filter(question_type='QM').order_by('question_text')
+            if qs_qm.exists():
+                questions_id = [q.id for q in qs_qm]
+                questions_text = [q.question_text for q in qs_qm]
 
-            new_order = UtilsMC.sortedBySimilarity2(questions_text)
+                new_order = UtilsMC.sortedBySimilarity2(questions_text)
 
-            # Chama a função auxiliar existente (que retorna strings prontas na lista)
-            countQuestions, allQuestionsStr = see_topic_PDF_aux(
-                request, new_order, questions_id, allQuestionsStr, countQuestions
-            )
+                # Chama a função auxiliar existente (que retorna strings prontas na lista)
+                countQuestions, allQuestionsStr = see_topic_PDF_aux(
+                    request, new_order, questions_id, allQuestionsStr, countQuestions
+                )
 
-        if countQuestions > 0:
-            allQuestionsStr.append("\\newpage\\\\\n")
+            if countQuestions > 0:
+                allQuestionsStr.append("\\newpage\\\\\n")
 
-        # 2. Questões de Texto (QT)
-        qs_qt = topic.questions2.filter(question_type='QT').order_by('question_text')
-        if qs_qt.exists():
-            questions_id = [q.id for q in qs_qt]
-            questions_text = [q.question_text for q in qs_qt]
+            # 2. Questões de Texto (QT)
+            qs_qt = topic.questions2.filter(question_type='QT').order_by('question_text')
+            if qs_qt.exists():
+                questions_id = [q.id for q in qs_qt]
+                questions_text = [q.question_text for q in qs_qt]
 
-            new_order = UtilsMC.sortedBySimilarity2(questions_text)
+                new_order = UtilsMC.sortedBySimilarity2(questions_text)
 
-            countQuestions, allQuestionsStr = see_topic_PDF_aux(
-                request, new_order, questions_id, allQuestionsStr, countQuestions
-            )
+                countQuestions, allQuestionsStr = see_topic_PDF_aux(
+                    request, new_order, questions_id, allQuestionsStr, countQuestions
+                )
+        except ParametricQuestionError:
+            # A mensagem de erro (com o link direto para a questão) já foi
+            # enfileirada dentro de see_topic_PDF_aux antes de levantar.
+            return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
 
         # Junta todas as partes
         for st in allQuestionsStr:

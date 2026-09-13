@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 10:34-0300\n"
+"POT-Creation-Date: 2026-09-13 10:46-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2349,8 +2349,8 @@ msgid ""
 msgstr ""
 "Não foi possível criar as variações: a questão paramétrica #%(id)s falhou ao "
 "gerar -- o código dela tem um erro ou demorou demais para rodar (possível "
-"loop infinito). Nenhuma variação foi alterada. Corrija a questão aqui: "
-"<a href=\"%(url)s\" target=\"_blank\" rel=\"noopener noreferrer\">%(url)s</a>"
+"loop infinito). Nenhuma variação foi alterada. Corrija a questão aqui: <a "
+"href=\"%(url)s\" target=\"_blank\" rel=\"noopener noreferrer\">%(url)s</a>"
 
 #: exam/views.py:403
 msgid "Error creating variations"
@@ -4078,7 +4078,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1274
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1286
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -4440,7 +4440,7 @@ msgstr "Erro ao mover arquivo para o destino final: {e}"
 msgid "UtilsMC.questionParametric: forbidden words found."
 msgstr "UtilsMC.questionParametric: palavras proibidas encontradas."
 
-#: topic/views.py:147 topic/views.py:950
+#: topic/views.py:147 topic/views.py:962
 #, python-format
 msgid ""
 "This parametric question (#%(id)s) could not be generated automatically -- "
@@ -4450,10 +4450,10 @@ msgid ""
 msgstr ""
 "Esta questão paramétrica (#%(id)s) não pôde ser gerada automaticamente -- o "
 "código dela tem um erro ou demorou demais para rodar (possível loop "
-"infinito). Corrija a questão aqui: "
-"<a href=\"%(url)s\" target=\"_blank\" rel=\"noopener noreferrer\">%(url)s</a>"
+"infinito). Corrija a questão aqui: <a href=\"%(url)s\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">%(url)s</a>"
 
-#: topic/views.py:152 topic/views.py:955
+#: topic/views.py:152 topic/views.py:1053
 msgid "Error generating question"
 msgstr "Erro ao gerar questão"
 
@@ -4529,6 +4529,10 @@ msgid "TopicCreate: the user isn't the coordinator of the discipline"
 msgstr "TopicCreate: o usuário não é um coordenador da disciplina"
 
 #: topic/views.py:936
+msgid "ERROR IN THE PARAMETRIC PART!!!"
+msgstr "ERRO NA PARTE PARAMÉTRICA"
+
+#: topic/views.py:948
 msgid ""
 "UtilsMC.questionParametric: do not use some words in the code, for ex. exec, "
 "cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, getopt, "
@@ -4538,19 +4542,15 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:958
-msgid "ERROR IN THE PARAMETRIC PART!!!"
-msgstr "ERRO NA PARTE PARAMÉTRICA"
-
-#: topic/views.py:1001
+#: topic/views.py:1008
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:1344
+#: topic/views.py:1356
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:1398
+#: topic/views.py:1410
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 
