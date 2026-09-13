@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 10:04-0300\n"
+"POT-Creation-Date: 2026-09-13 10:28-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,7 +236,7 @@ msgstr "Apagar Turma"
 #: course/templates/classroom/classroom_list.html:78
 #: course/templates/classroom/classroom_list_who_created_user.html:78
 #: course/templates/discipline/discipline_detail.html:179 course/views.py:191
-#: exam/UtilsLatex.py:1264
+#: exam/UtilsLatex.py:1284
 msgid "Classroom"
 msgstr "Turma"
 
@@ -410,7 +410,7 @@ msgid "Code"
 msgstr "Código"
 
 #: course/templates/classroom/classroom_create.html:54
-#: course/templates/classroom/classroom_update.html:113 exam/UtilsLatex.py:1265
+#: course/templates/classroom/classroom_update.html:113 exam/UtilsLatex.py:1285
 #: exam/templates/exam/exam_create.html:84
 #: exam/templates/exam/exam_update5.3.html:313
 #: exam/templates/exam/exam_update5.4.html:785
@@ -534,7 +534,7 @@ msgstr "ID"
 
 #: course/templates/classroom/classroom_detail.html:44
 #: course/templates/classroom/classroom_detail.html:112 exam/CVMCTest.py:2116
-#: exam/CVMCTest_old.py:2115 exam/UtilsLatex.py:1274 exam/UtilsLatex.py:1403
+#: exam/CVMCTest_old.py:2115 exam/UtilsLatex.py:1294 exam/UtilsLatex.py:1423
 #: exam/models.py:246 exam/models.py:280
 msgid "Student"
 msgstr "Estudante"
@@ -693,7 +693,7 @@ msgstr "Código da Turma"
 #: course/templates/classroom/classroom_list_who_created_user.html:21
 #: course/templates/course/course_detail.html:75
 #: course/templates/discipline/discipline_detail.html:16
-#: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:1263
+#: course/templates/discipline/discipline_list.html:75 exam/UtilsLatex.py:1283
 #: exam/templates/exam/exam_create.html:81
 #: exam/templates/exam/exam_list.html:21
 #: exam/templates/exam/exam_list_who_created_user.html:25
@@ -1128,7 +1128,7 @@ msgstr "ImportStudentsClassroom: ID tem que ter somente dígitos: "
 msgid "Back to Classroom Detail"
 msgstr "Voltar para detalhes da turma"
 
-#: course/views.py:521 exam/views.py:3201 exam/views_old.py:2895
+#: course/views.py:521 exam/views.py:3221 exam/views_old.py:2895
 msgid "ClassroomUpdate: The teacher is not registered in a Discipline"
 msgstr "ClassroomUpdate: o professor não está registrado na disciplina"
 
@@ -1140,7 +1140,7 @@ msgstr "ClassroomCreate: o professor não está registrado na disciplina"
 msgid "ClassroomDelete: The teacher is not registered in a Discipline"
 msgstr "ClassroomDelete: o professor não está registrado na disciplina"
 
-#: exam/CVMCTest.py:2158 exam/CVMCTest_old.py:2157 exam/UtilsLatex.py:72
+#: exam/CVMCTest.py:2158 exam/CVMCTest_old.py:2157 exam/UtilsLatex.py:92
 msgid "Multiple Choice Questions"
 msgstr "Questões de Múltipla Escolha"
 
@@ -1152,27 +1152,27 @@ msgstr "Alternativa correta"
 msgid "Your answer"
 msgstr "Sua alternativa"
 
-#: exam/CVMCTest.py:2208 exam/CVMCTest_old.py:2207 exam/UtilsLatex.py:1764
-#: exam/UtilsLatex.py:1941
+#: exam/CVMCTest.py:2208 exam/CVMCTest_old.py:2207 exam/UtilsLatex.py:1793
+#: exam/UtilsLatex.py:1976
 msgid "Text Questions"
 msgstr "Questões Dissertativas"
 
-#: exam/UtilsLatex.py:1216 exam/UtilsLatex.py:1267 exam/forms.py:185
+#: exam/UtilsLatex.py:1236 exam/UtilsLatex.py:1287 exam/forms.py:185
 #: exam/models.py:197 exam/templates/exam/exam_update5.3.html:810
 msgid "Instructions"
 msgstr "Instruções"
 
-#: exam/UtilsLatex.py:1268
+#: exam/UtilsLatex.py:1288
 msgid "Prof."
 msgstr "Prof."
 
-#: exam/UtilsLatex.py:1269 exam/forms.py:169 exam/models.py:173
+#: exam/UtilsLatex.py:1289 exam/forms.py:169 exam/models.py:173
 #: exam/templates/exam/exam_update5.3.html:789
 #: exam/templates/exam/exam_update5.4.html:1152
 msgid "Term"
 msgstr "Período"
 
-#: exam/UtilsLatex.py:1270 exam/models.py:229 exam/models.py:241
+#: exam/UtilsLatex.py:1290 exam/models.py:229 exam/models.py:241
 #: exam/models.py:275 exam/templates/exam/exam_detail.html:15
 #: exam/templates/exam/exam_list.html:23 exam/templates/exam/exam_list.html:86
 #: exam/templates/exam/exam_list_who_created_user.html:27
@@ -1180,20 +1180,20 @@ msgstr "Período"
 msgid "Exam"
 msgstr "Exame"
 
-#: exam/UtilsLatex.py:1271 exam/templates/exam/exam_update5.3.html:782
+#: exam/UtilsLatex.py:1291 exam/templates/exam/exam_update5.3.html:782
 #: exam/templates/exam/exam_update5.4.html:1146
 msgid "Date"
 msgstr "Data"
 
-#: exam/UtilsLatex.py:1273 exam/UtilsLatex.py:1402
+#: exam/UtilsLatex.py:1293 exam/UtilsLatex.py:1422
 msgid "ID/RA"
 msgstr "ID/RA"
 
-#: exam/UtilsLatex.py:1321
+#: exam/UtilsLatex.py:1341
 msgid "Ass."
 msgstr "Ass."
 
-#: exam/UtilsLatex.py:1433
+#: exam/UtilsLatex.py:1453
 msgid ""
 "validateNumQuestions: The number of selected multiple-choice questions is "
 "inconsistent"
@@ -1201,20 +1201,20 @@ msgstr ""
 "validateNumQuestions: o número de questões de múltipla-escolha escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:1437
+#: exam/UtilsLatex.py:1457
 msgid "validateNumQuestions: the number of Text questions is inconsistent"
 msgstr ""
 "validateNumQuestions: o número de questões dissertativa escolhidas é "
 "incosistente"
 
-#: exam/UtilsLatex.py:1442
+#: exam/UtilsLatex.py:1462
 msgid ""
 "validateNumQuestions: You chose Both. Is it right? Number of QM questions >=3"
 msgstr ""
 "validateNumQuestions: você escolher Ambos. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:1447
+#: exam/UtilsLatex.py:1467
 msgid ""
 "validateNumQuestions: You chose Anwsers. Is it right? Number of QM questions "
 ">=3"
@@ -1222,7 +1222,7 @@ msgstr ""
 "validateNumQuestions: você escolhe Alternativas. Isto está correto? Número "
 "de questões QM >=3"
 
-#: exam/UtilsLatex.py:1452
+#: exam/UtilsLatex.py:1472
 msgid ""
 "validateNumQuestions: You chose Questions. Is it right? Number of QM "
 "questions >=3"
@@ -1230,31 +1230,31 @@ msgstr ""
 "validateNumQuestions: você escolher Questões. Isto está correto? Número de "
 "questões QM >=3"
 
-#: exam/UtilsLatex.py:1463
+#: exam/UtilsLatex.py:1483
 msgid "validateNumQuestions: number of QM difficulty questions var1"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var1"
 
-#: exam/UtilsLatex.py:1466
+#: exam/UtilsLatex.py:1486
 msgid "validateNumQuestions: number of QM difficulty questions var2"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var2"
 
-#: exam/UtilsLatex.py:1469
+#: exam/UtilsLatex.py:1489
 msgid "validateNumQuestions: number of QM difficulty questions var3"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var3"
 
-#: exam/UtilsLatex.py:1472
+#: exam/UtilsLatex.py:1492
 msgid "validateNumQuestions: number of QM difficulty questions var4"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var4"
 
-#: exam/UtilsLatex.py:1475
+#: exam/UtilsLatex.py:1495
 msgid "validateNumQuestions: number of QM difficulty questions var5"
 msgstr "validateNumQuestions: número de questões QM com dificuldade var5"
 
-#: exam/UtilsLatex.py:1513
+#: exam/UtilsLatex.py:1533
 msgid "ERROR: Each block must have at least 3 questions/answers"
 msgstr "ERRO: Cada bloco deve ter pelo menos 3 questões/respostas"
 
-#: exam/UtilsLatex.py:1676
+#: exam/UtilsLatex.py:1696
 msgid ""
 "drawQuestionsMCDifficulty: Topic of the chosen question does not belong to "
 "the discipline"
@@ -1262,22 +1262,22 @@ msgstr ""
 "drawQuestionsMCDifficulty: Tópico da questão escolhida não pertence à "
 "disciplina "
 
-#: exam/UtilsLatex.py:1712
+#: exam/UtilsLatex.py:1732
 msgid "drawQuestionsMCDifficulty: Error in parametric question"
 msgstr "drawQuestionsMCDifficulty: erro na questão paramétrica"
 
-#: exam/UtilsLatex.py:1720
+#: exam/UtilsLatex.py:1749
 msgid ""
 "drawQuestionsMCDifficulty: number of answers different: Exam; Question: "
 msgstr ""
 "drawQuestionsMCDifficulty: número de alternativas são diferentes: Exame; "
 "Questão"
 
-#: exam/UtilsLatex.py:1803
+#: exam/UtilsLatex.py:1832
 msgid "drawQuestionsTDifficulty: Error in compression textual questions"
 msgstr "drawQuestionsTDifficulty: erro na compressão da questão dissertativa"
 
-#: exam/UtilsLatex.py:1836
+#: exam/UtilsLatex.py:1865
 msgid ""
 "drawQuestionsTDifficultyVariations: Topic of the chosen question does not "
 "belong to the discipline"
@@ -1285,7 +1285,7 @@ msgstr ""
 "drawQuestionsTDifficultyVariations: tópico da questão escolhida não pertence "
 "à disciplina"
 
-#: exam/UtilsLatex.py:2531
+#: exam/UtilsLatex.py:2566
 msgid "ERROR - students with same name"
 msgstr "ERRO - estudante com o mesmo nome"
 
@@ -1828,8 +1828,8 @@ msgstr "Aumentar o contraste? Útil se o PDF estiver muito branco!"
 #: exam/templates/exam/exam_update5.3.html:145
 #: exam/templates/exam/exam_update5.4.html:306
 #: exam/templates/exam/exam_update5.4.html:523
-#: exam/templates/exam/exam_update5.4.html:688 exam/views.py:749
-#: exam/views.py:885 exam/views.py:1053
+#: exam/templates/exam/exam_update5.4.html:688 exam/views.py:769
+#: exam/views.py:905 exam/views.py:1073
 msgid "Upload-PDF"
 msgstr "Upload-PDF"
 
@@ -2335,19 +2335,35 @@ msgstr "Esta ação não pode ser desfeita."
 msgid "Yes, Delete"
 msgstr "Sim, Apagar"
 
-#: exam/views.py:312 exam/views_old.py:283
+#: exam/views.py:313 exam/views_old.py:283
 msgid "variationsExam: there are no variations in the answer-only style!"
 msgstr "variationsExam: não há variações no estilo: somente resposta!"
 
-#: exam/views.py:575 exam/views_old.py:546
+#: exam/views.py:398
+#, python-format
+msgid ""
+"Could not create variations: parametric question #%(id)s failed to generate "
+"-- its code has an error or took too long to run (possible infinite loop). "
+"No variations were changed. Fix the question here: %(url)s"
+msgstr ""
+"Não foi possível criar as variações: a questão paramétrica #%(id)s falhou "
+"ao gerar -- o código dela tem um erro ou demorou demais para rodar "
+"(possível loop infinito). Nenhuma variação foi alterada. Corrija a "
+"questão aqui: %(url)s"
+
+#: exam/views.py:403
+msgid "Error creating variations"
+msgstr "Erro ao criar variações"
+
+#: exam/views.py:595 exam/views_old.py:546
 msgid "Error sending email with variations."
 msgstr "Erro ao enviar e-mail com as variações."
 
-#: exam/views.py:596 exam/views_old.py:567
+#: exam/views.py:616 exam/views_old.py:567
 msgid "Exam variations were stored in the database."
 msgstr "As variações do exame foram armazenadas no banco de dados."
 
-#: exam/views.py:597 exam/views_old.py:568
+#: exam/views.py:617 exam/views_old.py:568
 msgid ""
 "Return and refresh the exam page. Notice the ID change next to the Create-"
 "Variations button."
@@ -2355,7 +2371,7 @@ msgstr ""
 "Retorne e atualize a página do exame. Observe a mudança de ID ao lado do "
 "botão Create-Variations."
 
-#: exam/views.py:598 exam/views_old.py:569
+#: exam/views.py:618 exam/views_old.py:569
 msgid ""
 "Whenever you click this button, new exam variations will be stored in the "
 "database!"
@@ -2363,11 +2379,11 @@ msgstr ""
 "Sempre que você clicar neste botão, novas variações do exame serão "
 "armazenadas no banco de dados!"
 
-#: exam/views.py:601 exam/views_old.py:572
+#: exam/views.py:621 exam/views_old.py:572
 msgid "Selected files have been sent to your email."
 msgstr "Os arquivos selecionados foram enviados para o seu e-mail."
 
-#: exam/views.py:630 exam/views_old.py:601
+#: exam/views.py:650 exam/views_old.py:601
 msgid ""
 "feedbackStudentsExamText: feedback to student is NO, Change to YES and click "
 "in Upload-PDF again!"
@@ -2375,7 +2391,7 @@ msgstr ""
 "feedbackStudentsExamText: retorno do estudante é NÃO, escolher SIM e clique "
 "em Upload-PDF novamente"
 
-#: exam/views.py:642 exam/views_old.py:613
+#: exam/views.py:662 exam/views_old.py:613
 msgid ""
 "feedbackStudentsExamText: choose a ZIP file with scanned exams, for example "
 "_e31_769.zip!"
@@ -2383,14 +2399,14 @@ msgstr ""
 "feedbackStudentsExamText: escolher um arquivo ZIP com os exames "
 "digitalizados, por exemplo: _e31_769.zip!"
 
-#: exam/views.py:690 exam/views_old.py:661
+#: exam/views.py:710 exam/views_old.py:661
 msgid ""
 "feedbackStudentsExamText: name of the pdf file does not follow a pattern "
 "ID_xxx.pdf"
 msgstr ""
 "feedbackStudentsExamText: nome do arquivo PDF não segue um padrão: ID_xxx.pdf"
 
-#: exam/views.py:720
+#: exam/views.py:740
 #, fuzzy
 #| msgid ""
 #| "feedbackStudentsExamText: no email was sent, are you in the correct Exam "
@@ -2402,7 +2418,7 @@ msgstr ""
 "feedbackStudentsExamText: nenhum email foi enviado, você está em Exame e "
 "Turma corretos?"
 
-#: exam/views.py:745
+#: exam/views.py:765
 #, python-format
 msgid ""
 "Upload received. Sending feedback e-mails to %(n)d file(s) in the background "
@@ -2413,7 +2429,7 @@ msgstr ""
 "segundo plano -- tempo estimado: cerca de %(mins)d minuto(s). Você receberá "
 "o relatório por e-mail quando terminar."
 
-#: exam/views.py:838 exam/views_old.py:744
+#: exam/views.py:858 exam/views_old.py:744
 msgid ""
 "feedbackStudentsExam: feedback to student is NO, Change to YES and click in "
 "Upload-PDF again!"
@@ -2421,12 +2437,12 @@ msgstr ""
 "feedbackStudentsExam: retorno ao estudante é NÃO, escolher SIM e clique em "
 "Upload-PDF novamente!"
 
-#: exam/views.py:867
+#: exam/views.py:887
 msgid "feedbackStudentsExam: no PDF files found in pdfStudentEmail/."
 msgstr ""
 "feedbackStudentsExam: nenhum arquivo PDF encontrado em pdfStudentEmail/."
 
-#: exam/views.py:881
+#: exam/views.py:901
 #, python-format
 msgid ""
 "Sending feedback e-mails to %(n)d file(s) in the background -- estimated "
@@ -2437,11 +2453,11 @@ msgstr ""
 "estimado: cerca de %(mins)d minuto(s). Você receberá o relatório por e-mail "
 "quando terminar."
 
-#: exam/views.py:994 exam/views_old.py:834
+#: exam/views.py:1014 exam/views_old.py:834
 msgid "correctStudentsExam: choose a PDF file with scanned exams!"
 msgstr "correctStudentsExam: escolher um arquivo PDF com exames digitalizados"
 
-#: exam/views.py:1048
+#: exam/views.py:1068
 #, python-format
 msgid ""
 "Correcting exam in the background for %(n)d page(s). Estimated time: about "
@@ -2452,15 +2468,15 @@ msgstr ""
 "cerca de %(mins)d minuto(s). Você receberá o ZIP resultante por e-mail "
 "quando terminar (e eventuais erros) -- não precisa esperar nesta página."
 
-#: exam/views.py:1122 exam/views_old.py:901
+#: exam/views.py:1142 exam/views_old.py:901
 msgid "correctStudentsExam: Error in read PDF file: "
 msgstr "correctStudentsExam: erro ao ler PDF"
 
-#: exam/views.py:1176 exam/views_old.py:956
+#: exam/views.py:1196 exam/views_old.py:956
 msgid "Error reading QRcode from PDF for exam ID: "
 msgstr "Erro ao ler QRcode do PDF para o ID do exame: "
 
-#: exam/views.py:2331
+#: exam/views.py:2351
 #, python-format
 msgid ""
 "PDF generation started for %(n)d student(s). Estimated time: about %(mins)d "
@@ -2471,67 +2487,67 @@ msgstr ""
 "%(mins)d minuto(s). Você receberá um e-mail com o PDF/ZIP (e eventuais "
 "erros) quando terminar -- não precisa esperar nesta página."
 
-#: exam/views.py:2335
+#: exam/views.py:2355
 msgid "PDF Generation"
 msgstr "Geração de PDF"
 
-#: exam/views.py:2420 exam/views_old.py:2143
+#: exam/views.py:2440 exam/views_old.py:2143
 msgid "Create variations first"
 msgstr "Criar primeiro as variações"
 
-#: exam/views.py:2435 exam/views_old.py:2158
+#: exam/views.py:2455 exam/views_old.py:2158
 msgid "ERROR in generate_page, number_of_questions_text!!!!  "
 msgstr "ERRO em generate_page, number_of_questions_text!!!!  "
 
-#: exam/views.py:2439 exam/views_old.py:2162
+#: exam/views.py:2459 exam/views_old.py:2162
 msgid "ERROR in generate_page, number_of_QM!!!! - no questions: "
 msgstr "ERRO em generate_page, number_of_QM!!! - sem questões:"
 
-#: exam/views.py:2472 exam/views_old.py:2192
+#: exam/views.py:2492 exam/views_old.py:2192
 msgid "ERROR in generate_page, class with zero students: "
 msgstr "ERRO: classe com zero estudantes: "
 
-#: exam/views.py:2517 exam/views_old.py:2237
+#: exam/views.py:2537 exam/views_old.py:2237
 msgid "ERROR in Utils.distro_table, student: "
 msgstr "ERRO em Utils.distro_table, estudante: "
 
-#: exam/views.py:2581 exam/views_old.py:2292
+#: exam/views.py:2601 exam/views_old.py:2292
 msgid "ERROR in distro_table!!!! - student name:"
 msgstr "ERRO em distro_table!!!! - nome do estudante:"
 
-#: exam/views.py:2622 exam/views_old.py:2333
+#: exam/views.py:2642 exam/views_old.py:2333
 msgid "ERROR in validateNumQuestions!!!!"
 msgstr "ERRO em validateNumQuestions"
 
-#: exam/views.py:2696 exam/views_old.py:2401
+#: exam/views.py:2716 exam/views_old.py:2401
 msgid "ERROR generating PDF for student"
 msgstr "ERRO ao gerar PDF para estudante"
 
-#: exam/views.py:2719 exam/views_old.py:2419
+#: exam/views.py:2739 exam/views_old.py:2419
 msgid "ERROR generating PDF for class"
 msgstr "ERRO ao gerar PDF para a turma"
 
-#: exam/views.py:2894 exam/views_old.py:2588
+#: exam/views.py:2914 exam/views_old.py:2588
 msgid "ERROR: PDF file not found."
 msgstr "ERRO: Arquivo PDF não encontrado."
 
-#: exam/views.py:2919 exam/views_old.py:2613
+#: exam/views.py:2939 exam/views_old.py:2613
 msgid "ERROR: Zip file not created."
 msgstr "ERRO: Arquivo Zip não criado."
 
-#: exam/views.py:2960 exam/views_old.py:2654
+#: exam/views.py:2980 exam/views_old.py:2654
 msgid "ERROR - watch out for special characters in exam name"
 msgstr "ERRO - cuidado com os caracteres especiais no nome do exame"
 
-#: exam/views.py:3137 exam/views_old.py:2831
+#: exam/views.py:3157 exam/views_old.py:2831
 msgid "ExamListView: The teacher is not registered in a Discipline"
 msgstr "ExamListView: o professor não está registrado na disciplina"
 
-#: exam/views.py:3152 exam/views_old.py:2846
+#: exam/views.py:3172 exam/views_old.py:2846
 msgid "ExamUpdate: The teacher is not registered in a Discipline"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: exam/views.py:3166 exam/views_old.py:2860
+#: exam/views.py:3186 exam/views_old.py:2860
 msgid "ExamDetailView: The teacher is not registered in a Discipline"
 msgstr "ExamDetailView: o professor não está registrado na disciplina"
 
@@ -4061,7 +4077,7 @@ msgstr "Apagar Questão"
 msgid "Are you sure you want to delete the question"
 msgstr "Tem certeza que deseja apagar esta questão"
 
-#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1258
+#: topic/templates/question/question_confirm_delete.html:40 topic/views.py:1272
 msgid ""
 "ERROR: You did not create this question or you are not the course "
 "coordinator. Please get in touch with them."
@@ -4423,19 +4439,18 @@ msgstr "Erro ao mover arquivo para o destino final: {e}"
 msgid "UtilsMC.questionParametric: forbidden words found."
 msgstr "UtilsMC.questionParametric: palavras proibidas encontradas."
 
-#: topic/views.py:146
+#: topic/views.py:147 topic/views.py:949
 #, python-format
 msgid ""
 "This parametric question (#%(id)s) could not be generated automatically -- "
-"its code has an error or took too long to run (possible infinite loop). Ask "
-"whoever created the question to review the code in \"[[def: ...]]\"."
+"its code has an error or took too long to run (possible infinite loop). Fix "
+"the question here: %(url)s"
 msgstr ""
 "Esta questão paramétrica (#%(id)s) não pôde ser gerada automaticamente -- "
 "o código dela tem um erro ou demorou demais para rodar (possível loop "
-"infinito). Peça para quem criou a questão revisar o código em "
-"\"[[def: ...]]\"."
+"infinito). Corrija a questão aqui: %(url)s"
 
-#: topic/views.py:151
+#: topic/views.py:151 topic/views.py:953
 msgid "Error generating question"
 msgstr "Erro ao gerar questão"
 
@@ -4520,19 +4535,19 @@ msgstr ""
 "exec, cmd, open, import os, remove, mkdir, sys, gnureadline, subprocess, "
 "getopt, shlex, wget, commands, system, exec, eval"
 
-#: topic/views.py:942
+#: topic/views.py:956
 msgid "ERROR IN THE PARAMETRIC PART!!!"
 msgstr "ERRO NA PARTE PARAMÉTRICA"
 
-#: topic/views.py:985
+#: topic/views.py:999
 msgid "The professor does not have permission!"
 msgstr "O professor não tem permissão"
 
-#: topic/views.py:1328
+#: topic/views.py:1342
 msgid "ERROR: The teacher is not registered in the Discipline (of the topic)"
 msgstr "ExamUpdate: o professor não está registrado na disciplina"
 
-#: topic/views.py:1382
+#: topic/views.py:1396
 msgid "QuestionCreate: the teacher is not registered in discipline"
 msgstr "QuestionCreate: o professor não está registrado na disciplina"
 

@@ -59,6 +59,26 @@ from exam.models import StudentExam
 from exam.models import StudentExamQuestion
 from topic.utils_pdf import PDFGenerator
 
+
+class ParametricQuestionError(Exception):
+    """
+    Levantada quando uma questão paramétrica falha ao gerar (erro no código
+    "[[def: ...]]" ou timeout por loop infinito -- ver
+    topic.UtilsMCTest4.UtilsMC.questionParametric) durante a criação de
+    variações do exame.
+
+    Antes, esse caso era só logado (messages.error) e a questão ficava de
+    fora silenciosamente, gerando um exame incompleto sem o professor
+    perceber o motivo. Agora propaga como exceção para abortar toda a
+    criação de variações (ver variationsExam, que reverte via
+    transaction.atomic) e apontar exatamente qual questão precisa ser
+    corrigida.
+    """
+    def __init__(self, question_id):
+        self.question_id = question_id
+        super().__init__(f"Parametric question #{question_id} failed to generate (error or timeout)")
+
+
 class Utils(object):
 
     @staticmethod
@@ -1712,6 +1732,15 @@ _inst1_
                         messages.error(request, _('drawQuestionsMCDifficulty: Error in parametric question'))
                         return -1
 
+                    # questionParametric devolve uma string começando com "ERROR"
+                    # (código com erro ou timeout por loop infinito) em vez de
+                    # levantar uma exceção -- sem esta checagem isso caía no
+                    # "number of answers different" genérico abaixo (NUM_ans=0),
+                    # a questão era simplesmente pulada, e o exame ficava
+                    # incompleto sem o professor perceber o motivo real.
+                    if isinstance(quest, str) and quest.startswith('ERROR'):
+                        raise ParametricQuestionError(q.id)
+
                     NUM_ans = len(ans)
 
                 # erro se nao tiver o mesmo numero de alternativas
@@ -1858,6 +1887,12 @@ _inst1_
                         [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, q.answers(), exam)
                     else:  # se não for QM entao nao pegar as alternativas
                         [quest, ans, feedback_ans] = UtilsMC.questionParametric(q.question_text, [], exam)
+
+                    # ver comentário equivalente em drawQuestionsMCDifficulty --
+                    # sem esta checagem, o texto de erro cru (com traceback e
+                    # código Python) acabava virando o enunciado da questão.
+                    if isinstance(quest, str) and quest.startswith('ERROR'):
+                        raise ParametricQuestionError(q.id)
 
                 bd_qT.append(
                     [count, q.id, q.topic.topic_text, q.question_type, diff, q.question_short_description, quest])

@@ -142,12 +142,12 @@ def see_question_PDF(request, pk):
                 # direto para o PDF gerado, em vez de mostrar um aviso claro.
                 if isinstance(quest, str) and quest.startswith('ERROR'):
                     print(f"see_question_PDF: erro ao gerar questão paramétrica {q.id}: {quest}")
+                    question_url = request.build_absolute_uri(f'/topic/question/{q.id}/update/')
                     messages.error(request, _(
                         'This parametric question (#%(id)s) could not be generated '
                         'automatically -- its code has an error or took too long to '
-                        'run (possible infinite loop). Ask whoever created the '
-                        'question to review the code in "[[def: ...]]".'
-                    ) % {'id': q.id})
+                        'run (possible infinite loop). Fix the question here: %(url)s'
+                    ) % {'id': q.id, 'url': question_url})
                     return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
             except Exception as e:
                 messages.error(request, f"Error generating parametric question: {e}")
@@ -937,6 +937,20 @@ def see_topic_PDF_aux(request, new_order, questions_id, allQuestionsStr, countQu
                                      'subprocess, getopt, shlex, wget, commands, system, exec, eval'))
                     messages.error(request, 'Question: %d' % q.id)
                     return render(request, 'exam/exam_errors.html', {})
+
+                # questionParametric devolve uma string começando com "ERROR"
+                # (código com erro ou timeout por loop infinito) em vez de
+                # levantar uma exceção -- sem esta checagem o texto de erro
+                # cru seguia direto para o PDF (ver mesma correção em
+                # see_question_PDF).
+                if isinstance(quest, str) and quest.startswith('ERROR'):
+                    question_url = request.build_absolute_uri(f'/topic/question/{q.id}/update/')
+                    messages.error(request, _(
+                        'This parametric question (#%(id)s) could not be generated '
+                        'automatically -- its code has an error or took too long to '
+                        'run (possible infinite loop). Fix the question here: %(url)s'
+                    ) % {'id': q.id, 'url': question_url})
+                    return render(request, 'exam/exam_errors.html', {'title': _('Error generating question')})
             except:
                 str1 += "ERRO NA PARTE PARAMÉTRICA!!!\\\\\n"
                 messages.error(request, _('ERROR IN THE PARAMETRIC PART!!!'))

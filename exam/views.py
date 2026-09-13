@@ -48,6 +48,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages import get_messages
 from django.core.files.storage import FileSystemStorage
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
@@ -59,7 +60,7 @@ from django.urls import reverse_lazy
 from pdf2image import convert_from_path
 
 from exam.CVMCTest import cvMCTest
-from exam.UtilsLatex import Utils
+from exam.UtilsLatex import Utils, ParametricQuestionError
 from mctest.settings import webMCTest_FROM
 from mctest.settings import webMCTest_PASS
 from mctest.settings import webMCTest_SERVER
@@ -312,75 +313,94 @@ def variationsExam(request, pk):
                        _('variationsExam: there are no variations in the answer-only style!'))
         return render(request, 'exam/exam_errors.html', {})
 
-    # Limpa variações antigas
-    for v in exam.variationsExams2.all():
-        v.delete()
-
     st = Utils.validateProf(exam, request.user)
     if st != None:
         return HttpResponse(st)
 
     # Geração das Variações no Banco de Dados
+    #
+    # Tudo dentro de uma transaction.atomic: se uma questão paramétrica falhar
+    # (ParametricQuestionError, levantada em drawQuestionsMCDifficulty/
+    # drawQuestionsTDifficultyVariations por erro de código ou timeout de
+    # loop infinito), a transação inteira é revertida -- inclusive a limpeza
+    # das variações antigas logo abaixo -- em vez de deixar o exame sem
+    # nenhuma variação (ou com uma questão faltando, sem o professor saber
+    # por quê).
     print("variationsExam-01-" + str(datetime.datetime.now()))
-    for v in range(int(exam.exam_variations)):  # for each variant
-        formatVariations = {}
-        formatVariations['variations'] = []
-        print("variationsExam-02-" + str(datetime.datetime.now()) + ' var: ' + str(v))
+    try:
+        with transaction.atomic():
+            # Limpa variações antigas
+            for v in exam.variationsExams2.all():
+                v.delete()
 
-        db_questions = Utils.drawQuestionsVariations(request, exam, request.user,
-                                                     Utils.getTopics(exam))
+            for v in range(int(exam.exam_variations)):  # for each variant
+                formatVariations = {}
+                formatVariations['variations'] = []
+                print("variationsExam-02-" + str(datetime.datetime.now()) + ' var: ' + str(v))
 
-        variant = {}
-        variant['variant'] = str(v + 1)  ##### MUDAR para iniciar com a variação 0 !!!!
-        variant['questions'] = []
+                db_questions = Utils.drawQuestionsVariations(request, exam, request.user,
+                                                             Utils.getTopics(exam))
 
-        # Processa Questões QM
-        for q in db_questions[0]:  # for each question QM
-            question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
-            question['answers'] = []
-            for key, a in enumerate(q[7]):
-                answer = {}
-                answer['answer'] = key
-                answer['sort'] = a[0]
-                answer['text'] = a[1]
-                answer['feedback'] = a[2]
-                question['answers'].append(answer)
-            variant['questions'].append(question)
+                variant = {}
+                variant['variant'] = str(v + 1)  ##### MUDAR para iniciar com a variação 0 !!!!
+                variant['questions'] = []
 
-        # Processa Questões QT
-        if len(db_questions) >= 2:  # QM and QT
-            for qi in range(1, len(db_questions)):  # for each question QT
-                q = db_questions[qi][0]
-                if q != None and len(q) == 8:
+                # Processa Questões QM
+                for q in db_questions[0]:  # for each question QM
                     question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
-                    variant['questions'].append(question)
-                    st = question['text']
-
-                    # Extração de resposta correta textual
-                    a, b = st.find('%%{'), st.find('}%%')
-                    if a < b:
-                        ans = st[a + len('%%{'):b]
-                        answer = {'answer': 0, 'sort': 0, 'text': ans.strip(), 'feedback': '\n'}
+                    question['answers'] = []
+                    for key, a in enumerate(q[7]):
+                        answer = {}
+                        answer['answer'] = key
+                        answer['sort'] = a[0]
+                        answer['text'] = a[1]
+                        answer['feedback'] = a[2]
                         question['answers'].append(answer)
+                    variant['questions'].append(question)
 
-                    # Extração de casos de teste VPL
-                    a, b = st.find('begin{comment}'), st.find('end{comment}')
-                    if a < b:
-                        st = st[a + len('begin{comment}'):b]
-                        st = st[st.find("{"):len(st) - 2]
-                        st = st.replace('\\\\', '\\')
-                        try:
-                            case = json.loads(st)
-                            case['input'] = [[c] for c in case['input']]
-                            case['output'] = [[c] for c in case['output']]
-                            case['key'] = [str(question['key'])]
-                            question['testcases'] = case
-                        except Exception as e:
-                            print(f"Erro parsing JSON testcases: {e}")
+                # Processa Questões QT
+                if len(db_questions) >= 2:  # QM and QT
+                    for qi in range(1, len(db_questions)):  # for each question QT
+                        q = db_questions[qi][0]
+                        if q != None and len(q) == 8:
+                            question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
+                            variant['questions'].append(question)
+                            st = question['text']
 
-        formatVariations['variations'].append(variant)
-        v = VariationExam.objects.create(variation=formatVariations)
-        exam.variationsExams2.add(v)
+                            # Extração de resposta correta textual
+                            a, b = st.find('%%{'), st.find('}%%')
+                            if a < b:
+                                ans = st[a + len('%%{'):b]
+                                answer = {'answer': 0, 'sort': 0, 'text': ans.strip(), 'feedback': '\n'}
+                                question['answers'].append(answer)
+
+                            # Extração de casos de teste VPL
+                            a, b = st.find('begin{comment}'), st.find('end{comment}')
+                            if a < b:
+                                st = st[a + len('begin{comment}'):b]
+                                st = st[st.find("{"):len(st) - 2]
+                                st = st.replace('\\\\', '\\')
+                                try:
+                                    case = json.loads(st)
+                                    case['input'] = [[c] for c in case['input']]
+                                    case['output'] = [[c] for c in case['output']]
+                                    case['key'] = [str(question['key'])]
+                                    question['testcases'] = case
+                                except Exception as e:
+                                    print(f"Erro parsing JSON testcases: {e}")
+
+                formatVariations['variations'].append(variant)
+                v = VariationExam.objects.create(variation=formatVariations)
+                exam.variationsExams2.add(v)
+    except ParametricQuestionError as e:
+        question_url = request.build_absolute_uri(f'/topic/question/{e.question_id}/update/')
+        messages.error(request, _(
+            'Could not create variations: parametric question #%(id)s failed to '
+            'generate -- its code has an error or took too long to run (possible '
+            'infinite loop). No variations were changed. Fix the question here: '
+            '%(url)s'
+        ) % {'id': e.question_id, 'url': question_url})
+        return render(request, 'exam/exam_errors.html', {'title': _('Error creating variations')})
 
     # Processamento do POST (Envio de E-mail com Arquivos)
     choices_list = []
