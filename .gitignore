@@ -14,3 +14,4 @@ LabMoodle
 mctest/local_settings.py
 _staticfiles_local_unused/
 runDjango.local.sh
+*.log
