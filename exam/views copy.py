@@ -1,0 +1,3240 @@
+"""
+=====================================================================
+Copyright (C) 2018-2026 Francisco de Assis Zampirolli
+from Federal University of ABC and individual contributors.
+All rights reserved.
+
+This file is part of MCTest 5.4.
+
+Languages: Python, Django and many libraries described at
+github.com/fzampirolli/mctest
+
+You should cite some references included in vision.ufabc.edu.br
+in any publication about it.
+
+MCTest is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License
+(gnu.org/licenses/agpl-3.0.txt) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.
+
+MCTest is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+=====================================================================
+"""
+# from rest_framework import viewsets#serializers
+import csv
+import datetime
+import glob
+import json
+import os
+import re
+import threading
+import traceback
+import uuid
+import pandas as pd
+
+import PyPDF2
+import cv2  # pip install opencv-python
+import img2pdf
+import numpy as np
+import pandas
+from django.contrib import messages
+# Create your views here.
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages import get_messages
+from django.core.files.storage import FileSystemStorage
+from django.db import transaction
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.static import serve
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse_lazy
+from pdf2image import convert_from_path
+
+from exam.CVMCTest import cvMCTest
+from exam.UtilsLatex import Utils, ParametricQuestionError
+from mctest.settings import webMCTest_FROM
+from mctest.settings import webMCTest_PASS
+from mctest.settings import webMCTest_SERVER
+from .forms import UpdateExamForm, ExamCreateForm
+from .models import Exam, StudentExam, StudentExamQuestion
+from .models import VariationExam
+from .models import StudentExam
+from topic.models import Question
+from student.models import Student
+
+from django.core.mail import EmailMessage
+
+import requests
+
+from topic.utils_pdf import PDFGenerator  # <--- ADICIONE ISSO
+from mctest.settings import BASE_DIR      # Verifique se já tem
+from django.conf import settings
+
+def _acquire_background_job_lock():
+    """
+    Cria um arquivo de lock em tmp/ enquanto um job pesado (Criar-PDF ou
+    Upload-PDF) roda numa thread de background. Em produção, `_killDjango.sh`
+    mata via cron processos python3 com memória alta quando nenhum usuário
+    tem sessão válida no momento da checagem -- ele foi atualizado para
+    também checar a presença de qualquer arquivo `tmp/.bg_job_*.lock` antes
+    de matar, para nunca derrubar o processo com uma dessas threads em
+    andamento (o que perderia o trabalho silenciosamente, sem avisar o
+    professor). Sempre remover o lock em um `finally` (ver
+    `_release_background_job_lock`).
+    """
+    tmp_dir = os.path.join(str(settings.BASE_DIR), 'tmp')
+    os.makedirs(tmp_dir, exist_ok=True)
+    lock_path = os.path.join(tmp_dir, f'.bg_job_{os.getpid()}_{uuid.uuid4().hex}.lock')
+    open(lock_path, 'w').close()
+    return lock_path
+
+
+def _release_background_job_lock(lock_path):
+    try:
+        os.remove(lock_path)
+    except OSError:
+        pass
+
+
+def get_email_report_content(user_name, exam_name, date_str):
+    """
+    Gera assunto e corpo do email de RELATÓRIO DE ENVIOS para o professor.
+    """
+    lang = getattr(settings, 'LANGUAGE_CODE', 'pt-br').lower()
+
+    if lang.startswith('en'):
+        subject = f"[Report] Feedback Delivery Log - {exam_name} - {date_str}"
+
+        body = f"Dear {user_name},\n\n"
+        body += f"The process of sending feedback emails to students for the exam '{exam_name}' has been completed.\n\n"
+        body += "Please find attached the delivery report (CSV file).\n"
+        body += "The CSV contains the following columns:\n"
+        body += " - Sent File (filename)\n"
+        body += " - Student ID\n"
+        body += " - Email\n"
+        body += " - Student Name\n"
+        body += " - Date and Time\n\n"
+        body += "Best regards,\nMCTest System\n\n"
+    else:
+        subject = f"[Relatório] Log de Envio de Feedbacks - {exam_name} - {date_str}"
+
+        body = f"Prezado(a) {user_name},\n\n"
+        body += f"O processo de envio de e-mails de feedback para os alunos do exame '{exam_name}' foi concluído.\n\n"
+        body += "Segue em anexo o relatório de envios (arquivo CSV).\n"
+        body += "O arquivo contém as seguintes colunas:\n"
+        body += " - Arquivo enviado\n"
+        body += " - ID do Aluno\n"
+        body += " - Email\n"
+        body += " - Nome do Aluno\n"
+        body += " - Data e Hora\n\n"
+        body += "Atenciosamente,\nEquipe MCTest\n\n"
+
+    return subject, body
+
+def get_professor_final_email_content(user_name, exam_name, date_str, attachment_types, context='PDF_GENERATION'):
+    """
+    Gera o corpo do e-mail final para o professor.
+    """
+    lang = getattr(settings, 'LANGUAGE_CODE', 'pt-br').lower()
+    is_en = lang.startswith('en')
+
+    # --- TEXTOS DINÂMICOS BASEADOS NO CONTEXTO ---
+    if context == 'VARIATIONS_CREATION':
+        if is_en:
+            subject = f"MCTest: Variations Stored - {exam_name}"
+            greeting = (f"Dear {user_name},\n\n"
+                        f"New variations for exam '{exam_name}' have been successfully stored in the database ({date_str}).\n"
+                        "You can now proceed to 'Create-PDF' to generate the printable files.\n")
+        else:
+            subject = f"MCTest: Variações Salvas - {exam_name}"
+            greeting = (f"Prezado(a) {user_name},\n\n"
+                        f"Novas variações para o exame '{exam_name}' foram salvas com sucesso no banco de dados ({date_str}).\n"
+                        "Você pode agora prosseguir para 'Gerar-PDF' para criar os arquivos de impressão.\n")
+    else: # Default: PDF_GENERATION
+        if is_en:
+            subject = f"MCTest: Exam Generation Completed - {exam_name}"
+            greeting = (f"Dear {user_name},\n\n"
+                        f"The generation process (PDFs) for exam '{exam_name}' is complete ({date_str}).\n")
+        else:
+            subject = f"MCTest: Geração de Exame Concluída - {exam_name}"
+            greeting = (f"Prezado(a) {user_name},\n\n"
+                        f"O processo de geração (PDFs) do exame '{exam_name}' foi concluído ({date_str}).\n")
+
+    # --- TEXTOS COMUNS ---
+    if is_en:
+        intro_files = "The following configuration/support files are attached:\n"
+        footer = "\nBest regards,\nMCTest System\n\n"
+    else:
+        intro_files = "Os seguintes arquivos de configuração/apoio estão em anexo:\n"
+        footer = "\nAtenciosamente,\nEquipe MCTest\n\n"
+
+    # Dicionário de descrições
+    descriptions = {
+        'JSON': {
+            'en': (
+                "\n- '*linker.json': Configuration file for Moodle VPL (Test Cases).\n",
+                "See reference: https://dx.doi.org/10.5753/cbie.sbie.2020.1573"
+            ),
+            'pt': (
+                "\n- '*linker.json': Arquivo de configuração para o Moodle VPL (Casos de Teste).\n"
+                "Veja referência em: https://dx.doi.org/10.5753/cbie.sbie.2020.1573"
+            ),
+        },
+        'TEMPLATE': {
+            'en': (
+                "\n- '*templates.csv': Answer key for multiple choice questions.\n\n"
+                "  IMPORTANT NOTE: It is **ESSENTIAL** to use a printer with good-quality ink to ensure proper "
+                "image processing of the answer sheet during scanning. For example, the four black disks "
+                "external to the answer sheet must be truly black and intact so that the system "
+                "can correctly detect and process them.\n\n"
+                "  FUNDAMENTAL NOTE: Automatic grading will only work if the variation number shown below the "
+                "\"Create-Variations\" button is **exactly the same** as the red number displayed below the "
+                "student’s signature on the generated PDF. Therefore, it is **NOT ALLOWED** to use an old PDF "
+                "with a variation number different from the one currently displayed below this button.\n\n"
+                "See reference: https://doi.org/10.5753/cbie.sbie.2020.51"
+            ),
+            'pt': (
+                "\n- '*templates.csv': Gabarito das questões de múltipla escolha.\n\n"
+                "  NOTA IMPORTANTE: É **ESSENCIAL** utilizar uma impressora com tinta de boa qualidade para garantir "
+                "o correto processamento das imagens do quadro de resposta na digitalização. Por exemplo, os quatro "
+                "discos pretos externos ao quadro de resposta precisam estar realmente pretos e intactos para que o "
+                "sistema consiga detectá-los e processá-los corretamente.\n\n"
+                "  NOTA FUNDAMENTAL: A correção automática só funcionará se o número da variação exibido abaixo do "
+                "botão \"Criar-Variações\" for **exatamente igual** ao número em vermelho mostrado abaixo da "
+                "assinatura do aluno no PDF gerado. Portanto, é **PROIBIDO** utilizar um PDF antigo com um número "
+                "de variação diferente do que está atualmente exibido abaixo deste botão.\n\n"
+                "Veja referência em: https://doi.org/10.5753/cbie.sbie.2020.51"
+            ),
+        },
+        'VARIATIONS': {
+            'en': "\n- Variations Tables (.csv): Mapping of variations and student assignments.",
+            'pt': "\n- Tabelas de Variações (.csv): Mapeamento das variações e atribuição aos alunos."
+        },
+        'ADAPTIVE': {
+            'en': "\n- Adaptive Test Data: Statistics and parameters for MLE/CAT/WPC.",
+            'pt': "\n- Dados de Teste Adaptativo: Estatísticas e parâmetros para MLE/CAT/WPC."
+        },
+        # --- NOVAS CHAVES ADICIONADAS ---
+        'AIKEN': {
+            'en': (
+                "\n- '*variations_DB_aiken.txt': Database of questions in Aiken format (Moodle).",
+                "See references: https://dx.doi.org/10.1109/FIE49875.2021.9637055"
+            ),
+            'pt': (
+                "\n- '*variations_DB_aiken.txt': Banco de questões em formato Aiken (para importação no Moodle)."
+                "Veja referência em: https://dx.doi.org/10.1109/FIE49875.2021.9637055"
+            ),
+        },
+        'XML': {
+            'en': (
+                "\n- '*variations_DB.xml': Database of questions in Moodle XML format.",
+                "See references: https://dx.doi.org/10.1109/FIE49875.2021.9637055"
+            ),
+            'pt': (
+                "\n- '*variations_DB.xml': Banco de questões em formato Moodle XML."
+                "Veja referência em: https://dx.doi.org/10.1109/FIE49875.2021.9637055"
+            ),
+        },
+        'LATEX': {
+            'en': (
+                "\n- '*variations.pdf': Database of variations in PDF format.\n"
+            ),
+            'pt': (
+                "\n- '*variations.pdf': Banco de variações em formato PDF.\n"
+            )
+        },
+        # --------------------------------
+        'PDF': {
+            'en': "\n- Exam Files (PDF/ZIP): Documents of exam.",
+            'pt': "\n- Arquivos do Exame (PDF/ZIP): Documentos da prova."
+        },
+        'INFO_ANSW': {
+            'en': (
+                "\n[IMPORTANT: CORRECTION PROCESS - ANSWER SHEET ONLY]\n"
+                "Since this exam contains only the Answer Sheet, the Answer Key (Gabarito) "
+                "is defined by the **FIRST PAGE** of the scanned PDF you upload later (Upload-PDF). "
+                "Please fill out one answer sheet correctly and scan it as the first page of the batch.\n\n"
+                "Note: This process of using only the answer sheet (without printed questions) is used on a "
+                "large scale at the UFABC Preparatory School (Selection Processes and Mock Exams).\n"
+                "See reference: https://ieeexplore.ieee.org/document/9725157"
+            ),
+            'pt': (
+                "\n[IMPORTANTE: PROCESSO DE CORREÇÃO - APENAS QUADRO DE RESPOSTAS]\n"
+                "Como este exame contém apenas o Quadro de Respostas, o Gabarito é definido pela "
+                "**PRIMEIRA PÁGINA** do PDF digitalizado que você enviará posteriormente (Upload-PDF). "
+                "Por favor, preencha uma folha de respostas corretamente e digitalize-a como a primeira página do pacote.\n\n"
+                "Nota: Este processo de uso apenas do quadro de respostas (sem as questões impressas) é utilizado "
+                "em larga escala na Escola Preparatória da UFABC (Processos Seletivos e Simulados).\n"
+                "Veja referência em: https://ieeexplore.ieee.org/document/9725157"
+            )
+        }
+    }
+
+    # Monta o corpo
+    body = greeting + "\n" + intro_files
+
+    for type_key in attachment_types:
+        if type_key in descriptions:
+            desc = descriptions[type_key]['en' if is_en else 'pt']
+            body += f"{desc}\n"
+
+    body += footer
+    return subject, body
+
+@login_required
+def variationsExam(request, pk):
+    # Verificação de Permissões
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    # Configuração de Data/Hora
+    data_hora = datetime.datetime.now()
+    data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+    print("variationsExam-00-" + str(datetime.datetime.now()))
+
+    exam = get_object_or_404(Exam, pk=pk)
+
+    # Validações Iniciais
+    if exam.exam_print == 'answ':
+        messages.error(request,
+                       _('variationsExam: there are no variations in the answer-only style!'))
+        return render(request, 'exam/exam_errors.html', {})
+
+    st = Utils.validateProf(exam, request.user)
+    if st != None:
+        return HttpResponse(st)
+
+    # Geração das Variações no Banco de Dados
+    #
+    # Tudo dentro de uma transaction.atomic: se uma questão paramétrica falhar
+    # (ParametricQuestionError, levantada em drawQuestionsMCDifficulty/
+    # drawQuestionsTDifficultyVariations por erro de código ou timeout de
+    # loop infinito), a transação inteira é revertida -- inclusive a limpeza
+    # das variações antigas logo abaixo -- em vez de deixar o exame sem
+    # nenhuma variação (ou com uma questão faltando, sem o professor saber
+    # por quê).
+    print("variationsExam-01-" + str(datetime.datetime.now()))
+    try:
+        with transaction.atomic():
+            # Limpa variações antigas
+            for v in exam.variationsExams2.all():
+                v.delete()
+
+            for v in range(int(exam.exam_variations)):  # for each variant
+                formatVariations = {}
+                formatVariations['variations'] = []
+                print("variationsExam-02-" + str(datetime.datetime.now()) + ' var: ' + str(v))
+
+                db_questions = Utils.drawQuestionsVariations(request, exam, request.user,
+                                                             Utils.getTopics(exam))
+
+                variant = {}
+                variant['variant'] = str(v + 1)  ##### MUDAR para iniciar com a variação 0 !!!!
+                variant['questions'] = []
+
+                # Processa Questões QM
+                for q in db_questions[0]:  # for each question QM
+                    question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
+                    question['answers'] = []
+                    for key, a in enumerate(q[7]):
+                        answer = {}
+                        answer['answer'] = key
+                        answer['sort'] = a[0]
+                        answer['text'] = a[1]
+                        answer['feedback'] = a[2]
+                        question['answers'].append(answer)
+                    variant['questions'].append(question)
+
+                # Processa Questões QT
+                if len(db_questions) >= 2:  # QM and QT
+                    for qi in range(1, len(db_questions)):  # for each question QT
+                        q = db_questions[qi][0]
+                        if q != None and len(q) == 8:
+                            question = dict(zip(['number', 'key', 'topic', 'type', 'weight', 'short', 'text', 'answers'], q))
+                            variant['questions'].append(question)
+                            st = question['text']
+
+                            # Extração de resposta correta textual
+                            a, b = st.find('%%{'), st.find('}%%')
+                            if a < b:
+                                ans = st[a + len('%%{'):b]
+                                answer = {'answer': 0, 'sort': 0, 'text': ans.strip(), 'feedback': '\n'}
+                                question['answers'].append(answer)
+
+                            # Extração de casos de teste VPL
+                            a, b = st.find('begin{comment}'), st.find('end{comment}')
+                            if a < b:
+                                st = st[a + len('begin{comment}'):b]
+                                st = st[st.find("{"):len(st) - 2]
+                                st = st.replace('\\\\', '\\')
+                                try:
+                                    case = json.loads(st)
+                                    case['input'] = [[c] for c in case['input']]
+                                    case['output'] = [[c] for c in case['output']]
+                                    case['key'] = [str(question['key'])]
+                                    question['testcases'] = case
+                                except Exception as e:
+                                    print(f"Erro parsing JSON testcases: {e}")
+
+                formatVariations['variations'].append(variant)
+                v = VariationExam.objects.create(variation=formatVariations)
+                exam.variationsExams2.add(v)
+    except ParametricQuestionError as e:
+        question_url = request.build_absolute_uri(f'/topic/question/{e.question_id}/update/')
+        messages.error(request, _(
+            'Could not create variations: parametric question #%(id)s failed to '
+            'generate -- its code has an error or took too long to run (possible '
+            'infinite loop). No variations were changed. Fix the question here: '
+            '<a href="%(url)s" target="_blank" rel="noopener noreferrer">%(url)s</a>'
+        ) % {'id': e.question_id, 'url': question_url})
+        return render(request, 'exam/exam_errors.html', {'title': _('Error creating variations')})
+
+    # Processamento do POST (Envio de E-mail com Arquivos)
+    choices_list = []
+    if request.method == 'POST':
+        font_size = request.POST.get('font_size', 11)
+
+        # Captura opções selecionadas
+        choices_list = []
+        choices_list.append(request.POST.getlist('choicesJSON'))
+        choices_list.append(request.POST.getlist('choicesTemplateCSV'))
+        choices_list.append(request.POST.getlist('choicesAiken'))
+        choices_list.append(request.POST.getlist('choicesXML'))
+        choices_list.append(request.POST.getlist('choicesLatex'))
+        choices = [i[0] for i in choices_list if len(i)]
+
+        anexos = []
+        generated_types = []
+
+        # Caminho base para arquivos auxiliares
+        path_base = os.path.join(BASE_DIR, "pdfExam", f"report_Exam_{pk}")
+
+        # path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk)
+        # message_cases = _('Dear,') + '\n\n'
+        # message_cases += _(
+        #     'This message contains files created automatically, with all variations of this exam.') + '\n\n'
+
+        # 1. JSON (Linker)
+        if 'JSON' in choices:
+            try:
+                print("variationsExam-03-JSON")
+                path_to_file_LINKER_JSON = path_base + "_linker.json"
+                cases = Utils.get_cases(exam)
+                Utils.format_cases(cases, path_to_file_LINKER_JSON)
+
+                if os.path.exists(path_to_file_LINKER_JSON):
+                    anexos.append(path_to_file_LINKER_JSON)
+                    generated_types.append('JSON')
+            except Exception as e:
+                print(f"Erro ao gerar JSON: {e}")
+        # if 'JSON' in choices:
+        #     # send by email all case tests of moodle
+        #     print("variationsExam-03-" + str(datetime.datetime.now()))
+        #     path_to_file_LINKER_JSON = path_aux + "_linker.json"
+        #     cases = Utils.get_cases(exam)
+        #     anexos.append([Utils.format_cases(cases, path_to_file_LINKER_JSON)])
+        #     if len(cases['key'] and cases['key'][0]):
+        #         print("generate_page-04-" + str(datetime.datetime.now()))
+        #         message_cases += _(
+        #             '# JSON: Test cases to be inserted in the Moodle for automatic correction of the codes sent by the students, following these steps:') + '\n'
+        #         message_cases += _(
+        #             '1. Use the PDF with the exams generated with this date and time (EXACTLY): "') + data_hora + '"\n'
+        #         message_cases += _('2. Save and rename "linker.json" and "students_variations.csv" files') + '\n'
+        #         message_cases += _(
+        #             '3. After you create a Moodle VPL activity, in the "runtime files", add "linker.json" and "students_variations.csv"') + '\n'
+        #         message_cases += _(
+        #             '4. Add too other files available at github.com/fzampirolli/mctest/VPL_modification') + '\n'
+        #         message_cases += _(
+        #             '5. Also enable these files under "Files to keep while running"') + '\n'
+        #         message_cases += _(
+        #             'Note: "students_variations.csv" will be sent by email when creating PDFs of student exams.') + '\n'
+        #     else:
+        #         message_cases += _(
+        #             '# JSON: There are no Test Cases!') + '\n'
+        #     message_cases += _('See for details') + ':\n'
+        #     message_cases += '  A. https://doi.org/10.5753/cbie.sbie.2020.1573' + ' - v.01\n'
+        #     message_cases += '  B. "Automated assessment of parametric programming in a large-scale course" (LACLO21)' + ' - v.10\n'
+        #     message_cases += '  C. https://sol.sbc.org.br/index.php/sbie/article/view/18135/17969' + '\n\n'
+
+        # 2. CSV (Template)
+        if 'TemplateCSV' in choices:
+            try:
+                path_to_file_TEMPLATES = path_base + "_templates.csv"
+                Utils.createFileTemplates(exam, path_to_file_TEMPLATES)
+
+                if os.path.exists(path_to_file_TEMPLATES):
+                    anexos.append(path_to_file_TEMPLATES)
+                    generated_types.append('TEMPLATE')
+            except Exception as e:
+                print(f"Erro ao gerar CSV: {e}")
+        # if 'TemplateCSV' in choices:
+        #     path_to_file_TEMPLATES = path_aux + "_templates.csv"
+        #     Utils.createFileTemplates(exam, path_to_file_TEMPLATES)
+        #     anexos.append([path_to_file_TEMPLATES])
+        #     message_cases += _('# CSV: Template of questions.') + '\n'
+        #     message_cases += _('See for details') + ':\n'
+        #     message_cases += '  A. https://doi.org/10.5753/cbie.sbie.2020.51. '
+        #     message_cases += _('This CSV file can be used for automatic correction using Google Forms + Sheets.') + '\n'
+        #     message_cases += '  B. "Automated assessment with multiple-choice questions using weighted answers" (CSEDU21)' + '\n\n'
+
+        # 3. Aiken
+        if 'Aiken' in choices:
+            try:
+                path_to_file_AIKEN = path_base + "_variations_DB_aiken.txt"
+                Utils.createFileDB_aiken(exam, path_to_file_AIKEN)
+
+                if os.path.exists(path_to_file_AIKEN):
+                    anexos.append(path_to_file_AIKEN)
+                    generated_types.append('AIKEN') # <--- ADICIONADO
+                    # Mapeie 'AIKEN' na função de email se desejar texto específico, ou deixe genérico
+            except Exception as e:
+                print(f"Erro ao gerar Aiken: {e}")
+        # if 'Aiken' in choices:
+        #     path_to_file_VARIATIONS_DB_aiken = path_aux + "_variations_DB_aiken.txt"
+        #     Utils.createFileDB_aiken(exam, path_to_file_VARIATIONS_DB_aiken)
+        #     anexos.append([path_to_file_VARIATIONS_DB_aiken])
+        #     message_cases += _('# AIKEN: Database of questions for Moodle.') + '\n'
+        #     message_cases += _(
+        #         'See for details: "Facilitating the Generation of Parametric Questions and their export to Moodle" (FIE21)') + '\n\n'
+
+        # 4. XML
+        if 'XML' in choices:
+            try:
+                path_to_file_XML = path_base + "_variations_DB.xml"
+                Utils.createFileDB_xml(exam, path_to_file_XML)
+
+                if os.path.exists(path_to_file_XML):
+                    anexos.append(path_to_file_XML)
+                    generated_types.append('XML') # <--- ADICIONADO
+            except Exception as e:
+                print(f"Erro ao gerar XML: {e}")
+        # if 'XML' in choices:
+        #     path_to_file_VARIATIONS_DB_xml = path_aux + "_variations_DB.xml"
+        #     Utils.createFileDB_xml(exam, path_to_file_VARIATIONS_DB_xml)
+        #     anexos.append([path_to_file_VARIATIONS_DB_xml])
+        #     message_cases += _('# XML: Database of questions for Moodle.') + '\n'
+        #     message_cases += _(
+        #         'See for details: "Facilitating the Generation of Parametric Questions and their export to Moodle" (FIE21)') + '\n\n'
+
+        # 5. LaTeX + PDF
+        if 'Latex' in choices:
+            try:
+                filename_variations = f"report_Exam_{pk}_variations"
+                # Chama Utils.createFile_Tex que já usa PDFGenerator internamente
+                if Utils.createFile_Tex(request, exam, filename_variations, data_hora, font_size):
+                    # O PDFGenerator salva em pdfExam com o nome base + .pdf
+                    pdf_path = os.path.join(BASE_DIR, "pdfExam", f"{filename_variations}.pdf")
+
+                    if os.path.exists(pdf_path):
+                        anexos.append(pdf_path)
+                        generated_types.append('LATEX')
+                    else:
+                        print(f"PDF não encontrado em: {pdf_path}")
+                else:
+                    return render(request, 'exam/exam_msg.html', {})
+            except Exception as e:
+                print(f"Erro ao gerar LaTeX/PDF: {e}")
+        # if 'Latex' in choices:
+        #
+        #     # Se essa lógica estiver no generate_page:
+        #     filename_variations = "report_Exam_" + str(pk) + "_variations"
+        #     if not Utils.createFile_Tex(request, exam, filename_variations, data_hora, font_size):
+        #         return render(request, 'exam/exam_msg.html', {})
+        #
+        #     # path_aux = BASE_DIR + "/report_Exam_" + str(pk)
+        #     # path_to_file_VARIATIONS_DB_Tex = path_aux + "_variations.tex"
+        #     # if not Utils.createFile_Tex(request, exam, path_to_file_VARIATIONS_DB_Tex, data_hora, font_size):
+        #     #     # message_cases += _("ERROR: Each block must have at least 3 questions/answers") + '\n'
+        #     #     return render(request, 'exam/exam_msg.html', {})
+        #
+        #     path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk)
+        #     path_to_file_VARIATIONS_DB_Tex = path_aux + "_variations.tex"
+        #     # anexos.append([path_to_file_VARIATIONS_DB_Tex])
+        #     anexos.append([path_to_file_VARIATIONS_DB_Tex[:-4] + '.pdf'])
+        #     message_cases += _('# TEX+PDF: Database of questions in LaTeX format.') + '\n'
+        #     message_cases += _('Run with command line:') + '\n'
+        #     message_cases += _('pdflatex --shell -scape -interaction nonstopmode "file.tex".') + '\n\n'
+
+        # 6. Envio de E-mail
+        if anexos:
+            # Gera assunto e corpo do email padronizados e traduzidos
+            subject_prof, body_prof = get_professor_final_email_content(
+                str(request.user),
+                str(exam.exam_name),
+                data_hora,
+                generated_types,
+                context='VARIATIONS_CREATION'
+            )
+
+            try:
+                cvMCTest.envia_email(
+                    webMCTest_SERVER,
+                    587,
+                    webMCTest_FROM,
+                    webMCTest_PASS,
+                    str(request.user),
+                    subject_prof,
+                    body_prof,
+                    anexos
+                )
+            except Exception as e:
+                print(f"Erro ao enviar email variações: {e}")
+                messages.error(request, _("Error sending email with variations."))
+        # message_cases += '\n'
+        # if len(anexos):
+        #     # send mail with all anexos
+        #     enviaOK = cvMCTest.envia_email(webMCTest_SERVER,
+        #                                    587,
+        #                                    webMCTest_FROM,
+        #                                    webMCTest_PASS,
+        #                                    str(request.user),
+        #                                    'MCTest: files created automatically; Exam: ' + str(
+        #                                        exam.exam_name) + '; ' + data_hora,
+        #                                    message_cases, anexos)
+        #     # problem with permission ...
+        #     path = os.getcwd()
+        #     getuser = path.split('/')
+        #     getuser = getuser[1]
+        #     getuser = getuser + ':' + getuser
+        #     os.system('chown -R ' + getuser + ' ' + path + ' .')
+        #     os.system('chgrp -R ' + getuser + ' ' + path + ' .')
+
+    # Mensagens finais para o usuário na tela
+    messages.success(request, _('Exam variations were stored in the database.'))
+    messages.info(request, _('Return and refresh the exam page. Notice the ID change next to the Create-Variations button.'))
+    messages.info(request, _('Whenever you click this button, new exam variations will be stored in the database!'))
+
+    if request.method == 'POST' and anexos:
+        messages.success(request, _('Selected files have been sent to your email.'))
+
+    return render(request, 'exam/exam_msg.html', {})
+    # messages.error(request,
+    #                _('Exam variations were stored in the database.'))
+    # messages.error(request,
+    #                _('Return and refresh the exam page. Notice the ID change next to the Create-Variations button.'))
+    # messages.error(request,
+    #                _('Whenever you click this button, new exam variations will be stored in the database!'))
+    # messages.error(request,
+    #                _('If you checked some options, check the attachments sent to your email.'))
+    # return render(request, 'exam/exam_msg.html', {})
+    #
+    # # return HttpResponseRedirect('/exam/exam/' + str(pk) + '/update/')
+
+
+@login_required
+def feedbackStudentsExamText(request, pk):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    exam = get_object_or_404(Exam, pk=pk)
+
+    if (exam.exam_student_feedback == 'no'):
+        messages.error(request,
+                       _('feedbackStudentsExamText: feedback to student is NO, Change to YES and click in Upload-PDF '
+                         'again!'))
+        return render(request, 'exam/exam_errors.html', {})
+
+    if request.method == 'POST':
+        file_name = exam.exam_name
+        instrucoes = 'asdfasdf asdf afd '
+        try:
+            file = request.FILES['myfileZIP']
+        except:
+            messages.error(request,
+                           _(
+                               'feedbackStudentsExamText: choose a ZIP file with scanned exams, for example _e31_769.zip!'))
+            return render(request, 'exam/exam_errors.html', {})
+
+        filestr = str(file)
+
+        fs = FileSystemStorage()
+        filename = fs.save(file.name, file)
+        uploaded_file_url = fs.url(filename)
+
+        path_to_file0 = BASE_DIR + "/" + uploaded_file_url
+        path2 = BASE_DIR + "/pdfStudentEmail/" + filestr[:-4]
+
+        os.system('rm -rf ' + path2)
+
+        os.system("unzip " + path_to_file0 + " -d " + path2)
+
+        files5 = []
+        # r=root, d=directories, f = files  ===>> pega todos os pdfs
+        for r, d, f in os.walk(path2):
+            for file in f:
+                if '.pdf' in file and file[0] != '.':
+                    files5.append(os.path.join(r, file))
+
+        myfiles = []
+        idQuestion = ""
+        for f in np.sort(files5):
+
+            # /Users/fz/PycharmProjects/mctest/pdfStudentEmail/download/e102_c224_q1240_p001_11201811442.pdf
+            # ['', 'Users', 'fz', 'PycharmProjects', 'mctest', 'pdfStudentEmail', 'download', '_e102_c224_q1240_p001_11201811442.pdf']
+            fp = f.split('/')
+
+            # _e102_c224_q1240_p001_11201811442.pdf
+            ss = fp[-1]
+
+            try:
+                idExam = ss[ss.find('_e') + 2:ss.find('_c')]
+                idClass = ss[ss.find('_c') + 2:ss.find('_q')]
+                idQuestion = ss[ss.find('_q') + 2:ss.find('_p')]
+                page = ss[ss.find('_p') + 2:ss.find('_p') + 5]
+                idStudent = ss[ss.rfind('_') + 1:-4]
+                a = int(idExam)
+                a = int(idClass)
+                a = int(idQuestion)
+                a = int(page)
+                a = int(idStudent)
+            except:
+                messages.error(request,
+                               _(
+                                   "feedbackStudentsExamText: name of the pdf file does not follow a pattern ID_xxx.pdf"))
+                return render(request, 'exam/exam_errors.html', {})
+
+            ss0 = ss.split(";")
+            nota = erros = ""
+            if len(ss0) == 2:
+                nota = ss0[0]
+                ss1 = ss0[1].split("_")
+
+            elif len(ss0) == 3:
+                nota = ss0[0]
+                erros = ss0[1]
+                ss1 = ss0[2].split("_")
+
+            else:
+                ss1 = ss.split("_")
+
+            print('processing ', page, idQuestion, idStudent)
+            myfiles.append([idExam, idQuestion, idStudent, nota, erros, page, f])
+
+        try:
+            # _e102_c224_q1240
+            fileMSG = '_e' + idExam + '_c' + idClass + '_q' + idQuestion + '.txt'
+            with open(os.path.join(path2, fileMSG), 'r', encoding="ISO-8859-1") as f:
+                msg_str = f.read()
+        except:
+            msg_str = ""
+
+        if not myfiles:
+            messages.error(request,
+                           _("feedbackStudentsExamText: no PDF files found matching the expected pattern in the ZIP."))
+            return render(request, 'exam/exam_errors.html', {})
+
+        path_to_file = BASE_DIR + "/report" + str(pk) + "q" + idQuestion + ".csv"
+        # raise Http404(path_to_file)
+
+        try:
+            os.remove(path_to_file)
+            pass
+        except Exception as e:
+            pass
+
+        # O upload/unzip acima e rapido e precisa do request.FILES ainda vivo, entao
+        # fica sincrono. O laco de envio de e-mail por aluno e que pode demorar em
+        # turmas grandes -- roda em background (dados simples, sem o objeto request)
+        # e o professor recebe o relatorio por e-mail ao final, em vez de esperar
+        # nesta pagina.
+        professor_email = str(request.user)
+        thread = threading.Thread(
+            target=_feedback_students_exam_text_worker,
+            args=(exam.id, myfiles, msg_str, path_to_file, professor_email),
+            daemon=True)
+        thread.start()
+
+        estimated_minutes = max(1, round(len(myfiles) * 2 / 60))
+        messages.success(request, _('Upload received. Sending feedback e-mails to %(n)d file(s) in the '
+                                     'background -- estimated time: about %(mins)d minute(s). You will '
+                                     'receive the report by e-mail when it finishes.') % {
+                                     'n': len(myfiles), 'mins': estimated_minutes})
+        return render(request, 'exam/exam_errors.html', {'title': _('Upload-PDF')})
+
+    return HttpResponseRedirect("/")
+
+
+def _feedback_students_exam_text_worker(exam_id, myfiles, msg_str, path_to_file, professor_email):
+    lock_path = _acquire_background_job_lock()
+    try:
+        _feedback_students_exam_text_impl(exam_id, myfiles, msg_str, path_to_file, professor_email)
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(f"ERRO NAO TRATADO em _feedback_students_exam_text_worker (exam {exam_id}): {e}\n{tb}")
+        try:
+            cvMCTest.envia_email(
+                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
+                f"[MCTest] Erro no Upload-PDF (texto) do exame {exam_id}",
+                f"Ocorreu um erro ao enviar os e-mails de feedback do exame {exam_id}:\n\n{tb}")
+        except Exception as e2:
+            print(f"Erro ao notificar professor sobre falha no upload-pdf (texto): {e2}")
+    finally:
+        _release_background_job_lock(lock_path)
+        from django.db import connection
+        connection.close()
+
+
+def _feedback_students_exam_text_impl(exam_id, myfiles, msg_str, path_to_file, professor_email):
+    exam = get_object_or_404(Exam, pk=exam_id)
+
+    # Reaproveita uma unica conexao SMTP para todos os alunos, evitando
+    # reconectar/TLS a cada e-mail em turmas grandes.
+    smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS)
+
+    for room in exam.classrooms.all():  # para cada turma
+        for s in room.students.all():  # para cada estudante da turma
+            for f in myfiles:
+                if f[0] == str(exam.id) and f[2] == s.student_ID:
+                    email = s.student_email
+                    data_hora = datetime.datetime.now()
+                    data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+                    file_name = f[6]
+                    print('send mail to: ', s.student_email)
+                    enviaOK = cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
+                                                 connection=smtp_connection)
+                    if enviaOK and 'ERROR' in enviaOK:
+                        smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM,
+                                                                      webMCTest_PASS)
+                        cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
+                                           connection=smtp_connection)
+                    with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
+                        writer = csv.writer(data)
+                        writer.writerow([f[5], s.student_ID, email, s.student_name, f[3], f[4], data_hora])
+
+    if smtp_connection is not None:
+        try:
+            smtp_connection.quit()
+        except Exception:
+            pass
+
+    anexos = [path_to_file] if os.path.exists(path_to_file) else []
+    if anexos:
+        subject = f"[MCTest] Upload-PDF concluido - Exame {exam.id} - {exam.exam_name}"
+        body = (f"O envio de feedback (Upload-PDF texto) do exame '{exam.exam_name}' (ID: {exam.id}) "
+                f"foi concluido.\n\nRelatorio de envios em anexo.")
+    else:
+        subject = f"[MCTest] Upload-PDF - Exame {exam.id} - nenhum e-mail enviado"
+        body = (f"Nenhum e-mail foi enviado para o exame '{exam.exam_name}' (ID: {exam.id}). "
+                f"Verifique se voce esta no Exame/Termo correto.")
+
+    try:
+        cvMCTest.envia_email(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
+                              subject, body, anexos)
+    except Exception as e:
+        print(f"Erro ao enviar relatorio final ao professor (upload-pdf texto): {e}")
+
+
+@login_required
+def feedbackStudentsExam(request, pk):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    exam = get_object_or_404(Exam, pk=pk)
+
+    if (exam.exam_student_feedback == 'no'):
+        messages.error(request,
+                       _(
+                           "feedbackStudentsExam: feedback to student is NO, Change to YES and click in Upload-PDF again!"))
+        return render(request, 'exam/exam_errors.html', {})
+
+    if request.method == 'POST':
+        file_name = exam.exam_name
+        instrucoes = 'asdfasdf asdf afd '
+
+        path_to_file = BASE_DIR + "/" + "report" + str(pk) + ".csv"
+        try:
+            os.remove(path_to_file)
+            pass
+        except Exception as e:
+            pass
+
+        myfiles = []
+        mypath = os.getcwd() + "/pdfStudentEmail/"
+        for file in np.sort(glob.glob(mypath + '*.pdf')):
+            ss = file.split('_')
+            ff = file.split('/')
+            idStudent = ss[-1:][0]
+            idStudent = idStudent[1:-4]
+            idRoom = ss[len(ss) - 2]
+            idRoom = idRoom[1:]
+            idExam = ss[len(ss) - 3]
+            idExam = idExam[1:]
+            # return HttpResponse(file,idStudent,idRoom,idExam,ff[len(ff)-1])
+            myfiles.append([idExam, idRoom, idStudent, ff[len(ff) - 1]])
+
+        if not myfiles:
+            messages.error(request, _("feedbackStudentsExam: no PDF files found in pdfStudentEmail/."))
+            return render(request, 'exam/exam_errors.html', {})
+
+        # O envio de e-mail por aluno pode demorar em turmas grandes -- roda em
+        # background (dados simples, sem o objeto request) e o professor recebe
+        # o relatorio por e-mail ao final, em vez de esperar nesta pagina.
+        professor_email = str(request.user)
+        thread = threading.Thread(
+            target=_feedback_students_exam_worker,
+            args=(exam.id, myfiles, path_to_file, professor_email),
+            daemon=True)
+        thread.start()
+
+        estimated_minutes = max(1, round(len(myfiles) * 2 / 60))
+        messages.success(request, _('Sending feedback e-mails to %(n)d file(s) in the background -- '
+                                     'estimated time: about %(mins)d minute(s). You will receive the '
+                                     'report by e-mail when it finishes.') % {
+                                     'n': len(myfiles), 'mins': estimated_minutes})
+        return render(request, 'exam/exam_errors.html', {'title': _('Upload-PDF')})
+
+    return HttpResponseRedirect("/")
+
+
+def _feedback_students_exam_worker(exam_id, myfiles, path_to_file, professor_email):
+    lock_path = _acquire_background_job_lock()
+    try:
+        _feedback_students_exam_impl(exam_id, myfiles, path_to_file, professor_email)
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(f"ERRO NAO TRATADO em _feedback_students_exam_worker (exam {exam_id}): {e}\n{tb}")
+        try:
+            cvMCTest.envia_email(
+                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
+                f"[MCTest] Erro no Upload-PDF do exame {exam_id}",
+                f"Ocorreu um erro ao enviar os e-mails de feedback do exame {exam_id}:\n\n{tb}")
+        except Exception as e2:
+            print(f"Erro ao notificar professor sobre falha no upload-pdf: {e2}")
+    finally:
+        _release_background_job_lock(lock_path)
+        from django.db import connection
+        connection.close()
+
+
+def _feedback_students_exam_impl(exam_id, myfiles, path_to_file, professor_email):
+    exam = get_object_or_404(Exam, pk=exam_id)
+
+    # Reaproveita uma unica conexao SMTP para todos os alunos, evitando
+    # reconectar/TLS a cada e-mail em turmas grandes.
+    smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS)
+
+    for room in exam.classrooms.all():  # para cada turma
+        for s in room.students.all():  # para cada estudante da turma
+            for f in myfiles:
+                if f[0] == str(exam.id) and f[1] == str(room.id) and f[2] == s.student_ID:
+                    email = "fzampirolli@gmail.com"
+                    # email = s.student_email
+                    data_hora = datetime.datetime.now()
+                    data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+
+                    path = os.getcwd()
+                    file_name = "studentEmail_e" + f[0] + "_r" + f[1] + "_s" + f[2]
+                    file_name = path + "/pdfStudentEmail/" + file_name + '.pdf'
+
+                    msg_str = ""
+                    enviaOK = cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
+                                                 connection=smtp_connection)
+                    if enviaOK and 'ERROR' in enviaOK:
+                        smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM,
+                                                                      webMCTest_PASS)
+                        cvMCTest.sendMail(file_name, msg_str, email, str(s.student_name),
+                                           connection=smtp_connection)
+
+                    with open(path_to_file, 'a') as data:  # acrescenta no final do csv a cada envio
+                        writer = csv.writer(data)
+                        writer.writerow(['page', s.student_ID, email, s.student_name, data_hora])
+
+    if smtp_connection is not None:
+        try:
+            smtp_connection.quit()
+        except Exception:
+            pass
+
+    anexos = [path_to_file] if os.path.exists(path_to_file) else []
+    if anexos:
+        subject = f"[MCTest] Upload-PDF concluido - Exame {exam.id} - {exam.exam_name}"
+        body = (f"O envio de feedback (Upload-PDF) do exame '{exam.exam_name}' (ID: {exam.id}) "
+                f"foi concluido.\n\nRelatorio de envios em anexo.")
+    else:
+        subject = f"[MCTest] Upload-PDF - Exame {exam.id} - nenhum e-mail enviado"
+        body = (f"Nenhum e-mail foi enviado para o exame '{exam.exam_name}' (ID: {exam.id}). "
+                f"Verifique se voce esta no Exame/Termo correto.")
+
+    try:
+        cvMCTest.envia_email(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
+                              subject, body, anexos)
+    except Exception as e:
+        print(f"Erro ao enviar relatorio final ao professor (upload-pdf): {e}")
+
+@login_required
+def correctStudentsExam(request, pk):
+    # ==============================================================================
+    # 1. VERIFICAÇÃO DE PERMISSÕES E INICIALIZAÇÃO
+    # ==============================================================================
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    exam = get_object_or_404(Exam, pk=pk)
+    BASE_DIR = str(settings.BASE_DIR)
+
+    # --- Limpeza de arquivos temporários de email anteriores (Legado) ---
+    strf2 = BASE_DIR + "/pdfStudentEmail/studentEmail_e" + str(exam.id) + "*"
+    try:
+        for fi in glob.glob(strf2):
+            os.remove(fi)
+        pass
+    except Exception as e:
+        pass
+
+    if request.method == 'POST':
+        try:
+            # Captura o arquivo do formulário
+            uploaded_file = request.FILES['myfilePDF']
+        except:
+            messages.error(request, _('correctStudentsExam: choose a PDF file with scanned exams!'))
+            return render(request, 'exam/exam_errors.html', {})
+
+        choiceReturnQuestions = request.POST.get('choiceReturnQuestions')
+
+        # 2. CONFIGURAÇÃO DE DIRETÓRIOS E ARQUIVOS TEMPORÁRIOS
+        tmp_path = os.path.join(BASE_DIR, 'tmp')
+        if not os.path.exists(tmp_path):
+            os.makedirs(tmp_path)
+
+        # Sanitiza o nome original do arquivo
+        file0 = str(uploaded_file.name)
+        file0 = file0.replace(' ', '')
+        file0 = re.sub('[^A-Za-z0-9._-]+', '', file0)
+
+        # str(request.user) == e-mail do professor (USERNAME_FIELD = 'email' em account.models)
+        professor_email = str(request.user)
+
+        # Constrói o nome exato para salvar no disco
+        filename_custom = "_e" + str(exam.id) + '_' + professor_email + '_' + file0[:-4] + '.pdf'
+
+        # Inicializa o Storage e salva o arquivo
+        fs = FileSystemStorage(location=tmp_path)
+        if fs.exists(filename_custom):
+            fs.delete(filename_custom)
+        saved_filename = fs.save(filename_custom, uploaded_file)
+
+        # 'file' armazena o caminho absoluto do PDF salvo
+        file = fs.path(saved_filename)
+
+        # A correção (conversão PDF->imagem, detecção de QRCode, leitura das
+        # marcações via cv2, estatísticas/IRT) pode demorar bastante em PDFs
+        # com muitas páginas -- roda em background (só valores simples, sem o
+        # objeto request) e o professor recebe o ZIP final por e-mail ao
+        # terminar, em vez de esperar nesta página (o que antes estourava o
+        # timeout do servidor).
+        thread = threading.Thread(
+            target=_correct_students_exam_worker,
+            args=(exam.id, file, file0, choiceReturnQuestions, professor_email, request.user.first_name),
+            daemon=True)
+        thread.start()
+
+        # Estimativa aproximada: paginas do PDF enviado (uma por folha
+        # escaneada) x tempo unitario -- nao usa a quantidade de alunos da
+        # turma, pois o PDF enviado pode conter so uma prova ou a turma
+        # inteira. Mesmo ~5s/pagina usado como base em generate_page, ainda
+        # sem medicao de carga propria para a correcao -- ajustar aqui se um
+        # teste real mostrar outro valor.
+        try:
+            num_pages = PyPDF2.PdfFileReader(open(str(file), "rb")).getNumPages()
+        except Exception:
+            num_pages = 0
+        estimated_minutes = max(1, round(num_pages * 5 / 60))
+
+        messages.success(request, _('Correcting exam in the background for %(n)d page(s). '
+                                     'Estimated time: about %(mins)d minute(s). You will receive '
+                                     'the resulting ZIP by e-mail when it finishes (and any errors) '
+                                     '-- no need to wait on this page.') % {
+                                     'n': num_pages, 'mins': estimated_minutes})
+        return render(request, 'exam/exam_errors.html', {'title': _('Upload-PDF')})
+
+    return HttpResponseRedirect("/")
+
+
+def _correct_students_exam_worker(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name):
+    lock_path = _acquire_background_job_lock()
+    try:
+        _correct_students_exam_impl(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name)
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(f"ERRO NAO TRATADO em _correct_students_exam_worker (exam {exam_id}): {e}\n{tb}")
+        try:
+            cvMCTest.envia_email(
+                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS, professor_email,
+                f"[MCTest] Erro no Upload-PDF (correção) do exame {exam_id}",
+                f"Ocorreu um erro ao corrigir o exame {exam_id}:\n\n{tb}")
+        except Exception as e2:
+            print(f"Erro ao notificar professor sobre falha no correctStudentsExam: {e2}")
+    finally:
+        _release_background_job_lock(lock_path)
+        from django.db import connection
+        connection.close()
+
+
+def _correct_students_exam_impl(exam_id, file, file0, choiceReturnQuestions, professor_email, professor_first_name):
+    exam = get_object_or_404(Exam, pk=exam_id)
+    BASE_DIR = str(settings.BASE_DIR)
+
+    # 'MYFILES' é o prefixo base para todos os arquivos gerados (imagens, csvs, logs)
+    MYFILES = BASE_DIR + "/tmp/_e" + str(exam.id) + '_' + professor_email + '_' + file0[:-4]
+
+    # ==============================================================================
+    # DEFINIÇÃO DO ARQUIVO ZIP FINAL E LOG CSV
+    # ==============================================================================
+    dir_pdf_student = os.path.join(BASE_DIR, 'pdfStudentEmail')
+    fzip_name = "studentEmail_e" + str(exam.id) + ".zip"
+    fzip_path = os.path.join(dir_pdf_student, fzip_name)
+
+    # Remove ZIP antigo se existir
+    if os.path.exists(fzip_path):
+        os.remove(fzip_path)
+
+    # --- CRIAÇÃO DO LOG CSV (HEADER) ---
+    email_log_path = MYFILES + "_RETURN_email_log.csv"
+    with open(email_log_path, "w", newline='', encoding='utf-8') as f_log:
+        writer = csv.writer(f_log, delimiter=',')  # Use ';' se preferir abrir direto no Excel BR
+
+        # Metadados
+        writer.writerow(['RELATORIO DE PROCESSAMENTO', f"EXAME {exam.id}"])
+        writer.writerow(['Professor', professor_email])
+        writer.writerow(['Data', str(datetime.datetime.now())])
+        writer.writerow([])
+
+        # Cabeçalho das Colunas
+        writer.writerow(['Pagina', 'Exame', 'Turma', 'ID Aluno', 'Nome', 'Nota', 'Status'])
+
+    # Limpeza preventiva da pasta TMP
+    try:
+        files_to_remove = glob.glob(MYFILES + "*")
+        for f_rem in files_to_remove:
+            if f_rem != file and f_rem != email_log_path:
+                os.remove(f_rem)
+    except Exception as e:
+        pass
+
+    try:
+        input_pdf = PyPDF2.PdfFileReader(open(str(file), "rb"))
+    except PyPDF2.utils.PdfReadError:
+        raise Exception(str(_("correctStudentsExam: Error in read PDF file: ")) + str(file))
+
+    # ==============================================================================
+    # CONVERSÃO PDF -> IMAGEM
+    # ==============================================================================
+    # Ajuste poppler_path conforme seu servidor (Linux geralmente não precisa, MacOS sim)
+    pages = convert_from_path(file, 200)  # , poppler_path='/opt/local/bin'
+
+    numPAGES = 0
+    for page in pages:
+        myfile0 = MYFILES + '_p' + str(numPAGES) + '.png'
+        page.save(myfile0)
+        numPAGES += 1
+    pages.clear()
+
+    # 3. LOOP DE PROCESSAMENTO DAS PÁGINAS
+    countCorrectExams = 0
+    countCorrectQuestions = 0
+    qr0 = dict()
+    countPage = 0
+    while countPage < numPAGES:  # para cada pagina do pdf
+        print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
+        myfile0 = MYFILES + '_p' + str(countPage) + '.png'
+        img = cv2.imread(myfile0)
+
+        DEBUG = False
+        img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        cvMCTest.centroidsMarked = []
+        countCorrectExams += 1
+
+        if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)
+
+        # Detecta QRCode
+        myFlagArea, qr = cvMCTest.getQRCode(img, countPage)
+        img = cvMCTest.imgAnswers
+
+        # Fallback se não detectar QR Code
+        if not qr:
+            qr = dict()
+            qr['idStudent'] = 'ERROR'
+            if myFlagArea:
+                qr['answer'] = exam.exam_number_of_anwsers_question
+            else:
+                qr['answer'] = 'ERROR'
+            qr['numquest'] = Utils.getNumMCQuestions(exam)
+            qr['idExam'] = str(exam_id)
+            qr['idClassroom'] = '0'
+            qr['question'] = '0'
+            qr['respgrade'] = '0'
+            qr['stylesheet'] = '0'
+            qr['variations'] = '0'
+            qr['variant'] = '0'
+        else:
+            if int(qr['idExam']) != exam.id:
+                raise Exception(str(_("Error reading QRcode from PDF for exam ID: ")) + str(qr['idExam']))
+
+        qr['exam_print'] = exam.exam_print
+
+        if int(Utils.getNumMCQuestions(exam) == 0):
+            qr['onlyT'] = True  # Exame Dissertativo
+        else:
+            qr['onlyT'] = False  # Exame Múltipla Escolha
+
+        qr['file'] = file
+        qr['page'] = countPage
+        qr['max_questions_square'] = exam.exam_max_questions_square
+        qr['user'] = professor_email
+
+        # Guarda gabarito se for folha de resposta apenas
+        if not countPage and qr['exam_print'] == 'answ':
+            qr0 = qr
+
+        # --- Ramo A: Lógica para Questões Dissertativas (onlyT) ---
+        if qr['onlyT']:
+            print(">>>>text>>>>", qr)
+            mypath = MYFILES + "_q" + qr['question']
+            myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
+            myfileMSG = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + '.txt'
+
+            os.system("mkdir " + mypath)
+
+            if not os.path.exists(myfileMSG):
+                with open(myfileMSG, 'w') as fileMSG:
+                    fileMSG.write('Write here a message to sent to student, for each question/classroom')
+                    fileMSG.close()
+
+            if countPage < numPAGES - 1:
+                fileImages = [myfile0]
+                flagOK = False
+                while not flagOK and countPage < numPAGES - 1:
+                    myfile3 = MYFILES + '_p' + str(countPage + 1) + '.png'
+                    img2 = cv2.imread(myfile3)
+                    img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+                    flagOK, qr3 = cvMCTest.getQRCode(img2, countPage)
+                    if not qr3:
+                        fileImages.append(myfile3)
+                        countPage += 1
+                    else:
+                        flagOK = True
+                with open(myfile, "wb") as outputStream:
+                    outputStream.write(img2pdf.convert(fileImages))
+            else:
+                with open(myfile, "wb") as outputStream:
+                    outputStream.write(img2pdf.convert(myfile0))
+
+        # --- Ramo B: Lógica para Múltipla Escolha (Standard) ---
+        elif qr:
+            if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
+                cvMCTest.findBoxesAnwsersHor(img, countPage, -1)
+                img = cvMCTest.imgAnswersSegment
+                rectSquares = cvMCTest.findSquaresHor(qr, img, countPage)
+            else:
+                rectSquares = cvMCTest.findSquares(qr, img, countPage)
+
+            if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+
+            if qr['idStudent'] != 'ERROR':
+                strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr['idStudent'] + '_GAB.png'
+                imgGAB = cv2.medianBlur(cvMCTest.imgAnswers, 3)
+                imgGAB_rgb = cv2.cvtColor(imgGAB, cv2.COLOR_GRAY2RGB)
+
+            testAnswers = []
+            qr['squares'] = rectSquares
+
+            if myFlagArea:
+                for countSquare in range(len(rectSquares)):
+                    p1, p2 = rectSquares[countSquare]
+
+                    if qr['idStudent'] != 'ERROR':
+                        cv2.rectangle(imgGAB_rgb, (p1[1], p1[0]), (p2[1], p2[0]), (255, 255, 0), 1);
+
+                    if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
+                        imgQi = cvMCTest.imgAnswersSegment[p1[0]:p2[0], p1[1]:p2[1]]
+                        [NUM_COLUMNS, img] = cvMCTest.setColumnsHor(imgQi, countPage, countSquare)
+                        [NUM_LINES, img] = cvMCTest.setLinesHor(imgQi, countPage, countSquare)
+                        NUM_RESPOSTAS = NUM_LINES
+                        NUM_QUESTOES = NUM_COLUMNS
+                    else:
+                        imgQi = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
+                        [NUM_COLUMNS, img] = cvMCTest.setColumns(imgQi, countPage, countSquare)
+                        [NUM_LINES, img] = cvMCTest.setLines(imgQi, countPage, countSquare)
+                        NUM_RESPOSTAS = NUM_COLUMNS
+                        NUM_QUESTOES = NUM_LINES
+
+                    if DEBUG: cv2.imwrite("_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_q" + str(countSquare + 1).zfill(2) + "_00.png", imgQi)
+
+                    countCorrectQuestions += NUM_QUESTOES
+
+                    if int(NUM_RESPOSTAS) != int(qr['answer']):
+                        qr['correct'] = 'ERROR:' + ' page ' + str(countPage + 1) + ' square ' + str(countSquare + 1) + ': ' + str(NUM_RESPOSTAS) + '-' + str(qr['answer'])
+
+                    imgQiNC = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
+
+                    if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
+                        testAnswers.append(cvMCTest.segmentAnswersHor([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
+                    else:
+                        testAnswers.append(cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
+
+                qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)
+
+                if len(qr0) == 0 and exam.exam_print != 'answ':
+                    qr = Utils.getQRanswersbyVariation(qr, exam)
+
+                qr = cvMCTest.studentGrade(qr, qr0)
+
+            # Salva o resultado parcial (um aluno) no CSV
+            cvMCTest.saveCSVone(qr)
+
+            # ==============================================================================
+            # POPULAR DADOS REAIS DO ALUNO E LOGAR NO CSV
+            # ==============================================================================
+            if qr['idStudent'] != 'ERROR':
+
+                real_name = "---"
+                real_email = "---"
+
+                # Busca segura dos dados no Banco para usar no LOG
+                try:
+                    # Busca apenas se o ID parecer válido (numérico ou string válida)
+                    s_obj = Student.objects.filter(student_ID=qr['idStudent']).first()
+                    if s_obj:
+                        real_name = s_obj.student_name
+                        real_email = s_obj.student_email
+                        # Atualiza o dicionário qr para uso posterior no envio de email
+                        qr['name'] = real_name
+                        qr['email'] = real_email
+                except Exception as e:
+                    print(f"Erro ao buscar aluno ID {qr['idStudent']}: {e}")
+
+                is_answer_key = int(qr['page']) == 0
+                status_log = "Gabarito processado" if is_answer_key else "Prova processada"
+
+                # Gera feedback visual (Imagem GAB) e envia Email se configurado
+                if (exam.exam_student_feedback == 'yes' and not 'ERROR' in qr['correct']):
+                    if not is_answer_key or exam.exam_print == 'both':
+                        cvMCTest.drawImageGAB(qr, strGAB, imgGAB_rgb)
+
+                        # Chama o método de envio de email
+                        cvMCTest.studentSendEmail(exam, qr, choiceReturnQuestions)
+
+                        status_log = f"Email enviado para {real_email}"
+
+                # Escreve a linha no CSV de Log
+                with open(email_log_path, "a", newline='', encoding='utf-8') as f_log:
+                    writer = csv.writer(f_log, delimiter=',')
+                    writer.writerow([
+                        f"pag{countPage + 1:02d}",      # Pagina
+                        exam_id,                        # Exame
+                        qr['idClassroom'],              # Turma
+                        qr['idStudent'],                # ID
+                        real_name,                      # Nome (REAL, buscado do DB)
+                        qr.get('grade', 'N/A'),          # Nota
+                        status_log                      # Status
+                    ])
+
+        countPage += 1
+
+    # Fim do loop de páginas - Fecha o log com rodapé
+    with open(email_log_path, "a", newline='', encoding='utf-8') as f_log:
+        writer = csv.writer(f_log, delimiter=',')
+        writer.writerow([])
+        writer.writerow(['FIM DO PROCESSAMENTO'])
+
+    # Atualiza contadores do Instituto
+    myflag = True
+    for r in exam.classrooms.all():
+        for d in r.discipline.courses.all():
+            for i in d.institutes.all():
+                if myflag:
+                    i.institute_exams_corrected += countCorrectExams
+                    i.institute_questions_corrected += countCorrectQuestions
+                    i.save()
+                    myflag = False
+                    break
+
+    # ==============================================================================
+    # 4. PREPARAÇÃO DOS ARQUIVOS (Separada por Tipo)
+    # ==============================================================================
+
+    if qr['onlyT']:
+        # --- CASO DISSERTATIVO ---
+        mypath_base = MYFILES + "_q0"
+
+        # Consolida arquivos gerados (mv)
+        os.system("mv " + BASE_DIR + "/tmp/_e" + str(exam.id) + professor_email + "*_q0/* " + mypath_base)
+
+        # Zipa diretamente para o fzip_path final
+        os.system("zip -j \'" + fzip_path + "\' " + mypath_base + "/*")
+
+        # Limpa a pasta temporária que foi zipada
+        os.system("rm -rf " + mypath_base)
+        os.system("rm -rf " + mypath_base[:-5] + "*.png")
+
+    else:
+        # --- CASO MÚLTIPLA ESCOLHA ---
+        path_to_file = file[:-4] + ".csv"
+
+        # Gera cópia do CSV com nome padronizado para retorno (_RETURN__.csv)
+        os.system("cp \'" + path_to_file + "\' " + MYFILES + "_RETURN__.csv")
+
+        ### log begin (Original Log)
+        f_log_orig = "correct.log"
+        if not os.path.exists(f_log_orig):
+            with open(f_log_orig, 'w') as csvfile:
+                spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                spamWriter.writerow("CORRECTIONS of MCTest")
+        with open(f_log_orig, 'a') as csvfile:
+            spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+            spamWriter.writerow(["\n" + professor_email, ",", str(datetime.datetime.now())])
+        os.system("cat >> correct.log " + path_to_file)
+        ### log end
+
+        ### IRT e Estatísticas begin
+        if exam.exam_print in ['both']:
+            try:
+                M = int(Utils.getNumMCQuestions(exam))
+                X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                X.replace('', np.nan, inplace=True)
+                X.replace(' ', np.nan, inplace=True)
+                X.dropna(inplace=True)
+
+                ANS = int(exam.exam_number_of_anwsers_question)
+                K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
+                K.replace('', np.nan, inplace=True)
+                K.replace(' ', np.nan, inplace=True)
+                K.dropna(inplace=True)
+                K = K.to_numpy() // 10 ** ANS
+
+                acertos, erros = {}, {}
+                for q in X:
+                    i = int(q[1:]) - 1
+                    for n, s in enumerate(X[q]):
+                        ki = K[n][i]
+                        if len(str(s).split()[0]) == 1:
+                            acertos[ki] = acertos.get(ki, 0) + 1
+                        else:
+                            erros[ki] = erros.get(ki, 0) + 1
+
+                for k in set(acertos.keys()) | set(erros.keys()):
+                    acertos[k] = acertos.get(k, 0)
+                    erros[k] = erros.get(k, 0)
+
+                with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                    f.write(f' id,  key, corr, fail, %corr, %fail\n')
+                    for i, k in enumerate(sorted(acertos.keys())):
+                        a, e = acertos[k], erros[k]
+                        try:
+                            f.write(f'{i + 1:3d},{int(k):5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                        except:
+                            continue
+                    f.close()
+
+                chaves = sorted(acertos.keys())
+                dados = np.zeros((len(X), len(chaves)), dtype=int)
+                X0 = X.to_numpy()
+                for i, a in enumerate(X0):
+                    for j, b in enumerate(a):
+                        if len(X0[i, j].split()[0]) == 1:
+                            dados[i, chaves.index(K[i, j])] = 1
+
+                N = len(X['Q1'])
+                with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+                    spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                    for n in range(N):
+                        spamWriter.writerow(dados[n])
+                    csvfile.close()
+
+                os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
+
+            except Exception as e:
+                print(f"correctStudentsExam: Error in IRT or more Statists: {e}")
+
+            try:
+                cvMCTest.estimate_IRT_parameters(exam)
+            except Exception as e:
+                print(f"correctStudentsExam: Error in MLE by scipy.optimize: {e}")
+
+        else:  # (Stats para exames sem chaves/ambos)
+            try:
+                M = int(Utils.getNumMCQuestions(exam))
+                X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+                X.replace('', np.nan, inplace=True)
+                X.replace(' ', np.nan, inplace=True)
+                X.dropna(inplace=True)
+
+                N = len(X['Q1'])
+                dados = np.zeros((N, M), dtype=int)
+                for q in X:
+                    for n, s in enumerate(X[q]):
+                        if len(str(s).split()[0]) == 1:
+                            dados[n][int(q[1:]) - 1] = 1
+                N -= 1
+                dados = np.delete(dados, 0, 0)
+
+                with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+                    f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
+                    media_colunas = np.mean(dados, axis=0)
+                    desvio_padrao_colunas = np.std(dados, axis=0)
+                    acertos = np.sum(dados, axis=0)
+                    erros = N - np.sum(dados, axis=0)
+                    for i in range(len(dados[0])):
+                        a, e, m, s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
+                        f.write(f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+                    f.close()
+
+                with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+                    spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+                    for n in range(N):
+                        spamWriter.writerow(dados[n])
+                    csvfile.close()
+
+                os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv >/dev/null 2>&1 &")
+
+            except Exception as e:
+                print(f"correctStudentsExam: Error in IRT: {e}")
+        ### IRT end
+
+    # ==============================================================================
+    # 5. ZIP UNIFICADO, ENVIO DE EMAIL E LIMPEZA (Cleanup)
+    # ==============================================================================
+
+    # A) ZIPAR ARQUIVOS COMUNS
+    cmd_zip_common = "zip -j \'" + fzip_path + "\' " + MYFILES + "_RETURN_*"
+    os.system(cmd_zip_common)
+
+    # B) ZIPAR PDFS DOS ALUNOS
+    # - Apenas para múltipla escolha, pois dissertativo já zipou acima.
+    if not qr['onlyT']:
+        pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
+        if glob.glob(pdfs_student_pattern):
+            cmd_zip_students = "zip -j \'" + fzip_path + "\' " + pdfs_student_pattern
+            os.system(cmd_zip_students)
+
+    # C) ENVIAR EMAIL PARA O PROFESSOR
+    try:
+        # 1. Verifica quais tipos de arquivos foram gerados
+        has_student_pdfs = False
+        # Verifica se há PDFs na pasta de origem antes de serem movidos/apagados
+        pdf_pattern_check = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
+        if not qr['onlyT'] and glob.glob(pdf_pattern_check) and exam.exam_student_feedback == 'yes':
+            has_student_pdfs = True
+
+        # Verifica se há imagens de recortes (PNG) na pasta temporária
+        png_pattern_check = MYFILES + "_RETURN_p*.png"
+        has_png_snippets = len(glob.glob(png_pattern_check)) > 0
+
+        # 2. Constrói o Assunto e Cabeçalho
+        subject = f'[MCTest] Resultado da Correção - Exame {exam.id} - {exam.exam_name}'
+
+        status_msg = "ENVIADO aos alunos" if has_student_pdfs else "PROCESSADO (Sem envio aos alunos)"
+
+        body = (
+            f"Olá, {professor_first_name}.\n\n"
+            f"A correção do exame '{exam.exam_name}' (ID: {exam.id}) foi concluída.\n"
+            f"Status do Feedback: {status_msg}.\n\n"
+            f"Resumo do conteúdo do anexo (ZIP):\n"
+            f"--------------------------------------------------\n"
+            f"[X] Relatório de Processamento (_RETURN_email_log.csv)\n"
+            f"[X] Estatísticas Gerais e Dados IRT (CSV)\n"
+        )
+
+        # 3. Adiciona itens condicionais
+        if has_student_pdfs:
+            body += f"[X] PDFs Individuais: Feedback detalhado de cada aluno.\n"
+        else:
+            body += f"[ ] PDFs Individuais: Não gerados nesta configuração.\n"
+
+        if has_png_snippets:
+            body += f"[X] Imagens de Conferência (.png): Recortes das respostas manuscritas.\n"
+            body += f"    Legenda: _pAAA_sB_qCCC.png\n"
+            body += f"    (p=Página, s=Bloco/Quadro, q=Questão relativa ao bloco)\n"
+
+        body += f"--------------------------------------------------\n\n"
+        body += f"Sistema MCTest"
+
+        email = EmailMessage(
+            subject,
+            body,
+            to=[professor_email],
+        )
+        email.attach_file(fzip_path)
+        email.send()
+    except Exception as e:
+        print(f"Erro ao enviar email para professor: {e}")
+        pass
+
+    # D) LIMPEZA GERAL (CLEANUP)
+    try:
+        # Limpa arquivos temporários da pasta TMP
+        os.system("rm -rf " + MYFILES + "_RETURN_*")      # Logs e CSVs temporários
+        os.system("rm -rf " + MYFILES + "_p*.png")        # Páginas PNG do PDF
+
+        # Remove ZIPs que estejam no TMP (temporários)
+        os.system("rm -rf " + MYFILES + "*.zip")
+        #os.system("rm -rf " + os.path.join(BASE_DIR, "tmp", "_DEBUG_*"))
+
+        # Limpa arquivos individuais da pasta pdfStudentEmail (já estão no ZIP)
+        if not qr['onlyT']:
+            pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
+            os.system("rm -rf " + pdfs_student_pattern)
+
+            gabs_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_*_GAB.png")
+            os.system("rm -rf " + gabs_pattern)
+    except Exception as e:
+        pass
+#
+# @login_required
+# def correctStudentsExam_old(request, pk):
+#     # --- Verificação de Permissões ---
+#     if request.user.get_group_permissions():
+#         perm = [p for p in request.user.get_group_permissions()]
+#         if not 'exam.change_exam' in perm:
+#             return HttpResponseRedirect("/")
+#     else:
+#         return HttpResponseRedirect("/")
+#
+#     exam = get_object_or_404(Exam, pk=pk)
+#
+#     # --- Limpeza de arquivos temporários de email anteriores ---
+#     strf2 = BASE_DIR + "/pdfStudentEmail/studentEmail_e" + str(exam.id) + "*"
+#     try:
+#         for fi in glob.glob(strf2):
+#             os.remove(fi)
+#         pass
+#     except Exception as e:
+#         pass
+#
+#     if request.method == 'POST':
+#         try:
+#             # Captura o arquivo do formulário
+#             uploaded_file = request.FILES['myfilePDF']
+#         except:
+#             messages.error(request, _('correctStudentsExam: choose a PDF file with scanned exams!'))
+#             return render(request, 'exam/exam_errors.html', {})
+#
+#         choiceReturnQuestions = request.POST.get('choiceReturnQuestions')
+#
+#         # 1. Configura o caminho da pasta tmp
+#         tmp_path = os.path.join(BASE_DIR, 'tmp')
+#         if not os.path.exists(tmp_path):
+#             os.makedirs(tmp_path)
+#
+#         # 2. Sanitiza o nome original do arquivo
+#         file0 = str(uploaded_file.name)
+#         file0 = file0.replace(' ', '')
+#         file0 = re.sub('[^A-Za-z0-9._-]+', '', file0) # Remove caracteres especiais
+#
+#         # 3. Constrói o nome exato conforme seu padrão solicitado:
+#         # Padrão: _e{id}_{user}_{nome_original_sem_extensao}_upload.pdf
+#         # Nota: file0[:-4] remove o '.pdf'
+#         filename_custom = "_e" + str(exam.id) + '_' + str(request.user) + '_' + file0[:-4] + '.pdf'
+#
+#         # 4. Inicializa o Storage apontando para a pasta tmp
+#         fs = FileSystemStorage(location=tmp_path)
+#
+#         # 5. Verifica se o arquivo já existe e deleta para forçar a sobrescrita
+#         # (Isso evita que o Django crie _upload_1.pdf, _upload_2.pdf, etc)
+#         if fs.exists(filename_custom):
+#             fs.delete(filename_custom)
+#
+#         # 6. Salva o arquivo com o nome personalizado
+#         saved_filename = fs.save(filename_custom, uploaded_file)
+#
+#         # 7. Atualiza a variável 'file' com o caminho completo absoluto para o restante do script
+#         # Isso é crucial para o PyPDF2 e cv2 encontrarem o arquivo
+#         file = fs.path(saved_filename)
+#
+#         # --- Mantém a lógica da variável MYFILES para as imagens temporárias ---
+#         MYFILES = BASE_DIR + "/tmp/_e" + str(exam.id) + '_' + str(request.user) + '_' + file0[:-4]
+#
+#         # Limpeza completa: remove qualquer arquivo que comece com esse prefixo, exceto *_upload.pdf
+#         # Isso inclui: .csv, _p0.png, _p1.png, etc.
+#         try:
+#             files_to_remove = glob.glob(MYFILES + "*")
+#             for f_rem in files_to_remove:
+#                 if f_rem != file:
+#                     os.remove(f_rem)
+#         except Exception as e:
+#             pass
+#
+#         try:
+#             # O 'file' agora aponta corretamente para: .../tmp/_e1_admin_nomearquivo_upload.pdf
+#             input_pdf = PyPDF2.PdfFileReader(open(str(file), "rb"))
+#         except PyPDF2.utils.PdfReadError:
+#             messages.error(request, _("correctStudentsExam: Error in read PDF file: ") + str(file))
+#             return render(request, 'exam/exam_errors.html', {})
+#
+#         # try reading the pdf file using another way
+#         #pages = convert_from_path(file, 200)  # dpi 100=min 500=max
+#         pages = convert_from_path(file, 200, poppler_path='/opt/local/bin')
+#         numPAGES = 0
+#         for page in pages:
+#             myfile0 = MYFILES + '_p' + str(numPAGES) + '.png'
+#             page.save(myfile0)
+#             numPAGES += 1
+#         pages.clear()
+#
+#         countCorrectExams = 0
+#         countCorrectQuestions = 0
+#         qr0 = dict()
+#         countPage = 0
+#         while countPage < numPAGES:  # para cada pagina do pdf
+#             print("#$$$$$$$$$$$$$$$ PAGINA ======", countPage + 1)
+#             myfile0 = MYFILES + '_p' + str(countPage) + '.png'
+#             img = cv2.imread(myfile0)
+#             # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+#
+#             DEBUG = False
+#
+#             img = img0 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#
+#             cvMCTest.centroidsMarked = []
+#             countCorrectExams += 1
+#
+#             # img = 255 - imgs[countPage]
+#             if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_01all.png", img)
+#
+#             myFlagArea, qr = cvMCTest.getQRCode(img, countPage)
+#             img = cvMCTest.imgAnswers
+#
+#             if not qr:
+#                 qr = dict()
+#                 qr['idStudent'] = 'ERROR'
+#                 if myFlagArea:
+#                     qr['answer'] = exam.exam_number_of_anwsers_question
+#                 else:
+#                     qr['answer'] = 'ERROR'
+#                 qr['numquest'] = Utils.getNumMCQuestions(exam)
+#                 qr['idExam'] = pk
+#                 qr['idClassroom'] = '0'
+#                 qr['question'] = '0'
+#                 qr['respgrade'] = '0'
+#                 qr['stylesheet'] = '0'  # default horizonal=0
+#
+#                 qr['variations'] = '0'
+#                 qr['variant'] = '0'
+#
+#             qr['exam_print'] = exam.exam_print
+#
+#             if int(Utils.getNumMCQuestions(exam) == 0):
+#                 qr['onlyT'] = True
+#             else:
+#                 qr['onlyT'] = False
+#
+#             qr['file'] = file
+#             qr['page'] = countPage
+#             qr['max_questions_square'] = exam.exam_max_questions_square
+#             qr['user'] = request.user.email
+#             qr['exam_print'] = exam.exam_print
+#
+#             if not countPage and qr[
+#                 'exam_print'] == 'answ':  # para correcoes sem questoes, com apenas quadro de reposta,
+#                 qr0 = qr  # guarda a primeira pagina como gabarito
+#
+#             if qr['onlyT']:  # questoes dissertativas e uma questao por pagina - frente-verso: salva a página em tmp/
+#                 print(">>>>text>>>>", qr)
+#                 mypath = MYFILES + "_q" + qr['question']
+#
+#                 myfile = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + "_p" + str(
+#                     countPage + 1).zfill(3) + "_" + qr['idStudent'] + ".pdf"
+#
+#                 myfileMSG = mypath + "/_e" + qr['idExam'] + "_c" + qr['idClassroom'] + "_q" + qr['question'] + '.txt'
+#
+#                 os.system("mkdir " + mypath)
+#
+#                 if not os.path.exists(myfileMSG):
+#                     with open(myfileMSG, 'w') as fileMSG:
+#                         fileMSG.write('Write here a message to sent to student, for each question/classroom')
+#                         fileMSG.close()
+#
+#                 if countPage < numPAGES - 1:  # salva tb verso
+#                     # countPage += 1
+#                     # myfile2 = MYFILES + '_p' + str(countPage) + '.png'
+#
+#                     fileImages = [myfile0]  # , myfile2]
+#
+#                     flagOK = False  # continua salvando ate achar qrcode ou acabar
+#                     while not flagOK and countPage < numPAGES - 1:
+#                         myfile3 = MYFILES + '_p' + str(countPage + 1) + '.png'
+#                         img2 = cv2.imread(myfile3)
+#                         img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+#                         flagOK, qr3 = cvMCTest.getQRCode(img2, countPage)
+#
+#                         if not qr3:
+#                             fileImages.append(myfile3)
+#                             countPage += 1
+#                         else:
+#                             flagOK = True
+#
+#                     with open(myfile, "wb") as outputStream:
+#                         outputStream.write(img2pdf.convert(fileImages))
+#                 else:
+#                     with open(myfile, "wb") as outputStream:
+#                         outputStream.write(img2pdf.convert(myfile0))
+#
+#             elif qr:
+#
+#                 if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':  # quadro horizontal
+#                     cvMCTest.findBoxesAnwsersHor(img, countPage, -1)
+#                     img = cvMCTest.imgAnswersSegment
+#                     rectSquares = cvMCTest.findSquaresHor(qr, img, countPage)
+#                 else:
+#                     rectSquares = cvMCTest.findSquares(qr, img, countPage)
+#
+#                 if DEBUG: cv2.imwrite("./tmp/_DEBUG_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_02.png", img)
+#
+#                 if qr['idStudent'] != 'ERROR':
+#                     strGAB = './pdfStudentEmail/studentEmail_e' + qr['idExam'] + '_r' + qr['idClassroom'] + '_s' + qr[
+#                         'idStudent'] + '_GAB.png'
+#                     imgGAB = cv2.medianBlur(cvMCTest.imgAnswers, 3)
+#                     imgGAB_rgb = cv2.cvtColor(imgGAB, cv2.COLOR_GRAY2RGB)
+#
+#                 testAnswers = []
+#                 qr['squares'] = rectSquares
+#
+#                 if myFlagArea:
+#
+#                     for countSquare in range(len(rectSquares)):
+#                         p1, p2 = rectSquares[countSquare]
+#
+#                         if qr['idStudent'] != 'ERROR':
+#                             cv2.rectangle(imgGAB_rgb, (p1[1], p1[0]), (p2[1], p2[0]), (255, 255, 0), 1);
+#
+#                         if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':  # quadro horizontal
+#                             imgQi = cvMCTest.imgAnswersSegment[p1[0]:p2[0], p1[1]:p2[1]]
+#                             [NUM_COLUMNS, img] = cvMCTest.setColumnsHor(imgQi, countPage, countSquare)
+#                             [NUM_LINES, img] = cvMCTest.setLinesHor(imgQi, countPage, countSquare)
+#                             NUM_RESPOSTAS = NUM_LINES
+#                             NUM_QUESTOES = NUM_COLUMNS
+#                         else:
+#                             imgQi = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
+#                             [NUM_COLUMNS, img] = cvMCTest.setColumns(imgQi, countPage, countSquare)
+#                             [NUM_LINES, img] = cvMCTest.setLines(imgQi, countPage, countSquare)
+#                             NUM_RESPOSTAS = NUM_COLUMNS
+#                             NUM_QUESTOES = NUM_LINES
+#
+#                         if DEBUG: cv2.imwrite(
+#                             "_test_corrTests" + "_p" + str(countPage + 1).zfill(3) + "_q" + str(countSquare + 1).zfill(
+#                                 2) + "_00.png", imgQi)
+#
+#                         countCorrectQuestions += NUM_QUESTOES
+#
+#                         if int(NUM_RESPOSTAS) != int(qr['answer']):
+#                             qr['correct'] = 'ERROR:' + ' page ' + str(countPage + 1) + ' square ' + str(
+#                                 countSquare + 1) + ': ' + str(NUM_RESPOSTAS) + '-' + str(qr['answer'])
+#
+#                         imgQiNC = cvMCTest.imgAnswers[p1[0]:p2[0], p1[1]:p2[1]]
+#                         if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':  # quadro horizontal
+#                             testAnswers.append(
+#                                 cvMCTest.segmentAnswersHor([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
+#                         else:
+#                             testAnswers.append(
+#                                 cvMCTest.segmentAnswers([imgQi, imgQiNC], countPage, countSquare, NUM_QUESTOES, qr))
+#
+#                     qr = cvMCTest.setAnswarsOneLine(testAnswers, qr)  # deixa as respostas de cada quadro em uma linha
+#
+#                     # alterado em 15/12/2025
+#                     if len(qr0) == 0 and exam.exam_print != 'answ':  # se usou questões do BD
+#                         qr = Utils.getQRanswersbyVariation(qr, exam)
+#
+#                     qr = cvMCTest.studentGrade(qr, qr0)  # calcula nota final do aluno
+#
+#                 cvMCTest.saveCSVone(qr)  # salva arquivo CSV
+#
+#                 if (exam.exam_student_feedback == 'yes' and not 'ERROR' in qr['correct']):
+#                     if int(qr['page']) != 0 or exam.exam_print == 'both':
+#                         cvMCTest.drawImageGAB(qr, strGAB, imgGAB_rgb)
+#                         cvMCTest.studentSendEmail(exam, qr, choiceReturnQuestions)  # cria pdf com feedback p/ aluno
+#
+#             countPage += 1
+#
+#         myflag = True
+#         for r in exam.classrooms.all():
+#             for d in r.discipline.courses.all():
+#                 for i in d.institutes.all():
+#                     if myflag:
+#                         i.institute_exams_corrected += countCorrectExams
+#                         i.institute_questions_corrected += countCorrectQuestions
+#                         i.save()
+#                         myflag = False
+#                         break
+#
+#         fzip = MYFILES + ".zip"
+#
+#         try:
+#             os.system("rm " + fzip)
+#         except:
+#             pass
+#
+#         if qr['onlyT']:  # questoes dissertativas e uma questao por pagina: salva a página em tmp
+#             os.system("mv " + BASE_DIR + "/tmp/_e" + str(exam.id) + str(request.user) + "*_q0/* " + mypath)
+#             os.system("zip -j " + fzip + " " + mypath + "/*")
+#             os.system("rm -rf " + mypath)
+#             os.system("rm " + mypath[:-5] + "*.png")
+#
+#         else:
+#             path_to_file = file[:-4] + ".csv"
+#             # mypath = BASE_DIR + "/tmp/_e" + str(exam.id) + file[:-4]
+#
+#             os.system("cp \'" + path_to_file + "\' " + MYFILES + "_RETURN__.csv")
+#
+#             ### log begin
+#             f_log = "correct.log"
+#             if not os.path.exists(f_log):
+#                 with open(f_log, 'w') as csvfile:
+#                     spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+#                     spamWriter.writerow("CORRECTIONS of MCTest")
+#             with open(f_log, 'a') as csvfile:
+#                 spamWriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+#                 spamWriter.writerow(["\n" + str(request.user), ",", str(datetime.datetime.now())])
+#             os.system("cat >> correct.log " + path_to_file)
+#             ### log end
+#
+#             ### IRT begin
+#             if exam.exam_print in ['both']:  # não é somente quadro de respostas
+#                 try:
+#                     M = int(Utils.getNumMCQuestions(exam))  # Number of questions
+#                     X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+#                     X.replace('', np.nan, inplace=True)
+#                     X.replace(' ', np.nan, inplace=True)
+#                     X.dropna(inplace=True)
+#
+#                     # more statistis adapted of Profa. Dra. Denise Goya, from UFABC
+#                     # 31/03/2023
+#                     ANS = int(exam.exam_number_of_anwsers_question)
+#                     K = pandas.read_csv(path_to_file, delimiter=',', usecols=['K' + str(i) for i in range(1, M + 1)])
+#                     K.replace('', np.nan, inplace=True)
+#                     K.replace(' ', np.nan, inplace=True)
+#                     K.dropna(inplace=True)
+#                     K = K.to_numpy() // 10 ** ANS
+#
+#                     acertos, erros = {}, {}
+#                     for q in X:  # for each question
+#                         i = int(q[1:]) - 1
+#                         for n, s in enumerate(X[q]):  # for each student
+#                             ki = K[n][i]
+#                             if len(str(s).split()[0]) == 1:
+#                                 acertos[ki] = acertos.get(ki, 0) + 1
+#                             else:
+#                                 erros[ki] = erros.get(ki, 0) + 1
+#
+#                     # incluir chaves se nao existir
+#                     for k in set(acertos.keys()) | set(erros.keys()):
+#                         acertos[k] = acertos.get(k, 0)
+#                         erros[k] = erros.get(k, 0)
+#
+#                     with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+#                         f.write(f' id,  key, corr, fail, %corr, %fail\n')
+#                         for i, k in enumerate(sorted(acertos.keys())):
+#                             a, e = acertos[k], erros[k]
+#                             try:
+#                                 f.write(f'{i + 1:3d},{int(k):5d}, {a:4d}, {e:4d}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+#                             except:
+#                                 continue
+#                         f.close()
+#
+#                     # irt - questoes ordenadas pelas chaves
+#                     chaves = sorted(acertos.keys())
+#                     dados = np.zeros((len(X), len(chaves)), dtype=int)
+#                     X0 = X.to_numpy()
+#                     for i, a in enumerate(X0):
+#                         for j, b in enumerate(a):
+#                             if len(X0[i, j].split()[0]) == 1:
+#                                 dados[i, chaves.index(K[i, j])] = 1
+#
+#                     N = len(X['Q1'])  # Number of students
+#                     with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+#                         spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+#                         for n in range(N):
+#                             spamWriter.writerow(dados[n])
+#                         csvfile.close()
+#
+#                     os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv &")
+#
+#                 except:
+#                     messages.error(request, _("correctStudentsExam: Error in IRT or more Statists"))
+#
+#                 # método para calcular a,b e c da TRI
+#                 try:
+#                     cvMCTest.estimate_IRT_parameters(exam)
+#                     pass
+#                 except:
+#                     messages.error(request, _("correctStudentsExam: Error in MLE by scipy.optimize"))
+#
+#                 try:
+#                     # cvMCTest.estimate_IRT_parameters_R(exam)
+#                     pass
+#                 except:
+#                     messages.error(request, _("correctStudentsExam: Error in MLE by R"))
+#
+#
+#             else:  # exames sem chaves - primeira página é o gabarito
+#                 try:
+#                     M = int(Utils.getNumMCQuestions(exam))  # Number of questions
+#                     X = pandas.read_csv(path_to_file, delimiter=',', usecols=['Q' + str(i) for i in range(1, M + 1)])
+#                     X.replace('', np.nan, inplace=True)
+#                     X.replace(' ', np.nan, inplace=True)
+#                     X.dropna(inplace=True)
+#
+#                     N = len(X['Q1'])  # Number of students
+#                     dados = np.zeros((N, M), dtype=int)
+#                     for q in X:  # for each question
+#                         for n, s in enumerate(X[q]):  # for each student
+#                             if len(str(s).split()[0]) == 1:
+#                                 dados[n][int(q[1:]) - 1] = 1
+#                     N -= 1
+#                     dados = np.delete(dados, 0, 0)  # remove primeira linha com o gabarito
+#
+#                     with open(MYFILES + '_RETURN_statistics.csv', 'w') as f:
+#                         f.write(f' id, corr, fail, aver, std, %corr, %fail\n')
+#                         media_colunas = np.mean(dados, axis=0)
+#                         desvio_padrao_colunas = np.std(dados, axis=0)
+#                         acertos = np.sum(dados, axis=0)
+#                         erros = N - np.sum(dados, axis=0)
+#                         for i in range(len(dados[0])):
+#                             a, e, m, s = acertos[i], erros[i], media_colunas[i], desvio_padrao_colunas[i]
+#                             f.write(
+#                                 f'{i + 1:3d}, {a:4d}, {e:4d}, {m:.3f}, {s:.3f}, {a / (a + e):.3f}, {e / (a + e):.3f}\n')
+#                         f.close()
+#
+#                     with open(MYFILES + '_RETURN_irt.csv', 'w') as csvfile:
+#                         spamWriter = csv.writer(csvfile, delimiter=',', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+#                         for n in range(N):
+#                             spamWriter.writerow(dados[n])
+#                         csvfile.close()
+#
+#                     os.system("python3 _irt_pymc3.py " + MYFILES + "_RETURN_irt.csv &")
+#
+#                 except:
+#                     messages.error(request, _("correctStudentsExam: Error in IRT"))
+#
+#             # --- FIM DO BLOCO IRT/ESTATÍSTICAS ---
+#
+#             # ==============================================================================
+#             # NOVA LÓGICA DE ZIP E LIMPEZA (Alterado conforme solicitação)
+#             # ==============================================================================
+#
+#             # 1. Definição de caminhos
+#             dir_pdf_student = os.path.join(BASE_DIR, 'pdfStudentEmail')
+#
+#             # Nome do arquivo ZIP final: studentEmail_e{id}.zip
+#             fzip_name = "studentEmail_e" + str(exam.id) + ".zip"
+#             fzip_path = os.path.join(dir_pdf_student, fzip_name)
+#
+#             # 2. Remove zip anterior se existir (para não duplicar dados dentro)
+#             if os.path.exists(fzip_path):
+#                 os.remove(fzip_path)
+#
+#             # 3. Zipar arquivos de estatísticas/retorno do TMP (_RETURN_*)
+#             # Nota: O código gera arquivos com _RETURN_, então usamos esse padrão.
+#             # O flag '-j' (junk paths) garante que não crie a estrutura de pastas dentro do zip.
+#             cmd_zip_tmp = "zip -j \'" + fzip_path + "\' " + MYFILES + "_RETURN_*"
+#             os.system(cmd_zip_tmp)
+#
+#             # 4. Zipar arquivos PDF individuais dos alunos (studentEmail_e*_r*_s*.pdf)
+#             # Padrão para pegar apenas os PDFs deste exame
+#             pdfs_student_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_r*.pdf")
+#
+#             # Verifica se existem arquivos antes de tentar zipar para evitar erro do zip
+#             if glob.glob(pdfs_student_pattern):
+#                 cmd_zip_students = "zip -j \'" + fzip_path + "\' " + pdfs_student_pattern
+#                 os.system(cmd_zip_students)
+#
+#             # 5. LIMPEZA (Cleanup)
+#
+#             # A) Limpar TMP: Apagar _RETURN_*, páginas png processadas e zips temporários
+#             # Mantém apenas o PDF original (_upload.pdf) e o CSV original (path_to_file)
+#             try:
+#                 os.system("rm " + MYFILES + "_RETURN_*")      # Apaga relatórios/csv gerados
+#                 os.system("rm " + MYFILES + "_p*.png")        # Apaga páginas extraídas
+#                 os.system("rm " + MYFILES + "*.zip")          # Apaga zips residuais no tmp
+#
+#                 # Remove arquivos de debug se existirem
+#                 os.system("rm " + os.path.join(BASE_DIR, "tmp", "_DEBUG_*"))
+#             except Exception as e:
+#                 pass
+#
+#             # B) Limpar pdfStudentEmail: Apagar os PDFs e PNGs (GAB) individuais, mantendo SÓ o ZIP
+#             try:
+#                 os.system("rm " + pdfs_student_pattern) # Apaga os pdfs studentEmail_e...pdf
+#
+#                 # Apaga também os gabaritos PNG gerados na pasta de email
+#                 gabs_pattern = os.path.join(dir_pdf_student, "studentEmail_e" + str(exam.id) + "_*_GAB.png")
+#                 os.system("rm " + gabs_pattern)
+#             except Exception as e:
+#                 pass
+#
+#             # Atualiza a variável fzip para o return final
+#             fzip = fzip_path
+#
+#     # Retorna o arquivo ZIP localizado em pdfStudentEmail
+#     return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
+#
+
+# for line in sys.stdin:
+#     nome = unidecode.unidecode(line.split()[0])
+#
+#     print(nome,end="\t")
+#     print(distro_table(nome),end="\n")
+#
+# nome = input()
+# nome = unicodedata.normalize('NFKD', nome).encode('ascii','ignore').decode('ascii').split()
+# nome = nome[0]+nome[-1]
+# print(nome,end="\t")
+# print(Utils.distro_table(nome),end="\n")
+# ###################### HASH
+#
+# from django.shortcuts import render
+# from .forms import QuizForm
+
+
+def moodle_question(request, pk):
+    """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
+    como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+    pela Universidade Federal do ABC, no período de 2023-2024.
+
+    Este método é responsável por enviar as questões do exame para o Moodle
+    (que deve ter apenas uma variação), criando as questões em um Quiz já
+    existente no Moodle, o qual deve ser incluído no formulário do Exame no
+    MCTest com o nome do Quiz e o nome do Curso.
+
+    As respostas dos alunos são recebidas pelo método get_moodle_question()
+    """
+    if request.method == 'POST':
+        form = QuizForm(request.POST)
+        if form.is_valid():
+            print("moodle_question-00-" + str(datetime.datetime.now()))
+
+            nome_quiz_moodle = request.POST.get('nome_quiz_moodle')
+            nome_disciplina_moodle = request.POST.get('nome_disciplina_moodle')
+
+            exam = get_object_or_404(Exam, pk=pk)
+
+            if 'enviar_questoes_moodle' in request.POST:
+                generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle)
+            elif 'pegar_respostas_moodle' in request.POST:
+                get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle)
+            else:
+                # Caso nenhum botão seja pressionado
+                return HttpResponse('Nenhum botão pressionado')
+
+            print("moodle_question-01-" + str(datetime.datetime.now()))
+
+    else:
+        form = QuizForm()
+
+    return render(request, 'exam/exam_moodle.html', {'form': form})
+
+
+def get_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
+    resposta = '''{
+    "sumgrades": "2.00000",
+    "email": "fzampirolli@gmail.com",
+    "name": "Administrador",
+    "questions": [
+        {
+            "moodleid": "99",
+            "questionsummary": "Terceira questao: 1a alternativa criada; 2a alternativa criada; 3a alternativa criada; 5a alternativa criada; 4a alternativa criada",
+            "rightanswer": "1a alternativa criada",
+            "responsesummary": "1a alternativa criada",
+            "mctestid": "2445"
+        },
+        {
+            "moodleid": "100",
+            "questionsummary": "Segunda Questao: 2a alternativa criada; 4a alternativa criada; 3a alternativa criada; 5a alternativa criada; 1a alternativa criada",
+            "rightanswer": "1a alternativa criada",
+            "responsesummary": "3a alternativa criada",
+            "mctestid": "2444"
+        },
+        {
+            "moodleid": "101",
+            "questionsummary": "Primeira Questao - Sempre a primeira alternativa criada eh a correta.: 4a alternativa criada; 2a alternativa criada; 3a alternativa criada; 5a alternativa criada; 1a alternativa criada",
+            "rightanswer": "Teclado          % alternativa correta - sempre a primeira",
+            "responsesummary": "Teclado          % alternativa correta - sempre a primeira",
+            "mctestid": "2455"
+        }
+    ]
+}'''
+    # Transforma a string JSON em um dicionário Python
+    dicionario_resposta = json.loads(resposta)
+
+    #  StudentExam
+    try:
+        email = dicionario_resposta['email']
+        student = Student.objects.filter(student_email=email)
+
+        # apaga estudante de StudentExam
+        for s in StudentExam.objects.filter(exam=exam.id).filter(student=student[0]): s.delete()
+
+        studentExam = StudentExam.objects.create(
+            exam=exam,
+            student=student[0],
+            grade=dicionario_resposta["sumgrades"]
+        )
+        # apaga questões antigas de StudentExamQuestion
+        for q in StudentExamQuestion.objects.filter(studentExam=studentExam): q.delete()
+    except:
+        pass
+
+    # Acessando a lista de questões dentro do dicionário
+    questions = dicionario_resposta['questions']
+
+    # Iterando sobre cada questão na lista de questões
+    for q in questions:
+        mctestid = q["mctestid"]
+
+        # questão está presente na lista de questões do exame
+        # questao_existe = Exam.objects.filter(questions__pk=mctestid).exists()
+
+        # Verifica se a questão com o MCTest ID especificado está presente em alguma variação do exame
+        questao_existe = exam.variationsExams2.filter(variation__contains=mctestid).exists()
+
+        if questao_existe:
+            question = get_object_or_404(Question, pk=mctestid)
+            question.question_correction_count += 1
+            acertou, ordem = 'B', '10'  # errou - PROVISÓRIO, POIS FORMATO INCOMPATÍVEL
+            if q["rightanswer"] == q["responsesummary"]:
+                question.question_correct_count += 1
+                acertou, ordem = 'A', '01'  # acertou - PROVISÓRIO
+            question.save()
+
+            try:
+                if not len(StudentExamQuestion.objects.filter(studentExam=studentExam).filter(question=question)):
+                    StudentExamQuestion.objects.create(
+                        studentExam=studentExam,
+                        question=question,
+                        studentAnswer=acertou,
+                        answersOrder=ordem,
+                    )  # CONSIDERO, quando acerta, por exemplo:
+                    # studentAnswer: A << aluno acertou, pois
+                    # answersOrder: 03142 << ordem embaralhada no BD
+                    #               ABCDE
+                    # studentAnswer: E << aluno errou
+
+            except:
+                pass
+
+        else:
+            # A questão não existe no banco de dados
+            pass
+
+
+def generate_moodle_question(exam, nome_quiz_moodle, nome_disciplina_moodle):
+    """Código desenvolvido por Henrique Augusto Batista para integração com o Moodle,
+    como Trabalho de Conclusão de Curso do Bacharelado em Ciência da Computação,
+    pela Universidade Federal do ABC, no período de 2023-2024.
+
+    Este método é responsável por enviar as questões do exame para o Moodle
+    (que deve ter apenas uma variação), criando as questões em um Quiz já
+    existente no Moodle, o qual deve ser incluído no formulário do Exame no
+    MCTest com o nome do Quiz e o nome do Curso.
+
+    As respostas dos alunos são recebidas pelo método get_moodle_question()
+    """
+
+    try:
+        data = {
+            'username': 'webservice',
+            'password': 'Ab1234@@',
+            'service': 'test_service'
+        }
+        url = "http://localhost/moodle/login/token.php"
+        token_request = requests.get(url, params=data)
+
+        data = {
+            'wstoken': token_request.json()['token'],
+            'wsfunction': 'local_wstemplate_create_link_question',
+            'moodlewsrestformat': 'json',
+            'json': '{}'
+        }
+        url = "http://localhost/moodle/webservice/rest/server.php"
+        question_data = {
+            "nomeDoQuiz": nome_quiz_moodle,
+            "nomeDoCurso": nome_disciplina_moodle,
+            "nomeDaQuestao": "",
+            "textoDaQuestao": "",
+            "categoria": "",
+            "feedbackCorreto": "Sua resposta esta correta.",
+            "feedbackParcialmenteCorreto": "Sua resposta esta parcialmente correta.",
+            "feedbackIncorreto": "Sua resposta esta incorreta.",
+            "alternativaA": "",
+            "fracaoA": "",
+            "alternativaB": "",
+            "fracaoB": "",
+            "alternativaC": "",
+            "fracaoC": "",
+            "alternativaD": "",
+            "fracaoD": "",
+            "alternativaE": "",
+            "fracaoE": ""
+        }
+        answer_data = 'ABCDE'
+        d = exam.variationsExams2.all()[0]
+        s = eval(d.variation)
+        for var in s['variations']:
+            for q in var['questions']:
+                if q['type'] == 'QM':
+                    question_data['nomeDaQuestao'] = q['key']
+                    question_data['textoDaQuestao'] = q['text']
+                    qBD = get_object_or_404(Question, pk=str(q['key']))
+                    question_data['categoria'] = qBD.topic.topic_text
+                    if len(q['answers']):
+                        count = 0
+                        for a in q['answers']:
+                            if int(a['sort']) == 0:
+                                question_data['alternativa' + answer_data[count]] = a['text']
+                                question_data['fracao' + answer_data[count]] = "1.0"
+                            else:
+                                question_data['alternativa' + answer_data[count]] = a['text']
+                                question_data['fracao' + answer_data[count]] = "0.0"
+                            count += 1
+                data['json'] = json.dumps(question_data)
+                print(data)
+                request = requests.post(url, data)
+                print("acha request", request)
+    except:
+        pass
+
+
+@login_required
+@csrf_exempt
+def generate_page(request, pk):
+    """
+    View fina: valida permissao/POST na hora (sincrono) e dispara a geracao
+    pesada (PDFs + e-mails, pode levar minutos em turmas grandes) em background,
+    respondendo ao navegador imediatamente. O professor ja recebe por e-mail o
+    PDF/ZIP final e, em caso de erro, um aviso -- ver _generate_page_worker.
+    """
+    print("generate_page-00-" + str(datetime.datetime.now()))
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    exam = get_object_or_404(Exam, pk=pk)
+
+    if not request.POST:
+        return HttpResponseRedirect("/")
+
+    thread = threading.Thread(target=_generate_page_worker, args=(request, pk), daemon=True)
+    thread.start()
+
+    # Estimativa aproximada baseada em teste de carga (100 alunos ~= 8 minutos
+    # ponta a ponta): ~5s/aluno, com um piso de 1 minuto para turmas pequenas.
+    total_students = sum(room.students.count() for room in exam.classrooms.all())
+    estimated_minutes = max(1, round(total_students * 5 / 60))
+
+    messages.success(request, _('PDF generation started for %(n)d student(s). Estimated time: '
+                                 'about %(mins)d minute(s). You will receive an e-mail with the PDF/ZIP '
+                                 '(and any errors) when it finishes -- no need to wait on this page.') % {
+                                 'n': total_students, 'mins': estimated_minutes})
+    return render(request, 'exam/exam_errors.html', {'title': _('PDF Generation')})
+
+
+def _generate_page_worker(request, pk):
+    """
+    Faz o trabalho pesado do Criar-PDF (antigo corpo de generate_page) fora do
+    ciclo request/response. Roda numa thread separada: request.POST/FILES/user
+    ja estao totalmente carregados em memoria e continuam legiveis aqui, mas
+    messages.error(request, ...) nao tem mais efeito visivel (a resposta ja foi
+    enviada) -- por isso qualquer excecao e capturada no final e enviada por
+    e-mail ao professor, e cada "return render(request, 'exam/exam_errors.html', {})"
+    abaixo apenas encerra a thread silenciosamente (o print/log ainda mostra a causa).
+    """
+    lock_path = _acquire_background_job_lock()
+    try:
+        _generate_page_impl(request, pk)
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(f"ERRO NAO TRATADO em _generate_page_worker (exam {pk}): {e}\n{tb}")
+        try:
+            cvMCTest.envia_email(
+                webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS,
+                str(request.user),
+                f"[MCTest] Erro ao gerar PDF do exame {pk}",
+                f"Ocorreu um erro ao gerar o PDF/enviar e-mails do exame {pk}:\n\n{tb}"
+            )
+        except Exception as e2:
+            print(f"Erro ao notificar professor sobre falha na geracao: {e2}")
+    finally:
+        _release_background_job_lock(lock_path)
+        # Esta thread nao passa pelo ciclo request/response do Django, que e
+        # quem normalmente fecha conexoes de banco ociosas/expiradas ao final
+        # de cada requisicao -- sem isso a conexao desta thread ficaria aberta
+        # indefinidamente.
+        from django.db import connection
+        connection.close()
+
+
+def _generate_page_impl(request, pk):
+    exam = get_object_or_404(Exam, pk=pk)
+    context = {"students": exam}
+
+    print("generate_page-01-" + str(datetime.datetime.now()))
+
+    try:
+        strVarExam = str(exam.variationsExams2.all()[0].id)
+    except:
+        strVarExam = '0'
+
+    path_aux = BASE_DIR + "/pdfExam/report_Exam_" + str(pk) + "_varID_" + strVarExam
+    path_to_file_REPORT = path_aux + "_sendMails.csv"
+
+    path_aux0 = BASE_DIR + "/pdfExam/_e" + str(pk) + "_varID_" + strVarExam
+    path_to_file_VARIATIONS_VPL = path_aux0 + "_students_variations.csv"
+    path_to_file_LINKER_JSON =  path_aux0 + "_linker.json"
+    path_to_file_VARIATIONS = path_aux0 + "_variations.csv"
+    path_to_file_ADAPTIVE_TEST = path_aux0 + '_adaptive_test.csv'
+    path_to_file_ADAPTIVE_TEST_CAT = path_aux0 + '_adaptive_test_cat.json'
+    path_to_file_ADAPTIVE_TEST_variations = path_aux0 + '_adaptive_test_variations.csv'
+    path_to_file_TEMPLATES = path_aux0 + "_templates.csv"
+
+    if request.POST:
+        # Inicialize aqui para estar disponível em todo o escopo (alunos e turma)
+        generator = PDFGenerator()
+        anexos = []
+
+        file_name = ""
+        message_cases = ""
+
+        countStudentsAll = 0
+        # start = time.time()
+        # tempoTeX = 0
+        # tempoPDF = 0
+
+        font_size = request.POST.get('font_size')
+        choice_adaptive_test_number = request.POST.get('adaptative_test_number')
+        choice_adaptive_test = request.POST.get('adaptative_test')
+        if choice_adaptive_test == None:
+            choice_adaptive_test_number = 0
+
+        st = Utils.validateProf(exam, request.user)
+        if st != None:
+            return HttpResponse(st)
+
+        if exam.exam_print != 'answ' and len(exam.variationsExams2.all()) != int(exam.exam_variations):
+            return HttpResponse(_('Create variations first'))
+
+        print("generate_page-02-" + str(datetime.datetime.now()))
+
+        qr_answers = Utils.getQRanswers(exam.variationsExams2.all())
+
+        # generate_moodle_question(exam, 5) # para teste de integração com o Moodle
+
+        if exam.exam_print != 'answ':
+            d = exam.variationsExams2.all().first()
+            exam0dict = eval(d.variation)
+            numQM = len([v['type'] for v in exam0dict['variations'][0]['questions'] if v['type'] == 'QM'])
+            numQT = len([v['type'] for v in exam0dict['variations'][0]['questions'] if v['type'] == 'QT'])
+
+            if int(exam.exam_number_of_questions_text) and str(numQT) != str(exam.exam_number_of_questions_text):
+                messages.error(request, _('ERROR in generate_page, number_of_questions_text!!!!  ') +
+                               str(numQT) + '<>' + str(exam.exam_number_of_questions_text))
+                return render(request, 'exam/exam_errors.html', {})
+            if int(Utils.getNumMCQuestions(exam)) and str(numQM) != str(Utils.getNumMCQuestions(exam)):
+                messages.error(request, _('ERROR in generate_page, number_of_QM!!!! - no questions: ') +
+                               str(numQM) + '<>' + str(Utils.getNumMCQuestions(exam)))
+                return render(request, 'exam/exam_errors.html', {})
+
+        data_hora = datetime.datetime.now()
+        data_hora = str(data_hora).split('.')[0].replace(' ', ' - ')
+
+        # (Removido) checagem "aborta se ja houver alguma mensagem pendente no
+        # request": agora que esta funcao roda em thread separada, a view
+        # principal adiciona sua propria messages.success(request, ...) no MESMO
+        # request logo apos disparar essa thread -- essa checagem enxergava essa
+        # mensagem de sucesso como se fosse um erro anterior e abortava sempre,
+        # silenciosamente, antes de chegar na conexao SMTP.
+
+        strAnswerSheet = Utils.drawAnswerSheet(request, exam)
+        strCircles = Utils.drawCircles()
+        strInstructions = Utils.drawInstructions(exam)
+
+        strf = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*"  # remover _eID*
+        try:
+            for fi in glob.glob(strf):
+                os.remove(fi)
+            pass
+        except Exception as e:
+            pass
+
+        listVariations = [['Room', 'ID', 'Name', 'Email', 'Variation', 'MeanPreviousAbilities']]
+        maxStudentsClass = 0  # if maxStudentsClass < exam_variations, save all students in CSV file, for VPL
+        for room in exam.classrooms.all():  ############## PARA CADA TURMA
+            if maxStudentsClass < len(room.students.all()):
+                maxStudentsClass = len(room.students.all())
+
+            if len(room.students.all()) == 0:
+                messages.error(request, _('ERROR in generate_page, class with zero students: ') +
+                               str(room.classroom_code))
+                return render(request, 'exam/exam_errors.html', {})
+
+        ####################################
+        ### PARA TESTE ADAPTATIVO 17/11/2023
+
+        maxStudentsClassesGrade = -5
+        minStudentsClassesGrade = 100
+        if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
+
+            if choice_adaptive_test in ['WPC', 'MLE', 'SAT']:
+                # pega todas as notas de provas anteriores de todos os alunos nas mesmas turmas deste exame
+                minStudentsClassesGrade, maxStudentsClassesGrade, student_u_b_all_exams = Utils.createAdaptativeTest(
+                    request, exam,
+                    choice_adaptive_test_number,
+                    path_to_file_ADAPTIVE_TEST,
+                    choice_adaptive_test)
+
+                variantExam_rankin_sort = Utils.createVariantExam_rankin_sort(
+                    request, exam, path_to_file_ADAPTIVE_TEST_variations, choice_adaptive_test)
+
+                df = pd.read_csv(path_to_file_ADAPTIVE_TEST, delimiter=',')
+
+        ### PARA TESTE ADAPTATIVO 17/11/2023 - FIM
+        ##########################################
+
+        # create directory with key is room
+        distribute_students_by_room_random = {}
+        for room in exam.classrooms.all():  ############## PARA CADA TURMA
+            distribute_students = []
+
+            for s in room.students.all():
+                stname = s.student_name.split(' ')
+                stname = stname[0] + ' ' + stname[-1]  # USE FULL NAME
+                stname = stname.upper()  # CHANGED: 29/06/22
+                if not stname in distribute_students:
+                    distribute_students.append(stname)
+
+            distribute_students_random = []
+            if int(exam.exam_variations) < maxStudentsClass:
+                for s in distribute_students:
+                    try:
+                        hash_num = Utils.distro_table(s)
+                    except:
+                        messages.error(request, _('ERROR in Utils.distro_table, student: ') + s)
+                        return render(request, 'exam/exam_errors.html', {})
+                    distribute_students_random.append([s, hash_num])
+            else:
+                # distribute students without repetition
+                vetRandomRoom = np.arange(int(exam.exam_variations))
+                np.random.shuffle(vetRandomRoom)
+                vetRandomRoom = vetRandomRoom[:len(distribute_students)]
+                for s in distribute_students:
+
+                    hash_num = distribute_students.index(s)
+                    hash_num = vetRandomRoom[hash_num]
+
+                    # verify if exist name/surname
+                    for key, list_of_values in distribute_students_by_room_random.items():
+                        ss = np.array(list_of_values)
+                        sss = ss[:, 0]
+                        if s in sss:
+                            hash_num = np.where(sss == s)
+                            hash_num = int(ss[hash_num, 1][0])
+                            break
+
+                    distribute_students_random.append([s, hash_num])
+
+            distribute_students_by_room_random[room.id] = distribute_students_random
+
+        # Abre UMA conexao SMTP para reaproveitar em todos os e-mails de feedback
+        # desta geracao, em vez de reconectar/TLS a cada aluno (evita timeout em
+        # turmas grandes quando exam_student_feedback == 'yes').
+        print("generate_page-03-antes-smtp-" + str(datetime.datetime.now()))
+        smtp_connection = None
+        if exam.exam_student_feedback == 'yes':
+            smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM, webMCTest_PASS)
+        print("generate_page-04-depois-smtp-" + str(datetime.datetime.now()) + " conexao=" + str(smtp_connection))
+
+        # ... (Loop das salas) ...
+        for room in exam.classrooms.all():
+            # Define o nome base do arquivo da turma
+            file_name = "_e" + str(exam.id) + "_varID_" + strVarExam + "_class_" + str(room.id)
+            file_name = file_name.replace(" ", "")
+
+            # Se quiser usar um nome mais explicativo localmente, pode, mas garanta que file_name receba o valor
+            file_name_class = file_name
+
+            strALL = '' # Acumula o conteúdo de todos os alunos desta sala
+
+            distribute_students_random = np.array(distribute_students_by_room_random[room.id])
+
+            countStudents = 0
+            countVariations = 0
+            for s in room.students.all():  ############## PARA CADA ESTUDANTE DA TURMA
+                # start0 = time.time()
+                strSTUDENT = ''
+                countStudents += 1
+                countVariations += 1
+
+                stname = s.student_name.split(' ')
+                stname = stname[0] + ' ' + stname[-1]  # USE FULL NAME
+                stname = stname.upper()  # CHANGED: 29/06/22
+
+                indStudent = np.where(distribute_students_random[:, 0] == stname)
+
+                hash_num = int(distribute_students_random[indStudent, 1][0])
+                if hash_num == -1:
+                    messages.error(request, _('ERROR in distro_table!!!! - student name:' + s.student_name))
+                    return render(request, 'exam/exam_errors.html', {})
+
+                var_hash = hash_num % int(exam.exam_variations)
+
+                ################################### 18/11/2023 pega hash adaptativo
+                nota_student = 0
+                if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(
+                        exam):
+
+                    if choice_adaptive_test == 'MLE':
+                        student_u_b_all_exams = Utils.getHashVariationByCat(request,
+                                                                            student_u_b_all_exams,
+                                                                            variantExam_rankin_sort,
+                                                                            s.id)
+                        student_u_b_all_exams[s.id]['student'] = s.student_name
+                        nota_student = student_u_b_all_exams[s.id]['b_ability']
+                        var_hash = student_u_b_all_exams[s.id]['best_variation']
+                    else:
+                        var_hash, nota_student = Utils.getHashAdaptative(request, exam, df, variantExam_rankin_sort,
+                                                                         s.student_name, minStudentsClassesGrade,
+                                                                         maxStudentsClassesGrade)
+
+                ################################### 18/11/2023 pega hash adaptativo - FIM
+
+                listVariations.append(
+                    [room.classroom_code, s.student_ID, s.student_name, s.student_email, var_hash, nota_student])
+
+                myqr = Utils.defineQRcode(exam, room, s.student_ID, strVarExam, str(var_hash))
+                strQuestions = ''
+                if Utils.validateNumQuestions(request, exam):  # pegar tb o que foi sorteado
+
+                    if exam.exam_print != 'answ':
+                        myqr.append(qr_answers[var_hash])  # inclui as respostas
+
+                    strQuestions += Utils.drawQuestions(request, myqr,
+                                                        exam, room, s.student_ID, s.student_name,
+                                                        var_hash, data_hora, font_size)
+
+
+                else:
+                    messages.error(request, _('ERROR in validateNumQuestions!!!!'))
+                    return render(request, 'exam/exam_errors.html', {})
+
+                if exam.exam_print in ['answ', 'both']:
+                    if int(Utils.getNumMCQuestions(exam)):
+                        strSTUDENT += Utils.drawJumpPage()
+                        strSTUDENT += strCircles
+                        strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
+                                                      data_hora, font_size)
+                        strSTUDENT += strAnswerSheet
+                        strSTUDENT += strCircles
+                        '''
+                        hash_student = Utils.distro_table(s.student_name)
+                        strSTUDENT += '\n\n \\hspace{3cm} \\tiny{hash:' + str(hash_student) + \
+                                      ' model:' + str(hash_student % int(exam.exam_variations)) + '}\n\n'
+                        '''
+                        strSTUDENT += strInstructions
+                        if exam.exam_print_eco == 'no' and exam.exam_print == 'both':
+                            strSTUDENT += "\n\n\\newpage\n\n"
+                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
+                                                          data_hora, font_size)
+                        if exam.exam_print == 'both':
+                            strSTUDENT += strQuestions
+                if exam.exam_print in ['ques']:
+                    if int(exam.exam_number_of_questions_text):
+                        if exam.exam_print_eco == 'yes':
+                            strSTUDENT += Utils.drawJumpPage()
+                            strSTUDENT += Utils.getHeader(request, exam, room, s.student_ID, s.student_name, myqr,
+                                                          data_hora, font_size)
+                            strSTUDENT += strInstructions
+                        strSTUDENT += strQuestions
+
+                strALL += strSTUDENT
+
+                if exam.exam_student_feedback == 'yes':  ##################### cria um tex para cada estudante >> email
+                    # Monta conteúdo completo
+                    latex_student_content = Utils.getBegin(font_size) + strSTUDENT + "\\end{document}"
+
+                    student_filename = file_name_class + '_' + s.student_ID
+
+                    # --- AQUI MUDA: Usa o generator ---
+                    final_student_pdf = generator.generate(
+                        latex_content=latex_student_content,
+                        filename_base=student_filename,
+                        destination_folder_name="pdfExam"
+                    )
+
+                    if final_student_pdf and os.path.exists(final_student_pdf):
+
+                        email = s.student_email
+                        # Usa o caminho retornado pelo generator; reaproveita a conexao SMTP aberta
+                        # para toda a geracao, evitando reconectar a cada aluno.
+                        enviaOK = cvMCTest.sendMail(final_student_pdf, "Exam by MCTest", email, str(s.student_name),
+                                                     connection=smtp_connection)
+                        if enviaOK and 'ERROR' in enviaOK:
+                            # Conexao pode ter caido (turma grande/servidor SMTP fechou por ociosidade);
+                            # reabre uma vez e tenta novamente antes de desistir deste aluno.
+                            smtp_connection = cvMCTest.abre_conexao_smtp(webMCTest_SERVER, 587, webMCTest_FROM,
+                                                                          webMCTest_PASS)
+                            enviaOK = cvMCTest.sendMail(final_student_pdf, "Exam by MCTest", email,
+                                                         str(s.student_name), connection=smtp_connection)
+
+                        # Log no CSV
+                        with open(path_to_file_REPORT, 'a+') as data:
+                            writer = csv.writer(data)
+                            # Ajuste o nome do arquivo para o log se necessário
+                            writer.writerow([os.path.basename(final_student_pdf), s.student_ID, email + str(enviaOK), s.student_name, data_hora])
+
+                        # Remove o PDF individual após enviar (para economizar espaço)
+                        try:
+                            os.remove(final_student_pdf)
+                        except:
+                            pass
+                    else:
+                        messages.error(request, _('ERROR generating PDF for student') + ': ' + s.student_name)
+
+            # FIM DO LOOP DE ESTUDANTES
+            #### Final dos estudantes de uma classe ###
+
+            countStudentsAll += countStudents
+
+            # GERAÇÃO DO PDF DA TURMA (TODOS OS ALUNOS JUNTOS)
+            latex_class_content = Utils.getBegin(font_size) + strALL + "\\end{document}"
+
+            # --- AQUI MUDA: Usa o generator ---
+            final_class_pdf = generator.generate(
+                latex_content=latex_class_content,
+                filename_base=file_name, # Usa o nome definido
+                destination_folder_name="pdfExam"
+            )
+
+            if not final_class_pdf:
+                if smtp_connection is not None:
+                    try:
+                        smtp_connection.quit()
+                    except Exception:
+                        pass
+                messages.error(request, _('ERROR generating PDF for class') + ': ' + room.classroom_code)
+                return render(request, 'exam/exam_errors.html', {})
+
+            ### Final das classes selecionadas ###
+
+        # Encerra a conexao SMTP reaproveitada (se foi aberta)
+        if smtp_connection is not None:
+            try:
+                smtp_connection.quit()
+            except Exception:
+                pass
+
+        # Lista para rastrear quais tipos de arquivos foram gerados com sucesso
+        generated_types = []
+
+        # ==============================================================================
+        # LÓGICA AUTOMÁTICA: GERAR ARQUIVOS ESSENCIAIS (JSON e CSV)
+        # Não depende mais de checkboxes no formulário
+        # ==============================================================================
+        # 1. Sempre tenta gerar o linker.json (Para integração VPL / Questões Dissertativas)
+        # Se não houver questões QT, o arquivo será gerado vazio ou com estrutura básica,
+        # mas é seguro tentar.
+        try:
+            # Tenta gerar linker.json (VPL)
+            cases = Utils.get_cases(exam)
+
+            # Verifica se realmente existem casos de teste para salvar
+            has_test_cases = False
+            if cases and 'key' in cases and len(cases['key']) > 0:
+                # Verifica se a primeira lista de chaves não está vazia
+                if len(cases['key'][0]) > 0:
+                    has_test_cases = True
+
+            if has_test_cases:
+                Utils.format_cases(cases, path_to_file_LINKER_JSON)
+                if os.path.exists(path_to_file_LINKER_JSON):
+                    anexos.append(path_to_file_LINKER_JSON)
+                    #message_cases += _('- linker.json (Use in Moodle VPL for automatic correction).') + '\n'
+                    generated_types.append('JSON')
+
+        except Exception as e:
+            print(f"Aviso: Não foi possível gerar linker.json: {e}")
+
+        # 2. Sempre tenta gerar o Template CSV (Gabarito / Múltipla Escolha)
+        # Útil para correções rápidas ou conferência
+        try:
+            # Verifica se tem questões QM (Múltipla Escolha) para justificar o CSV
+            # Tenta gerar Template CSV (Gabarito)
+            # Se tiver questões MC (num_qm > 0) OU se o tipo de prova exigir quadro de respostas ('answ' ou 'both'),
+            # devemos gerar o template. Isso garante que a tag 'TEMPLATE' seja adicionada,
+            # o que por sua vez insere o aviso sobre a qualidade da impressora no e-mail.
+            num_qm = int(Utils.getNumMCQuestions(exam))
+
+            if num_qm > 0 and exam.exam_print in ['both']:
+                Utils.createFileTemplates(exam, path_to_file_TEMPLATES)
+
+                if os.path.exists(path_to_file_TEMPLATES):
+                    anexos.append(path_to_file_TEMPLATES)
+                    #message_cases += _('- templates.csv (Answer key for Multiple Choice).') + '\n'
+                    generated_types.append('TEMPLATE')
+        except Exception as e:
+            print(f"Aviso: Não foi possível gerar templates.csv: {e}")
+
+        # FIM DA LÓGICA AUTOMÁTICA: GERAR ARQUIVOS ESSENCIAIS (JSON e CSV)
+        # ==============================================================================
+
+        if exam.exam_student_feedback == 'yes':
+            # Gera assunto e mensagem profissional
+
+            subject_report, message_report = get_email_report_content(
+                str(request.user),
+                str(exam.exam_name),
+                data_hora
+            )
+
+            try:
+                enviaOK = cvMCTest.envia_email(
+                    webMCTest_SERVER,
+                    587,
+                    webMCTest_FROM,
+                    webMCTest_PASS,
+                    str(request.user), # Envia para o professor
+                    subject_report,    # Assunto melhorado
+                    message_report,    # Corpo melhorado
+                    [path_to_file_REPORT] # Anexo CSV
+                )
+            except Exception as e:
+                print(f"Erro ao enviar relatório ao professor: {e}")
+
+        # ==============================================================================
+        # 2. ESTATÍSTICAS E VARIAÇÕES
+        # ==============================================================================
+
+        # Atualiza estatísticas do instituto (mantido do original)
+        for d in room.discipline.courses.all():
+            for i in d.institutes.all():
+                i.institute_exams_generated += countStudentsAll
+                i.save()
+                break
+
+        # anexos = []
+
+        # send file by email with variation of each student
+        # Arquivos de Variações (CSV)
+        if int(exam.exam_variations) > 0 and exam.exam_print != 'answ':
+            try:
+                # ordena pela coluna MeanPreviousAbilities
+                aux_sort = np.array(listVariations[1:])
+                aux_sort = np.array(sorted(aux_sort, key=lambda x: float(x[5])))
+                aux_sort = np.concatenate(([listVariations[0]], aux_sort))
+
+                with open(path_to_file_VARIATIONS, 'w', newline='') as file_var:
+                    writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
+                                        lineterminator='\n')
+                    writer.writerows(aux_sort)
+                anexos.append(path_to_file_VARIATIONS)  # util para quando tem várias turmas
+
+                # Salva _students_variations.csv (para VPL)
+                aux = np.array(listVariations)
+                with open(path_to_file_VARIATIONS_VPL, 'w', newline='') as file_var:
+                    writer = csv.writer(file_var, delimiter=',', quoting=csv.QUOTE_NONE, quotechar='',
+                                        lineterminator='\n')
+                    aux = aux[:, 2:5]  # get columns aluno e variacao
+                    writer.writerows(aux)  # return name; variation
+                anexos.append([path_to_file_VARIATIONS_VPL])
+
+                generated_types.append('VARIATIONS')
+            except Exception as e:
+                print(f"Erro ao gerar CSV de variações: {e}")
+
+        # Arquivos de Teste Adaptativo
+        if exam.exam_print != 'answ' and int(choice_adaptive_test_number) and Utils.getNumMCQuestions(exam):
+            try:
+                anexos.append(path_to_file_ADAPTIVE_TEST)
+                anexos.append(path_to_file_ADAPTIVE_TEST_variations)
+
+                if choice_adaptive_test == 'MLE':
+                    # Convertendo os dados antes de serializar
+                    for key, value in student_u_b_all_exams.items():
+                        if isinstance(value, dict):
+                            # Se o valor for um dicionário, iteramos sobre as chaves e valores internos
+                            for k, v in value.items():
+                                if isinstance(v, list):
+                                    # Se o valor for uma lista, convertemos cada elemento para float
+                                    value[k] = [float(item) for item in v]
+                                elif isinstance(v, np.float64):
+                                    # Se o valor for float64, convertemos para float
+                                    value[k] = float(v)
+                        elif isinstance(value, np.float64):
+                            # Se o valor for float64, convertemos para float
+                            student_u_b_all_exams[key] = float(value)
+
+                    # Salva o dicionário como arquivo JSON
+                    with open(path_to_file_ADAPTIVE_TEST_CAT, 'w') as json_file:
+                        json.dump(student_u_b_all_exams, json_file, indent=4)
+
+                    anexos.append(path_to_file_ADAPTIVE_TEST_CAT)
+
+                generated_types.append('ADAPTIVE')
+            except Exception as e:
+                print(f"Erro ao gerar arquivos adaptativos: {e}")
+
+        message_cases += 'Following all variations of each student and pdf/tex\n\n'
+
+        # ==============================================================================
+        # 3. PDF FINAL (ZIP OU ÚNICO)
+        # ==============================================================================
+
+        if exam.classrooms.all().count() == 1:
+            path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
+            if os.path.exists(path_to_file):
+                anexos.append(path_to_file)
+                generated_types.append('PDF')
+                file_to_serve = path_to_file
+            else:
+                messages.error(request, _('ERROR: PDF file not found.'))
+                return render(request, 'exam/exam_errors.html', {})
+        else:
+            # fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
+            # # zipar todos os exames das turmas
+            # os.system("zip -j " + fzip + " " + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*")
+            #
+            # os.system('rm -rf ' + BASE_DIR + "/pdfExam/_e" + str(exam.id) + "*.tex")
+            # path_to_zip = os.path.dirname(fzip) + "/" + os.path.basename(fzip)
+            # anexos.append(path_to_zip)
+            fzip = BASE_DIR + "/pdfExam/_e" + str(exam.id) + "_" + str(request.user) + ".zip"
+            # Zipar arquivos PDF e também os CSVs/JSONs gerados (que começam com report_Exam_)
+            # Usamos wildcards para pegar tudo relacionado
+            cmd_zip = f"zip -j {fzip} {BASE_DIR}/pdfExam/_e{exam.id}* {path_aux0}*"
+            os.system(cmd_zip)
+
+            # Limpeza de TeX
+            os.system(f'rm -rf {BASE_DIR}/pdfExam/_e{exam.id}*.tex')
+
+            path_to_zip = fzip
+            if os.path.exists(path_to_zip):
+                anexos.append(path_to_zip)
+                generated_types.append('PDF')
+                file_to_serve = path_to_zip
+            else:
+                messages.error(request, _('ERROR: Zip file not created.'))
+                return render(request, 'exam/exam_errors.html', {})
+
+        # ==============================================================================
+        # 4. ENVIO DO EMAIL AO PROFESSOR
+        # ==============================================================================
+
+        # LÓGICA NOVA: Adiciona o aviso explicativo se for apenas quadro de respostas
+        if exam.exam_print == 'answ':
+            generated_types.append('INFO_ANSW')
+
+        # Gera o texto baseado no que foi realmente gerado
+        subject_prof, body_prof = get_professor_final_email_content(
+            str(request.user),
+            str(exam.exam_name),
+            data_hora,
+            generated_types,
+            context='PDF_GENERATION' # <--- DIFERENCIAÇÃO AQUI
+        )
+
+        try:
+            # Envia email único com todos os anexos
+            cvMCTest.envia_email(
+                webMCTest_SERVER,
+                587,
+                webMCTest_FROM,
+                webMCTest_PASS,
+                str(request.user),
+                subject_prof,
+                body_prof,
+                anexos
+            )
+        except Exception as e:
+            print(f"Erro ao enviar email final ao professor: {e}")
+
+        # mostra em uma nova aba o pdf ou faz download do zip
+        if exam.classrooms.all().count() == 1:
+            try:
+                path_to_file = BASE_DIR + "/pdfExam/" + file_name + ".pdf"
+                return serve(request, os.path.basename(path_to_file), os.path.dirname(path_to_file))
+            except:
+                messages.error(request, _('ERROR - watch out for special characters in exam name') + ': ' + file_name)
+                return render(request, 'exam/exam_errors.html', {})
+        else:
+            return serve(request, os.path.basename(fzip), os.path.dirname(fzip))
+
+        # print(">>>>>>>>>>>>>>>>>>>>>>>>> TIME <<<<<<<<<<<<<<<<<<<<<<<<<")
+        # print ("s - tex/s", countStudents, (start1-start)/countStudents)
+        # print("  tex:", tempoTeX)
+        # print("latex:", tempoPDF)
+        # print("  ALL:", time.time() - start)
+
+
+@login_required
+def SerializersExam(request, pk):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    exam_inst = get_object_or_404(Exam, pk=pk)
+    questions = exam_inst.questions
+    classrooms = exam_inst.classrooms
+
+    return render(request, 'exam/exam_list.html', {})
+
+
+@login_required
+def UpdateExam(request, pk):
+    if request.user.get_group_permissions():
+        perm = [p for p in request.user.get_group_permissions()]
+        if not 'exam.change_exam' in perm:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+
+    # 2. Lógica de Versão (NEW)
+    # Pega a versão da URL (GET) ou define '5.3' como padrão
+    current_version = request.GET.get('version', '5.3')
+
+    # Define qual template usar
+    if current_version == '5.4':
+        template_name = 'exam/exam_update5.4.html' # Certifique-se que o arquivo existe nesta pasta
+    else:
+        # Assumindo que o exam_update2.html é a versão 5.3/Legada atual
+        template_name = 'exam/exam_update5.3.html'
+
+    exam_inst = get_object_or_404(Exam, pk=pk)
+    classrooms = exam_inst.classrooms
+    topics = exam_inst.topics
+    questions = exam_inst.questions
+
+    try:
+        variation_ID = exam_inst.variationsExams2.all()[0].id
+    except:
+        variation_ID = 0
+
+    st = Utils.validateProf(exam_inst, request.user)
+    if st is not None:
+        return HttpResponse(st)
+        # messages.error(request, _('Error: there is no selected classroom(s).'))
+        # return render(request, 'exam/exam_errors.html', {})
+
+    if request.method == 'POST':
+        form = UpdateExamForm(request.POST)
+        if form.is_valid():
+            exam_inst.exam_name = form.cleaned_data['exam_name']
+            exam_inst.exam_number_of_questions_var1 = form.cleaned_data['exam_number_of_questions_var1']
+            exam_inst.exam_number_of_questions_var2 = form.cleaned_data['exam_number_of_questions_var2']
+            exam_inst.exam_number_of_questions_var3 = form.cleaned_data['exam_number_of_questions_var3']
+            exam_inst.exam_number_of_questions_var4 = form.cleaned_data['exam_number_of_questions_var4']
+            exam_inst.exam_number_of_questions_var5 = form.cleaned_data['exam_number_of_questions_var5']
+            exam_inst.exam_number_of_anwsers_question = form.cleaned_data['exam_number_of_anwsers_question']
+            exam_inst.exam_number_of_questions_text = form.cleaned_data['exam_number_of_questions_text']
+            exam_inst.exam_variations = form.cleaned_data['exam_variations']
+            exam_inst.exam_max_questions_square = form.cleaned_data['exam_max_questions_square']
+            exam_inst.exam_max_squares_horizontal = form.cleaned_data['exam_max_squares_horizontal']
+            exam_inst.exam_stylesheet = form.cleaned_data['exam_stylesheet']
+            exam_inst.exam_print = form.cleaned_data['exam_print']
+            exam_inst.exam_print_eco = form.cleaned_data['exam_print_eco']
+            exam_inst.exam_student_feedback = form.cleaned_data['exam_student_feedback']
+            # exam_inst.exam_room = form.cleaned_data['exam_room']
+            exam_inst.exam_hour = form.cleaned_data['exam_hour']
+            exam_inst.exam_term = form.cleaned_data['exam_term']
+            # exam_inst.exam_output = form.cleaned_data['exam_output']
+            exam_inst.exam_who_created = form.cleaned_data['exam_who_created']
+            # exam_inst.exam_profs_header = form.cleaned_data['exam_profs_header']
+            exam_inst.exam_instructions = form.cleaned_data['exam_instructions']
+
+            classrooms = form.cleaned_data['classrooms']
+            for q in exam_inst.classrooms.all():
+                exam_inst.classrooms.remove(q)
+            exam_inst.classrooms.add(*classrooms)
+
+            # NÃO CONSEGUI INCLUIR EM UM BD JÁ EXISTENTE
+            topics = form.cleaned_data['topics']
+            for q in exam_inst.topics.all():
+                exam_inst.topics.remove(q)
+            exam_inst.topics.add(*topics)
+
+            questions = form.cleaned_data['questions']
+            # raise Http404(len(exam_inst.questions.all()))
+            for q in exam_inst.questions.all():
+                exam_inst.questions.remove(q)
+            exam_inst.questions.add(*questions)
+
+            exam_inst.save()
+
+            # (CHANGED) Redireciona mantendo a versão atual na URL
+            return HttpResponseRedirect(f'/exam/exam/{pk}/update/?version={current_version}')
+        else:
+            messages.error(request, str(form.errors))
+            # (CHANGED) Renderiza o erro no template correto
+            return render(request, 'exam/exam_errors.html', {'form': form})
+
+    else:
+        # topics
+        tt = topics.filter().values_list('id', flat=True)
+        qq = questions.filter(topic__id__in=tt).values_list('id', flat=True)
+
+        form = UpdateExamForm(initial={
+            'exam_name': exam_inst.exam_name,
+            'classrooms': [c for c in classrooms.filter().values_list('id', flat=True)],
+            'topics': tt,
+            'questions': qq,
+            'exam_number_of_questions_var1': exam_inst.exam_number_of_questions_var1,
+            'exam_number_of_questions_var2': exam_inst.exam_number_of_questions_var2,
+            'exam_number_of_questions_var3': exam_inst.exam_number_of_questions_var3,
+            'exam_number_of_questions_var4': exam_inst.exam_number_of_questions_var4,
+            'exam_number_of_questions_var5': exam_inst.exam_number_of_questions_var5,
+            'exam_number_of_anwsers_question': exam_inst.exam_number_of_anwsers_question,
+            'exam_number_of_questions_text': exam_inst.exam_number_of_questions_text,
+            'exam_variations': exam_inst.exam_variations,
+            'exam_max_questions_square': exam_inst.exam_max_questions_square,
+            'exam_max_squares_horizontal': exam_inst.exam_max_squares_horizontal,
+            'exam_stylesheet': exam_inst.exam_stylesheet,
+            'exam_print': exam_inst.exam_print,
+            'exam_print_eco': exam_inst.exam_print_eco,
+            'exam_student_feedback': exam_inst.exam_student_feedback,
+            # 'exam_room': exam_inst.exam_room,
+            'exam_hour': exam_inst.exam_hour,
+            'exam_term': exam_inst.exam_term,
+            # 'exam_output': exam_inst.exam_output,
+            'exam_who_created': exam_inst.exam_who_created,
+            # 'exam_profs_header': exam_inst.exam_profs_header,
+            'exam_instructions': exam_inst.exam_instructions,
+        })
+
+    # (CHANGED) Renderiza o template escolhido dinamicamente
+    return render(request, template_name, {
+        'form': form,
+        'examinst': exam_inst,
+        'variation_ID': variation_ID,
+        'current_version': current_version, # (NEW) Passa a versão para o template saber qual botão mostrar
+    })
+
+
+##########################################################
+class ExamListView(generic.ListView):
+    model = Exam
+    fields = '__all__'
+    # paginate_by = 100
+    success_url = '/exam/exams'
+    template_name = 'exam/exam_list.html'
+
+    def get_queryset(self):
+        li = Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)
+        # qs = Exam.objects.none()
+        # t = []
+        # for e in li:
+        #     if not e.pk in t:
+        #         t.append(e.pk)
+        return li.order_by('exam_name').distinct()
+
+    def form_valid(self, form):
+        if not Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user):
+            messages.error(self.request, _('ExamListView: The teacher is not registered in a Discipline'))
+            return render(self.request, 'exam/exam_errors.html', {})
+
+
+class ExamUpdate(UpdateView):
+    model = Exam
+    template_name = 'exam/exam_update2.html'
+    fields = '__all__'
+    success_url = '/exam/myexams'
+
+    def get_queryset(self):
+        return Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user).distinct()
+
+    def form_valid(self, form):
+        if not Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user):
+            messages.error(self.request, _('ExamUpdate: The teacher is not registered in a Discipline'))
+            return render(self.request, 'exam/exam_errors.html', {})
+
+
+class ExamDetailView(generic.DetailView):
+    model = Exam
+    template_name = 'exam/exam_detail.html'
+
+    def get_queryset(self):
+        li = Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)
+        return li.order_by('exam_name').distinct()
+
+    def form_valid(self, form):
+        if not Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user):
+            messages.error(self.request, _('ExamDetailView: The teacher is not registered in a Discipline'))
+            return render(self.request, 'exam/exam_errors.html', {})
+
+
+class ExamCreate(CreateView):
+    form_class = ExamCreateForm
+
+    template_name = 'exam/exam_create.html'
+    success_url = '/exam/myexams'
+
+    def get_form_kwargs(self):
+        kwargs = super(ExamCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_queryset(self):
+        return Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user)  # .distinct()
+
+    def form_valid(self, form):
+        form.instance.exam_who_created = self.request.user
+        t = datetime.date.today()
+        form.instance.exam_hour = str(t.year) + "-" + str(t.month) + "-" + str(t.day) + " 02:00:00"
+        return super(ExamCreate, self).form_valid(form)
+
+
+class ExamDelete(DeleteView):
+    model = Exam
+    template_name = 'exam/exam_confirm_delete.html'
+    success_url = reverse_lazy('exam:myexams')
+
+    def get_queryset(self):
+        return Exam.objects.filter(exam_who_created=self.request.user).distinct()
+
+    def form_valid(self, form):
+        if not Exam.objects.filter(classrooms__discipline__discipline_profs=self.request.user):
+            messages.error(self.request, _('ClassroomUpdate: The teacher is not registered in a Discipline'))
+            return render(self.request, 'exam/exam_errors.html', {})
+
+        return super().form_valid(form)
+
+
+class LoanedExamByUserListView(LoginRequiredMixin, generic.ListView):
+    model = Exam
+    template_name = 'exam/exam_list_who_created_user.html'
+
+    # paginate_by = 100
+
+    def get_queryset(self):
+        li = Exam.objects.filter(exam_who_created=self.request.user)
+        # qs = Exam.objects.none()
+        # t = []
+        # for e in li:
+        #     if not e.pk in t:
+        #         t.append(e.pk)
+        return li.order_by('exam_name').distinct()

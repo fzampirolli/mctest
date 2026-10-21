@@ -118,6 +118,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'mctest.middleware.ActiveUserMiddleware',
     # 'django_session_timeout.middleware.SessionTimeoutMiddleware',
     # Custom Middlewares
     # 'mctest.middlewares.FiltraIPMiddleware',

@@ -998,6 +998,32 @@ class cvMCTest(object):
         return rectSquares
 
     @staticmethod
+    def findBoxesAnwsersHorAuto(img, countPage, countSquare, expectedBoxes):
+        """
+        Chama findBoxesAnwsersHor escurecendo progressivamente (gamma) a imagem
+        até encontrar exatamente expectedBoxes quadrinhos (questões x alternativas).
+        Scans claros deixam o cinza (retícula) dos quadrinhos "poroso" e eles somem
+        na binarização. O escurecimento é usado só para localizar os quadrinhos;
+        a leitura das marcações continua usando a imagem original (imgAnswers).
+        Se nenhum gamma atingir o esperado, mantém o que achou mais quadrinhos.
+        """
+        best = None
+        for g in [1.0, 1.5, 2.0, 2.5, 3.0]:  # 1.0 = sem alteração (comportamento original)
+            if g == 1.0:
+                imgG = img
+            else:
+                lut = (np.power(np.arange(256) / 255.0, g) * 255).astype('uint8')
+                imgG = cv2.LUT(img, lut)
+            cvMCTest.findBoxesAnwsersHor(imgG, countPage, countSquare)
+            numBoxes = label(cvMCTest.imgAnswersSegment > 0).max()
+            if best is None or numBoxes > best[0]:
+                best = (numBoxes, cvMCTest.imgAnswersSegment, g)
+            if numBoxes == expectedBoxes:
+                break
+        print("findBoxesAnwsersHorAuto: page", countPage + 1, "gamma", best[2], "boxes", best[0], "/", expectedBoxes)
+        cvMCTest.imgAnswersSegment = best[1]
+
+    @staticmethod
     def findBoxesAnwsersHor(img, countPage, countSquare):
         DEBUG = False
 
