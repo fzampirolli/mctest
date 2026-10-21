@@ -1247,7 +1247,11 @@ def _correct_students_exam_impl(exam_id, file, file0, choiceReturnQuestions, pro
         # --- Ramo B: Lógica para Múltipla Escolha (Standard) ---
         elif qr:
             if qr['stylesheet'] == '0' and exam.exam_stylesheet == 'Hor':
-                cvMCTest.findBoxesAnwsersHor(img, countPage, -1)
+                try:
+                    expectedBoxes = int(qr['numquest']) * int(qr['answer'])
+                except (ValueError, TypeError):
+                    expectedBoxes = -1  # sem QRcode válido: testa todos os gammas e fica com o melhor
+                cvMCTest.findBoxesAnwsersHorAuto(img, countPage, -1, expectedBoxes)
                 img = cvMCTest.imgAnswersSegment
                 rectSquares = cvMCTest.findSquaresHor(qr, img, countPage)
             else:
